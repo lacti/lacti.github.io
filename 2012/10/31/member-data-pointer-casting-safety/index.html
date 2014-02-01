@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="멤버 데이터 포인터의 casting과 안정성 1 31 Oct 2012 c++ 어제 동아리 친구와 이야기를 나누다 run-time에서는 float array를 float pointer로 casting하여 사용할 수 있는데 compile time에서는 왜 그럴 수 없냐는 이야기가 나왔다. 질문이 좀 미묘한데, 좀 더 정확히 정의하자면 float array type의 member data pointer를 float pointer type의 member data pointer로 casting하여 사용할 수 없냐는 이야기이다. 일단 결론부터 이야기하자면, casting은 가능하지만 정의되지 않은 동작을 한다. 예제 코드를 간단히 꾸려보면 다음과 같다. enum stat_speed { ss_walk, ss_run, ss_max }; struct stat_t { stat_t() { std::fill(speed, speed + ss_max, 0.0f); } float speed[ss_max]; }; template &lt;float* stat_t::*dataptr&gt; struct accessor { static float get(stat_t&amp; obj) { return *(obj.*dataptr); } }; int _tmain(int argc, _TCHAR* argv[]) { typedef float* stat_t::*fpointer_ptr; // fpointer_ptr aptr =..." />
+
+	<meta http-equiv="date" content="Wednesday, 31  2012 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>멤버 데이터 포인터의 casting과 안정성 1</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">멤버 데이터 포인터의 casting과 안정성 1</h1>
+				<p class="page-date">31 Oct 2012</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>어제 동아리 친구와 이야기를 나누다 run-time에서는 float array를 float pointer로 casting하여 사용할 수 있는데 compile time에서는 왜 그럴 수 없냐는 이야기가 나왔다.</p>
+
+<p>질문이 좀 미묘한데, 좀 더 정확히 정의하자면 <em>float array type의 member data pointer를 float pointer type의 member data pointer로 casting하여 사용할 수 없냐</em>는 이야기이다.</p>
+
+<p><strong>일단 결론부터 이야기하자면, casting은 가능하지만 정의되지 않은 동작을 한다.</strong></p>
+
+<p>예제 코드를 간단히 꾸려보면 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">enum</span> <span class="n">stat_speed</span> <span class="p">{</span> <span class="n">ss_walk</span><span class="p">,</span> <span class="n">ss_run</span><span class="p">,</span> <span class="n">ss_max</span> <span class="p">};</span>
+
+<span class="k">struct</span> <span class="kt">stat_t</span> <span class="p">{</span>
+    <span class="kt">stat_t</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">fill</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">speed</span> <span class="o">+</span> <span class="n">ss_max</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">float</span> <span class="n">speed</span><span class="p">[</span><span class="n">ss_max</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">float</span><span class="o">*</span> <span class="kt">stat_t</span><span class="o">::*</span><span class="n">dataptr</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">accessor</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">float</span> <span class="n">get</span><span class="p">(</span><span class="kt">stat_t</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="n">dataptr</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="k">typedef</span> <span class="kt">float</span><span class="o">*</span> <span class="kt">stat_t</span><span class="o">::*</span><span class="n">fpointer_ptr</span><span class="p">;</span>
+    <span class="c1">// fpointer_ptr aptr = static_cast&lt;fpointer_ptr&gt;(&amp;stat_t::speed); // cannot convert</span>
+    <span class="n">fpointer_ptr</span> <span class="n">aptr</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">fpointer_ptr</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="kt">stat_t</span><span class="o">::</span><span class="n">speed</span><span class="p">);</span>
+
+    <span class="kt">stat_t</span> <span class="n">stat</span><span class="p">;</span>
+    <span class="k">typedef</span> <span class="n">accessor</span><span class="o">&lt;</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*</span> <span class="kt">stat_t</span><span class="o">::*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="kt">stat_t</span><span class="o">::</span><span class="n">speed</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">accessor</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">accessor</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>stat_t</code>의 <code>speed</code>는 <code>float (stat_t::*)[ss_max]</code> type이다. 이것을 <code>float* stat_t::*</code> type으로 바꿔볼 것이다. 당연한 이야기이지만 이 두 개의 type은 완전히 다르기 때문에 <code>static_cast</code>로는 형 변환이 안된다. 때문에 <code>reinterpret_cast</code>를 사용해서 강제 형 변환을 유도해야 한다.</p>
+
+<p>(run-time에서 메모리에 존재하는 배열과 그곳을 접근하기 위한 주소 값의 의미인 포인터로 둘이 동일하게 동작하는 것으로 생각할 수는 있지만, compiler가 생각하는 type 입장에서는 완전 다른 type이다.)</p>
+
+<p>template parameter로 넘겨줄 때에도 <code>reinterpret_cast</code>를 사용해서 넘겨주면 형식 안정성을 다 무시하고 그냥 넘겨줄 수 있다. 때문에 위 <code>accessor::get()</code> 함수가 호출되는 위 코드 전체에는 아무런 compile error가 없다.</p>
+
+<p>template programming을 하는 이유가 compile time에 검사해주는 type check를 사용하여 형식 안정성을 보장해주기 위함인데, <code>reinterpret_cast</code>가 들어간 시점에서 위 코드는 그냥 망했다.</p>
+
+<p>뭐 일단 casting해서 template parameter를 넘길 수 있냐 없냐를 보여주기 위한 억지 예제이기는 하다. 이제 compile 성공 여부를 떠나서 위 코드가 제대로 실행되는지 보자.</p>
+
+<p>일단 member data pointer가 어떤 구조를 가졌는지를 설명해야 하는데, 자세한 내용은 대충 이 pdf의 chapter 3에서 확인하고 요점만 이야기해보자.</p>
+
+<ul>
+<li><a href="http://www.dsi.fceia.unr.edu.ar/downloads/informatica/info_II/c++../inside.the.c++.object.model.pdf">PDF: Inside the C++ object model</a></li>
+</ul>
+
+<p>member function pointer를 보면, 단순히 어떤 클래스의 함수의 주소 값만 가지고 있으면 될 것 같지만 이게 vfptr를 참조해야 하는지, 그리고 그 상속 구조가 다중 상속 혹은 virtual 상속 구조인지에 따라서 내부 구성이 좀 달라진다. 그런데 이게 c++ 표준에 명세만 있고 구현이 없어서 컴파일러마다 구현체가 제각각이다. (즉 무슨 짓을 해놓는지 모름)</p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Thunk#Object-oriented_programming">Wiki: Thunk (object-oriented programming)</a></li>
+</ul>
+
+<p>위와 동일한 개념이 member data pointer에도 적용된다고 보면 된다. 때문에 member data pointer가 단순 offset_of의 개념이라고 생각하면 안된다. (사실 고백하자면, 이 예제를 이해하는데 위 내용을 다 알아야 할 필요는 없지만 그냥 기회가 되었으니 공부하는 셈 치고 보면 좋다)</p>
+
+<p>즉, 위 예제에서 <code>float (stat_t::*)[ss_max]</code>를 <code>float* stat_t::*</code>으로 casting하고, 그것을 dereferencing한 <code>float*</code> 값을 다시 dereferencing했을 때 <code>speed[ss_walk]</code>가 나오지 않는다는 이야기다. (즉 run-time에서 우리가 해왔던 것과는 조금 다르게 동작한다)</p>
+
+<p>심지어 예제를 돌려보면 잘못된 메모리 접근으로 프로그램이 계속 죽는다!</p>
+
+<p>시간이 부족한 관계로 위 예제가 실제로 어떻게 동작하는지 disassemble해서 살펴 보는 것과 그러면 어떻게 이해를 해야 하고 어떻게 코드를 고치면 위 문제를 풀어볼 수 있을지에 대해서는 다음 글에서 알아보자.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2012/10/13/different-between-member-data-pointer-and-pointer/" title="member-data-pointer와 pointer의 차이">&laquo; member-data-pointer와 pointer의 차이</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2012/11/18/fiddler-web-debugger/" title="Fiddler Web Debugger">&raquo; Fiddler Web Debugger</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

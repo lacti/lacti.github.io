@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="빠른 메시지 만들기 11 Feb 2014 c++ message Cap&#39;n Proto와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까? 이를 위해 잠깐 네트워크로 정보를 전달하는 과정을 생각해보자. end-point #1은 정보를 패킷에 담아 네트워크로 전송한다. (serialize) end-point #2는 네트워크에서 바이트를 읽어 메시지를 구성하고, 그 메시지로부터 정보를 읽는다. (deserialize) 당연한 이야기지만 메시지 serialize/deserialize 비용을 최소화하는 것이 정답이란 소리다. 그러면 이것을 어떻게 최적화할 수 있을까? 이는 메시지에 어떠한 내용이 들어가냐를 고민해봄으로써 좀 더 자세히 생각해볼 수 있다. 다음과 같은 메시지가 있다고 해보자. struct player_message_t { float hp, mp; int atk, def, luck; }; 위 경우 serialize, deserialize 과정이 필요가 없다. 왜냐하면, // send send(reinterpret_cast&lt;const byte*&gt;(&amp;player_stat)); // receive player_message_t* message = reinterpret_cast&lt;const player_message_t*&gt;(buffer); c/c++의 struct는 바로 byte로 mapping될 수 있기 때문데..." />
+
+	<meta http-equiv="date" content="Tuesday, 11  2014 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,message,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>빠른 메시지 만들기</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">빠른 메시지 만들기</h1>
+				<p class="page-date">11 Feb 2014</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#message">message</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p><a href="http://kentonv.github.io/capnproto/">Cap&#39;n Proto</a>와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까?</p>
+
+<p>이를 위해 잠깐 네트워크로 정보를 전달하는 과정을 생각해보자.</p>
+
+<ol>
+<li>end-point #1은 정보를 패킷에 담아 네트워크로 전송한다. (serialize)</li>
+<li>end-point #2는 네트워크에서 바이트를 읽어 메시지를 구성하고, 그 메시지로부터 정보를 읽는다. (deserialize)</li>
+</ol>
+
+<p>당연한 이야기지만 메시지 serialize/deserialize 비용을 최소화하는 것이 정답이란 소리다. 그러면 이것을 어떻게 최적화할 수 있을까? 이는 메시지에 어떠한 내용이 들어가냐를 고민해봄으로써 좀 더 자세히 생각해볼 수 있다.</p>
+
+<p>다음과 같은 메시지가 있다고 해보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">player_message_t</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">hp</span><span class="p">,</span> <span class="n">mp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">atk</span><span class="p">,</span> <span class="n">def</span><span class="p">,</span> <span class="n">luck</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>위 경우 serialize, deserialize 과정이 필요가 없다. 왜냐하면,</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="c1">// send</span>
+<span class="n">send</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">player_stat</span><span class="p">));</span>
+
+<span class="c1">// receive</span>
+<span class="kt">player_message_t</span><span class="o">*</span> <span class="n">message</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">player_message_t</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+</code></pre></div>
+<p>c/c++의 struct는 바로 byte로 mapping될 수 있기 때문데 send할 때 그냥 보내고, receive할 때 그냥 casting해서 읽으면 되기 때문이다. 이 경우 필요한 추가 정보라고 해봐야 message dispatch를 위한 id와, message의 경계를 확인하기 위한 message size 정도이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">message_header_t</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">message_id</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">message_size</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>하지만 위와 같은 단순한 경우일 때 message_size는 단순히 sizeof(T) 같은 형태로 얻어낼 수 있으니 더욱 구조가 간단해질 수 있다.</p>
+
+<p>좀 더 복잡한 메시지를 고려해보자. 소위 말하는 가변 길이 메시지인데 보통은 list 때문에 발생한다. (string의 경우 char의 list)</p>
+
+<p>이 경우 가장 간단한 방법은 size를 기록하는 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">player_message_t</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">hp</span><span class="p">,</span> <span class="n">mp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">name_size</span><span class="p">;</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">name_bytes</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">atk</span><span class="p">,</span> <span class="n">def</span><span class="p">,</span> <span class="n">luck</span><span class="p">;</span> 
+<span class="p">};</span>
+</code></pre></div>
+<p>하지만 이 경우 첫 번째 경우와 같은 serialize/deserialize 성능을 보이기가 어렵다. 그 이유는 <code>name_bytes</code> 때문인데, 이 때문에 쓸 때 따로 write하는 구문을 추가해야할 뿐만 아니라 읽을 때도 <code>name_size</code>만큼 메모리를 할당한 다음 메시지를 읽도록 구현해야 하기 때문이다.</p>
+
+<p>하지만 위 문제를 해결할 수 있는 간단한 방법이 있다. 바로 offset과 null-terminated를 사용하는 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">player_message_t</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">hp</span><span class="p">,</span> <span class="n">mp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">name_offset</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">atk</span><span class="p">,</span> <span class="n">def</span><span class="p">,</span> <span class="n">luck</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="n">name_offset</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>이 경우 메시지의 bytes 구조는 다음과 같아진다.</p>
+
+<ul>
+<li><code>hp</code> <code>mp</code> <code>name_offset</code> <code>atk</code> <code>def</code> <code>luck</code> <code>name-bytes</code></li>
+</ul>
+
+<p>위와 같이 작성할 경우 serialize 입장에서는 큰 차이가 없다. hp, mp, atk, def, luck를 모두 write한 다음 <code>name_offset</code>의 위치를 기록하고, 마지막 부분에 <code>name-bytes</code>를 기록한다. 하지만 deserialize에서 큰 차이가 나타난다. 첫 번째 소개한대로 읽은 message buffer에 대해 단순히 <code>player_message_t</code>로 casting만 해서도 관련 정보를 모두 읽을 수 있는 구조이기 때문에, deserialize 비용이 필요 없어진다.</p>
+
+<p>list도 위와 같은 방법으로 구현할 수 있다. 차이점이 있다면 string의 경우 char type에 대해 구현한 것이고, list의 경우 어떤 T type에 대해 구현한다는 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">player_message_t</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">hp</span><span class="p">,</span> <span class="n">mp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">name_offset</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">inven_offset</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">inven_count</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">atk</span><span class="p">,</span> <span class="n">def</span><span class="p">,</span> <span class="n">luck</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="kt">inven_t</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">item_id</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">item_data_id</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="n">name_offset</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">const</span> <span class="kt">inven_t</span><span class="o">*</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">inven_t</span><span class="o">*&gt;</span><span class="p">(</span>
+                    <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="n">inven_offset</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">const</span> <span class="kt">inven_t</span><span class="o">*</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">inven_t</span><span class="o">*&gt;</span><span class="p">(</span>
+                    <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="n">inven_offset</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="n">inven_count</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>이 경우 메시지의 구조는 다음처럼 된다.</p>
+
+<ul>
+<li><code>hp</code> <code>mp</code> <code>name_offset</code> <code>inven_offset</code> <code>inven_count</code> <code>atk</code> <code>def</code> <code>luck</code> <code>name-bytes</code> <code>inven_t-bytes</code></li>
+</ul>
+
+<p>그냥 string랑 똑같은데 <code>begin()</code>, <code>end()</code> method를 나누어 구현했다고 보면 된다. 다만, <code>end()</code> 함수에서 <code>inven_count</code>를 더하는 부분이 <code>inven_t</code> 크기가 고정일 경우를 가정하고 있는데, 이 부분은 null-terminated 등을 써서 가변에 대해서도 쉽게 적용할 수 있을 것이라 보기 때문에 더 이상의 자세한 설명은 생략한다. (iterator를 직접 구현하여 사용할 경우 간단히 해결할 수 있는데 그렇게까지 글을 쓰면 너무 무의미하게 길어진다.)</p>
+
+<p><del>대체 왜 이런 글을 쓰는지 지금도 잘 모르겠지만 어쨌든 글을 마무리 짓자면,</del> 발상의 전환을 통해 어렵지 않은 방법으로 성능 개선을 할 수 있는 방법은 무궁무진하니 이미 알고 있는 내용일지라도 여러 방면으로 고민하여 기술을 갈고 닦았으면 좋겠다.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2013/12/22/server-programming/" title="서버 프로그래밍">&laquo; 서버 프로그래밍</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2014/02/14/secret-of-mswsock-dll/" title="mswsock.dll의 비밀">&raquo; mswsock.dll의 비밀</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

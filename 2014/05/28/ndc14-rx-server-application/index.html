@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="Rx와 Functional Reactive Programming으로 고성능 서버 어플리케이션 만들기 28 May 2014 ndc14 server NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기 from Jong Wook Kim 김종욱 요약 대세는 병렬처리, 이를 Reactive functional programming으로 풀어보자. 근데 functional 이야기 안 함 Reactive가 왜 나왔는지 알아보자, 그러면서 MONAD 잠깐 이야기 그러면서 Rx.NET 조금 소개 고성능 이야기 안 함 내용 ControlFlow Turning machine, Intel Arch Imperative Programming DataFlow 병렬처리 Compiler 발전으로 최적화 잘 해줌 The Future of Programming Actor Model Massively Parallel model Reactive Programming DataFlow 설명을 위한 Excel cell 예시 A + B -&gt; C 독립적 작업 단위 + 데이터 흐름 예시) Gate 조합 기존 명령형 언어는 병렬처리가 어렵다? 선언적, DataFlow, Functional Programming, Reactive Reactive Manifesto Responsible Scalable Event-driven Resilient 시간 이야기..." />
+
+	<meta http-equiv="date" content="Wednesday, 28  2014 00:00:00 GMT" />
+
+	<meta name="keywords" content="ndc14,server,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>Rx와 Functional Reactive Programming으로 고성능 서버 어플리케이션 만들기</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">Rx와 Functional Reactive Programming으로 고성능 서버 어플리케이션 만들기</h1>
+				<p class="page-date">28 May 2014</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#ndc14">ndc14</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#server">server</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<div class="embed rich SlideShare"><iframe src="https://www.slideshare.net/slideshow/embed_code/key/E85jkcnmqPhpsO" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/jongwookkim/ndc14-rx-functional-reactive-programming" title="NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기" target="_blank">NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기</a> </strong> from <strong><a target="_blank" href="http://www.slideshare.net/jongwookkim">Jong Wook Kim</a></strong> </div>
+
+<p></div></p>
+
+<ul>
+<li><a href="http://jongwook.kim/home">김종욱</a></li>
+</ul>
+
+<h3>요약</h3>
+
+<ul>
+<li>대세는 병렬처리, 이를 Reactive functional programming으로 풀어보자. <del>근데 functional 이야기 안 함</del></li>
+<li>Reactive가 왜 나왔는지 알아보자, 그러면서 MONAD 잠깐 이야기</li>
+<li>그러면서 Rx.NET 조금 소개 <del>고성능 이야기 안 함</del></li>
+</ul>
+
+<h3>내용</h3>
+
+<ul>
+<li>ControlFlow
+
+<ul>
+<li>Turning machine, Intel Arch</li>
+<li>Imperative Programming</li>
+</ul></li>
+<li>DataFlow
+
+<ul>
+<li>병렬처리</li>
+<li>Compiler 발전으로 최적화 잘 해줌</li>
+<li>The Future of Programming
+
+<ul>
+<li>Actor Model</li>
+<li>Massively Parallel model</li>
+</ul></li>
+</ul></li>
+<li>Reactive Programming
+
+<ul>
+<li>DataFlow 설명을 위한 Excel cell 예시 A + B -&gt; C</li>
+<li>독립적 작업 단위 + 데이터 흐름 예시) Gate 조합</li>
+<li>기존 명령형 언어는 병렬처리가 어렵다?
+
+<ul>
+<li>선언적, DataFlow, Functional Programming, Reactive</li>
+</ul></li>
+</ul></li>
+<li>Reactive Manifesto
+
+<ul>
+<li>Responsible</li>
+<li>Scalable</li>
+<li><strong>Event-driven</strong></li>
+<li>Resilient</li>
+</ul></li>
+<li>시간 이야기
+
+<ul>
+<li>뭔가 이야기를 많이 했지만 결국 <strong>switch 비용을 줄이자</strong></li>
+<li>tasklet이 작고 빨라야 함.</li>
+</ul></li>
+<li>event driven
+
+<ul>
+<li>사실상 microthread 이야기를 함</li>
+<li>관련 framework 이야기를 하면서 callback hell 같은 문제를 언급</li>
+</ul></li>
+<li> MONAD
+
+<ul>
+<li> <code>INPUT =&gt; M&lt;OUTPUT&gt;</code></li>
+<li> MONAD = Unit + FlatMap</li>
+<li> Maybe, Try, Iterable, Future</li>
+</ul></li>
+</ul>
+
+<table><thead>
+<tr>
+<th>-</th>
+<th>하나</th>
+<th>다수</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>동기</td>
+<td>Try</td>
+<td>Iterable</td>
+</tr>
+<tr>
+<td>비동기</td>
+<td>Future</td>
+<td>Rx</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>Reactive
+
+<ul>
+<li>Rx = Observable + LINQ + Scheduler
+
+<ul>
+<li>Observable = Reactive Stream</li>
+</ul></li>
+<li>Iterable (pull) -&gt; Observable (push) [duality]</li>
+<li>Map: Synchronous Continuation</li>
+<li>FlatMap: Asynchronous Continuation</li>
+<li>기타 operation들 소개</li>
+</ul></li>
+<li>LE Platform
+
+<ul>
+<li>TCP -&amp;gt; Dispatch -&amp;gt; [Handlers...] -&amp;gt; Database</li>
+</ul></li>
+<li>기타
+
+<ul>
+<li><a href="http://reactive-streams.org">http://reactive-streams.org</a></li>
+<li>java: play, akka, reactor</li>
+<li><a href="http://reactconf.org">http://reactconf.org</a></li>
+<li>coursera principles of Reactive programming</li>
+</ul></li>
+<li>debugging
+
+<ul>
+<li>data flow 기반 분석</li>
+<li>data flow를 database처럼 기록(?)해서 추적</li>
+</ul></li>
+<li>기타 청중 건의
+
+<ul>
+<li>async lock이나 async enumerable을 쓰는 것도 고려해보세요.</li>
+</ul></li>
+</ul>
+
+<hr>
+
+<ul>
+<li>발표 내용은 잘 정리되어 흥미로웠지만 정작 Reactive Programming으로 어떻게 고성능 서버를 구현하는 지에 대한 언급이 미흡
+
+<ul>
+<li>병렬 처리에 있어서 stateless한 functional programming이 유리한건 사실이나 이게 reactive programming과 어떻게 연결된다는 지에 대한 설명이 부족</li>
+<li>event driven으로 microthread나 async io를 설명하는건 좋고, 이게 sync io나 blocking에 비해 성능이 좋은 것은 맞는데 reactive programming과의 연결성이 모호</li>
+<li>reactive programming으로 소개된 rx.net은 표현력이 좋은 것이지 성능적 이점을 얻기 위한 것이 아님</li>
+<li>lineage eternal이 저걸 어떻게 사용했는지에 대한 부분을 너무 대충 다루고 넘어감</li>
+</ul></li>
+<li>재미는 있었으나 내용면에서 좀 아쉬운 발표였음</li>
+</ul>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2014/05/28/ndc14-experience-of-using-redis/" title="라이브 상황에서 윈도우 서버 개발자가 겪은 좌충우돌 Redis 적용 경험담">&laquo; 라이브 상황에서 윈도우 서버 개발자가 겪은 좌충우돌 Redis 적용 경험담</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/" title="던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아이가 세배 빨라졌어요!">&raquo; 던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아이가 세배 빨라졌어요!</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

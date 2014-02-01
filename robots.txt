@@ -1,0 +1,3 @@
+Sitemap: http://blog.lacti.me/sitemap.xml
+User-agent: *
+Allow: /

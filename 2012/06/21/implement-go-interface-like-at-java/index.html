@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="go interface 구현하기 21 Jun 2012 java 사실 go interface가 어떤 스펙을 가졌는지는 모르겠고 그냥 summerlight님께서 그걸 c++로 구현하면 재미있겠다고 해서 시작을 한건데 대충 내용은 다음과 같다. class A { public: void a(); void b(); void c(); }; class X { public: void a() = 0; }; class Y { public: void b() = 0; }; class Z { public void c() = 0; }; A obj; X* x = /* 어떻게든 obj랑 연결 */; x-&gt;a(); // A::a() 함수가 호출됨 A라는 class는 a, b, c라는 함수를 가지고 있지만, 명시적으로 X, Y, Z interface를 구현하고 있지 않기 때문에 X, Y, Z pointer로 A 객체를 지칭할 수 없다. 하지만 암시적으로라도, 동일한 함수 signature가 존재한다면 interface로 지칭할 수 있게 해주는 것이 목적이다. (template..." />
+
+	<meta http-equiv="date" content="Thursday, 21  2012 00:00:00 GMT" />
+
+	<meta name="keywords" content="java,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>go interface 구현하기</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">go interface 구현하기</h1>
+				<p class="page-date">21 Jun 2012</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#java">java</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>사실 go interface가 어떤 스펙을 가졌는지는 모르겠고
+그냥 <a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님께서 그걸 c++로 구현하면 재미있겠다고 해서 시작을 한건데 대충 내용은 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">A</span> <span class="p">{</span>
+<span class="nl">public:</span> <span class="kt">void</span> <span class="n">a</span><span class="p">();</span> <span class="kt">void</span> <span class="nf">b</span><span class="p">();</span> <span class="kt">void</span> <span class="nf">c</span><span class="p">();</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">X</span> <span class="p">{</span>
+<span class="nl">public:</span> <span class="kt">void</span> <span class="n">a</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">Y</span> <span class="p">{</span>
+<span class="nl">public:</span> <span class="kt">void</span> <span class="n">b</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">Z</span> <span class="p">{</span>
+<span class="k">public</span> <span class="kt">void</span> <span class="n">c</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">A</span> <span class="n">obj</span><span class="p">;</span>
+<span class="n">X</span><span class="o">*</span> <span class="n">x</span> <span class="o">=</span> <span class="cm">/* 어떻게든 obj랑 연결 */</span><span class="p">;</span>
+<span class="n">x</span><span class="o">-&gt;</span><span class="n">a</span><span class="p">();</span> <span class="c1">// A::a() 함수가 호출됨</span>
+</code></pre></div>
+<p>A라는 class는 a, b, c라는 함수를 가지고 있지만, 명시적으로 X, Y, Z interface를 구현하고 있지 않기 때문에 X, Y, Z pointer로 A 객체를 지칭할 수 없다. 하지만 암시적으로라도, 동일한 함수 signature가 존재한다면 interface로 지칭할 수 있게 해주는 것이 목적이다. (template 함수에서 암시적 interface를 요구하는 것을 객체화하여 접근할 수 있게 하였다고 봐도 되겠다)</p>
+
+<p>reflection을 사용하면 저걸 구현하는건 쉽다. 그렇지만 컴파일 시점에 대입 가능성을 보장해주려면 metaprogramming을 해야 한다.</p>
+
+<p>이 때 함수 signature를 비교하여 대입가능성을 검사해야 하는데, 문제는 함수 signature에 함수 이름이 포함된다는 것이다. 이름은 string literal이 될 것이고, 이를 compile time에 비교하려면 적어도 constexpr을 쓰거나 char typelist(variadic template)를 써야하는데, constexpr와 variadic template 모두 vs2012에서 지원 안하니 <del>(그렇다고 gcc를 쓸 생각은 없으니)</del> 일단 무시한다.</p>
+
+<p>결국 reflection을 써서 저 기능을 구현하면 되는데 c++로 reflection부터 만드려면 귀찮으니 java로 예제를 만들어 보자.</p>
+
+<p>안타깝게도 (혹은 다행스럽게도) java에서는 연산자 overloading이 없으므로, interface 객체에 대상 객체를 대입하기 위한 static 함수를 하나 만들 것이다.</p>
+
+<p>java reflection 중에는 <code>Proxy</code>라고 하여 해당 interface에 대한 method가 호출될 때, 그 method와 argument 정보를 하나의 함수로 모아주는(<code>InvocationHandler</code>) 좋은 class가 있다. (마치 ruby의 missing method나 php의 <code>__call</code>처럼)</p>
+
+<p>덕분에 어떤 interface를 넣어도 <code>Proxy</code>를 적절히 써서, 해당 interface의 함수가 호출될 때 이 정보를 대상 객체(target)의 함수로 잘 넘겨서 실행해주면 되겠다.</p>
+
+<p>이에 대한 코드는 다음과 같다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationHandler</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Proxy</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">InfOp</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="n">assign</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">infClazz</span><span class="o">,</span> <span class="n">Object</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">infClazz</span><span class="o">.</span><span class="na">cast</span><span class="o">(</span><span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">infClazz</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span> 
+                <span class="k">new</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="o">{</span> <span class="n">infClazz</span> <span class="o">},</span> <span class="k">new</span> <span class="n">InvocImpl</span><span class="o">(</span><span class="n">target</span><span class="o">)));</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">InvocImpl</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="n">Object</span> <span class="n">target</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">targetClazz</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">InvocImpl</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">targetClazz</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="na">getClass</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+                <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+            <span class="n">Method</span> <span class="n">targetMethod</span> <span class="o">=</span> <span class="n">targetClazz</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="n">method</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> 
+                    <span class="n">method</span><span class="o">.</span><span class="na">getParameterTypes</span><span class="o">());</span>
+            <span class="k">return</span> <span class="n">targetMethod</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>핵심은 <code>InvocationHandler::Invoke()</code> 내에 있는 코드이다. interface class에서 호출되는 method의 정보(name, parameter = 결국 signature)를 사용하여 target 객체의 method 정보를 찾는다. 그리고 invoke를 하면서 argument도 넘겨주면 끝이다.</p>
+
+<p>이제 다음과 같이 사용해볼 수 있다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Character</span> <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Character</span><span class="o">();</span>
+        <span class="n">Drawable</span> <span class="n">dr</span> <span class="o">=</span> <span class="n">InfOp</span><span class="o">.</span><span class="na">assign</span><span class="o">(</span><span class="n">Drawable</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">ch</span><span class="o">);</span>
+        <span class="n">dr</span><span class="o">.</span><span class="na">draw</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">interface</span> <span class="nc">Drawable</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">draw</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">interface</span> <span class="nc">Movable</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">move</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Character</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">draw</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;draw!&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">move</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;move!&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><code>Character</code> class와 <code>Drawable</code> interface는 명시적인 구현 관계(implements)가 없지만, 어쨌든 <code>draw()</code>라는 동일한 함수 signature를 갖는다. 따라서 <code>Character</code> 객체를 적절히 proxy로 감싸서 <code>Drawable</code> interface와 연결하여 위 코드처럼 실행시킬 수 있는 것이다.</p>
+
+<p><em>(조만간 compile time check를 포기한 c++ 버전도 올리도록 하겠다.)</em></p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2012/06/10/get-resource-stream-using-ClassLoader/" title="ClassLoader를 사용하여 Resource Stream 얻기">&laquo; ClassLoader를 사용하여 Resource Stream 얻기</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2012/10/01/extract-code-using-member-data-pointer-1/" title="멤버 데이터 포인터를 사용하여 연산식 묶어내기 1">&raquo; 멤버 데이터 포인터를 사용하여 연산식 묶어내기 1</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

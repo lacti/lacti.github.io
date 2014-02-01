@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="자바로 만드는 비행기 게임 3 06 Nov 2011 java game 이번에는 적기의 등장과 충돌검사를 해보자. 적기는, y=0에서 등장해서 y=height까지 진행한다. 즉, 화면 위쪽에서 아래쪽으로 일직선으로 진행하도록 하자. 그러면 진행하는 y 값은 항상 동일할테니까(0 -&gt; height) 시작과 끝 x 값을 random으로 뽑으면 된다. 적기의 속도를 다양하게 한다고 한다면 원래 속도를 랜덤하게 구해서 그만큼씩 이동하게 하겠지만, 그렇게 계산해주기 귀찮으니까 등장 시간을 랜덤하게 뽑고(5초에서 10초 사이) 그 시간에 대해 랜덤한 시작좌표 ~ 끝좌표를 토대로 매 tick(100ms)마다 얼마나 이동하면 될지 delta를 구한다. class EnemyPos { Point2D delta, current; public EnemyPos(int shipHeight) { Random rand = new Random(); float lifetime = rand.nextFloat() * 50 + 50; int startX = rand.nextInt(640); int endX = rand.nextInt(640); delta = new Point2D.Float((endX - startX) / lifetime, (480 + shipHeight..." />
+
+	<meta http-equiv="date" content="Sunday, 06  2011 00:00:00 GMT" />
+
+	<meta name="keywords" content="java,game,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>자바로 만드는 비행기 게임 3</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">자바로 만드는 비행기 게임 3</h1>
+				<p class="page-date">06 Nov 2011</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#java">java</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#game">game</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>이번에는 적기의 등장과 충돌검사를 해보자.</p>
+
+<p>적기는, <code>y=0</code>에서 등장해서 <code>y=height</code>까지 진행한다. 즉, 화면 위쪽에서 아래쪽으로 일직선으로 진행하도록 하자. 그러면 진행하는 y 값은 항상 동일할테니까<code>(0 -&gt; height)</code> 시작과 끝 x 값을 random으로 뽑으면 된다.</p>
+
+<p>적기의 속도를 다양하게 한다고 한다면 원래 속도를 랜덤하게 구해서 그만큼씩 이동하게 하겠지만, 그렇게 계산해주기 귀찮으니까 등장 시간을 랜덤하게 뽑고(5초에서 10초 사이) 그 시간에 대해 랜덤한 시작좌표 ~ 끝좌표를 토대로 매 tick(100ms)마다 얼마나 이동하면 될지 delta를 구한다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">class</span> <span class="nc">EnemyPos</span> <span class="o">{</span>
+    <span class="n">Point2D</span> <span class="n">delta</span><span class="o">,</span> <span class="n">current</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">EnemyPos</span><span class="o">(</span><span class="kt">int</span> <span class="n">shipHeight</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">lifetime</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextFloat</span><span class="o">()</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="mi">50</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">640</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">endX</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">640</span><span class="o">);</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point2D</span><span class="o">.</span><span class="na">Float</span><span class="o">((</span><span class="n">endX</span> <span class="o">-</span> <span class="n">startX</span><span class="o">)</span> <span class="o">/</span> <span class="n">lifetime</span><span class="o">,</span> <span class="o">(</span><span class="mi">480</span> <span class="o">+</span> <span class="n">shipHeight</span> <span class="o">*</span> <span class="mi">2</span><span class="o">)</span> <span class="o">/</span> <span class="n">lifetime</span><span class="o">);</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point2D</span><span class="o">.</span><span class="na">Float</span><span class="o">(</span><span class="n">startX</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">shipHeight</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>그러면 매 tick마다 current는 delta만큼 더해주면 된다. 시작 y와 끝 y는 적기가 완전히 지나갈 수 있도록 비행기 그림의 height만큼씩 더 고려해주었다.</p>
+
+<p>적기를 만들어주는 것도 여러 고려할 것이 있겠지만, 귀찮으니까 랜덤한 시간으로 만들어준다. 일단 <code>spawnTick</code>이라는걸 두어서, 현재 시간이 <code>spawnTick</code>을 넘어갈 때만 적기를 만들고, 그 후 <code>spawnTick</code>을 랜덤하게 갱신한다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">private</span> <span class="kt">long</span> <span class="n">spawnTick</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">generateEnemy</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">spawnTick</span> <span class="o">&lt;</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">spawnTick</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2000</span><span class="o">)</span> <span class="o">+</span> <span class="mi">500</span><span class="o">;</span>
+        <span class="n">enemies</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">EnemyPos</span><span class="o">(</span><span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>이제 매 Tick마다 적기가 움직일 수 있도록 위치 갱신을 해준다. 적기는 +y 방향으로 진행하며, 대충 화면 크기 height가 480 이니까 560정도 지나갈 때 비행기를 없애준다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">updateEnemyPos</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">EnemyPos</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="na">delta</span><span class="o">.</span><span class="na">getX</span><span class="o">(),</span> 
+                <span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="na">delta</span><span class="o">.</span><span class="na">getY</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">560</span><span class="o">)</span>
+            <span class="n">iterator</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>미리 매 tick마다 얼마나 움직일 지 계산해놨으니까, 현재의 위치는 거기서 더해주기만 하면 된다.</p>
+
+<p>이제 적기도 그려주자. <code>paint</code> 함수에 현재 존재하는 적기들을 그려주도록 하면 된다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">g</span><span class="o">.</span><span class="na">drawImage</span><span class="o">(</span><span class="n">enemy</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span>
+        <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>이제 랜덤한 시간에 랜덤한 위치로 적기가 생성되어서 +y 방향으로 진행하는 것을 볼 수 있다.</p>
+
+<p>여기까지 코드는 다음과 같다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.geom.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tatieul</span> <span class="kd">extends</span> <span class="n">JPanel</span> <span class="kd">implements</span> <span class="n">KeyListener</span><span class="o">,</span> <span class="n">ActionListener</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Point</span> <span class="n">shipPos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point</span><span class="o">(</span><span class="mi">320</span><span class="o">,</span> <span class="mi">400</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="n">Image</span> <span class="n">ship</span><span class="o">,</span> <span class="n">enemy</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">bullets</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;();</span>
+    <span class="kd">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">enemies</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;();</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">spawnTick</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Tatieul</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">setPreferredSize</span><span class="o">(</span><span class="k">new</span> <span class="n">Dimension</span><span class="o">(</span><span class="mi">640</span><span class="o">,</span> <span class="mi">480</span><span class="o">));</span>
+        <span class="n">setFocusable</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">addKeyListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">ship</span> <span class="o">=</span> <span class="n">Toolkit</span><span class="o">.</span><span class="na">getDefaultToolkit</span><span class="o">().</span><span class="na">getImage</span><span class="o">(</span><span class="s">&quot;player.png&quot;</span><span class="o">);</span>
+        <span class="n">enemy</span> <span class="o">=</span> <span class="n">Toolkit</span><span class="o">.</span><span class="na">getDefaultToolkit</span><span class="o">().</span><span class="na">getImage</span><span class="o">(</span><span class="s">&quot;enemy.png&quot;</span><span class="o">);</span>
+        <span class="k">new</span> <span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">Timer</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="k">this</span><span class="o">).</span><span class="na">start</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyPressed</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getKeyCode</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_UP</span><span class="o">:</span>    <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_DOWN</span><span class="o">:</span>  <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">+=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_LEFT</span><span class="o">:</span>  <span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_RIGHT</span><span class="o">:</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">+=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_SPACE</span><span class="o">:</span> <span class="n">bullets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Point</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span><span class="o">));</span> <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">repaint</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="n">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">updateEnemyPos</span><span class="o">();</span>
+        <span class="n">updateBullets</span><span class="o">();</span>
+        <span class="n">generateEnemy</span><span class="o">();</span>
+        <span class="n">repaint</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">generateEnemy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">spawnTick</span> <span class="o">&lt;</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">spawnTick</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2000</span><span class="o">)</span> <span class="o">+</span> <span class="mi">500</span><span class="o">;</span>
+            <span class="n">enemies</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">EnemyPos</span><span class="o">(</span><span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">updateEnemyPos</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">EnemyPos</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="na">delta</span><span class="o">.</span><span class="na">getX</span><span class="o">(),</span> 
+                    <span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="na">delta</span><span class="o">.</span><span class="na">getY</span><span class="o">());</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">560</span><span class="o">)</span>
+                <span class="n">iterator</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">updateBullets</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">Point</span> <span class="n">bullet</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">bullet</span><span class="o">.</span><span class="na">y</span> <span class="o">-=</span> <span class="mi">20</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">bullet</span><span class="o">.</span><span class="na">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+                <span class="n">iterator</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyReleased</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyTyped</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">paintComponent</span><span class="o">(</span><span class="n">Graphics</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">white</span><span class="o">);</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">fillRect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">640</span><span class="o">,</span> <span class="mi">480</span><span class="o">);</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">drawImage</span><span class="o">(</span><span class="n">ship</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">ship</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">ship</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">drawImage</span><span class="o">(</span><span class="n">enemy</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span>
+                <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">black</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Point</span> <span class="nl">bullet:</span> <span class="n">bullets</span><span class="o">)</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">drawLine</span><span class="o">(</span><span class="n">bullet</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="mi">4</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">JFrame</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JFrame</span><span class="o">(</span><span class="s">&quot;Tatieul - New Generation Shooting Game&quot;</span><span class="o">);</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setContentPane</span><span class="o">(</span><span class="k">new</span> <span class="n">Tatieul</span><span class="o">());</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">pack</span><span class="o">();</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setLocationRelativeTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setDefaultCloseOperation</span><span class="o">(</span><span class="n">JFrame</span><span class="o">.</span><span class="na">EXIT_ON_CLOSE</span><span class="o">);</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">EnemyPos</span> <span class="o">{</span>
+    <span class="n">Point2D</span> <span class="n">delta</span><span class="o">,</span> <span class="n">current</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">EnemyPos</span><span class="o">(</span><span class="kt">int</span> <span class="n">shipHeight</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">lifetime</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextFloat</span><span class="o">()</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="mi">50</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">640</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">endX</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">640</span><span class="o">);</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point2D</span><span class="o">.</span><span class="na">Float</span><span class="o">((</span><span class="n">endX</span> <span class="o">-</span> <span class="n">startX</span><span class="o">)</span> <span class="o">/</span> <span class="n">lifetime</span><span class="o">,</span> <span class="o">(</span><span class="mi">480</span> <span class="o">+</span> <span class="n">shipHeight</span> <span class="o">*</span> <span class="mi">2</span><span class="o">)</span> <span class="o">/</span> <span class="n">lifetime</span><span class="o">);</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point2D</span><span class="o">.</span><span class="na">Float</span><span class="o">(</span><span class="n">startX</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">shipHeight</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>적기도 총알을 쏴야한다. 하지만 지금까지 총알은 모두 -y 방향(플레이어가 쐈을 때)만 고려되어서 만들어져있다. 따라서 총알도 방향 정보가 추가되어야 한다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Bullet</span> <span class="o">{</span>
+    <span class="n">Point</span> <span class="n">pos</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">direction</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Bullet</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">direction</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">pos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">direction</span> <span class="o">=</span> <span class="n">direction</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>이에 따라 기존에 총알을 관리하던 코드가 바뀌어야 한다. 플레이어는 -y 방향으로 쏘니까 direction 값이 - 가 될테고, 이를 저장하는 List 는 Point 가 아닌 Bullet 을 가져야할테고, 그림 그리는 곳과 총알이 사라지는 곳까지 다 고쳐주면 된다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">bullets</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;();</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyPressed</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">switch</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getKeyCode</span><span class="o">())</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_SPACE</span><span class="o">:</span> <span class="n">bullets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Bullet</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">));</span> <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">repaint</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">updateBullets</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">Bullet</span> <span class="n">bullet</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">+=</span> <span class="n">bullet</span><span class="o">.</span><span class="na">direction</span> <span class="o">*</span> <span class="mi">20</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">bullet</span><span class="o">.</span><span class="na">direction</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+                <span class="o">||</span> <span class="o">(</span><span class="n">bullet</span><span class="o">.</span><span class="na">direction</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">&gt;</span> <span class="mi">560</span><span class="o">))</span>
+            <span class="n">iterator</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">paintComponent</span><span class="o">(</span><span class="n">Graphics</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">black</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">bullet:</span> <span class="n">bullets</span><span class="o">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">drawLine</span><span class="o">(</span><span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="mi">4</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>적기가 총알을 쏴야한다. 간단하게 각 적기가 매 tick마다 random 돌려서 0.3보다 작은 값이 나오면 총알을 만들도록 하자-_-</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">generateEnemyBullet</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">random</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">bullets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Bullet</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">(),</span> 
+                    <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">(),</span> <span class="mi">1</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>이제 충돌검사를 구현한다. 본 게임에서는 간단하게 3가지 충돌검사만 구현해보자.</p>
+
+<ol>
+<li>총알간의 충돌검사</li>
+<li>총알과 비행기의 충돌검사</li>
+<li>비행기간의 충돌검사</li>
+</ol>
+
+<p>그런데 비행기가 적기와 플레이어의 비행기로 2종류가 있으니 총 5가지 항목에 대해서 검사를 해야한다.
+먼저 매 tick마다 총알간 충돌 검사를 하자.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="n">Set</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">removeBulletSet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;();</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Bullet</span> <span class="n">lhs</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">rhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">rhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+            <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rhs</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">removal:</span> <span class="n">removeBulletSet</span><span class="o">)</span> 
+    <span class="n">bullets</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">removal</span><span class="o">);</span>
+</code></pre></div>
+<p>너무 치밀하게 충돌 검사를 하면 탄막놀이가 힘들어지니까 후하게 x범위 4, y범위 10으로 주자-_-</p>
+
+<p>대충하는 건 좋은데 문제가 생겼다. space 키를 누르고 있으면 그 총알들이 겹쳐서 다 충돌처리가 되어버린다. 이 문제를 없애기 위해 shot delay를 준다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">private</span> <span class="kt">long</span> <span class="n">shotTick</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">playerShot</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">shotTick</span> <span class="o">&lt;</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">shotTick</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="mi">200</span><span class="o">;</span>
+        <span class="n">bullets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Bullet</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>그리고 나머지 충돌 처리도 한다. 적기와 플레이어의 비행기는 영역을 갖는 <code>Rectangle</code>이므로 <code>Rectangle</code>의 <code>intersect</code> 함수를 쓰면 간단하다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">checkCollision</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Set</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">removeBulletSet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;();</span>
+    <span class="n">Set</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">removeEnemySet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;();</span>
+    <span class="kt">int</span> <span class="n">shipWidth</span> <span class="o">=</span> <span class="n">ship</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">),</span> <span class="n">shipHeight</span> <span class="o">=</span> <span class="n">ship</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">enemyWidth</span> <span class="o">=</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">),</span> <span class="n">enemyHeight</span> <span class="o">=</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Bullet</span> <span class="n">lhs</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">rhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">rhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+                <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rhs</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">Rectangle2D</span> <span class="n">shipRect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rectangle2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">shipWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+            <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">shipHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">shipWidth</span><span class="o">,</span> <span class="n">shipHeight</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">bullet:</span> <span class="n">bullets</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">enemyWidth</span> 
+                    <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">enemyHeight</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">enemyPos</span><span class="o">);</span>
+                <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">bullet</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">shipWidth</span>
+                <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">shipHeight</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">bullet</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">enemies</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">EnemyPos</span> <span class="n">lhs</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="n">Rectangle2D</span> <span class="n">lhsRect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rectangle2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+                <span class="n">lhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">enemyWidth</span><span class="o">,</span> <span class="n">enemyHeight</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">enemies</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">EnemyPos</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+            <span class="n">Rectangle2D</span> <span class="n">rhsRect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rectangle2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="n">rhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+                    <span class="n">rhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">enemyWidth</span><span class="o">,</span> <span class="n">enemyHeight</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">lhsRect</span><span class="o">.</span><span class="na">intersects</span><span class="o">(</span><span class="n">rhsRect</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+                <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rhs</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">lhsRect</span><span class="o">.</span><span class="na">intersects</span><span class="o">(</span><span class="n">shipRect</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">removal:</span> <span class="n">removeBulletSet</span><span class="o">)</span> 
+        <span class="n">bullets</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">removal</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">removal:</span> <span class="n">removeEnemySet</span><span class="o">)</span>
+        <span class="n">enemies</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">removal</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>엄청나게 대충 작성한 결과로 적기가 자신이 쏜 총알에 맞아 사망하는 놀라운 일이 발생했다-_-;</p>
+
+<p>여기까지 코드 전문은 다음과 같다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.geom.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tatieul</span> <span class="kd">extends</span> <span class="n">JPanel</span> <span class="kd">implements</span> <span class="n">KeyListener</span><span class="o">,</span> <span class="n">ActionListener</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Point</span> <span class="n">shipPos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point</span><span class="o">(</span><span class="mi">320</span><span class="o">,</span> <span class="mi">400</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="n">Image</span> <span class="n">ship</span><span class="o">,</span> <span class="n">enemy</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">bullets</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;();</span>
+    <span class="kd">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">enemies</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;();</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">spawnTick</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">shotTick</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Tatieul</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">setPreferredSize</span><span class="o">(</span><span class="k">new</span> <span class="n">Dimension</span><span class="o">(</span><span class="mi">640</span><span class="o">,</span> <span class="mi">480</span><span class="o">));</span>
+        <span class="n">setFocusable</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">addKeyListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">ship</span> <span class="o">=</span> <span class="n">Toolkit</span><span class="o">.</span><span class="na">getDefaultToolkit</span><span class="o">().</span><span class="na">getImage</span><span class="o">(</span><span class="s">&quot;player.png&quot;</span><span class="o">);</span>
+        <span class="n">enemy</span> <span class="o">=</span> <span class="n">Toolkit</span><span class="o">.</span><span class="na">getDefaultToolkit</span><span class="o">().</span><span class="na">getImage</span><span class="o">(</span><span class="s">&quot;enemy.png&quot;</span><span class="o">);</span>
+        <span class="k">new</span> <span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">Timer</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="k">this</span><span class="o">).</span><span class="na">start</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyPressed</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getKeyCode</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_UP</span><span class="o">:</span>    <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_DOWN</span><span class="o">:</span>  <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">+=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_LEFT</span><span class="o">:</span>  <span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_RIGHT</span><span class="o">:</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">+=</span> <span class="mi">10</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">KeyEvent</span><span class="o">.</span><span class="na">VK_SPACE</span><span class="o">:</span> <span class="n">playerShot</span><span class="o">();</span> <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">repaint</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">playerShot</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">shotTick</span> <span class="o">&lt;</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">shotTick</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="mi">200</span><span class="o">;</span>
+            <span class="n">bullets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Bullet</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="o">(</span><span class="n">ship</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">8</span><span class="o">),</span> <span class="o">-</span><span class="mi">1</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="n">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">updateEnemyPos</span><span class="o">();</span>
+        <span class="n">updateBullets</span><span class="o">();</span>
+        <span class="n">checkCollision</span><span class="o">();</span>
+        <span class="n">generateEnemy</span><span class="o">();</span>
+        <span class="n">generateEnemyBullet</span><span class="o">();</span>
+        <span class="n">repaint</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">checkCollision</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">removeBulletSet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;();</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">removeEnemySet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;();</span>
+        <span class="kt">int</span> <span class="n">shipWidth</span> <span class="o">=</span> <span class="n">ship</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">),</span> <span class="n">shipHeight</span> <span class="o">=</span> <span class="n">ship</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">enemyWidth</span> <span class="o">=</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">),</span> <span class="n">enemyHeight</span> <span class="o">=</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">Bullet</span> <span class="n">lhs</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">rhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">rhs</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+                    <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rhs</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">Rectangle2D</span> <span class="n">shipRect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rectangle2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">shipWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+                <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">shipHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">shipWidth</span><span class="o">,</span> <span class="n">shipHeight</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">bullet:</span> <span class="n">bullets</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">enemyWidth</span> 
+                        <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">enemyHeight</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">enemyPos</span><span class="o">);</span>
+                    <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">bullet</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">shipWidth</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">shipHeight</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">removeBulletSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">bullet</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">enemies</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">EnemyPos</span> <span class="n">lhs</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">Rectangle2D</span> <span class="n">lhsRect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rectangle2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="n">lhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+                    <span class="n">lhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">enemyWidth</span><span class="o">,</span> <span class="n">enemyHeight</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">enemies</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">EnemyPos</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+                <span class="n">Rectangle2D</span> <span class="n">rhsRect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rectangle2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="n">rhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+                        <span class="n">rhs</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemyHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">enemyWidth</span><span class="o">,</span> <span class="n">enemyHeight</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">lhsRect</span><span class="o">.</span><span class="na">intersects</span><span class="o">(</span><span class="n">rhsRect</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+                    <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rhs</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">lhsRect</span><span class="o">.</span><span class="na">intersects</span><span class="o">(</span><span class="n">shipRect</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">removeEnemySet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lhs</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">removal:</span> <span class="n">removeBulletSet</span><span class="o">)</span> 
+            <span class="n">bullets</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">removal</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">removal:</span> <span class="n">removeEnemySet</span><span class="o">)</span>
+            <span class="n">enemies</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">removal</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">updateEnemyPos</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">EnemyPos</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">enemies</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">EnemyPos</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="na">delta</span><span class="o">.</span><span class="na">getX</span><span class="o">(),</span> 
+                    <span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="na">delta</span><span class="o">.</span><span class="na">getY</span><span class="o">());</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">pos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">560</span><span class="o">)</span>
+                <span class="n">iterator</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">updateBullets</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Bullet</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">bullets</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">Bullet</span> <span class="n">bullet</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">+=</span> <span class="n">bullet</span><span class="o">.</span><span class="na">direction</span> <span class="o">*</span> <span class="mi">20</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">bullet</span><span class="o">.</span><span class="na">direction</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+                    <span class="o">||</span> <span class="o">(</span><span class="n">bullet</span><span class="o">.</span><span class="na">direction</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">&gt;</span> <span class="mi">560</span><span class="o">))</span>
+                <span class="n">iterator</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">generateEnemy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">spawnTick</span> <span class="o">&lt;</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">spawnTick</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2000</span><span class="o">)</span> <span class="o">+</span> <span class="mi">500</span><span class="o">;</span>
+            <span class="n">enemies</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">EnemyPos</span><span class="o">(</span><span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">generateEnemyBullet</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">random</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">bullets</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Bullet</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">(),</span> 
+                        <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">+</span> <span class="o">(</span><span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">8</span><span class="o">),</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyReleased</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">keyTyped</span><span class="o">(</span><span class="n">KeyEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">paintComponent</span><span class="o">(</span><span class="n">Graphics</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">white</span><span class="o">);</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">fillRect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">640</span><span class="o">,</span> <span class="mi">480</span><span class="o">);</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">drawImage</span><span class="o">(</span><span class="n">ship</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">x</span> <span class="o">-</span> <span class="n">ship</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">shipPos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="n">ship</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">EnemyPos</span> <span class="nl">enemyPos:</span> <span class="n">enemies</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">drawImage</span><span class="o">(</span><span class="n">enemy</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getX</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> 
+                    <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">enemyPos</span><span class="o">.</span><span class="na">current</span><span class="o">.</span><span class="na">getY</span><span class="o">()</span> <span class="o">-</span> <span class="n">enemy</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">black</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Bullet</span> <span class="nl">bullet:</span> <span class="n">bullets</span><span class="o">)</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">drawLine</span><span class="o">(</span><span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">bullet</span><span class="o">.</span><span class="na">pos</span><span class="o">.</span><span class="na">y</span> <span class="o">-</span> <span class="mi">4</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">JFrame</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JFrame</span><span class="o">(</span><span class="s">&quot;Tatieul - New Generation Shooting Game&quot;</span><span class="o">);</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setContentPane</span><span class="o">(</span><span class="k">new</span> <span class="n">Tatieul</span><span class="o">());</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">pack</span><span class="o">();</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setLocationRelativeTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setDefaultCloseOperation</span><span class="o">(</span><span class="n">JFrame</span><span class="o">.</span><span class="na">EXIT_ON_CLOSE</span><span class="o">);</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">EnemyPos</span> <span class="o">{</span>
+    <span class="n">Point2D</span> <span class="n">delta</span><span class="o">,</span> <span class="n">current</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">EnemyPos</span><span class="o">(</span><span class="kt">int</span> <span class="n">shipHeight</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">lifetime</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextFloat</span><span class="o">()</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="mi">50</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">640</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">endX</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">640</span><span class="o">);</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point2D</span><span class="o">.</span><span class="na">Float</span><span class="o">((</span><span class="n">endX</span> <span class="o">-</span> <span class="n">startX</span><span class="o">)</span> <span class="o">/</span> <span class="n">lifetime</span><span class="o">,</span> <span class="o">(</span><span class="mi">480</span> <span class="o">+</span> <span class="n">shipHeight</span> <span class="o">*</span> <span class="mi">2</span><span class="o">)</span> <span class="o">/</span> <span class="n">lifetime</span><span class="o">);</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point2D</span><span class="o">.</span><span class="na">Float</span><span class="o">(</span><span class="n">startX</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">shipHeight</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Bullet</span> <span class="o">{</span>
+    <span class="n">Point</span> <span class="n">pos</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">direction</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Bullet</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">direction</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">pos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Point</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">direction</span> <span class="o">=</span> <span class="n">direction</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>억지로 한 파일에 최대한 짧고 대충 짜려다보니 코드가 개판이 되었다. 여러 이슈가 있겠지만, 일단 다음번에는 저걸 보다 구조화하는 작업을 해보도록 하자. (안 그러면 코드가 너무 더러워서 도저히 진행을 못할 것 같다-_-)</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2011/10/08/design-database/" title="데이터베이스 설계">&laquo; 데이터베이스 설계</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2011/11/13/flight-game-with-java-4/" title="자바로 만드는 비행기 게임 4">&raquo; 자바로 만드는 비행기 게임 4</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

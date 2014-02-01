@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="eclipse + subversive 25 Dec 2008 tool eclipse는 우연히 만나서 같이 지내오는 녀석이고, subversive는 알게 된지는 얼마 안됬는데 굉장히 많이 쓰게 된 녀석이다. eclipse 1학년 2학기 상상설계공학 수업에서 모바일 프로그래밍을 하였다. 이 때 J2ME로 진행하면서 eclipse를 처음 써보았다. 정확히 말하면 eclipse 3.2에 SK-VM 플러그인을 설치해서 작업했던 것이다. 아무튼 Java 언어나 문법보다 eclipse를 먼저 만났다 [...] subversive svn은 2학년 여름 방학 때 동아리 선배님들과 아르바이트를 진행하면서 같이 일했던 선배에게 배워서 알게 되었다. (그 때는 visual studio를 사용해서 visual svn을 썼었다.) 그 후 마침 마소에서 svn 관련 기사를 다루면서 eclipse 플러그인으로 subversive가 있다는 것을 소개해주었고, 이것을 2학년 2학기 인터넷 프로그래밍 수업 시간에 프로젝트를 진행하면서 주로 사용하게 되었다. eclipse eclipse는 IBM에서 만든 통합 개발 환경(IDE)이다. 시작은 Java IDE로 시작한 것 같지만 요즘은 C/C++,..." />
+
+	<meta http-equiv="date" content="Thursday, 25  2008 00:00:00 GMT" />
+
+	<meta name="keywords" content="tool" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>eclipse + subversive</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">eclipse + subversive</h1>
+				<p class="page-date">25 Dec 2008</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#tool">tool</a></code>
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>eclipse는 우연히 만나서 같이 지내오는 녀석이고,
+subversive는 알게 된지는 얼마 안됬는데 굉장히 많이 쓰게 된 녀석이다.</p>
+
+<h3>eclipse</h3>
+
+<p>1학년 2학기 상상설계공학 수업에서 모바일 프로그래밍을 하였다. 이 때 J2ME로 진행하면서 <code>eclipse</code>를 처음 써보았다. 정확히 말하면 eclipse 3.2에 SK-VM 플러그인을 설치해서 작업했던 것이다.</p>
+
+<p>아무튼 Java 언어나 문법보다 eclipse를 먼저 만났다 [...]</p>
+
+<h3>subversive</h3>
+
+<p>svn은 2학년 여름 방학 때 동아리 선배님들과 아르바이트를 진행하면서 같이 일했던 선배에게 배워서 알게 되었다. <em>(그 때는 visual studio를 사용해서 visual svn을 썼었다.)</em></p>
+
+<p>그 후 마침 <a href="http://imaso.co.kr">마소</a>에서 svn 관련 기사를 다루면서 <code>eclipse</code> 플러그인으로 <code>subversive</code>가 있다는 것을 소개해주었고, 이것을 2학년 2학기 인터넷 프로그래밍 수업 시간에 프로젝트를 진행하면서 주로 사용하게 되었다.</p>
+
+<h3>eclipse</h3>
+
+<p><code>eclipse</code>는 IBM에서 만든 통합 개발 환경(IDE)이다. 시작은 Java IDE로 시작한 것 같지만 요즘은 C/C++, Web, PHP, Modeling, Python, nesC 등등 별별 언어를 다 지원한다. <em>(FLEX builder도 eclipse 기반이다)</em></p>
+
+<p>보통 언어의 앞 글자를 따서 DT(Development Tookit)이라고 부른다. JDT, PDT(PHP), CDT라고 부르는 것들이 바로 이것이다.</p>
+
+<p>하나의 <code>eclipse</code>에는 여러 DT가 포함될 수 있고 이것들은 내부에서 <code>perspective</code>라고 해서 나뉜다. 단 각 DT마다 eclipse 버전이 다를 수 있으므로 주의가 필요하다. <em>(이 글을 쓰는 시점을 기준으로 PDT는 아직도 eclipse 3.3을 못 벗어난 것 같다)</em></p>
+
+<p>아무튼 이 IDE를 쓰려면 일단 JRE(Java Runtime Environment)가 설치되어있어야 하고, 이건 <a href="http://java.com">http://java.com</a>에 들어가서 받으면 된다. 벌써 jdk1.6.0_11이 나왔다.</p>
+
+<p>이클립스는 <a href="http://www.eclipse.org">http://www.eclipse.org</a>에서 다운받을 수 있다.</p>
+
+<h3>subversive</h3>
+
+<p>subversive는 앞서 말했듯이 eclipse 내에서 svn 기능을 (정확히 말하면 svn client) 사용할 수 있게 해주는 플러그인이다. 기존의 subclipse가 좀 제대로 동작하지 않은 적이 있어서 나는 주로 subversive를 사용한다.</p>
+
+<p><a href="http://www.polarion.org/index.php?page=download&amp;project=subversive">http://www.polarion.org/index.php?page=download&amp;project=subversive</a></p>
+
+<ul>
+<li>eclipse에서 플러그인을 관리하는 곳은 3.4부터 update를 수행하는 곳과 완전히 통합되어버렸다.
+재미있게도 그 메뉴는 help - software updates 이다.</li>
+<li>Software Updates and Add-ons라는 창이 뜬다. 여기서 새로운 것을 설치해야하니 Available Software Tab으로 이동한다.</li>
+<li>그리고 Add Site를 눌러서 아래 두 사이트를 추가해주면 자신이 설치할 수 있는 목록을 가져와서 보여준다. 
+
+<ul>
+<li><a href="http://download.eclipse.org/technology/subversive/0.7/update-site/">http://download.eclipse.org/technology/subversive/0.7/update-site/</a></li>
+<li><a href="http://www.polarion.org/projects/subversive/download/eclipse/2.0/update-site/">http://www.polarion.org/projects/subversive/download/eclipse/2.0/update-site/</a></li>
+</ul></li>
+<li>거기서 뭐 적당히 알아서 깔면 된다. 나는 뭐, source 빼고 다 까는 편이다.</li>
+<li>SVN Connectors 깔고, SVN Team Provider 깔고, JavaHL이나 SVNKit를 선택해서 깔아주면 된다.</li>
+</ul>
+
+<p>끝</p>
+
+<h3>요약</h3>
+
+<p>Java 개발자를 위한 Subversive 플러그인 설치</p>
+
+<ul>
+<li><a href="http://java.sun.com">http://java.sun.com</a> 들어가서 JDK 설치</li>
+<li><a href="http://www.eclipse.org">http://www.eclipse.org</a> 들어가서 eclipse 다운로드</li>
+<li>eclipse 구동 후 Help - Software Updates 메뉴를 눌러 Available Software Tab로 이동한 다음 Add Site를 눌러
+<a href="http://download.eclipse.org/technology/subversive/0.7/update-site/">http://download.eclipse.org/technology/subversive/0.7/update-site/</a>
+<a href="http://www.polarion.org/projects/subversive/download/eclipse/2.0/update-site/">http://www.polarion.org/projects/subversive/download/eclipse/2.0/update-site/</a>
+의 목록을 추가하고,</li>
+<li>SVN Connectors, SVN Team Provider, JavaHL or SVNKit (혹은 둘다) 선택해서 깔아주면 된다.</li>
+</ul>
+
+<h3>기타</h3>
+
+<p>omega를 망쳐버린 내가 이런 말할 자격은 없지만,<br>
+뭐랄까 wiki와 게시판의 중간 정도의 성향을 띄면서 뭐시기한 그런 게시판이 있으면 참 좋겠다. 하지만 웹 프로그래밍은 무서워서 섣불리 작업을 시작하기가 무섭다 [...]</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2008/10/18/django-and-encoding/" title="django와 encoding">&laquo; django와 encoding</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2009/01/03/java-swing-1/" title="Java Swing을 한다면 1">&raquo; Java Swing을 한다면 1</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

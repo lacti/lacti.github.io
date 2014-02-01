@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="java annotation을 사용한 InstanceId 구현 02 Mar 2011 java Java에서 생성하는 Object마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자. Index 발급 Group 관련해서 파일을 하나 작성하여 IndexGeneratingManager를 구성해서 발급해도 되고, 아니면 발급 받는 시점을 적절히 조절하거나 발급 함수의 인자로 Group할 Class 정보를 넣어줘도 되겠다. 하지만 본 글에서는 Java 1.5부터 추가된 Annotation을 사용하여 source code에 metadata를 추가하여 문제를 해결하는 방법을 써 보겠다. Java의 Annotation은 특정 지점(ElementType: Type, Method, Field, ...)에 특정 시점(Retention: Source, Class, Runtime)까지 유지되는 metadata이다. @interface keyword로 정의할 수 있고, 지정된 지점에 맞게 class, method, field, parameter 등에 선언될 수 있고, 이는 지정된 시점까지 유지된다. 위 문제를 해결하기 위해 새로 작성하는 IndexCategory라는 annotation은 index를 발급할 category class를 지정한다. import java.lang.annotation.ElementType; import java.lang.annotation.Retention; import java.lang.annotation.RetentionPolicy; import java.lang.annotation.Target; @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME) public..." />
+
+	<meta http-equiv="date" content="Wednesday, 02  2011 00:00:00 GMT" />
+
+	<meta name="keywords" content="java,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>java annotation을 사용한 InstanceId 구현</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">java annotation을 사용한 InstanceId 구현</h1>
+				<p class="page-date">02 Mar 2011</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#java">java</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>Java에서 생성하는 <code>Object</code>마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자.</p>
+
+<p>Index 발급 Group 관련해서 파일을 하나 작성하여 <code>IndexGeneratingManager</code>를 구성해서 발급해도 되고, 아니면 발급 받는 시점을 적절히 조절하거나 발급 함수의 인자로 Group할 Class 정보를 넣어줘도 되겠다.<br>
+하지만 본 글에서는 Java 1.5부터 추가된 <code>Annotation</code>을 사용하여 source code에 metadata를 추가하여 문제를 해결하는 방법을 써 보겠다.</p>
+
+<p>Java의 <code>Annotation</code>은 특정 지점(ElementType: Type, Method, Field, ...)에 특정 시점(Retention: Source, Class, Runtime)까지 유지되는 metadata이다.<br>
+<code>@interface keyword</code>로 정의할 수 있고, 지정된 지점에 맞게 class, method, field, parameter 등에 선언될 수 있고, 이는 지정된 시점까지 유지된다.</p>
+
+<p>위 문제를 해결하기 위해 새로 작성하는 <code>IndexCategory</code>라는 annotation은 index를 발급할 <code>category</code> class를 지정한다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.lang.annotation.ElementType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.RetentionPolicy</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
+
+<span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">IndexCategory</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">category</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>이 annotation은 <code>Type</code>에 선언될 수 있는데, 여기서 <code>Type</code>은 <code>class</code>를 뜻한다.<br>
+또한 Runtime까지 유지되는 정보인데, 그 이유는 객체가 &quot;생성되는 시점&quot;인 runtime에 해당 정보를 통해서 어떤 category의 class type으로 index를 발급받을지 얻어내야하기 때문이다.</p>
+
+<p>annotation은 속성<code>property</code>를 갖는데, <code>IndexCategory</code>는 <code>category()</code>라는 속성을 갖는다. 이는 <code>Class&lt;?&gt;</code>를 값으로 갖는 속성으로 그 이름은 category가 된다.</p>
+
+<p>위와 같은 <code>IndexCategory</code> annotation을 다음과 같이 사용하고자 할 class에 적용한다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Skill</span> <span class="kd">extends</span> <span class="n">Thing</span> <span class="o">{}</span>
+
+<span class="nd">@IndexCategory</span><span class="o">(</span><span class="n">category</span><span class="o">=</span><span class="n">Skill</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">Magic</span> <span class="kd">extends</span> <span class="n">Skill</span> <span class="o">{}</span>
+
+<span class="nd">@IndexCategory</span><span class="o">(</span><span class="n">category</span><span class="o">=</span><span class="n">Skill</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">Mastery</span> <span class="kd">extends</span> <span class="n">Skill</span> <span class="o">{}</span>
+</code></pre></div>
+<p><code>Magic</code> class와 <code>Mastery</code> class는 <code>IndexCategory</code>에 의해 어떤 category에 따라 index를 발급받을지 code 상에 명시한다.
+분명 이 annotation은 프로그램의 동작에 영향을 주지만, 어떠한 코드로써 그 정보를 제공한다기 보다는 metadata로 그 정보를 제공한다는 점에서 충분히 매력적이다. 어떠한 class의 특성을 명시하기 위해 method나 field, 상속 등의 무거운 방법을 사용하지 않고, 위처럼 <code>annotation</code>을 통해 충분히 정보를 제공할 수 있다.</p>
+
+<p>문법상 annotation을 사용할 때 앞에 @ 을 붙이고 annotation 이름을 쓴다. 그리고 () 안에 <em>속성=값</em>의 형태로 나열하면 되고, 배열의 경우 {}를 통해 묶어주면 된다.</p>
+
+<p>이러한 annotation을 가장 많이 접하는 경우가 <code>Override annotation</code>과 <code>Deprecated annotation</code>, 그리고 <code>SuppressWarnings annotation</code>이다.<br>
+간단히 <code>Override annotation</code>만 설명하자면 이는 method에 선언 가능하며 source 시간까지 유지되는 <code>annotation</code>이다. 즉 compiler가 확인하고 버리는 시점까지 유지되는 <code>annotation</code>으로 <code>override</code> 되지 않은 method가 이 <code>annotation</code>을 가지고 있을 경우 compile error를 띄워주는 역할을 하여 compile time에 잘못된 override를 사전에 보고하는 역할을 한다.</p>
+
+<p>위와 같이 <code>IndexCategory</code> annotation을 명시한 뒤, 객체를 생성하여 index를 발급하는 코드에서는 이를 반영하여 index를 해주면 된다.</p>
+<div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">generateNextIndex</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">callerClassName</span> <span class="o">=</span> <span class="n">findCallerClassName</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">callerClass</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">callerClassName</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">callerClass</span><span class="o">.</span><span class="na">isAnnotationPresent</span><span class="o">(</span><span class="n">IndexCategory</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">IndexCategory</span> <span class="n">category</span> <span class="o">=</span> <span class="n">callerClass</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">IndexCategory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+            <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">categoryClass</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">category</span><span class="o">();</span>
+            <span class="k">return</span> <span class="nf">generateNextIndex</span><span class="o">(</span><span class="n">categoryClass</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nf">generateNextIndex</span><span class="o">(</span><span class="n">callerClass</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="nf">generateNextIndex</span><span class="o">(</span><span class="n">callerClassName</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><code>callerClassName</code>을 가져와서 그로부터 Class 정보를 가져온 뒤, 그 Class가 <code>IndexCategory</code> annotation이 존재<code>present</code>할 경우 해당 annotation에 명시된 category로부터 category class 정보를 가져와서 그 class로 index를 발급하겠다는 코드이다.</p>
+
+<p>즉, 반드시 <code>IndexCategory</code>를 통해 index grouping을 수행하겠다는 것이 아니라 <code>IndexCategory</code> annotation이 present된 경우에만 해당 class로 index를 발급받는 것이므로, annotation이 선언되지 않은 경우까지 완벽히 처리하게 됩니다.</p>
+
+<p>물론 <code>callerClassName</code>에서 잘못된 class 이름을 얻을 경우에 대비해서 예외처리 코드를 추가했지만 이는 <code>Class#forName</code> 함수가 반드시 예외를 처리하게 하는(명시적 예외처리) 구조이므로 try-catch 문을 작성한 것이지 위 경우에서는 예외가 발생할 가능성이 없다.</p>
+
+<p>본 문서에서는 <a href="http://en.wikipedia.org/wiki/Annotation#Java_annotations">Java Annotation</a>의 문법에 대해 설명하는 것이 취지가 아니므로, 이 정도로 글을 마친다.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2011/02/22/object-database-and-value-object/" title="Object Database와 Value Object">&laquo; Object Database와 Value Object</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2011/03/20/classical-inheritance-in-javascript/" title="Classical Inheritance in JavaScript">&raquo; Classical Inheritance in JavaScript</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

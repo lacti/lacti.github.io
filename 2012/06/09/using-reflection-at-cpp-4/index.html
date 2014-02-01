@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="c++에서 reflection 사용하기 4 09 Jun 2012 c++ reflection 이전 글에서는 자료구조가 선언된 header파일을 여러 번 include하면 문제가 발생했었다. 하지만 이리저리 참조가 되다보면 각 번역 단위에서 include가 한 번만 되는 것은 굉장히 힘든 일일 것이다. 따라서 본 글에서는 매크로를 잘 정의해서 선언 header파일이 구조체 선언, reflection 등록 딱 2번만 include가 될 수 있도록 만들어볼 것이다. 이전 글(#3)의 소스 코드 내의, reset_type_macro.h type_declare_macro.h type_register_macro.h user.h 가 이번 글의 타겟이 될 것이다. #include를 하는 phase는 2단계로 나뉜다. 첫 번째는 구조체를 선언하기 위한 단계로 DECLARE_PHASE라고 하겠다. 이 때 STRUCT 매크로들은 DECLARE 매크로가 사용되어야 하므로, 이 시점에서는 type_declare_macro.h가 include된 상태이어야 한다. 두 번째는 선언된 구조체의 reflection 정보를 등록하는 단계로 REGISTER_PHASE라고 하겠다. 이 때 STRUCT 매크로들은 REFLECTION_REGISTER 매크로가 사용되어야 하므로, 이 시점에서는 type_register_macro.h가 include된 상태이어야..." />
+
+	<meta http-equiv="date" content="Saturday, 09  2012 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,reflection,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>c++에서 reflection 사용하기 4</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">c++에서 reflection 사용하기 4</h1>
+				<p class="page-date">09 Jun 2012</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#reflection">reflection</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>이전 글에서는 자료구조가 선언된 header파일을 여러 번 include하면 문제가 발생했었다. 하지만 이리저리 참조가 되다보면 각 번역 단위에서 include가 한 번만 되는 것은 굉장히 힘든 일일 것이다.</p>
+
+<p>따라서 본 글에서는 매크로를 잘 정의해서 선언 header파일이 구조체 선언, reflection 등록 딱 2번만 include가 될 수 있도록 만들어볼 것이다. <a href="https://github.com/lacti/FieldInfo/tree/v0.3">이전 글(#3)의 소스 코드</a> 내의,</p>
+
+<ul>
+<li><a href="https://github.com/lacti/FieldInfo/blob/v0.3/reset_type_macro.h">reset_type_macro.h</a></li>
+<li><a href="https://github.com/lacti/FieldInfo/blob/v0.3/type_declare_macro.h">type_declare_macro.h</a></li>
+<li><a href="https://github.com/lacti/FieldInfo/blob/v0.3/type_register_macro.h">type_register_macro.h</a></li>
+<li><a href="https://github.com/lacti/FieldInfo/blob/v0.3/user.h">user.h</a></li>
+</ul>
+
+<p>가 이번 글의 타겟이 될 것이다.</p>
+
+<p><code>#include</code>를 하는 phase는 2단계로 나뉜다.</p>
+
+<ul>
+<li>첫 번째는 구조체를 선언하기 위한 단계로 <code>DECLARE_PHASE</code>라고 하겠다. 이 때 <code>STRUCT</code> 매크로들은 <code>DECLARE</code> 매크로가 사용되어야 하므로, 이 시점에서는 type_declare_macro.h가 include된 상태이어야 한다.</li>
+<li>두 번째는 선언된 구조체의 reflection 정보를 등록하는 단계로 <code>REGISTER_PHASE</code>라고 하겠다. 이 때 STRUCT 매크로들은 REFLECTION_REGISTER 매크로가 사용되어야 하므로, 이 시점에서는 type_register_macro.h가 include된 상태이어야 한다.</li>
+</ul>
+
+<p>두 macro.h 파일이 처음 참조하게 되는 초기화 파일인 reset_type_macro.h 파일에서 각 상태를 먼저 초기화해줄 수 있도록 한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#ifdef STRUCT_BEGIN</span>
+<span class="cp">#undef STRUCT_BEGIN</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef STRUCT_END</span>
+<span class="cp">#undef STRUCT_END</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef STRUCT_FIELD</span>
+<span class="cp">#undef STRUCT_FIELD</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef __DECLARE_PHASE__</span>
+<span class="cp">#undef __DECLARE_PHASE__</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef __REGISTER_PHASE__</span>
+<span class="cp">#undef __REGISTER_PHASE__</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p>이제 어떤 macro.h가 include되냐에 따라서 <code>STRUCT</code>와 <code>PHASE</code>도 변경될 수 있도록 밑작업을 마쳤다.</p>
+
+<p>구조체를 선언하기 위한 매크로가 정의된 type_declare_macro.h 파일을 보면 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#include &quot;reset_type_macro.h&quot;</span>
+
+<span class="cp">#ifndef __DECLARE_TYPE_MACRO_DEFINED__</span>
+<span class="cp">#define __DECLARE_TYPE_MACRO_DEFINED__</span>
+<span class="cp">#define DECLARE_BEGIN(class_name) \</span>
+<span class="cp">    struct class_name; \</span>
+<span class="cp">    typedef std::shared_ptr&lt;class_name&gt; class_name##_ref; \</span>
+<span class="cp">    struct class_name : public object_t {</span>
+
+<span class="cp">#define DECLARE_FIELD(type, field_name) \</span>
+<span class="cp">        type field_name;</span>
+
+<span class="cp">#define DECLARE_END()   \</span>
+<span class="cp">    };</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define STRUCT_BEGIN(class_name)        DECLARE_BEGIN(class_name)</span>
+<span class="cp">#define STRUCT_FIELD(type, field_name)  DECLARE_FIELD(type, field_name)</span>
+<span class="cp">#define STRUCT_END()                    DECLARE_END()</span>
+
+<span class="cp">#define __DECLARE_PHASE__</span>
+</code></pre></div>
+<p><code>DECLARE</code> 계열 매크로의 중복 정의를 막고, <code>STRUCT</code>가 <code>DECLARE</code> 매크로를 가리키게 한 다음,
+현재 상태를 <code>DECLARE_PHASE</code>로 만든다.</p>
+
+<p>선언된 구조체의 reflection 정보를 등록하기 위한 매크로가 정의된 type_register_macro.h 파일을 보면 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#include &quot;reflection_macro.h&quot;</span>
+<span class="cp">#include &quot;reset_type_macro.h&quot;</span>
+
+<span class="cp">#define STRUCT_BEGIN(class_name)        REFLECTION_REGISTER_BEGIN(class_name)</span>
+<span class="cp">#define STRUCT_FIELD(type, field_name)  REFLECTION_REGISTER_FIELD(type, field_name)</span>
+<span class="cp">#define STRUCT_END()                    REFLECTION_REGISTER_END()</span>
+
+<span class="cp">#define __REGISTER_PHASE__</span>
+</code></pre></div>
+<p><code>STRUCT</code>가 <code>REFLECTION_REGISTER</code> 매크로를 가리키게 한 다음, 현재 상태를 <code>REGISTER_PHASE</code>로 만든다.</p>
+
+<p>이제 모든 준비가 완료되었으니, user.h 파일에서 각 상태 별로 한 번씩만 include가 되도록 만들어주자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#if (defined(__DECLARE_PHASE__) &amp;&amp; !defined(__USER_DECLARED__)) \</span>
+<span class="cp">    || (defined(__REGISTER_PHASE__) &amp;&amp; !defined(__USER_REGISTERED__))</span>
+
+<span class="cp">#if defined(__DECLARE_PHASE__) &amp;&amp; !defined(__USER_DECLARED__)</span>
+<span class="cp">#define __USER_DECLARED__</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(__REGISTER_PHASE__) &amp;&amp; !defined(__USER_REGISTERED__)</span>
+<span class="cp">#define __USER_REGISTERED__</span>
+<span class="cp">#endif</span>
+
+<span class="n">STRUCT_BEGIN</span><span class="p">(</span><span class="kt">user_t</span><span class="p">)</span>
+    <span class="n">STRUCT_FIELD</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+    <span class="n">STRUCT_FIELD</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="n">STRUCT_END</span><span class="p">()</span>
+
+<span class="cp">#endif</span>
+</code></pre></div>
+<p>기존에는 #ifndef, #define ~ #endif 와 같이 단순히 중복 include를 막아줄 수 있었지만, 이제는 <code>DECLARE_PHASE</code>, <code>REGISTER_PHASE</code> 각각 한 번씩 include를 허용해주어야 하므로 상태를 따로 관리해야 한다.</p>
+
+<p>따라서 <code>USER DECLARED</code>, <code>REGISTERED</code> 상태 2개를 갖고,</p>
+
+<ul>
+<li><code>DECLARE_PHASE</code>에서는 DECLARED 상태가 아닐 때만 진입 가능하도록,</li>
+<li><code>REGISTER_PHASE</code>에서는 REGISTERED 상태가 아닐 때만 진입 가능하도록 매크로를 작성한다.</li>
+</ul>
+
+<p>이제 처음 #if 조건문에 의해, 각 상태마다 단 한 번의 include만 허용하게 된다.</p>
+
+<p>한가지 안타까운 점은, 실제 구조체를 선언하는 모든 header 파일에 위와 같은 안전자 지시 장치를 해주어야 한다는 것이다. 이는 생각보다 번거로운 작업이 될 수 있는데, file template을 잘 만들어서 쓰거나 하면 어느정도 해결할 수 있을 것 같다.</p>
+
+<p>여기까지 구조체를 선언, reflection 정보를 등록했고, 다음에는 등록한 reflection 정보를 사용하여 xml과 어떻게 bind할 것인지에 대해 살펴보자. 추가로 각 구조체의 version을 관리하여 어떻게 convert를 작성할 수 있을지도 고민해보도록 하자.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2012/06/09/using-reflection-at-cpp-3/" title="c++에서 reflection 사용하기 3">&laquo; c++에서 reflection 사용하기 3</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2012/06/10/get-resource-stream-using-ClassLoader/" title="ClassLoader를 사용하여 Resource Stream 얻기">&raquo; ClassLoader를 사용하여 Resource Stream 얻기</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

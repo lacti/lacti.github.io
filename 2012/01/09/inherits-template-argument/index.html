@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="template 인자를 상속 받기 09 Jan 2012 c++ template template &lt;class _Base&gt; class MyClass : public _Base {}; 위와 같은 형태가 어떤 의미를 지니고, 어느 곳에서 사용될 수 있는지 살펴보자 일단 자신의 부모 class를 generic하게 취할 수 있다는 것은 부모의 class 와 자식의 class 간의 결합성을 어느 정도 느슨하게 준다는 의미가 있다. (인자로 무엇을 주냐에 따라 상속 구조가 바뀌니까.) 또한 부모 class의 종류에 상관없이 동일한 기능을 추가해줄 수 있다거나, 아니면 부모 class들이 동일한 interface를 가지고 있다면, 그것을 통한 기능 확장도 가능하겠다. singleton 부모 class의 종류에 상관없이 동일한 기능을 추가하는 가장 간단한 예제는 singleton이다. 아래와 같은 MyClass가 있다고 해보자. class MyClass { public: int GetValue() const { return 100; } }; 이 Class를 Singleton으로 만드려면 가장 간단한 방법은 직접 해당 method를..." />
+
+	<meta http-equiv="date" content="Monday, 09  2012 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,template,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>template 인자를 상속 받기</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">template 인자를 상속 받기</h1>
+				<p class="page-date">09 Jan 2012</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#template">template</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Base</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">MyClass</span> <span class="o">:</span> <span class="k">public</span> <span class="n">_Base</span> <span class="p">{};</span>
+</code></pre></div>
+<p>위와 같은 형태가 어떤 의미를 지니고, 어느 곳에서 사용될 수 있는지 살펴보자</p>
+
+<p>일단 자신의 부모 class를 generic하게 취할 수 있다는 것은 부모의 class 와 자식의 class 간의 결합성을 어느 정도 느슨하게 준다는 의미가 있다. (인자로 무엇을 주냐에 따라 상속 구조가 바뀌니까.)</p>
+
+<p>또한 부모 class의 종류에 상관없이 동일한 기능을 추가해줄 수 있다거나, 아니면 부모 class들이 동일한 interface를 가지고 있다면, 그것을 통한 기능 확장도 가능하겠다.</p>
+
+<h3>singleton</h3>
+
+<p>부모 class의 종류에 상관없이 동일한 기능을 추가하는 가장 간단한 예제는 singleton이다. 아래와 같은 <code>MyClass</code>가 있다고 해보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">GetValue</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">100</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>이 Class를 Singleton으로 만드려면 가장 간단한 방법은 직접 해당 method를 <code>MyClass</code>에 추가하는 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">GetValue</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">100</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">static</span> <span class="n">MyClass</span><span class="o">&amp;</span> <span class="n">Instance</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_ptr</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">)</span>
+            <span class="n">_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyClass</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="n">_ptr</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="n">MyClass</span><span class="p">()</span> <span class="p">{}</span>
+<span class="nl">private:</span>
+    <span class="k">static</span> <span class="n">MyClass</span><span class="o">*</span> <span class="n">_ptr</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">MyClass</span><span class="o">*</span> <span class="n">MyClass</span><span class="o">::</span><span class="n">_ptr</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+</code></pre></div>
+<p>물론 좋은 설계는 아니겠지만 만약 <code>Singleton</code> 객체가 많아진다고 해보자. 그러면 매번 저런 식의 static 함수와 변수를 각 class마다 추가해주어야 할 것이다.</p>
+
+<p>이를 해결해주기 위한 여러 방법이 있겠지만 본 글에서 소개하고자 하는 방법은 다음과 같은 template singleton class를 만드는 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Target</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="n">_Target</span><span class="o">&amp;</span> <span class="n">Instance</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_ptr</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">)</span> <span class="n">_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">_Target</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="n">_ptr</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="k">static</span> <span class="n">_Target</span><span class="o">*</span> <span class="n">_ptr</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Target</span><span class="o">&gt;</span>
+<span class="n">_Target</span><span class="o">*</span> <span class="n">Singleton</span><span class="o">&lt;</span><span class="n">_Target</span><span class="o">&gt;::</span><span class="n">_ptr</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+</code></pre></div>
+<p>위와 같은 <code>Singleton</code>을 설계하고 모든 문제가 해결되었다! 라고 생각하면 안된다. <code>MyClass</code>는 여러 instance가 생기면 안되기 때문에 생성자가 private으로 작성되어 있다.</p>
+
+<p>하지만 위 <code>Singleton</code> class는 <code>new _Target</code>를 통해서 직접 해당 객체를 생성하므로, <code>Singleton&lt;MyClass&gt;::Instance()</code> 구문은  컴파일 에러를 발생시킬 것이다.</p>
+
+<p>이를 해결하기 위해 다음과 같이 코드를 수정한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Class</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Singleton</span> <span class="o">:</span> <span class="k">private</span> <span class="n">_Class</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="n">_Class</span><span class="o">&amp;</span> <span class="n">Instance</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_ptr</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">)</span>
+            <span class="n">_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Singleton</span><span class="o">&lt;</span><span class="n">_Class</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="n">_ptr</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="n">Singleton</span><span class="p">()</span> <span class="p">{}</span>
+<span class="nl">private:</span>
+    <span class="k">static</span> <span class="n">Singleton</span><span class="o">*</span> <span class="n">_ptr</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Class</span><span class="o">&gt;</span>
+<span class="n">Singleton</span><span class="o">&lt;</span><span class="n">_Class</span><span class="o">&gt;*</span> <span class="n">Singleton</span><span class="o">&lt;</span><span class="n">_Class</span><span class="o">&gt;::</span><span class="n">_ptr</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">GetValue</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">100</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nl">protected:</span>
+    <span class="n">MyClass</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>MyClass</code>의 생성자를 살짝 protected로 바꾸었다. 이제 <code>MyClass</code>를 상속받는 녀석이 아니면 저 객체를 생성하지 못할 것이다. 그리고 <code>Singleton</code> class가 이를 상속받는다.</p>
+
+<p>단순히 생성하기 위한 상속을 받는 것이고, 기능 상속을 받을 필요는 없으므로 private 상속을 받는다. 그리고 <code>Singleton</code> 객체를 static 변수로 포함하고 있다가 이것을 <code>Instance()</code> 함수에서 <code>_Class&amp;</code>로 변환해서 반환한다.</p>
+
+<ul>
+<li>그 이유는 static 함수에서 <code>new _Class</code>를 수행할 때 여전히 <code>MyClass</code>의 생성자가 protected이므로 접근이 불가능하기 때문이다. 따라서 접근 가능한 자신의 생성자 <code>private Singleton()</code>를 부른다. <code>Singleton</code>의 생성자에서는 부모의 생성자인 <code>MyClass</code> 함수가 protected이므로 접근이 가능하다.</li>
+</ul>
+
+<p>따라서 위와 같이 class를 설계하면, <code>Singleton&lt;MyClass&gt;::Instance()</code>와 같이 유일 객체에 접근이 가능하며, 그 객체 이외의 다른 객체의 생성도 막을 수 있다.</p>
+
+<p><strong>하지만 이것으로도 완벽하지 않고, 여러 문제가 발생할 여지가 있다. 이에 대해서는 MC++D 의 6장 Singleton 구현을 보자</strong></p>
+
+<h3>extension</h3>
+
+<p>부모 class들이 동일한 interface를 가지고 있다고 할 때, 이들에게 공통적으로 적용될 수 있는 기능을 추가한 class를 확장해보자.</p>
+
+<p>약간 억지 예제이지만, STL container의 iterator를 확장해 보겠다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_FwdIter</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">for_each_iter</span> <span class="o">:</span> <span class="k">public</span> <span class="n">_FwdIter</span> <span class="p">{</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_FuncTy</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">for_each</span><span class="p">(</span><span class="n">_FwdIter</span> <span class="n">end</span><span class="p">,</span> <span class="n">_FuncTy</span> <span class="n">funct</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">_FwdIter</span> <span class="n">it</span> <span class="o">=</span> <span class="n">begin</span><span class="p">;</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span>
+            <span class="n">funct</span><span class="p">(</span><span class="o">*</span><span class="n">it</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">for_each_iter</span><span class="p">(</span><span class="n">_FwdIter</span> <span class="n">_begin</span><span class="p">)</span> <span class="o">:</span> <span class="n">begin</span><span class="p">(</span><span class="n">_begin</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">_FwdIter</span> <span class="n">begin</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>for_each_iter</code>는 forward iterator 기능을 모두 가지면서 <code>for_each</code>라는 함수를 하나 더 갖는 iterator이다. 이를 만족하기 위해 <code>_FwdIter</code>에 대해 public 상속을 하였으며, <code>for_each</code> 함수를 추가로 갖는다.</p>
+
+<p>단, 저렇게 만들어놓으면 매번 <code>for_each_iter&lt;std::vector&lt;int&gt;::iterator&gt;</code> 등 type을 길게 써주어야 한다. 이 문제를 해결하기 위해 간단하게 type을 추론하여 객체를 생성해주는 생성 함수를 만들자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_FwdIter</span><span class="o">&gt;</span>
+<span class="n">for_each_iter</span><span class="o">&lt;</span><span class="n">_FwdIter</span><span class="o">&gt;</span> <span class="n">make_for_each_iter</span><span class="p">(</span><span class="n">_FwdIter</span> <span class="n">iter</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">for_each_iter</span><span class="o">&lt;</span><span class="n">_FwdIter</span><span class="o">&gt;</span><span class="p">(</span><span class="n">iter</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>그러면 아래와 같이 사용할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ints</span><span class="p">;</span>
+<span class="n">ints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">ints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">ints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="n">ints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+
+<span class="k">auto</span> <span class="n">ea1</span> <span class="o">=</span> <span class="n">make_for_each_iter</span><span class="p">(</span><span class="n">ints</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+<span class="n">ea1</span><span class="p">.</span><span class="n">for_each</span><span class="p">(</span><span class="n">ints</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_tprintf</span><span class="p">(</span><span class="n">_T</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">),</span> <span class="n">v</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>부모 class들이 동일한 interface를 가지고 있고 그에 대한 동일한 작업을 수행하거나 결과를 제공하는 함수가 멤버 함수 형태로 제공되어 그것이 하나의 객체를 이루면 좋을 경우에 위와 같이 쓰면 될 것 같다.</p>
+
+<p>하지만 보통은 algorithm에 있는 함수들처럼 그냥 함수를 만들어 쓴다. 만약 위와 같이 객체 형태로 표현할 때 장점이 있는 구조에서는 도움이 되지 않을까 싶다. (적절한 예제가 더 안 떠오른다-_-;)</p>
+
+<h3>마무리</h3>
+
+<p>template 인자로 받게되는 것은 암시적 interface가 요구되기 때문에 컴파일 타임에서의 느슨한 결합이 요구될 때 쓰면 좋다. 그리고 상속이라는 것을 통해 기능 확장, 혹은 접근 제한 등을 적절히 혼합하여 사용하면 재미난 많은 것을 할 수 있다.</p>
+
+<p>더 나아가서 <a href="http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">CRTP</a>라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2011/12/20/event-handler-and-message-passing/" title="EventHandler와 Message Passing">&laquo; EventHandler와 Message Passing</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2012/01/10/implicit-interface-by-template/" title="template의 암시적 interface 요구">&raquo; template의 암시적 interface 요구</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

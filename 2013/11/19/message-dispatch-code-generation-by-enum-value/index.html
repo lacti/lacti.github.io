@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="메시지 enum에 따른 message 콜백 함수 자동생성 19 Nov 2013 c++ message 일단 message에 대한 기본 type과 각 message을 구분하기 위한 enum이 있다. struct message_base_t {}; enum message_enum { message1, message2, message3, message_count, }; message과 enum 값을 쉽게 연결하기 위해 중간 층을 도입한다. template &lt;int code&gt; struct message_enum_t : public message_base_t { enum { enum_value = code }; }; 이제 message을 만든다. struct message_struct_1 : public message_enum_t&lt;message1&gt; {}; struct message_struct_2 : public message_enum_t&lt;message2&gt; {}; struct message_struct_3 : public message_enum_t&lt;message3&gt; {}; 기본적인 handler는 다음과 같이 단순하게 정의할 수 있다. typedef void (*base_handler_t)(const message_base_t&amp;); dispatch를 위해 handler에 대한 table을 하나 만들어둔다. typedef std::array&lt;base_handler_t, message_count&gt; handler_table_t; static handler_table_t _handler_table_t; 일단 등록된 handler가 없어도 서버 동작에 문제가 없도록 하기 위해 빈 handler로 초기화를 해준다...." />
+
+	<meta http-equiv="date" content="Tuesday, 19  2013 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,message,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>메시지 enum에 따른 message 콜백 함수 자동생성</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">메시지 enum에 따른 message 콜백 함수 자동생성</h1>
+				<p class="page-date">19 Nov 2013</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#message">message</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>일단 message에 대한 기본 type과 각 message을 구분하기 위한 enum이 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">message_base_t</span> <span class="p">{};</span>
+
+<span class="k">enum</span> <span class="n">message_enum</span> <span class="p">{</span>
+    <span class="n">message1</span><span class="p">,</span>
+    <span class="n">message2</span><span class="p">,</span>
+    <span class="n">message3</span><span class="p">,</span>
+    <span class="n">message_count</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>message과 enum 값을 쉽게 연결하기 위해 중간 층을 도입한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="kt">int</span> <span class="n">code</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="kt">message_enum_t</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">message_base_t</span> <span class="p">{</span>
+    <span class="k">enum</span> <span class="p">{</span>
+        <span class="n">enum_value</span> <span class="o">=</span> <span class="n">code</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>이제 message을 만든다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">message_struct_1</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">message_enum_t</span><span class="o">&lt;</span><span class="n">message1</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="n">message_struct_2</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">message_enum_t</span><span class="o">&lt;</span><span class="n">message2</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="n">message_struct_3</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">message_enum_t</span><span class="o">&lt;</span><span class="n">message3</span><span class="o">&gt;</span> <span class="p">{};</span>
+</code></pre></div>
+<p>기본적인 handler는 다음과 같이 단순하게 정의할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="nf">void</span> <span class="p">(</span><span class="o">*</span><span class="kt">base_handler_t</span><span class="p">)(</span><span class="k">const</span> <span class="kt">message_base_t</span><span class="o">&amp;</span><span class="p">);</span>
+</code></pre></div>
+<p>dispatch를 위해 handler에 대한 table을 하나 만들어둔다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">base_handler_t</span><span class="p">,</span> <span class="n">message_count</span><span class="o">&gt;</span> <span class="kt">handler_table_t</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">handler_table_t</span> <span class="kt">_handler_table_t</span><span class="p">;</span>
+</code></pre></div>
+<p>일단 등록된 handler가 없어도 서버 동작에 문제가 없도록 하기 위해 빈 handler로 초기화를 해준다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">static</span> <span class="kt">void</span> <span class="nf">empty_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">message_base_t</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="kt">handler_init_t</span> <span class="p">{</span>
+    <span class="kt">handler_init_t</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">message_count</span><span class="p">;</span> <span class="o">++</span><span class="n">index</span><span class="p">)</span>
+            <span class="kt">_handler_table_t</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty_handler</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="n">_init</span><span class="p">;</span>
+</code></pre></div>
+<p>각 handler를 쉽게 등록하기 위한 register를 만든다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">handler_register_t</span> <span class="p">{</span>
+    <span class="kt">handler_register_t</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="kt">base_handler_t</span> <span class="n">handler</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">_handler_table_t</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>handler의 귀찮은 함수 선언, casting, register 등록 부분의 코드를 생성해줄 macro를 정의한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define HANDLER(messageName) \</span>
+<span class="cp">    static void handler_##messageName(const messageName&amp; msg); \</span>
+<span class="cp">    static void _base_##messageName##_handler(const message_base_t&amp; msg) { \</span>
+<span class="cp">        handler_##messageName(static_cast&lt;const messageName&amp;&gt;(msg)); \</span>
+<span class="cp">    } \</span>
+<span class="cp">    static handler_register_t _register_##messageName( \</span>
+<span class="cp">        messageName::enum_value, _base_##messageName##_handler); \</span>
+<span class="cp">    static void handler_##messageName(const messageName&amp; msg)</span>
+</code></pre></div>
+<p>위 macro를 사용해서 handler를 구현한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">HANDLER</span><span class="p">(</span><span class="n">message_struct_1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">typeid</span><span class="p">(</span><span class="n">msg</span><span class="p">).</span><span class="n">name</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>dispatch를 구현한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_msgTy</span><span class="o">&gt;</span>
+<span class="kr">inline</span> <span class="kt">void</span> <span class="n">dispatch_message</span><span class="p">(</span><span class="k">const</span> <span class="n">_msgTy</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">_handler_table_t</span><span class="p">[</span><span class="n">_msgTy</span><span class="o">::</span><span class="n">enum_value</span><span class="p">](</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>모든 구현이 끝났으니 사용하면 된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">dispatch_message</span><span class="p">(</span><span class="n">message_struct_1</span><span class="p">());</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2013/11/19/asynchronous-programming-pattern-2/" title="비동기 프로그래밍 패턴 2">&laquo; 비동기 프로그래밍 패턴 2</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2013/12/22/server-programming/" title="서버 프로그래밍">&raquo; 서버 프로그래밍</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

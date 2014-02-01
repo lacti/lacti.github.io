@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="dumpable 고찰 30 Jun 2014 c++ template 하재승님께서 던전 앤 파이터 클라이언트 로딩 속도 최적화에서 언급하신 dumpable 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 operator =를 사용하여 dumpable한 struct를 만들어준다. 다만 몇 가지 아쉬운 점이 있었다. dptr::alloc() 함수가 thread safe하지 않다는 점 dstring, dvector가 custom allocator를 지원하지 않는다는 점 container의 type이 많지 않다는 점 때문에 dumpable을 fork해서 문제를 고쳐보기로 했다. 일단 dptr:alloc() 내의 static 변수를 thread_local로 변경해서 local_pool이 겹치지는 않도록 했다. 하나의 thread가 dumping을 하는 도중에는 다른 copy가 불가능하기 때문에 대충은 thread safe해졌다. custom allocator를 넣어보려고 이리저리 뜯어보니 상당히 고쳐줘야 한다. 일단 type부터 다시 재정의를 해야 할 것 같다. 고민을 좀 해보다보니 뭔가 기존 stl container에 allocator만을 가지고 tmp를 잘 해보면 되지 않을까라는 생각이 들었다. 뭔가..." />
+
+	<meta http-equiv="date" content="Monday, 30  2014 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,template,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>dumpable 고찰</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">dumpable 고찰</h1>
+				<p class="page-date">30 Jun 2014</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#template">template</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>하재승님께서 <a href="http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/">던전 앤 파이터 클라이언트 로딩 속도 최적화</a>에서 언급하신 <a href="https://github.com/ipkn/dumpable">dumpable</a> 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 <code>operator =</code>를 사용하여 dumpable한 struct를 만들어준다.</p>
+
+<p>다만 몇 가지 아쉬운 점이 있었다. </p>
+
+<ul>
+<li><code>dptr::alloc()</code> 함수가 thread safe하지 않다는 점</li>
+<li>dstring, dvector가 custom allocator를 지원하지 않는다는 점</li>
+<li>container의 type이 많지 않다는 점</li>
+</ul>
+
+<p>때문에 <a href="https://github.com/lacti/dumpable">dumpable을 fork해서</a> 문제를 고쳐보기로 했다.</p>
+
+<ul>
+<li>일단 <code>dptr:alloc()</code> 내의 static 변수를 thread_local로 변경해서 local_pool이 겹치지는 않도록 했다. 하나의 thread가 dumping을 하는 도중에는 다른 copy가 불가능하기 때문에 대충은 thread safe해졌다.</li>
+<li>custom allocator를 넣어보려고 이리저리 뜯어보니 상당히 고쳐줘야 한다. 일단 type부터 다시 재정의를 해야 할 것 같다.</li>
+</ul>
+
+<p>고민을 좀 해보다보니 뭔가 기존 stl container에 allocator만을 가지고 tmp를 잘 해보면 되지 않을까라는 생각이 들었다. 뭔가 복사할 때에만 serialize를 위한 allocator로 교체해서 그 쪽의 메모리를 할당해주면 되지 않을까!</p>
+
+<ol>
+<li>data type을 정의한다. 이 data type은 serializable할 것인지 말 것인지 template param으로 bool 값을 갖는다.</li>
+<li>data type에서 사용하는 stl container는 위 bool 값에 의해 <code>std::allocator</code>를 쓸지 <code>serializble_allocator</code>를 쓸지 <code>std::conditional</code>로 결정한다.</li>
+<li>data type은 자신의 bool 값을 rebind하여 serializable 가능한 type을 갖는다.</li>
+<li><code>write</code> 함수에서는 rebind된 type의 객체를 만든 후, 원본 객체로부터 복사를 유도하여 dumpable처럼 <code>operator =</code>에 의한 복사를 유도해보도록 하자.</li>
+</ol>
+
+<p>결론부터 이야기하자면 성공할 수 없는 삽질이다. 좀 더 자세한 설명을 위해 코드를 보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="n">ser</span> <span class="p">{</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">do_serialize</span> <span class="o">=</span> <span class="nb">false</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">vector</span> <span class="p">{</span>
+        <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">conditional</span><span class="o">&lt;</span><span class="n">do_serialize</span><span class="p">,</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="n">allocator_type</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">allocator_type</span><span class="o">&gt;</span> <span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">Base</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">make_serializable</span> <span class="p">{</span>
+        <span class="k">typedef</span> <span class="n">Base</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span> <span class="n">serializable_type</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>간단히 vector만 다시 정의해봤다. <code>do_serialize</code> 값에 따라 allocator만 바꿔주는 녀석이다.</li>
+<li><code>make_serializable</code> 역시 별거 없고 그냥 Base type에 대해 serializable 값만 바꿔준다.(rebind)</li>
+</ul>
+
+<p>그리고 다음과 같이 data를 쓰려고 했다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define SERIALIZABLE(name) \</span>
+<span class="cp">    template &lt;bool do_serialize = false&gt; \</span>
+<span class="cp">    struct name : ser::make_serializable&lt;name&gt;</span>
+
+<span class="n">SERIALIZABLE</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ser</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">do_serialize</span><span class="o">&gt;</span> <span class="n">values</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>위와 같이 정의하고,</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">test</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">typedef</span> <span class="k">typename</span> <span class="n">T</span><span class="o">::</span><span class="n">serializable_type</span> <span class="n">serializable_type</span><span class="p">;</span>
+    <span class="n">serializable_type</span> <span class="n">ser_obj</span><span class="p">;</span>
+    <span class="n">ser_obj</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>이런 식으로 테스트를 진행하려고 했다. 당연하지만 <code>data&lt;true&gt;</code>와 <code>data&lt;false&gt;</code>는 다른 type이기 때문에 <code>operator =</code>를 바로 호출할 수가 없다. <code>operator =</code> trick을 못 쓴다면 각 멤버에 대한 serialize 코드를 작성해주어야 한다는 것이므로 당초 목적을 달성할 수가 없다.</p>
+
+<p>뿐만 아니라 allocator를 사용하는 방법 자체는 잘못되었다.</p>
+
+<ul>
+<li>container 내에는 pointer type이 많이 있는데 이는 allocator를 통해 할당 공간만 어떻게 하나로 합친다고 해서 될 수 있는 내용이 아니다.</li>
+<li>프로그램 구동 시 처음 한 번 loading된 이후 변경이 없는 데이터의 경우 loading memory address를 강제로 고정해서 위 문제를 해결할 수 있을지는 모르겠지만, 그렇게 되면 범용적으로 사용할 수가 없다.</li>
+</ul>
+
+<p>따라서 dumpable처럼 container도 따로 구현해야만 한다. 많은 container가 없다는 점이 조금 아쉽기는 하지만 일단 custom allocator를 사용할 수 있는 수준까지 고쳐보고 다시 고민을 더 해봐야겠다.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2014/06/29/variadic-template-typelist/" title="variadic template을 사용한 typelist 구현">&laquo; variadic template을 사용한 typelist 구현</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2014/06/30/why-implements-csharp-server/" title="왜 c#으로 서버를 작성하려 하나?">&raquo; 왜 c#으로 서버를 작성하려 하나?</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

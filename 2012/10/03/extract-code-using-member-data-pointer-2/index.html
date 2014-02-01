@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="멤버 데이터 포인터를 사용하여 연산식 묶어내기 2 03 Oct 2012 c++ refactor 이번 글에서는 Stat 자료구조 내에 배열이 있을 때 이를 어떻게 처리할지에 대해서 알아보도록 하자. Stat 코드를 작성하다보니, 이동 속도에 관해서는 각각의 변수를 따로 두는 것 보다, 배열 하나로 처리하는 것이 더 낫다는 것을 깨닫게 되었다. enum MovingStatType { MST_WALK, MST_RUN, MST_RIDE, MST_MAX }; struct Stat { float hp; float movingSpeed[MST_MAX]; 배열로 묶어서 movingSpeed 관련 코드가 개선된 것까지는 좋았는데 hp와 movingSpeed는 type이 다르기 때문에 이전 글에서의 방법을 더 이상 사용할 수 없게 되었다. 둘의 type을 비교해보면 아래와 같다. typedef float Stat::*DataPtr; typedef float (Stat::*ArrayPtr)[3]; 어쨌든 두 타입이 완전히 달라졌기 때문에, 이를 일치시키지 못한다면 또 다시 switch-case의 지옥을 맛보게 될 것이다. 멤버 데이터 포인터 수준에서는 이를 해결할 수 없기 때문에..." />
+
+	<meta http-equiv="date" content="Wednesday, 03  2012 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,refactor,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>멤버 데이터 포인터를 사용하여 연산식 묶어내기 2</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">멤버 데이터 포인터를 사용하여 연산식 묶어내기 2</h1>
+				<p class="page-date">03 Oct 2012</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#refactor">refactor</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>이번 글에서는 <code>Stat</code> 자료구조 내에 배열이 있을 때 이를 어떻게 처리할지에 대해서 알아보도록 하자.</p>
+
+<p><code>Stat</code> 코드를 작성하다보니, 이동 속도에 관해서는 각각의 변수를 따로 두는 것 보다, 배열 하나로 처리하는 것이 더 낫다는 것을 깨닫게 되었다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">enum</span> <span class="n">MovingStatType</span> <span class="p">{</span>
+    <span class="n">MST_WALK</span><span class="p">,</span>
+    <span class="n">MST_RUN</span><span class="p">,</span>
+    <span class="n">MST_RIDE</span><span class="p">,</span>
+    <span class="n">MST_MAX</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">Stat</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">hp</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">movingSpeed</span><span class="p">[</span><span class="n">MST_MAX</span><span class="p">];</span>
+</code></pre></div>
+<p>배열로 묶어서 <code>movingSpeed</code> 관련 코드가 개선된 것까지는 좋았는데 <code>hp</code>와 <code>movingSpeed</code>는 type이 다르기 때문에 이전 글에서의 방법을 더 이상 사용할 수 없게 되었다. 둘의 type을 비교해보면 아래와 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="kt">float</span> <span class="n">Stat</span><span class="o">::*</span><span class="n">DataPtr</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">float</span> <span class="p">(</span><span class="n">Stat</span><span class="o">::*</span><span class="n">ArrayPtr</span><span class="p">)[</span><span class="mi">3</span><span class="p">];</span>
+</code></pre></div>
+<p>어쨌든 두 타입이 완전히 달라졌기 때문에, 이를 일치시키지 못한다면 또 다시 switch-case의 지옥을 맛보게 될 것이다. 멤버 데이터 포인터 수준에서는 이를 해결할 수 없기 때문에 <strong>멤버 함수 포인터</strong>를 사용하여 문제를 해결 할 것이다.</p>
+
+<p>목표는 그냥 멤버 변수와 배열 멤버 변수의 <strong>접근 interface를 통일시키는 것</strong>이다. 멤버 함수 포인터를 사용할 것이니 함수의 signature는 같아야 한다는 것이다.</p>
+
+<p>위 <code>Stat</code> 구조체에서는 다음과 같이 생각해볼 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Stat</span> <span class="p">{</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">Hp</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">hp</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">WalkSpeed</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">movingSpeed</span><span class="p">[</span><span class="n">MST_WALK</span><span class="p">];</span> <span class="p">}</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">RunSpeed</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">movingSpeed</span><span class="p">[</span><span class="n">MST_RUN</span><span class="p">];</span> <span class="p">}</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">RideSpeed</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">movingSpeed</span><span class="p">[</span><span class="n">MST_RIDE</span><span class="p">];</span> <span class="p">}</span>
+</code></pre></div>
+<p>이제 위 함수들은 다음의 멤버 함수 포인터로 지칭이 가능하다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="p">(</span><span class="n">Stat</span><span class="o">::*</span><span class="n">Accessor</span><span class="p">)();</span>
+</code></pre></div>
+<p>하지만 모든 멤버 변수에 대해서 저렇게 함수를 만들어주는 것은 여간 고역이 아니다. 이런 일을 사람이 하는 것은 도의에 어긋나니, 컴파일러가 이 일을 대신하도록 해보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Stat</span> <span class="p">{</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">Hp</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">hp</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">int</span> <span class="n">_Index</span><span class="o">&gt;</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">MovingSpeed</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">movingSpeed</span><span class="p">[</span><span class="n">_Index</span><span class="p">];</span> <span class="p">}</span>
+</code></pre></div>
+<p>template 함수를 사용해서 배열의 인자를 template으로 넘겼다. 저 <code>_Index</code> 값으로 <code>MST_WALK</code> 등의 값을 넘기면 그에 해당하는 <code>MovingSpeed&lt;&gt;</code> 함수를 컴파일러가 알아서 생성해줄 것이다.</p>
+
+<p><strong>이렇게 생성된 template 함수들의 interface도 위에서 정의한 Accessor에 부합된다. 이것이 핵심 아이디어이다.</strong></p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">Accessor</span> <span class="n">acc1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">MovingSpeed</span><span class="o">&lt;</span><span class="n">MST_WALK</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">Accessor</span> <span class="n">acc2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">MovingSpeed</span><span class="o">&lt;</span><span class="n">MST_RUN</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div>
+<p>Stat의 각 멤버에 대해 노출 함수를 만들어주는 것은 지겨운 일이다. 이 함수들 역시 template으로 묶어보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Stat</span> <span class="p">{</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">float</span> <span class="n">Stat</span><span class="o">::*</span><span class="n">_DataPtr</span><span class="o">&gt;</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">Access</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;*</span><span class="n">_DataPtr</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div>
+<p>Access 함수는 멤버 데이터 포인터를 template 인자로 받는다. 이 역시 위에서 정의한 Accessor 타입에 부합된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">Accessor</span> <span class="n">acc3</span> <span class="o">=</span> <span class="n">Stat</span><span class="o">::</span><span class="n">Access</span><span class="o">&lt;&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">hp</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div>
+<p>배열의 멤버 데이터 포인터를 template 인자로 받으려면 약간 까다로운데, 그 이유는 배열의 멤버 데이터 포인터의 타입을 명시할 때에는 그 배열의 크기가 필요하기 때문이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Stat</span> <span class="p">{</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">_Size</span><span class="p">,</span> <span class="kt">float</span> <span class="p">(</span><span class="n">Stat</span><span class="o">::*</span><span class="n">_ArrayPtr</span><span class="p">)[</span><span class="n">_Size</span><span class="p">],</span> <span class="kt">int</span> <span class="n">_Index</span><span class="o">&gt;</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="n">Access</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;*</span><span class="n">_ArrayPtr</span><span class="p">)[</span><span class="n">_Index</span><span class="p">];</span> <span class="p">}</span>
+</code></pre></div>
+<p>배열 타입 명시를 위한 배열의 크기, 멤버 데이터 포인터 값, 그리고 배열 내의 index. 이렇게 3개의 template 인자를 받는다. 이 함수를 사용하여 acc1, acc2를 다시 정의해 본다면 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">Accessor</span> <span class="n">acc1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">Access</span><span class="o">&lt;</span><span class="n">MST_MAX</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">,</span> <span class="n">MST_WALK</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">Accessor</span> <span class="n">acc2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">Access</span><span class="o">&lt;</span><span class="n">MST_MAX</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">,</span> <span class="n">MST_RUN</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div>
+<p>이제 일반적인 <strong>Access</strong>라는 멤버 함수를 사용하여 모든 멤버를 접근할 수 있게 되었다. 하지만 이미 선언할 때 명시해준 배열의 크기를 또 적어주어야 하는 것은 마음에 들지 않는다. 이를 고쳐보자.</p>
+
+<p>배열의 크기를 구하기 위해 간단한 메타 템플릿 함수를 작성해보자. 일단 일반적인 interface를 선언하고,</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">countof</span><span class="p">;</span>
+</code></pre></div>
+<p>그리고 배열의 크기를 알아내기 위한 특수화된 <em>specialization</em> 메타 템플릿 함수를 작성한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="p">,</span> <span class="k">typename</span> <span class="n">_Class</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">_Size</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">countof</span><span class="o">&lt;</span><span class="n">_Ty</span> <span class="p">(</span><span class="n">_Class</span><span class="o">::*</span><span class="p">)[</span><span class="n">_Size</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">enum</span> <span class="p">{</span> <span class="n">value</span> <span class="o">=</span> <span class="n">_Size</span> <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>countof</code>의 타입 argument가 <code>_Ty (_Class::*)[_Size]</code> 형태이면 그 <code>_Size</code>를 value로 갖는 메타 템플릿 함수이다. <code>decltype</code> 키워드를 사용하여 멤버 데이터 포인터의 타입을 얻을 수 있으므로, 다음과 같이 멤버 데이터 포인터가 가리키는 배열의 크기를 얻을 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">countof</span><span class="o">&lt;</span><span class="n">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span>
+</code></pre></div>
+<p>이제 위 배열 멤버에 대한 접근을 다음과 같이 표현할 수 있게 되었다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">Accessor</span> <span class="n">acc1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">Access</span><span class="o">&lt;</span><span class="n">countof</span><span class="o">&lt;</span><span class="n">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">,</span> <span class="n">MST_WALK</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div>
+<p>모든 준비가 갖추어졌다. 멤버의 데이터 타입이 배열이든, 그렇지 않든 <code>float&amp; (Stat::*)()</code> signature를 사용하여 값을 얻을 수 있게 되었다.</p>
+
+<p>이제 이전 글에서 했던 방법처럼 코드를 정리하면 된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="p">(</span><span class="n">Stat</span><span class="o">::*</span><span class="n">StatAccessor</span><span class="p">)();</span>
+<span class="n">StatAccessor</span> <span class="n">statAccessorTable</span><span class="p">[</span><span class="n">BUFF_MAX</span><span class="p">];</span>
+
+<span class="n">statAccessorTable</span><span class="p">[</span><span class="n">BUFF_HP</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">Access</span><span class="o">&lt;&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">hp</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">statAccessorTable</span><span class="p">[</span><span class="n">BUFF_WALK_SPEED</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">Access</span><span class="o">&lt;</span><span class="n">countof</span><span class="o">&lt;</span><span class="n">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">,</span> <span class="n">MST_WALK</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div>
+<p><code>statAccessorTable</code>을 사용하여 switch-case 구문도 깔끔하게 정리할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">StatAccessor</span> <span class="n">accessor</span> <span class="o">=</span> <span class="n">statAccessorTable</span><span class="p">[</span><span class="n">buffType</span><span class="p">];</span>
+<span class="k">switch</span> <span class="p">(</span><span class="n">buffMethod</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">case</span> <span class="n">SET</span>: <span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="o">*</span><span class="n">accessor</span><span class="p">)()</span> <span class="o">=</span> <span class="n">buffValue</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+<span class="k">case</span> <span class="n">ADD</span>: <span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="o">*</span><span class="n">accessor</span><span class="p">)()</span> <span class="o">+=</span> <span class="n">buffValue</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+<span class="k">case</span> <span class="n">RATE</span>: <span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="o">*</span><span class="n">accessor</span><span class="p">)()</span> <span class="o">*=</span> <span class="n">buffValue</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+</code></pre></div>
+<p><code>AccessorTable</code>을 등록할 때, 아무래도 배열 타입을 등록하는데 코드가 쓸데없이 길어진다. 이는 매크로를 사용하여 깔끔하게 정리할 수 있겠다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="c1">// buff_type.inl</span>
+<span class="n">BUFF_ENUM</span><span class="p">(</span><span class="n">BUFF_HP</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">hp</span><span class="p">)</span>
+<span class="n">BUFF_ENUM_A</span><span class="p">(</span><span class="n">BUFF_WALK_SPEED</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">movingSpeed</span><span class="p">,</span> <span class="n">MST_WALK</span><span class="p">)</span>
+</code></pre></div>
+<p>역시 적절한 macro 함수 교체를 통해 적절한 코드가 생성되도록 한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="c1">// buff_bind.cpp</span>
+<span class="cp">#define BUFF_ENUM(name, ptr) statAccessorTable[name] = &amp;Stat::Access&lt;ptr&gt;;</span>
+<span class="cp">#define BUFF_ENUM_A(name, ptr, idx) \</span>
+<span class="cp">    statAccessorTable[name] = &amp;Stat::Access&lt;countof&lt;decltype(ptr)&gt;::value, ptr, idx&gt;;</span>
+<span class="cp">#include &quot;buff_type.inl&quot;</span>
+<span class="cp">#undef BUFF_ENUM_A</span>
+<span class="cp">#undef BUFF_ENUM</span>
+</code></pre></div>
+<p>본 글에서는 완전히 일치하지는 않지만 어느 정도 타입이 비슷할 때, 멤버 데이터 포인터가 아닌 <strong>template 인자를 활용한 멤버 함수로 signature를 맞추어 반복되는 코드의 양을 줄이는 방법</strong>에 대해 알아보았다.</p>
+
+<p>지난 번 글에서도 언급했지만, 이것이 가능했던 이유는 각 멤버들이 모두 float이었기 때문이다. 다음 글에서는 type erasure를 사용하여 좀 더 일반적인 (하지만 성능에서는 손해를 보는) 방법에 대해 알아보도록 하겠다.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2012/10/01/extract-code-using-member-data-pointer-1/" title="멤버 데이터 포인터를 사용하여 연산식 묶어내기 1">&laquo; 멤버 데이터 포인터를 사용하여 연산식 묶어내기 1</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2012/10/07/extract-code-using-member-data-pointer-3/" title="멤버 데이터 포인터를 사용하여 연산식 묶어내기 3">&raquo; 멤버 데이터 포인터를 사용하여 연산식 묶어내기 3</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

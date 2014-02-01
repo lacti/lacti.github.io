@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="분산 처리 환경 구현 2 07 May 2013 distributed c# Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다. 가장 간단해보이는 M-S 모델 (master-slave)을 C#으로 구현해보자. 일단 구현하기에 앞서 간단히 설계도를 살펴보자. master에는 여러 slave가 연결한다. 각 연결된 slave는 master 내에 어떤 작업을 수행하는지/했는지 info를 갖는다. master에 command가 들어오면 수행할 work를 만든다. 연결된 slave의 info를 살펴보고 적절한 slave를 선택한 후 work를 보내준다**(distribute)**. 그러면 slave는 그 작업을 처리하고 결과를 master에게 보내주던가 한다. 위 구현을 위해서는, c# network programming 기술 c# object serialization 기술 정도만 알면 된다. 하지만 본 글에서 위 내용을 설명하는 것은 매우 무의미하기 때문에 이 부분에 대해서는 설명하지 않는다. 자세한 내용은 소스..." />
+
+	<meta http-equiv="date" content="Tuesday, 07  2013 00:00:00 GMT" />
+
+	<meta name="keywords" content="distributed,c#,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>분산 처리 환경 구현 2</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">분산 처리 환경 구현 2</h1>
+				<p class="page-date">07 May 2013</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#distributed">distributed</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#c#">c#</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<ul>
+<li><a href="https://github.com/lacti/DistWork/tree/simplest">Github: DistWork - simplest</a></li>
+</ul>
+
+<p>지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다.</p>
+
+<p>가장 간단해보이는 M-S 모델 (master-slave)을 C#으로 구현해보자.</p>
+
+<p>일단 구현하기에 앞서 간단히 설계도를 살펴보자.</p>
+
+<p><img src="http://lacti.me/images/mdf_arch.png" alt="구현 설계도"></p>
+
+<p>master에는 여러 slave가 연결한다. 각 연결된 slave는 master 내에 어떤 작업을 수행하는지/했는지 info를 갖는다. master에 command가 들어오면 수행할 work를 만든다. 연결된 slave의 info를 살펴보고 적절한 slave를 선택한 후 work를 보내준다**(distribute)**. 그러면 slave는 그 작업을 처리하고 결과를 master에게 보내주던가 한다.</p>
+
+<p>위 구현을 위해서는,</p>
+
+<ul>
+<li>c# network programming 기술</li>
+<li>c# object serialization 기술</li>
+</ul>
+
+<p>정도만 알면 된다.</p>
+
+<p>하지만 본 글에서 위 내용을 설명하는 것은 매우 무의미하기 때문에 이 부분에 대해서는 설명하지 않는다. 자세한 내용은 <a href="https://github.com/lacti/DistWork/tree/simplest">소스 코드</a>의 <a href="https://github.com/lacti/DistWork/blob/simplest/DistWork/Util/AsyncSocketExtension.cs">AsyncSocketExtension.cs</a>와 <a href="https://github.com/lacti/DistWork/blob/simplest/DistWork/Core/WorkSocketHelper.cs">WorkSocketHelper.cs</a> 파일을 보면 된다.</p>
+
+<h3>구현</h3>
+
+<p>먼저 master와 slave가 주고 받을 작업의 추상 형태인 IWork interface부터 살펴보면 다음과 같다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">interface</span> <span class="n">IWork</span>
+<span class="p">{</span>
+    <span class="k">void</span> <span class="nf">Execute</span><span class="p">(</span><span class="n">Socket</span> <span class="n">endPoint</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>이 interface를 구현한 class가 Serializable하면 Master와 Slave간에 serialize/deserialize되어 전달될 수 있고, 전달된 후에 <code>Execute</code>를 호출해주면 되므로 사실상 RPC와 같은 형태가 된다. 이 때 <code>endPoint</code>의 Socket을 받는 이유는 수행한 결과에 대해 상대측으로 다시 결과를 전달하기 위함이다. (이는 마지막 예제에서 볼 수 있다.)</p>
+
+<p><code>Master</code> class는 <code>Slave</code>의 통신을 위한 <code>Socket</code>과, 각 <code>Slave</code>의 상태에 대한 Information을 갖는다. 그리고 작업 분산이 요청될 경우(<code>DistributeWork</code>) 적절한 <code>Slave</code>의 <code>Socket</code>을 고르기 위한 알고리즘 함수를 갖는다. Java같은 언어라면 interface로 해당 알고리즘을 분리하겠지만, C#이니 그냥 delegate로 빼서 관리한다.</p>
+
+<p>위 구현 사항을 분할해서 살펴보자. 먼저 Slave와 연결을 맺고 Slave가 전달하는 Work를 처리하기 위한 함수이다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="c1">// Master class</span>
+<span class="k">public</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">listener</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Socket</span><span class="p">(</span><span class="n">AddressFamily</span><span class="p">.</span><span class="n">InterNetwork</span><span class="p">,</span> <span class="n">SocketType</span><span class="p">.</span><span class="n">Stream</span><span class="p">,</span> <span class="n">ProtocolType</span><span class="p">.</span><span class="n">Tcp</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">localEndPoint</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IPEndPoint</span><span class="p">(</span><span class="n">IPAddress</span><span class="p">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">_port</span><span class="p">);</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="n">listener</span><span class="p">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">localEndPoint</span><span class="p">);</span>
+        <span class="n">listener</span><span class="p">.</span><span class="n">Listen</span><span class="p">(</span><span class="m">100</span><span class="p">);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">clientSocket</span> <span class="p">=</span> <span class="k">await</span> <span class="n">listener</span><span class="p">.</span><span class="n">AcceptAsync</span><span class="p">();</span>
+            <span class="n">ProcessSocket</span><span class="p">(</span><span class="n">clientSocket</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span> <span class="n">Logger</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">e</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">private</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">ProcessSocket</span><span class="p">(</span><span class="n">Socket</span> <span class="n">socket</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_container</span><span class="p">.</span><span class="n">AddSocket</span><span class="p">(</span><span class="n">socket</span><span class="p">);</span>
+
+    <span class="n">Logger</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&quot;Connected from: &quot;</span> <span class="p">+</span> <span class="n">socket</span><span class="p">.</span><span class="n">RemoteEndPoint</span><span class="p">);</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">work</span> <span class="p">=</span> <span class="k">await</span> <span class="n">socket</span><span class="p">.</span><span class="n">ReceiveWork</span><span class="p">();</span>
+            <span class="n">work</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">socket</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span> <span class="n">Logger</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">e</span><span class="p">);</span> <span class="p">}</span>
+
+    <span class="k">try</span> <span class="p">{</span> <span class="n">socket</span><span class="p">.</span><span class="n">Shutdown</span><span class="p">(</span><span class="n">SocketShutdown</span><span class="p">.</span><span class="n">Both</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">_container</span><span class="p">.</span><span class="n">RemoveSocket</span><span class="p">(</span><span class="n">socket</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>지정된 port에 bind된 socket이 <code>Slave</code>와 연결되면 그 <code>Socket</code>으로부터 <code>Work</code>를 하나씩 받아서(deserialize) 처리하는 형태이다. awaitable한 프로그램을 작성했기 때문에 managed thread pool이 적절히 잘 운영해준다.</p>
+
+<p><code>_container</code>는 <code>SocketContainer</code> 객체로 slave의 socket을 관리해준다. <code>SocketContainer</code>에서 관리하는 Socket 집합은 추후 작업을 분산시키기 위해 특정 slave를 선택할 때 사용된다.</p>
+
+<p><code>Slave</code>는 <code>Master</code>에 연결한 뒤, 역시 동일하게 <code>Master</code>로부터 <code>Work</code>를 받아서 처리하는 구조로 작성하면 된다. 때문에 이 부분은 <code>Master</code>의 코드와 크게 차이가 없다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">Slave</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">try</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">socket</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Socket</span><span class="p">(</span><span class="n">AddressFamily</span><span class="p">.</span><span class="n">InterNetwork</span><span class="p">,</span> <span class="n">SocketType</span><span class="p">.</span><span class="n">Stream</span><span class="p">,</span>
+                    <span class="n">ProtocolType</span><span class="p">.</span><span class="n">Tcp</span><span class="p">);</span>
+            <span class="n">socket</span><span class="p">.</span><span class="n">Connect</span><span class="p">(</span><span class="n">_host</span><span class="p">,</span> <span class="n">_port</span><span class="p">);</span>
+            <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">work</span> <span class="p">=</span> <span class="k">await</span> <span class="n">socket</span><span class="p">.</span><span class="n">ReceiveWork</span><span class="p">();</span>
+                <span class="n">work</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">socket</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span> <span class="n">Logger</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">e</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>Slave</code>의 <code>Socket</code>을 관리하는 <code>SocketContainer</code>는 <code>Slave</code>의 연결이 동시 다발적으로 일어나므로 내부에 Lock을 가지고 Container를 관리하는 객체이다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="c1">// SocketContainer class</span>
+<span class="n">ReaderWriterLockSlim</span> <span class="n">_lock</span> <span class="p">=</span>
+    <span class="k">new</span> <span class="nf">ReaderWriterLockSlim</span><span class="p">(</span><span class="n">LockRecursionPolicy</span><span class="p">.</span><span class="n">SupportsRecursion</span><span class="p">);</span>
+<span class="k">private</span> <span class="k">readonly</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Socket</span><span class="p">,</span> <span class="n">SocketInformation</span><span class="p">&gt;</span> <span class="n">_sockets</span> <span class="p">=</span>
+    <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Socket</span><span class="p">,</span> <span class="n">SocketInformation</span><span class="p">&gt;();</span>
+
+<span class="k">public</span> <span class="k">void</span> <span class="nf">AddSocket</span><span class="p">(</span><span class="n">Socket</span> <span class="n">socket</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_lock</span><span class="p">.</span><span class="n">DoWriteLock</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">_sockets</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="n">SocketInformation</span><span class="p">.</span><span class="n">Invalid</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">void</span> <span class="nf">RemoveSocket</span><span class="p">(</span><span class="n">Socket</span> <span class="n">socket</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_lock</span><span class="p">.</span><span class="n">DoWriteLock</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">_sockets</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">socket</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="n">Socket</span> <span class="nf">SelectSocket</span><span class="p">(</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="n">Socket</span><span class="p">,</span> <span class="n">SocketInformation</span><span class="p">&gt;&gt;,</span> <span class="n">Socket</span><span class="p">&gt;</span> <span class="n">selector</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">_lock</span><span class="p">.</span><span class="n">DoReadLock</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">selector</span><span class="p">(</span><span class="n">_sockets</span><span class="p">.</span><span class="n">ToList</span><span class="p">()));</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>약간이나마 효율을 높이기 위해 <code>ReaderWriterLock</code>을 사용했다.
+재미있는 부분은 <code>SelectSocket</code>을 수행하는 부분인데, 이 과정에서는 모든 <code>Socket</code>과 그에 대한 <code>SocketInformation</code>을 순회하면서 적절한 <code>Socket</code>을 뽑아내야한다. 하지만 해당 자료구조를 순회하려면 자료구조가 Lock으로 보호된 상태이어야 하므로 Socket을 선택하는 selector를 delegator 형태로 받아서 <code>ReadLock</code> 구간 내에서 수행될 수 있도록 한다.</p>
+
+<p>그런데 작업을 분산시키기 위해 필요한 정보는 <code>Socket</code>, <code>SocketInformation</code> 뿐만 아니라 어떤 작업인지(<code>IWork</code>)의 정보도 필요하다. 때문에 <code>Master</code>에서는 이 정보까지 취합해서 적절한 <code>Slave</code>를 선택할 수 있도록 delegator를 제공한다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">DistributeContext</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">readonly</span> <span class="n">IList</span><span class="p">&lt;</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="n">Socket</span><span class="p">,</span> <span class="n">SocketInformation</span><span class="p">&gt;&gt;</span> <span class="n">Sockets</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">readonly</span> <span class="n">IWork</span> <span class="n">Work</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">SocketContainer</span> <span class="n">_container</span><span class="p">;</span>
+</code></pre></div>
+<p>필요한 정보(<code>Socket</code>, <code>SocketInformation</code>, <code>IWork</code>)를 <code>DistributeContext</code>로 감싸서 <code>SelectSocketDecl</code>로 넘겨준다. 이 delegator는 <code>_container</code>의 <code>SelectSocket()</code> 내에서 수행되므로 <code>_container</code>의 ReadLock 내에서 수행된다. 이렇게 socket을 하나 선택하게 되면 해당 socket으로 work를 전달한다. 즉 해당 slave에게 work를 전달한다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="c1">// Master class</span>
+<span class="k">public</span> <span class="k">delegate</span> <span class="n">Socket</span> <span class="nf">SelectSocketDecl</span><span class="p">(</span><span class="n">DistributeContext</span> <span class="n">context</span><span class="p">);</span>
+<span class="k">private</span> <span class="n">SelectSocketDecl</span> <span class="n">_socketSelector</span><span class="p">;</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">DistributeWork</span><span class="p">(</span><span class="n">IWork</span> <span class="n">work</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">socket</span> <span class="p">=</span> <span class="n">_container</span><span class="p">.</span><span class="n">SelectSocket</span><span class="p">(</span><span class="n">sockets</span> <span class="p">=&gt;</span>
+            <span class="n">_socketSelector</span><span class="p">(</span><span class="k">new</span> <span class="n">DistributeContext</span><span class="p">(</span><span class="n">_container</span><span class="p">,</span> <span class="n">sockets</span><span class="p">.</span><span class="n">AsReadOnly</span><span class="p">(),</span> <span class="n">work</span><span class="p">)));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">socket</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullReferenceException</span><span class="p">();</span>
+
+    <span class="n">socket</span><span class="p">.</span><span class="n">SendWork</span><span class="p">(</span><span class="n">work</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>굉장히 간단한 구조로 분산 시스템을 만들어봤다.</p>
+
+<ul>
+<li>Master는 Slave의 연결을 기다리고, Slave가 연결되면 각 상태를 적절하게 고려해서 작업을 전달한다.</li>
+<li>Slave는 Master에게 연결한 뒤, Master의 작업을 기다리고 있다가 받는 즉시 처리해준다.</li>
+</ul>
+
+<h3>예제</h3>
+
+<p>소스 코드에 첨부된 간단한 예제 코드를 직접 보면 다음과 같다.</p>
+<div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="na">[Serializable]</span>
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">SlaveWork</span> <span class="p">:</span> <span class="n">IWork</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">(</span><span class="n">Socket</span> <span class="n">endPoint</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Do my work: &quot;</span> <span class="p">+</span> <span class="n">endPoint</span><span class="p">.</span><span class="n">RemoteEndPoint</span><span class="p">);</span>
+        <span class="n">endPoint</span><span class="p">.</span><span class="n">SendWork</span><span class="p">(</span><span class="k">new</span> <span class="n">MasterWork</span><span class="p">(</span><span class="k">new</span> <span class="n">SlaveResult</span><span class="p">(</span><span class="s">&quot;TEST MESSAGE&quot;</span><span class="p">)));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="na">[Serializable]</span>
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">SlaveResult</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">SlaveGeneratedMessage</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">SlaveResult</span><span class="p">(</span><span class="kt">string</span> <span class="n">message</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">SlaveGeneratedMessage</span> <span class="p">=</span> <span class="n">message</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="na">[Serializable]</span>
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">MasterWork</span> <span class="p">:</span> <span class="n">IWork</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">SlaveResult</span> <span class="n">_result</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">MasterWork</span><span class="p">(</span><span class="n">SlaveResult</span> <span class="n">result</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_result</span> <span class="p">=</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">(</span><span class="n">Socket</span> <span class="n">endPoint</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Do master work: &quot;</span> <span class="p">+</span> <span class="n">endPoint</span><span class="p">.</span><span class="n">RemoteEndPoint</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Received from slave: &quot;</span> <span class="p">+</span> <span class="n">_result</span><span class="p">.</span><span class="n">SlaveGeneratedMessage</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">master</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Master</span><span class="p">(</span><span class="m">12345</span><span class="p">);</span>
+        <span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">StartNew</span><span class="p">(</span><span class="n">master</span><span class="p">.</span><span class="n">Start</span><span class="p">);</span>
+
+        <span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">1000</span><span class="p">);</span>
+
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">slaveCount</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">index</span> <span class="k">in</span> <span class="n">Enumerable</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">slaveCount</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">slave</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Slave</span><span class="p">(</span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="m">12345</span><span class="p">);</span>
+            <span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">StartNew</span><span class="p">(</span><span class="n">slave</span><span class="p">.</span><span class="n">Start</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">master</span><span class="p">.</span><span class="n">ConnectedSlaveCount</span> <span class="p">!=</span> <span class="n">slaveCount</span><span class="p">)</span>
+            <span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+
+        <span class="n">Logger</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&quot;Start!&quot;</span><span class="p">);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">master</span><span class="p">.</span><span class="n">DistributeWork</span><span class="p">(</span><span class="k">new</span> <span class="n">SlaveWork</span><span class="p">());</span>
+            <span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">1000</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ol>
+<li><code>Master</code>를 시작하고, <code>Slave</code>를 10개 만들어서 <code>Master</code>에 연결한다.</li>
+<li><code>Master</code>는 <code>SlaveWork</code> 객체를 만들어서 적절히 <code>Slave</code>에게 넘겨준다. 기본 알고리즘은 RoundRobin이므로 첫 번째 <code>Slave</code>부터 차례대로 일을 받게 된다.</li>
+<li><code>Slave</code>는 <code>SlaveWork</code>를 처리한 후, 수행한 결과를 <code>SlaveResult</code>에 담아서 <code>MasterWork</code> 객체를 <code>Master</code>에게 전달한다.</li>
+<li><code>Master</code>는 <code>MasterWork</code>를 받아서 그 내부에 있는 <code>SlaveResult</code>를 출력해준다.</li>
+</ol>
+
+<p>모두 네트워크로 전송되기 위해 <code>SerializableAttribute</code>를 붙이고 있다.</p>
+
+<h3>정리</h3>
+
+<p>본 글에서는 작업을 원격지에서 수행하고, 적절히 분산시킬 수 있는 분산 처리 환경을 C#으로 간단히 구현해봤다. Master와 Slave의 코드를 한 Assembly에 넣어놨기 때문에 Serialize/Deserialize를 수행함에 있어서 아주 편했다.</p>
+
+<p>하지만 제대로 된 분산 환경에서 Master와 Slave가 같은 코드를 공유한다는 것은 다양한 작업/변경된 작업을 수행함에 있어서 매우 불리하다. 왜냐하면 Slave가 수행되는 머신의 바이너리가 지속적으로 교체되어야 하기 때문이다.</p>
+
+<p>또한 위 코드는 단순한 RPC 작업을 수행함에 있어서 너무 많은 코드를 작성해야 한다. (적어도 두 개의 Work와 하나의 Result class를 작성해야 했다.)</p>
+
+<p>따라서 다음 글에서는</p>
+
+<ul>
+<li>Master/Slave가 코드를 공유하지 않아도 수행될 수 있는 구조와</li>
+<li>RpcWork와 WorkGroup 설계를 추가하여 보다 간편한 분산 작업을</li>
+</ul>
+
+<p>작성할 수 있도록 고민해보자.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2013/04/22/simple-distributed-system-implementation-1/" title="분산 처리 환경 구현 1">&laquo; 분산 처리 환경 구현 1</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2013/05/19/how-much-faster-is-cpp-than-c-sharp/" title="How much faster is C++ than C#?">&raquo; How much faster is C++ than C#?</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

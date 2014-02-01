@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="generic한 c++ rpc 구현 20 Aug 2013 c++ rpc generic한 rpc를 간단히 구현해보자. 원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 DSEL을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다. 양이 좀 많기 때문에 개요부터 설명하겠다. rpc 메시지을 주고 받기 위한 buffer를 먼저 설계하고, 메시지을 처리할 handler를 선언한다. 이를 기반으로 하나의 연결(connection)을 처리할 session을 구현하고, 이 위에 rpc_server와 rpc_client을 구현할 것이다. 마지막으로 구현된 기반 라이브러리를 바탕으로 DSEL을 만들어서 실제 사용할 rpc를 구현해볼 것이다. buffer 네트워크로 byte를 주고 받기 위한 buffer는 다음과 같이 쉽게 구현할 수 있다. 다만 매번 복사되는 것을 막기 위해 shared_ptr 형태도로 사용할 것이다. typedef std::vector&lt;char&gt; buffer_t; typedef boost::shared_ptr&lt;buffer_t&gt; buffer_ref; buffer로부터 데이터를 읽고 쓰는 class를 구현해보자. template만 있으면 primitive..." />
+
+	<meta http-equiv="date" content="Tuesday, 20  2013 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,rpc,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>generic한 c++ rpc 구현</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">generic한 c++ rpc 구현</h1>
+				<p class="page-date">20 Aug 2013</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#rpc">rpc</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>generic한 rpc를 간단히 구현해보자.</p>
+
+<p>원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 <a href="http://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage">DSEL</a>을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.</p>
+
+<p>양이 좀 많기 때문에 개요부터 설명하겠다.</p>
+
+<ul>
+<li>rpc 메시지을 주고 받기 위한 <strong>buffer</strong>를 먼저 설계하고, 메시지을 처리할 <strong>handler</strong>를 선언한다.</li>
+<li>이를 기반으로 하나의 연결(connection)을 처리할 <strong>session</strong>을 구현하고, 이 위에 <code>rpc_server</code>와 <code>rpc_client</code>을 구현할 것이다.</li>
+<li>마지막으로 구현된 기반 라이브러리를 바탕으로 <strong>DSEL</strong>을 만들어서 실제 사용할 rpc를 구현해볼 것이다.</li>
+</ul>
+
+<h3>buffer</h3>
+
+<p>네트워크로 byte를 주고 받기 위한 buffer는 다음과 같이 쉽게 구현할 수 있다. 다만 매번 복사되는 것을 막기 위해 shared_ptr 형태도로 사용할 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="kt">buffer_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">buffer_t</span><span class="o">&gt;</span> <span class="n">buffer_ref</span><span class="p">;</span>
+</code></pre></div>
+<p>buffer로부터 데이터를 읽고 쓰는 class를 구현해보자. template만 있으면 primitive type에 대해서는 쉽게 구현할 수가 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">buffer_reader_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">buffer_reader_t</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+    <span class="k">friend</span> <span class="kt">buffer_reader_t</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="kt">buffer_reader_t</span><span class="o">&amp;</span> <span class="n">reader</span><span class="p">,</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">_Ty</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">_buffer</span><span class="p">);</span>
+        <span class="n">reader</span><span class="p">.</span><span class="n">_buffer</span> <span class="o">+=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Ty</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">reader</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">_buffer</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">buffer_writer_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">buffer_writer_t</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">_buffer</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">buffer_t</span><span class="o">&gt;</span><span class="p">())</span> <span class="p">{}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+    <span class="k">friend</span> <span class="kt">buffer_writer_t</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">buffer_writer_t</span><span class="o">&amp;</span> <span class="n">writer</span><span class="p">,</span> <span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">byte_begin</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">byte_end</span> <span class="o">=</span> <span class="n">byte_begin</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">byte_begin</span><span class="p">,</span> <span class="n">byte_end</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="o">*</span><span class="n">writer</span><span class="p">.</span><span class="n">_buffer</span><span class="p">.</span><span class="n">get</span><span class="p">()));</span>
+        <span class="k">return</span> <span class="n">writer</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">buffer_ref</span> <span class="n">buffer</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_buffer</span><span class="p">;</span> <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="n">buffer_ref</span> <span class="n">_buffer</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>buffer_writer_t</code> 객체는 여기저기 복사되어 전달될 수 있다. 그 때마다 buffer가 복사되면 자원이 아까우니 <code>shared_ptr</code> 형태인 buffer_ref를 사용하도록 하였다.</p>
+
+<h3>handler</h3>
+
+<p><code>buffer_reader_t</code>와 <code>buffer_writer_t</code>가 정의되었으니 handler는 다음과 같이 정의할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span> <span class="p">(</span><span class="kt">buffer_reader_t</span><span class="p">,</span> <span class="kt">buffer_writer_t</span><span class="p">)</span><span class="o">&gt;</span> <span class="kt">handler_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">handler_t</span><span class="p">,</span> <span class="mi">128</span><span class="o">&gt;</span> <span class="kt">handler_array_t</span><span class="p">;</span>
+</code></pre></div>
+<p>rpc 함수는 필요한 인자(argument)를 buffer로부터 읽어서(<code>buffer_reader_t</code>) 그 결과를 다시 buffer로 써야한다(<code>buffer_writer_t</code>). 따라서 함수 signature가 reader와 writer를 인자로 받도록 구성된 것이다. 이 때 <code>buffer_writer_t</code> 객체가 reference가 아닌 이유는 writer가 갖고 있는 buffer 자체가 이미 <code>buffer_ref</code>이기 때문이다. 반환 값이 bool인 이유는 handler가 false를 반환할 경우 writer에 의해 작성된 buffer를 network로 전달하지 않기 위함이다.</p>
+
+<p><code>rpc_client_t</code>와 <code>rpc_server_t</code>는 각기 다른 <code>handler_array_t</code>를 갖는다. 이 때 가질 수 있는 handler는 128개로 제한하였다. (원래 <code>UINT16_MAX</code>를 썼는데 이만큼 쓸 경우 <code>rpc_server_t</code>나 <code>rpc_client_t</code> 객체를 local variable로 만들면 stackoverflow가 발생한다-_-)</p>
+
+<h3>session</h3>
+
+<p>필요한 자료구조를 다 만들었으니 session도 쉽게 만들 수 있다. <code>session_t</code> class는 하나의 socket을 갖고, 그에 대해서 async-read/write 요청/완료 처리를 하는 class이다. peer로부터 message를 받으면 해당 message를 dispatch하여 적절한 handler를 호출해준다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">session_t</span> <span class="o">:</span> <span class="k">public</span> <span class="n">boost</span><span class="o">::</span><span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="kt">session_t</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">session_t</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span><span class="o">&amp;</span> <span class="n">io_service</span><span class="p">,</span> <span class="kt">handler_array_t</span><span class="o">&amp;</span> <span class="n">handler_array</span><span class="p">);</span>
+
+    <span class="kt">void</span> <span class="nf">request_connect</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="n">endpoint</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">request_read_msg_size</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">request_read_msg</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">request_write</span><span class="p">(</span><span class="n">buffer_ref</span> <span class="n">buffer</span><span class="p">);</span>
+
+    <span class="kt">bool</span> <span class="n">is_connected</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_connected</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">friend</span> <span class="k">class</span> <span class="nc">rpc_server_t</span><span class="p">;</span>
+<span class="nl">private:</span>
+    <span class="kt">void</span> <span class="nf">handle_connect</span><span class="p">(</span><span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">handle_read_msg_size</span><span class="p">(</span><span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">handle_read_msg</span><span class="p">(</span><span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">handle_write</span><span class="p">(</span><span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span><span class="o">&amp;</span> <span class="n">_io_service</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">socket</span> <span class="n">_socket</span><span class="p">;</span>
+
+    <span class="kt">size_t</span> <span class="n">_msg_size</span><span class="p">;</span>
+    <span class="kt">buffer_t</span> <span class="n">_msg_buffer</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">_connected</span><span class="p">;</span>
+    <span class="kt">handler_array_t</span><span class="o">&amp;</span> <span class="n">_handler_array</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">session_t</span><span class="o">&gt;</span> <span class="n">session_ref</span><span class="p">;</span>
+</code></pre></div>
+<p><a href="http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html">boost asio</a>에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.</p>
+
+<p>전체 코드를 다 올리면 너무 기니까 간단하게 message를 읽는 코드만 옮겨보았다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="kt">session_t</span><span class="o">::</span><span class="n">request_read_msg_size</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">async_read</span><span class="p">(</span><span class="n">_socket</span><span class="p">,</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_msg_size</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_msg_size</span><span class="p">)),</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">transfer_exactly</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">_msg_size</span><span class="p">)),</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="kt">session_t</span><span class="o">::</span><span class="n">handle_read_msg_size</span><span class="p">,</span> <span class="n">shared_from_this</span><span class="p">(),</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">error</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="kt">session_t</span><span class="o">::</span><span class="n">request_read_msg</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_msg_buffer</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">_msg_size</span><span class="p">)</span>
+        <span class="n">_msg_buffer</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">_msg_size</span><span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">async_read</span><span class="p">(</span><span class="n">_socket</span><span class="p">,</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">_msg_buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">_msg_size</span><span class="p">),</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">transfer_exactly</span><span class="p">(</span><span class="n">_msg_size</span><span class="p">),</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="kt">session_t</span><span class="o">::</span><span class="n">handle_read_msg</span><span class="p">,</span> <span class="n">shared_from_this</span><span class="p">(),</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">error</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>먼저 msg_size를 먼저 받아온 후 그 크기만큼 msg를 읽는다. <code>_msg_size</code> 변수는 <code>size_t</code> type인데 <code>asio::buffer()</code>는 type을 가리지 않기 때문에 <code>size_t</code> 변수에 바로 크기를 받아올 수 있다. 그 후 필요한 크기만큼 buffer를 적절하게 늘려서 <code>transfer_exactly</code>로 <code>async_read()</code>를 요청하면 boost asio가 알아서 잘 채워준다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="kt">session_t</span><span class="o">::</span><span class="n">handle_read_msg_size</span><span class="p">(</span><span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">request_read_msg</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="n">_connected</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="kt">session_t</span><span class="o">::</span><span class="n">handle_read_msg</span><span class="p">(</span><span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">buffer_reader_t</span> <span class="n">reader</span><span class="p">(</span><span class="n">_msg_buffer</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+        <span class="kt">uint16_t</span> <span class="n">msg_type</span><span class="p">;</span>
+        <span class="n">reader</span> <span class="o">&gt;&gt;</span> <span class="n">msg_type</span><span class="p">;</span>
+
+        <span class="kt">handler_t</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">_handler_array</span><span class="p">[</span><span class="n">msg_type</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">handler</span> <span class="o">!=</span> <span class="n">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">buffer_writer_t</span> <span class="n">writer</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">handler</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span><span class="p">))</span>
+                <span class="n">request_write</span><span class="p">(</span><span class="n">writer</span><span class="p">.</span><span class="n">buffer</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="n">request_read_msg_size</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="n">_connected</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>msg_size</code> 요청 후 <code>msg_size</code>에 대한 완료 처리를 하고 그 다음에 msg 요청 후 msg에 대한 완료 처리를 한다. 그리고 다시 <code>msg_size</code> 요청하여 다음 msg를 받을 수 있도록 한다. 이렇게 하는 이유는 한 시점에 <strong>반드시 하나의 msg만 읽는 순서가 보장</strong>되도록 하기 위함이다.</p>
+
+<p>어쨌든 msg를 읽었으면 <code>msg_type</code> 확인해서 <code>handler_array</code>에서 찾아 handler를 호출해준다. 그리고 원할 경후 handler에 의해 작성된 buffer_writer_t 내의 buffer를 peer에게 보내준다. (추후 코드가 나오겠지만 <code>handler_array</code>의 index 값과 message의 type 값은 일치하도록 구현하였다)</p>
+
+<h3>rpc_server</h3>
+
+<p><code>rpc_server_t</code> class는 boost asio acceptor를 사용하여 socket을 받고, <code>session_t</code> 객체를 만들어서 <code>request_msg_size()</code> 함수를 불러주는 class이다. protected로 노출되는 <code>handler_array</code>를 갖는데, 그 이유는 이를 상속받아 구현할 <code>rpc_server_t</code> class가 각 message를 받아 어떻게 처리할지 handler를 구현할 수 있도록 하기 위함이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">rpc_server_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">rpc_server_t</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span><span class="o">&amp;</span> <span class="n">io_service</span><span class="p">,</span> <span class="kt">int</span> <span class="n">server_port</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="kt">rpc_server_t</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="kt">void</span> <span class="n">request_accept</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">handle_accept</span><span class="p">(</span><span class="n">session_ref</span> <span class="n">session</span><span class="p">,</span> <span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">);</span>
+<span class="nl">protected:</span>
+    <span class="kt">handler_array_t</span> <span class="n">_handler_array</span><span class="p">;</span>
+<span class="nl">private:</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span><span class="o">&amp;</span> <span class="n">_io_service</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">acceptor</span> <span class="n">_acceptor</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="kt">rpc_server_t</span><span class="o">::</span><span class="n">request_accept</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">session_ref</span> <span class="n">session</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">session_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_io_service</span><span class="p">,</span> <span class="n">_handler_array</span><span class="p">);</span>
+    <span class="n">_acceptor</span><span class="p">.</span><span class="n">async_accept</span><span class="p">(</span><span class="n">session</span><span class="o">-&gt;</span><span class="n">_socket</span><span class="p">,</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="kt">rpc_server_t</span><span class="o">::</span><span class="n">handle_accept</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span>
+            <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">error</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="kt">rpc_server_t</span><span class="o">::</span><span class="n">handle_accept</span><span class="p">(</span><span class="n">session_ref</span> <span class="n">session</span><span class="p">,</span> <span class="k">const</span> <span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">session</span><span class="o">-&gt;</span><span class="n">request_read_msg_size</span><span class="p">();</span>
+    <span class="n">request_accept</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>역시 accept의 순서 보장을 위해서 하나 accept 요청하고, 그 완료를 처리 후에 다음 accept를 요청하도록 되어있다. 사실 처음에 동시 접속이 많을 경우 위 같은 방법은 별로 좋지 않을 수 있다. 이를 위해 프로그램 처음 구동 시 <code>request_accept()</code>를 미리 많이 불러놓는 경우도 있다.</p>
+
+<p><code>rpc_server</code> 측에 구현되는 message handler는 각 <code>message_type</code>에 따라 구현이 달라야 한다. 두 int의 덧셈을 요청하는 message라면 <code>int+int</code>을 구현해야 하고, 만약 두 double의 곱셈을 요청하는 message라면 <code>dobule*double</code>을 구현해야 하기 때문이다. 이 handler들은 추후 <code>rpc_server_t</code> class를 상속 받아 구현하는 rpc class에서 정의될 것이다.</p>
+
+<h3>rpc_client</h3>
+
+<p><code>rpc_client_t</code> class는 <code>rpc_server_t</code> class에 비해 다소 복잡하다.</p>
+
+<ul>
+<li>rpc 수행 결과를 비동기로 받아야 하니 rpc 요청 시 결과를 처리할 callback을 받아야 한다.</li>
+<li>그리고 해당 rpc에 대한 수행 결과가 언제 올지 모르니, 요청할 때 id를 발급해서 id와 callback을 map같은 곳에다가 저장을 해두어야 한다.</li>
+<li>그런데 rpc 함수의 return type은 제각각이니 이 callback을 일관된 type으로 통일을 해주어야 한다.</li>
+</ul>
+
+<p>그렇기 때문에 코드가 좀 복잡해진다. 일단 전체 코드를 보면 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">rpc_client_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">rpc_client_t</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span><span class="o">&amp;</span> <span class="n">io_service</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="kt">rpc_client_t</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="kt">void</span> <span class="n">connect</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">port</span><span class="p">);</span>
+<span class="nl">protected:</span>
+    <span class="k">struct</span> <span class="kt">general_callback_t</span> <span class="p">{</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="kt">general_callback_t</span><span class="p">()</span> <span class="p">{}</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="k">operator</span> <span class="p">()</span> <span class="p">(</span><span class="kt">buffer_reader_t</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">general_callback_t</span><span class="o">&gt;</span> <span class="n">general_callback_ptr</span><span class="p">;</span>
+    <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">general_callback_ptr</span><span class="o">&gt;</span> <span class="kt">callback_map_t</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="nf">register_callback</span><span class="p">(</span><span class="n">general_callback_ptr</span> <span class="n">callback</span><span class="p">);</span>
+    <span class="n">general_callback_ptr</span> <span class="nf">get_callback</span><span class="p">(</span><span class="kt">int</span> <span class="n">req_num</span><span class="p">);</span>
+<span class="nl">protected:</span>
+    <span class="n">session_ref</span> <span class="n">_session</span><span class="p">;</span>
+<span class="nl">private:</span>
+    <span class="kt">void</span> <span class="nf">initialize_handlers</span><span class="p">();</span>
+    <span class="kt">bool</span> <span class="nf">default_handler</span><span class="p">(</span><span class="kt">buffer_reader_t</span> <span class="n">reader</span><span class="p">,</span> <span class="kt">buffer_writer_t</span> <span class="n">writer</span><span class="p">);</span>
+<span class="nl">private:</span>
+    <span class="kt">handler_array_t</span> <span class="n">_handler_array</span><span class="p">;</span>
+    <span class="kt">callback_map_t</span> <span class="n">_callback_map</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">_callback_map_mutex</span><span class="p">;</span>
+    <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_int</span> <span class="n">_req_num_gen</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>callback을 단일 type을 취급하기 위해 <code>general_callback_t</code> struct를 작성하였다. 단순히 <code>buffer_reader_t</code> 객체를 받아서 뭔가 처리하는 functor이고, 여기에 필요한 코드는 추후 rpc client 구현 시 macro로 찍어내게 될 것이다. 어쨌든 <code>general_callback_t</code>를 만들었으니 이 소유권을 보장해주기 위한 <code>unique_ptr</code>을 하나 선언하고, 이에 대한 map을 구성할 수 있다.</p>
+
+<p>이제 <code>atomic_int</code>에 의해 thread-safe하게 증가되는 <code>request_number</code>와 함께 callback을 map에다가 register할 수 있는 것이다. 그리고 추후 해당 <code>request_number</code>에 대한 결과가 오면 <code>callback</code>을 꺼내서 호출해주면 된다.</p>
+
+<p><code>rpc_server_t</code> class와는 다르게 <code>rpc_client_t</code> class는 <code>handler_array</code>를 갖지만 <code>default_handler</code>로 모든 것을 처리한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="kt">rpc_client_t</span><span class="o">::</span><span class="n">initialize_handlers</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="kt">rpc_client_t</span><span class="o">::</span><span class="n">default_handler</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">_1</span><span class="p">,</span> <span class="n">_2</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">each</span> <span class="o">:</span> <span class="n">_handler_array</span><span class="p">)</span>
+        <span class="n">each</span> <span class="o">=</span> <span class="n">handler</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="kt">rpc_client_t</span><span class="o">::</span><span class="n">default_handler</span><span class="p">(</span><span class="kt">buffer_reader_t</span> <span class="n">reader</span><span class="p">,</span> <span class="kt">buffer_writer_t</span> <span class="n">writer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">req_num</span><span class="p">;</span>
+    <span class="n">reader</span> <span class="o">&gt;&gt;</span> <span class="n">req_num</span><span class="p">;</span>
+    <span class="n">general_callback_ptr</span> <span class="n">callback</span> <span class="o">=</span> <span class="n">get_callback</span><span class="p">(</span><span class="n">req_num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">callback</span> <span class="o">!=</span> <span class="n">nullptr</span><span class="p">)</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="n">reader</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>왜냐하면 <code>rpc_client</code> 입장에서는 도착하는 모든 message가 <code>request_number + result</code> 일 것인데, <code>request_number</code> 가져와서 <code>callback</code>을 얻었으면 실제 result를 얻는 것은 callback 내부에서 처리하기 때문에 handler에서는 따로 더 해줄 일이 없기 때문이다. (return false를 하는 이유는 rpc_client가 다시 rpc_server에게 뭔가 보낼 필요가 없기 때문이다)</p>
+
+<p>callback 내에서는 reader 객체에서 result 값을 읽어서 사용자가 넘긴 진짜 callback을 불러줄 것이다. 그리고 이러한 코드는 macro에 의해서 자동 생성될 것이다.</p>
+
+<h3>code generating</h3>
+
+<p>이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 <strong>rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가</strong>이다. 나머지 byte serializer나 rpc type enum 선언 등의 <a href="http://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.</p>
+
+<p>일단 원하는 최종 형태의 코드는 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">RPC_BEGIN</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+    <span class="n">RPC_METHOD2</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">RPC_METHOD2</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">RPC_METHOD3</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">RPC_END</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+<span class="kt">int</span> <span class="n">example</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">double</span> <span class="n">example</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">int</span> <span class="n">example</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div>
+<p>rpc interface에 대한 선언을 하고, 그에 대한 구현을 한다. 그러면 필요한 나머지 코드가 모두 만들어지는 것이다.</p>
+
+<p>type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 <a href="http://en.wikipedia.org/wiki/X_Macro">X Macro pattern</a>이 사용될 것이다.</p>
+
+<p>일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 <code>RPC_METHOD3</code> macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 <a href="http://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html">boost pp</a>를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.</p>
+
+<p>설명의 편의를 위해 <code>RPC_METHOD2()</code>를 기준으로 설명할 것이다.</p>
+
+<p>type enum이 필요한 이유는 rpc client와 server가 어떤 rpc를 요청했는지를 구분하기 위한 식별자로 사용하기 위함이다. 그냥 enum 내에 rpc 함수 이름을 열거하면 되는데, 동일한 이름의 다른 argument type의 rpc가 존재할 수 있으니 rpc 이름에 type을 붙여서 type enum을 구성하도록 하자.</p>
+
+<p>type enum 이름은 앞으로도 자주 사용되므로 이를 위한 helper macro를 선언한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define RPC_TYPE2(name, type1, type2) type_##name##_##type1##_##type2</span>
+</code></pre></div>
+<p>그리고 helper macro를 사용하여 enum을 생성하는 코드를 만들 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define RPC_BEGIN(name) namespace name { enum type_enum {</span>
+<span class="cp">#define RPC_METHOD2(rtype, name, type1, var1, type2, var2) RPC_TYPE2(name, type1, type2),</span>
+<span class="cp">#define RPC_END(name) }; </span><span class="cm">/* enum */</span><span class="cp"> } </span><span class="cm">/* namespace */</span><span class="cp"></span>
+</code></pre></div>
+<p>코드 생성의 편의를 위해 namespace 내에 코드를 만들도록 하였다.</p>
+
+<p>rpc server 측의 코드를 생성할 때에는, 실제 구현할 rpc 함수에 대한 prototype 선언, 그리고 message를 통해 실제 rpc 함수를 불러주는 entry function 2개의 코드를 만들어주어야 한다.</p>
+
+<p>prototype을 생성해주는 코드는 간단한 편이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define RPC_BEGIN(name) namespace name {</span>
+<span class="cp">#define RPC_METHOD2(rtype, name, type1, var1, type2, var2) rtype name(type1 var1, type2 var2);</span>
+<span class="cp">#define RPC_END(name) };</span>
+</code></pre></div>
+<p>그냥 해당 namespace 안에 rpc 함수 이름을 갖고, 지정된 type의 인자를 받는 함수를 선언하였다.</p>
+
+<p>rpc server class를 만들어주는 macro는 약간 복잡하다. 아까 만든 rpc_server_t class를 상속받는 class를 하나 만든 후, <code>handler_array</code>에 각 rpc message를 받아서 실제 rpc 함수를 불러주는 과정의 코드를 만든다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define RPC_BEGIN(name) \</span>
+<span class="cp">    namespace name { \</span>
+<span class="cp">    class name##_rpc_server_t : public rpc_server_t { \</span>
+<span class="cp">    public: \</span>
+<span class="cp">        name##_rpc_server_t(boost::asio::io_service&amp; io_service, int server_port) \</span>
+<span class="cp">            : rpc_server_t(io_service, server_port) { \</span>
+<span class="cp">            initialize_handlers(); \</span>
+<span class="cp">        } \</span>
+<span class="cp">    private: \</span>
+<span class="cp">        void initialize_handlers() {</span>
+<span class="cp">#define RPC_METHOD2(rtype, name, type1, var1, type2, var2) \</span>
+<span class="cp">            _handler_array[RPC_TYPE2(name, type1, type2)] = [] \</span>
+<span class="cp">                    (buffer_reader_t reader, buffer_writer_t writer) -&gt; bool { \</span>
+<span class="cp">                int req_num; \</span>
+<span class="cp">                type1 var1; \</span>
+<span class="cp">                type2 var2; \</span>
+<span class="cp">                reader &gt;&gt; req_num &gt;&gt; var1 &gt;&gt; var2; \</span>
+<span class="cp">                rtype result = name(var1, var2); \</span>
+<span class="cp">                writer &lt;&lt; sizeof(uint16_t) + sizeof(int) + sizeof(rtype); \</span>
+<span class="cp">                writer &lt;&lt; static_cast&lt;uint16_t&gt;(RPC_TYPE2(name, type1, type2)); \</span>
+<span class="cp">                writer &lt;&lt; req_num; \</span>
+<span class="cp">                writer &lt;&lt; result; \</span>
+<span class="cp">                return true; \</span>
+<span class="cp">            };</span>
+<span class="cp">#define RPC_END(name) \</span>
+<span class="cp">        } </span><span class="cm">/* initialize_handlers */</span><span class="cp"> \</span>
+<span class="cp">    }; </span><span class="cm">/* class */</span><span class="cp"> \</span>
+<span class="cp">    }  </span><span class="cm">/* namespace */</span><span class="cp"></span>
+</code></pre></div>
+<p>그냥 <code>rpc_server_t</code> class 상속받고, <code>initialize_handlers()</code> 함수를 만든다. 그리고 그 함수 내에서 각 rpc message를 어떻게 처리할지에 대한 코드를 만드는데, 필요한 인자 정보를 <code>buffer_reader_t</code> 객체를 통해 읽고, 아까 prototype을 선언한 실제 함수를 불러 결과(result)를 얻은 뒤, 다시 그 결과를 <code>buffer_writer_t</code> 객체에 남아서 peer(client)에게 전달해주는 것이다.</p>
+
+<p>rpc client 쪽은 callback 때문에 약간 복잡해보일 수 있지만 server와 난이도는 동일하다. 인자로 받은 내용을 buffer에 담아 peer(server)에게 보내고, 그 결과가 오면 callback을 불러주면 된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define RPC_BEGIN(name) \</span>
+<span class="cp">    namespace name { \</span>
+<span class="cp">    class name##_rpc_client_t : public rpc_client_t { \</span>
+<span class="cp">    public: \</span>
+<span class="cp">        name##_rpc_client_t(boost::asio::io_service&amp; io_service) \</span>
+<span class="cp">            : rpc_client_t(io_service) { \</span>
+<span class="cp">        }</span>
+<span class="cp">#define RPC_METHOD2(rtype, name, type1, var1, type2, var2) \</span>
+<span class="cp">        void name(type1 var1, type2 var2, boost::function&lt;void (rtype)&gt; callback) { \</span>
+<span class="cp">            buffer_writer_t writer; \</span>
+<span class="cp">            writer &lt;&lt; sizeof(uint16_t) + sizeof(int) + sizeof(type1) + sizeof(type2); \</span>
+<span class="cp">            writer &lt;&lt; static_cast&lt;uint16_t&gt;(RPC_TYPE2(name, type1, type2)); \</span>
+<span class="cp">            struct __callback_t : public general_callback_t { \</span>
+<span class="cp">                virtual void operator () (buffer_reader_t reader) { \</span>
+<span class="cp">                    rtype result; \</span>
+<span class="cp">                    reader &gt;&gt; result; \</span>
+<span class="cp">                    _callback(result); \</span>
+<span class="cp">                } \</span>
+<span class="cp">                __callback_t(boost::function&lt;void (rtype)&gt; callback) \</span>
+<span class="cp">                    : _callback(callback) {} \</span>
+<span class="cp">                boost::function&lt;void (rtype)&gt; _callback; \</span>
+<span class="cp">            }; \</span>
+<span class="cp">            int req_num = register_callback(general_callback_ptr( \</span>
+<span class="cp">                                new __callback_t(callback))); \</span>
+<span class="cp">            writer &lt;&lt; req_num &lt;&lt; var1 &lt;&lt; var2; \</span>
+<span class="cp">            _session-&gt;request_write(writer.buffer()); \</span>
+<span class="cp">        }</span>
+<span class="cp">#define RPC_END(name)   \</span>
+<span class="cp">    }; </span><span class="cm">/* class */</span><span class="cp">  \</span>
+<span class="cp">    }  </span><span class="cm">/* namespace */</span><span class="cp"></span>
+</code></pre></div>
+<p><code>size</code>, <code>msg_type</code>, <code>req_num</code>, <code>args</code> 순으로 데이터를 writer에 써서 peer(server)에게 보낸다. 이 때 user-callback은 rtype(return type)을 인자로 받는 void function인데, 이를 callback map에 등록하기 위해 <code>general_callback_t</code> 객체로 감싼다. 이 <code>__callback_t</code> 객체의 <code>operator ()</code>가 불렸다는 것은 server의 수행 결과가 <code>buffer_reader_t</code> 객체에 담겼다는 것이므로 여기서 result를 읽어서<code>_callback</code>(user-callback)을 불러주기만 하면 된다.</p>
+
+<p>이제 X-Macro pattern을 사용하기 위한 macro function 선언은 끝났다. 이제 약간의 전처리기 기술을 사용하면 코드가 완성된다. 개념을 익히기 위해 다음 코드르 보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#ifdef _OPTION_</span>
+<span class="cm">/* define macro functions */</span>
+<span class="cp">#include _TARGET_</span>
+<span class="cm">/* undef macro functions */</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p>위 코드는 <code>_OPTION_</code> macro가 정의되어 있을 때만 수행되는 코드로, macro function을 그 구간 내에서만 사용하도록 정의(define) 후 해제(undef)하고 있다. 재밌는 것은 #include 부분인데 특정 파일을 지칭한 것이 아니라 <code>_TARGET_</code>라는 macro value를 지칭하고 있다. 즉, 위 내용이 들어있는 파일을 include하기 전에 <code>_TARGET_</code> macro에 적절한 파일명을 넣어주면 알아서 해당 파일을 include해준다는 것이다.</p>
+
+<p>본 소스의 <code>rpc_gen_spec.h</code> 파일을 보면 <code>_RPC_GEN_TYPE_</code>,  <code>_RPC_GEN_SERVER_</code>, <code>_RPC_GEN_CLIENT_</code> 3개의 option에 대해서 각각 macro function을 교체한 후 <code>_RPC_GEN_TARGET_</code> macro value로 정의한 파일을 include하도록 되어있다.
+이제 실제로 코드를 찍어내기 위한 <code>rpc_gen.h</code>에서는 다음과 같이 한 번에 여러 코드를 만들어낼 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define _RPC_GENERATING_ 1</span>
+<span class="cp">#   define _RPC_GEN_TYPE_</span>
+<span class="cp">#     include &quot;rpc_gen_spec.h&quot;</span>
+<span class="cp">#   undef _RPC_GEN_TYPE_</span>
+
+<span class="cp">#   ifdef _RPC_SERVER_</span>
+<span class="cp">#     define _RPC_GEN_SERVER_</span>
+<span class="cp">#        include &quot;rpc_gen_spec.h&quot;</span>
+<span class="cp">#       undef _RPC_GEN_SERVER_</span>
+<span class="cp">#   endif</span>
+
+<span class="cp">#   ifdef _RPC_CLIENT_</span>
+<span class="cp">#      define _RPC_GEN_CLIENT_</span>
+<span class="cp">#       include &quot;rpc_gen_spec.h&quot;</span>
+<span class="cp">#     undef _RPC_GEN_CLIENT_</span>
+<span class="cp">#   endif</span>
+<span class="cp">#undef _RPC_GENERATING_</span>
+</code></pre></div>
+<p>일단 <code>_RPC_GEN_TYPE_</code> macro를 선언하고 <code>rpc_gen_spec.h</code> 파일을 include해서 <code>type_enum</code> 코드를 먼저 만들어낸다.  그리고 <code>_RPC_SERVER_</code>라는 option이 있으면 다시 <code>_RPC_GEN_SERVER_</code> macro 선언 후 <code>rpc_gen_spec.h</code> 파일을 include해서 서버 측 코드를 만들어낸다. 같은 방법으로 <code>_RPC_CLIENT_</code> option이 있으면 클라이언트 코드도 만들어낸다.</p>
+
+<p>위 코드가 수행되는 동안 <code>_RPC_GENERATING_</code> 이라는 macro를 선언하고 있는데 그 이유는 이 파일을 include하는 쪽에서 초기 값을 선언할지, 아니면 코드 template을 선언할지에 대한 phase를 결정하도록 하기 위함이다.</p>
+
+<p><code>example_rpc.h</code> 파일을 보면 이해하기가 쉽다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#ifndef _RPC_GENERATING_</span>
+<span class="cp">#   define _RPC_SERVER_</span>
+<span class="cp">#   define _RPC_CLIENT_</span>
+<span class="cp">#   define _RPC_GEN_TARGET_ &quot;example_rpc.h&quot;</span>
+<span class="cp">#   include &quot;rpc_gen.h&quot;</span>
+<span class="cp">#else</span>
+<span class="n">RPC_BEGIN</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+    <span class="n">RPC_METHOD2</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">RPC_METHOD2</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">RPC_METHOD3</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">RPC_END</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p><code>_RPC_GENERATING_</code> macro가 선언되어 있지 않다면 <code>_RPC_SERVER_</code>, <code>_RPC_CLIENT_</code> option을 주고, <code>_RPC_GEN_TARGET_</code>으로 이 파일 이름을 준다. 즉, 처음 이 파일이 include될 때 코드를 생성하기 위한 초기 값을 지정하는 것이다.</p>
+
+<p>그리고 <code>rpc_gen.h</code> 파일이 include가 되면 <code>_RPC_GENERATING_</code> macro가 설정되고 <code>rpc_gen_spec.h</code> 파일이 include되면서 <code>_RPC_GEN_TARGET_</code>으로 지정된 <code>example_rpc.h</code> 파일이 <strong>다시</strong> include가 될 것이다. 이 때 <code>_RPC_GENERATING_</code> macro가 정의되었으므로 <code>RPC_BEGIN(...)</code> 코드가 사용될 것이고 이 macro function들이 적절히 치환되어 원하는 코드가 적절하게 생성될 것이다.</p>
+
+<h3>example</h3>
+
+<p>이제 모든 작업이 끝났으니 다음과 같이 코드를 실행해볼 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#include &quot;example_rpc.h&quot;</span>
+
+<span class="kt">int</span> <span class="n">example</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">double</span> <span class="n">example</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">int</span> <span class="n">example</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span> <span class="n">io_service</span><span class="p">;</span>
+    <span class="n">example</span><span class="o">::</span><span class="kt">example_rpc_server_t</span> <span class="n">server</span><span class="p">(</span><span class="n">io_service</span><span class="p">,</span> <span class="mi">12345</span><span class="p">);</span>
+    <span class="n">server</span><span class="p">.</span><span class="n">request_accept</span><span class="p">();</span>
+
+    <span class="n">example</span><span class="o">::</span><span class="kt">example_rpc_client_t</span> <span class="n">client</span><span class="p">(</span><span class="n">io_service</span><span class="p">);</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">);</span>
+
+    <span class="n">client</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="p">[]</span> <span class="p">(</span><span class="kt">int</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="mf">11.5</span><span class="p">,</span> <span class="mf">23.7</span><span class="p">,</span> <span class="p">[]</span> <span class="p">(</span><span class="kt">double</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="p">[]</span> <span class="p">(</span><span class="kt">int</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="n">io_service</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>client 객체를 통해 rpc argument가 적절히 rpc server에게 전달되어 실 구현 함수가 수행된 후, 그 결과가 적절히 client의 callback으로 돌아와 console에 출력되는 것을 볼 수 있다.</p>
+
+<h3>정리</h3>
+
+<ul>
+<li>macro 코드가 좀 더러운데 이 부분은 boost pp로 정리하면 어느 정도 괜찮아진다.</li>
+<li>thread-safe하지 않은 코드가 좀 보이는데 적절하게 고쳐 쓰면 multi-thread에서도 안전하게 사용할 수 있다.</li>
+<li>handler 개수가 128개로 제한되는 것이 아까우면 handler_array가 heap에 할당되도록 수정하면 된다.</li>
+<li>rpc 결과를 callback으로 받아오는 것이 마음에 들지 않는다면 boost coroutine을 써서 실행 흐름을 제어하면 된다.</li>
+</ul>
+
+<p>어쨌든 할만큼 한 것 같다. reflection이 익숙한 스터디 친구들은 저정도로 만족하지 못할 것 같지만 c++에서 code generator 도움이 없이 코드를 정리하면 저게 한계다. 정말이다!</p>
+
+<h3>소스 코드</h3>
+
+<ul>
+<li><a href="https://github.com/lacti/cpp-rpc">Github: cpp-rpc</a></li>
+<li>첨부된 프로젝트를 실행하기 위해서는 BOOST_INCLUDE, BOOST_LIB64 macro에 각 경로를 지정해야 한다. Visual Studio의 Property Manager window를 켜서, Microsoft.Cpp.x64.user를 열어 User Macros에 BOOST_INCLUDE와 BOOST_LIB64를 추가해주면 된다.</li>
+</ul>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2013/08/18/cpp11-async-corotuine-io-study/" title="c++11 async, corotuine, io 스터디">&laquo; c++11 async, corotuine, io 스터디</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2013/08/23/preprocessor-programming/" title="preprocessor programming">&raquo; preprocessor programming</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

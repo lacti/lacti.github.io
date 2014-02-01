@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="stl operator 실수 24 Dec 2010 c++ 어제 나를 1시간동안 고민하게 한 코드는 다음과 같다. class CMyData { int GetKey (void) const { return m_nKey; } CMyData (void) {} ~CMyData (void) {} private: int m_nKey; }; std::list&lt;CMyData&gt; gCache; BOOL Find (std::list&lt;CMyData&gt;&amp; list, int key) { for (std::list&lt;CMyData&gt;::iterator iterator = gCache.begin (); iterator &lt; gCache.end (); ++iterator) { if (iterator-&gt;GetKey () == key) list.push_back (list); } return list.size () != 0; } 어제 정신이 없었다고 변명을 해도 너무 어이없는 실수를 저질렀는데 더 큰 문제는 컴파일에서 뱉어주는 에러를 보고도 해당 문제를 파악하지 못했다는 것이다. 위 코드의 문제는 나는 OOP 수업의 영향으로 class declaration에서 public - protected - private 순으로 선언을 하고, public method를 선언할 때 가장 마지막 부분에 생성자 소멸자를 선언한다. 그런데..." />
+
+	<meta http-equiv="date" content="Friday, 24  2010 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>stl operator 실수</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">stl operator 실수</h1>
+				<p class="page-date">24 Dec 2010</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>어제 나를 1시간동안 고민하게 한 코드는 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">CMyData</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">GetKey</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_nKey</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="n">CMyData</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">CMyData</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_nKey</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">CMyData</span><span class="o">&gt;</span> <span class="n">gCache</span><span class="p">;</span>
+<span class="n">BOOL</span> <span class="nf">Find</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">CMyData</span><span class="o">&gt;&amp;</span> <span class="n">list</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">CMyData</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">gCache</span><span class="p">.</span><span class="n">begin</span> <span class="p">();</span>
+        <span class="n">iterator</span> <span class="o">&lt;</span> <span class="n">gCache</span><span class="p">.</span><span class="n">end</span> <span class="p">();</span> <span class="o">++</span><span class="n">iterator</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iterator</span><span class="o">-&gt;</span><span class="n">GetKey</span> <span class="p">()</span> <span class="o">==</span> <span class="n">key</span><span class="p">)</span> <span class="n">list</span><span class="p">.</span><span class="n">push_back</span> <span class="p">(</span><span class="n">list</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">list</span><span class="p">.</span><span class="n">size</span> <span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>어제 정신이 없었다고 변명을 해도 너무 어이없는 실수를 저질렀는데 더 큰 문제는 컴파일에서 뱉어주는 에러를 보고도 해당 문제를 파악하지 못했다는 것이다.</p>
+
+<p>위 코드의 문제는</p>
+
+<ul>
+<li>나는 OOP 수업의 영향으로 class declaration에서 public - protected - private 순으로 선언을 하고, public method를 선언할 때 가장 마지막 부분에 생성자 소멸자를 선언한다. <strong>그런데 class 선언할 때 맨 앞에 public을 빼먹었다.</strong></li>
+</ul>
+
+<p><code>GetKey()</code> 접근 위반 에러를 먼저 봤다면 괜찮았을텐데, <code>std::list</code> 쪽에서 <code>CMyData</code>의 소멸자를 호출하지 못한다는 에러만 보고 <em>소멸자 제대로 선언했는데!</em>를 외쳤으나 <code>public:</code>이 빠진건 보지 못했다.</p>
+
+<ul>
+<li>stl container의 iterator를 사용할 때는 <code>begin</code>으로부터 시작해서 <code>end</code>가 아닐 때까지 반복하는거다. 그래서 당연히 <code>iterator != list.end();</code>으로 써야하는데 대체 무슨 정신으로 저기에다가 <code>operator &lt;</code>를 써놨는지 모르겠다.</li>
+</ul>
+
+<p>결론은 술먹고 코딩하는 것보다 졸면서 코딩하는게 100만배는 더 해롭다는 사실.<br>
+저거 잡는데 1시간 반정도가 걸렸는데, 사실 잠 깨는데 1시간 걸리고 30분 동안 내가 졸면서 뭘 짜고 있었는지 파악하는게 걸린것 같다.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2010/12/24/cpp-class-memset-fault/" title="class와 memset">&laquo; class와 memset</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2011/01/08/closed-descriptor-and-write-when-SIGPIPE/" title="닫힌 descriptor와 write, SIGPIPE">&raquo; 닫힌 descriptor와 write, SIGPIPE</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="lacti's blog" />
+
+	<meta name="keywords" content="" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>lacti's blog</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				
+				<h1 class="page-title"><a href="/2017/03/29/new-ssg/">아내 블로그 구축기</a></h1>
+				<p class="page-date">29 Mar 2017</p>
+				<div class="content">
+<p>아내 블로그를 만들어 주고 있는데 이왕이면 네이버 블로그나 티스토리 말고 github pages로 만들어주고 싶었다.<br> 템플릿은 추후에 걱정하고 일단 내 블로그를 그대로 복사해서 아내의 github 계정에 넣고 travis-ci를 연동하는 것까지는 해봤던 일이라 금방 할 줄 알았는데,</p> <ul> <li>travis-ci에 넣어줄 secret token을 만들어야 하는데 travis를 실행할 shell이 없어서 결국 aws linux vm을 받았다 (...)</li> <li>github pages가 잘 동작하나 확인하려 했더니 때마침 github pages 장애가 나서 접근이 불가능했다 (...)</li> <li>custom domain을 연결해서 직접 dns를 구성했더니 page 접근은 성공했는데 dns가 문제가 있는지 재전파한다고 다시...
+				</div>
+				<hr class="section-split" />
+
+				<div class="pure-g">
+					<div class="pure-u-1 pure-u-md-1-2 l-box">
+					
+						<h4><a href="/2016/09/26/aws-serverless-hackathon-2016/" title="aws serverless hackathon 2016">aws serverless hackathon...</a> <span class="page-date">26 Sep 16</span></h4>
+						<div>작년에 참가하지 못했던 serverless gaming on aws을 올해는 드디어 참가할 수가 있었다. 개인적으로 행사에 대한 참가 소회를 생생하게 밝힐 자신은 없으므로 같이 참가했던 분의 글을 소개하는 것으로 넘어가려고 한다.
+
+
+2015년: Serverless 실시간 대전게임
+ 2016년: Gaming on A...</div>
+					
+						<h4><a href="/2015/02/20/yonsei-kroot-ctf-2015/" title="kroot ctf 2015">kroot ctf 2015</a> <span class="page-date">20 Feb 15</span></h4>
+						<div>연세대학교 보안 동아리 Kroot에서 주최하는 CTF 2015에 참가했다. 보안이란 주제랑은 별로 관련이 없는 삶을 살아온지라 [...] 난이도 낮은 문제 + 힌트가 공개된 문제를 중점으로 풀었다.
+
+웹은 아는게 없는지라 바로 스킵했다-_-;
+
+challensges에서 문제 내역을 확인할 수 있다...근데 지금 다 ...</div>
+					
+						<h4><a href="/2014/07/15/csharp-data-server-library-impl/" title="c# 데이터 서버 라이브러리 구현">c# 데이터 서버 라이브러리 구현</a> <span class="page-date">15 Jul 14</span></h4>
+						<div>지난 글에서는 csv 데이터를 binary 파일로 serialize하여 데이터의 loading 속도를 올리는 방법에 대해 알아보았다. 해당 방법은 용량이 큰 csv 파일에 대해서도 효과가 크지만, 작게 분할된 많은 csv 파일을 다시 적절한 크기의 binary 파일로 재구성하여 작업할 때 더욱 효과를 크게 느낄 수 ...</div>
+					
+					</div>
+					<div class="pure-u-1 pure-u-md-1-2 r-box r-head-div">
+					
+						<h4><a href="/2014/07/09/csharp-csv-to-binary/" title="c# binary 파일을 사용해 csv 파일 빨리 읽기">c# binary 파일을 사용해 csv 파일...</a> <span class="page-date">09 Jul 14</span></h4>
+						<div>데이터 분석을 위해 데이터를 열심히 수집해서 몇 개의 csv 파일을 얻었고, 이 csv 파일들은 각각 약 1GB 정도로 조금 큰 수준이라고 해보자. 데이터베이스가 있으면 데이터를 넣고 적절한 쿼리를 넣으면 되니 편하게 작업을 진행할 수가 있다. 하지만 데이터베이스가 없는 시스템에서 이 데이터들을 분석하거나, 쿼리로는...</div>
+					
+						<h4><a href="/2014/06/30/why-implements-csharp-server/" title="왜 c#으로 서버를 작성하려 하나?">왜 c#으로 서버를 작성하려 하나?</a> <span class="page-date">30 Jun 14</span></h4>
+						<div>본 글은 동아리 친구의 질문인 &#39;왜 게임 서버를 c++이 아닌 c#으로 작성하려 하냐?&#39;에 대한 답변이다.
+
+간단히 c++과 c#의 차이를 통해 답변하면 이렇다.
+
+
+c++은 속도가 빠르다.
+c#은 기본 라이브러리가 풍부하다.
+c#은 표현력이 좋다. linq나 reflection의 도움을 받을 수도 있...</div>
+					
+						<h4><a href="/2014/06/30/dumpable-analysis/" title="dumpable 고찰">dumpable 고찰</a> <span class="page-date">30 Jun 14</span></h4>
+						<div>하재승님께서 던전 앤 파이터 클라이언트 로딩 속도 최적화에서 언급하신 dumpable 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 operator =를 사용하여 dumpable한 struct를 만들어준다.
+
+다만 몇 가지 아쉬운 점...</div>
+					
+					</div>
+				</div>
+				<hr class="section-split" />
+
+				<div class="pure-g">
+					<div class="pure-u-1 pure-u-md-2-3 l-box">
+						<ul id="indexes">
+						
+							
+								
+								<h4>Jun 2014</h4>
+							
+							<li>
+								<span>29.</span>
+								<a href="/2014/06/29/variadic-template-typelist/">variadic template을 사용한 typelist 구현</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>23.</span>
+								<a href="/2014/06/23/blog-with-github-pages-and-jekyll/">github pages와 jekyll을 사용한 blog 만들기</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>02.</span>
+								<a href="/2014/06/02/128-things-that-it-architect-doesn-t-do/">IT 아키텍트가 하지 말아야 할 128가지</a>
+							</li>
+						
+							
+								
+								
+								
+									<h4>May 2014</h4>
+								
+							
+							<li>
+								<span>29.</span>
+								<a href="/2014/05/29/ndc14-tool-development/">팀을 구하는 툴 개발</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>29.</span>
+								<a href="/2014/05/29/ndc14-the-npc-master/">THE NPCM@STER - 라이브 게임에 어울리는 스토리 텔링의 접근법</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>29.</span>
+								<a href="/2014/05/29/ndc14-mobile-data-mining/">모바일 데이터 분석</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>29.</span>
+								<a href="/2014/05/29/ndc14-live-methodology/">신입 프로그래머들의 고민을 통해 생각해보는 누구나 쉽게 적응할 수 있는 프로젝트 만들기</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>29.</span>
+								<a href="/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/">던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아이가 세배 빨라졌어요!</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>28.</span>
+								<a href="/2014/05/28/ndc14-rx-server-application/">Rx와 Functional Reactive Programming으로 고성능 서버 어플리케이션 만들기</a>
+							</li>
+						
+							
+								
+								
+								
+							
+							<li>
+								<span>28.</span>
+								<a href="/2014/05/28/ndc14-experience-of-using-redis/">라이브 상황에서 윈도우 서버 개발자가 겪은 좌충우돌 Redis 적용 경험담</a>
+							</li>
+						
+						</ul>
+					</div>
+					<div class="pure-u-1 pure-u-md-1-3 r-box">
+						<h4>tags</h4>
+					
+					
+					
+					
+						<code class="tag"><a href="/tags/#async">async</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#aws">aws</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#book">book</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#c">c</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#c#">c#</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#c++">c++</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#cloud">cloud</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#concurrency">concurrency</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#ctf">ctf</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#data">data</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#database">database</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#design">design</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#diary">diary</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#distributed">distributed</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#game">game</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#io">io</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#java">java</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#javascript">javascript</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#kroot">kroot</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#live">live</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#memory">memory</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#message">message</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#ndc14">ndc14</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#network">network</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#optimization">optimization</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#os">os</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#python">python</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#refactor">refactor</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#reflection">reflection</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#rpc">rpc</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#server">server</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#serverless">serverless</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#slide">slide</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#study">study</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#template">template</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#tool">tool</a></code>
+					
+					
+					
+						<code class="tag"><a href="/tags/#web">web</a></code>
+					
+					
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

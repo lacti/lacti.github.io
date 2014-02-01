@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>http://lacti.me/</loc>
+		<lastmod>2017-04-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2017/03/29/new-ssg/</loc>
+		<lastmod>2017-03-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2016/09/26/aws-serverless-hackathon-2016/</loc>
+		<lastmod>2016-09-26</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2015/02/20/yonsei-kroot-ctf-2015/</loc>
+		<lastmod>2015-02-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/07/15/csharp-data-server-library-impl/</loc>
+		<lastmod>2014-07-15</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/07/09/csharp-csv-to-binary/</loc>
+		<lastmod>2014-07-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/06/30/why-implements-csharp-server/</loc>
+		<lastmod>2014-06-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/06/30/dumpable-analysis/</loc>
+		<lastmod>2014-06-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/06/29/variadic-template-typelist/</loc>
+		<lastmod>2014-06-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/06/23/blog-with-github-pages-and-jekyll/</loc>
+		<lastmod>2014-06-23</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/06/02/128-things-that-it-architect-doesn-t-do/</loc>
+		<lastmod>2014-06-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/29/ndc14-tool-development/</loc>
+		<lastmod>2014-05-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/29/ndc14-the-npc-master/</loc>
+		<lastmod>2014-05-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/29/ndc14-mobile-data-mining/</loc>
+		<lastmod>2014-05-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/29/ndc14-live-methodology/</loc>
+		<lastmod>2014-05-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/</loc>
+		<lastmod>2014-05-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-rx-server-application/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-experience-of-using-redis/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-distributed-mmorpg-server-without-spof/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-design-generic-game-server/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-cloud-fail-over-process/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-build-private-cloud/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/28/ndc14-build-distributed-system/</loc>
+		<lastmod>2014-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/27/ndc14-wcf-mobile-server/</loc>
+		<lastmod>2014-05-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/05/27/ndc14-python-mobile-server/</loc>
+		<lastmod>2014-05-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/02/16/network-offload-error/</loc>
+		<lastmod>2014-02-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/02/14/secret-of-mswsock-dll/</loc>
+		<lastmod>2014-02-14</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2014/02/11/fast-message-serialization/</loc>
+		<lastmod>2014-02-11</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/12/22/server-programming/</loc>
+		<lastmod>2013-12-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/11/19/message-dispatch-code-generation-by-enum-value/</loc>
+		<lastmod>2013-11-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/11/19/asynchronous-programming-pattern-2/</loc>
+		<lastmod>2013-11-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/11/16/cpp-message-dispatcher/</loc>
+		<lastmod>2013-11-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/11/10/template-programming-and-type-erasure/</loc>
+		<lastmod>2013-11-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/11/10/function-adapter/</loc>
+		<lastmod>2013-11-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/11/04/generic-programming-with-template/</loc>
+		<lastmod>2013-11-04</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/10/09/asynchronous-programming-pattern-1/</loc>
+		<lastmod>2013-10-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/09/08/zhconverter-simplified-traditional/</loc>
+		<lastmod>2013-09-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/09/07/websocket-webrtc/</loc>
+		<lastmod>2013-09-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/27/distributed-system-implementation-homework/</loc>
+		<lastmod>2013-08-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/26/concurrency-pattern-and-distributed-system-study/</loc>
+		<lastmod>2013-08-26</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/23/preprocessor-programming/</loc>
+		<lastmod>2013-08-23</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/20/simple-cpp-rpc/</loc>
+		<lastmod>2013-08-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/18/cpp11-async-corotuine-io-study/</loc>
+		<lastmod>2013-08-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/12/implements-producer-consumer-model/</loc>
+		<lastmod>2013-08-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/10/concurrency-algorithm-and-memory-model/</loc>
+		<lastmod>2013-08-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/04/implements-thread-safe-counter/</loc>
+		<lastmod>2013-08-04</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/08/03/concurrency-study/</loc>
+		<lastmod>2013-08-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/07/25/write-game-data/</loc>
+		<lastmod>2013-07-25</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/07/12/aws-gameserver-management/</loc>
+		<lastmod>2013-07-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/06/09/binary-xml-for-fast-loading/</loc>
+		<lastmod>2013-06-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/06/08/simple-distributed-system-implementation-3/</loc>
+		<lastmod>2013-06-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/06/07/csharp-game-server/</loc>
+		<lastmod>2013-06-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/05/19/how-much-faster-is-cpp-than-c-sharp/</loc>
+		<lastmod>2013-05-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/05/07/simple-distributed-system-implementation-2/</loc>
+		<lastmod>2013-05-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2013/04/22/simple-distributed-system-implementation-1/</loc>
+		<lastmod>2013-04-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/11/30/ctags-cscope-with-vim/</loc>
+		<lastmod>2012-11-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/11/20/index-analysis/</loc>
+		<lastmod>2012-11-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/11/18/fiddler-web-debugger/</loc>
+		<lastmod>2012-11-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/10/31/member-data-pointer-casting-safety/</loc>
+		<lastmod>2012-10-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/10/13/different-between-member-data-pointer-and-pointer/</loc>
+		<lastmod>2012-10-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/10/07/extract-code-using-member-data-pointer-3/</loc>
+		<lastmod>2012-10-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/10/03/extract-code-using-member-data-pointer-2/</loc>
+		<lastmod>2012-10-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/10/01/extract-code-using-member-data-pointer-1/</loc>
+		<lastmod>2012-10-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/06/21/implement-go-interface-like-at-java/</loc>
+		<lastmod>2012-06-21</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/06/10/get-resource-stream-using-ClassLoader/</loc>
+		<lastmod>2012-06-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/06/09/using-reflection-at-cpp-4/</loc>
+		<lastmod>2012-06-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/06/09/using-reflection-at-cpp-3/</loc>
+		<lastmod>2012-06-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/06/04/using-reflection-at-cpp-2/</loc>
+		<lastmod>2012-06-04</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/06/03/using-reflection-at-cpp-1/</loc>
+		<lastmod>2012-06-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/05/31/xml-mapping-using-java-annotation-and-reflection/</loc>
+		<lastmod>2012-05-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/05/28/simply-wait-using-FutureTask-at-java/</loc>
+		<lastmod>2012-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/05/12/lambda-and-raii-2/</loc>
+		<lastmod>2012-05-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/04/01/lambda-and-raii-1/</loc>
+		<lastmod>2012-04-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/03/18/asynchronous-programming-and-async-await/</loc>
+		<lastmod>2012-03-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/03/01/c-sharp-ui-cross-thread-problem/</loc>
+		<lastmod>2012-03-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/02/23/thread-unsafety-problem-in-circular-queue/</loc>
+		<lastmod>2012-02-23</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/01/10/implicit-interface-by-template/</loc>
+		<lastmod>2012-01-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2012/01/09/inherits-template-argument/</loc>
+		<lastmod>2012-01-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/12/20/event-handler-and-message-passing/</loc>
+		<lastmod>2011-12-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/11/27/java-message-dispatcher/</loc>
+		<lastmod>2011-11-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/11/15/type-dispatching-by-type-trait-class/</loc>
+		<lastmod>2011-11-15</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/11/13/flight-game-with-java-4/</loc>
+		<lastmod>2011-11-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/11/06/flight-game-with-java-3/</loc>
+		<lastmod>2011-11-06</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/10/08/design-database/</loc>
+		<lastmod>2011-10-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/10/03/getter-and-setter-at-java/</loc>
+		<lastmod>2011-10-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/09/30/using-rtti-at-cpp/</loc>
+		<lastmod>2011-09-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/09/22/flight-game-with-java-2/</loc>
+		<lastmod>2011-09-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/09/21/flight-game-with-java-1/</loc>
+		<lastmod>2011-09-21</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/09/20/talmud-wealth-inherit/</loc>
+		<lastmod>2011-09-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/22/static-sized-concurrent-pool/</loc>
+		<lastmod>2011-08-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/14/web-based-chat-site/</loc>
+		<lastmod>2011-08-14</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/14/io-and-memory-copy/</loc>
+		<lastmod>2011-08-14</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/11/synchronize-function-execution-in-each-object/</loc>
+		<lastmod>2011-08-11</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/07/efficient-processing-for-multiplexing-io/</loc>
+		<lastmod>2011-08-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/07/asynchronous-io/</loc>
+		<lastmod>2011-08-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/03/interlocked-singly-linked-lists/</loc>
+		<lastmod>2011-08-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/02/volatile-interlocked-operation/</loc>
+		<lastmod>2011-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/08/02/context-switching-and-simultaneously/</loc>
+		<lastmod>2011-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/20/public-private-at-c%2B%2B/</loc>
+		<lastmod>2011-07-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/20/object-ctor-dtor-with-goto/</loc>
+		<lastmod>2011-07-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/20/implement-call-stack-trace-at-c%2B%2B/</loc>
+		<lastmod>2011-07-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/19/check-type-equality-and-assignablity-by-template/</loc>
+		<lastmod>2011-07-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/13/tls-initializer/</loc>
+		<lastmod>2011-07-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/13/generic-interface-implemented-by-template/</loc>
+		<lastmod>2011-07-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/07/01/nonsense-of-iterator-incremental-operator/</loc>
+		<lastmod>2011-07-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/05/21/program-segment/</loc>
+		<lastmod>2011-05-21</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/05/19/http-message-header/</loc>
+		<lastmod>2011-05-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/05/15/how-to-control-width-in-java-due-to-LayoutManager/</loc>
+		<lastmod>2011-05-15</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/05/01/mysql-insert/</loc>
+		<lastmod>2011-05-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/03/20/classical-inheritance-in-javascript/</loc>
+		<lastmod>2011-03-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/03/02/implementation-instance-id-with-java-annotation/</loc>
+		<lastmod>2011-03-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/02/22/object-database-and-value-object/</loc>
+		<lastmod>2011-02-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/02/15/JPanel-inheritence/</loc>
+		<lastmod>2011-02-15</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/01/16/reference-sites-of-bash/</loc>
+		<lastmod>2011-01-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/01/09/typeof-and-container-of/</loc>
+		<lastmod>2011-01-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/01/08/different-between-size-t-ssize-t/</loc>
+		<lastmod>2011-01-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2011/01/08/closed-descriptor-and-write-when-SIGPIPE/</loc>
+		<lastmod>2011-01-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/12/24/cpp-stl-fault/</loc>
+		<lastmod>2010-12-24</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/12/24/cpp-class-memset-fault/</loc>
+		<lastmod>2010-12-24</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/12/21/debian-db-recovery/</loc>
+		<lastmod>2010-12-21</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/12/18/LockWindowUpdate/</loc>
+		<lastmod>2010-12-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/12/03/as-you-know-utf8-unicode-ci/</loc>
+		<lastmod>2010-12-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/10/31/http-serialize-object/</loc>
+		<lastmod>2010-10-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/05/01/java-network-programming-2-socket/</loc>
+		<lastmod>2010-05-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/05/01/java-network-programming-1-basic/</loc>
+		<lastmod>2010-05-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/04/29/why-java-ObjectStream-is-blocked/</loc>
+		<lastmod>2010-04-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/03/20/HashSet-and-ArrayList/</loc>
+		<lastmod>2010-03-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/02/17/java-remotelib/</loc>
+		<lastmod>2010-02-17</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/02/07/recommend-java-decompiler/</loc>
+		<lastmod>2010-02-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2010/02/04/developing-java-remote-library/</loc>
+		<lastmod>2010-02-04</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2009/10/18/how-to-function-returning-value-with-assembly/</loc>
+		<lastmod>2009-10-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2009/01/04/Java-Graphics-AffineTransform-and-JScrollPane/</loc>
+		<lastmod>2009-01-04</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2009/01/03/java-swing-1/</loc>
+		<lastmod>2009-01-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/12/25/eclipse-with-subversive/</loc>
+		<lastmod>2008-12-25</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/10/18/django-and-encoding/</loc>
+		<lastmod>2008-10-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/10/12/const-overloading/</loc>
+		<lastmod>2008-10-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/08/31/Java-equals/</loc>
+		<lastmod>2008-08-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/07/28/ConsoleHandler-System-in-out-error-closing/</loc>
+		<lastmod>2008-07-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/04/01/pintos-internal-structure/</loc>
+		<lastmod>2008-04-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/04/01/pintos-boot/</loc>
+		<lastmod>2008-04-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/04/01/make-pintos-environment/</loc>
+		<lastmod>2008-04-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>http://lacti.me/2008/04/01/gdb-simple-help/</loc>
+		<lastmod>2008-04-01</lastmod>
+	</url>
+	
+</urlset>

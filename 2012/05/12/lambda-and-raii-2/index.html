@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="lambda와 RAII 2 12 May 2012 c++ C++11은 lambda expression을 지원해주니 좀 다르게 생각해볼 수 있다. class lock_t { public: template &lt;typename functor&gt; void scoped(functor&amp; func) { lock(); func(); unlock(); } }; lock_t class 자체에 위와 같이 functor를 받아 실행할 수 있는 함수를 만든다. 그리고 그 앞 뒤로 lock-unlock을 불러준다. 이렇게 하면 lambda를 사용하여 lock 사용 코드를 보다 깔끔하게 정리해볼 수 있다. item_ref inventory_t::find(item_id_t item_id) { item_ref item(NULL); lock.scoped([&amp;item] () { auto iter = std::find(items.begin(), items.end(), find_item_by_id(item_id)); if (iter != items.end()) item = (*iter); }); return item; } lambda를 통해 lock 구문을 수행하는 코드를 보다 깔끔하게 묶어낼 수 있다... 라고 이야기하고 싶지만, item이라는 값을 반환해야할 방법이 딱히 없어서 외부에서 변수를 선언하고 내부로 전달하는 영 좋지 못한 방법을 쓰고 있다. 약간..." />
+
+	<meta http-equiv="date" content="Saturday, 12  2012 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>lambda와 RAII 2</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">lambda와 RAII 2</h1>
+				<p class="page-date">12 May 2012</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>C++11은 lambda expression을 지원해주니 좀 다르게 생각해볼 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">lock_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">functor</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">scoped</span><span class="p">(</span><span class="n">functor</span><span class="o">&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">lock</span><span class="p">();</span>
+        <span class="n">func</span><span class="p">();</span>
+        <span class="n">unlock</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>lock_t</code> class 자체에 위와 같이 functor를 받아 실행할 수 있는 함수를 만든다. 그리고 그 앞 뒤로 lock-unlock을 불러준다.</p>
+
+<p>이렇게 하면 lambda를 사용하여 lock 사용 코드를 보다 깔끔하게 정리해볼 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">item_ref</span> <span class="kt">inventory_t</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="kt">item_id_t</span> <span class="n">item_id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">item_ref</span> <span class="n">item</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">lock</span><span class="p">.</span><span class="n">scoped</span><span class="p">([</span><span class="o">&amp;</span><span class="n">item</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">items</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">find_item_by_id</span><span class="p">(</span><span class="n">item_id</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">items</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="n">item</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>lambda를 통해 lock 구문을 수행하는 코드를 보다 깔끔하게 묶어낼 수 있다... 라고 이야기하고 싶지만, item이라는 값을 반환해야할 방법이 딱히 없어서 외부에서 변수를 선언하고 내부로 전달하는 영 좋지 못한 방법을 쓰고 있다.</p>
+
+<p>약간 이야기가 다른 길로 가지만, 보다 깔끔한 해결책을 위해 아래와 같이 코드를 작성해볼 수 있다는 것을 이야기하고 싶다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">lock_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">R</span><span class="p">,</span> <span class="k">typename</span> <span class="n">functor</span><span class="o">&gt;</span>
+    <span class="n">R</span><span class="o">&amp;&amp;</span> <span class="n">scoped_return</span><span class="p">(</span><span class="n">functor</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">lock</span><span class="p">();</span>
+        <span class="n">R</span><span class="o">&amp;&amp;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">func</span><span class="p">();</span>
+        <span class="n">unlock</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>lock 범위 내에서 값을 반환할 수 있는 형태의 코드를 작성한 뒤 이를 사용하도록 한다는 것이다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">item_ref</span> <span class="kt">inventory_t</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="kt">item_id_t</span> <span class="n">item_id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">lock</span><span class="p">.</span><span class="n">scoped_return</span><span class="o">&lt;</span><span class="n">item_ref</span><span class="o">&gt;</span><span class="p">([</span><span class="o">=</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">items</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">find_item_by_id</span><span class="p">(</span><span class="n">item_id</span><span class="p">));</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">items</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="o">?</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">)</span><span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>물론 값을 쓸데없이 복사하는 구간이 있는데, 저 부분은 다시 RAII를 사용하여 묶는 등 코드를 좀 더 정리해볼 수 있겠다. (그게 귀찮아서 위처럼 r-value를 썼는데, 어차피 move constructor가 구현되어있지 않다면 저 방법은 효윺이 영 좋지 않을 수 있다.)</p>
+
+<p>lambda를 이용해 raii 영역을 하나의 scope로 묶어주는 방법에 대해서 정리해봤다. 하지만 이 방법을 써도 결국 최종 지점 (위 예제에서는 scoped 함수)에서는 결국 raii를 사용하여 자원을 관리할 필요가 있게 된다.</p>
+
+<p>이러한 패턴은 생각보다 자주 등장하게 되므로, 이에 대한 일반적인 패턴을 만들어놓으면 좋을 것이다. 이를 만족시키는 적절한 template class 를 작성해보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Ty</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="n">_Ty</span><span class="o">::*</span><span class="n">begin</span><span class="p">)(),</span> <span class="kt">void</span> <span class="p">(</span><span class="n">_Ty</span><span class="o">::*</span><span class="n">end</span><span class="p">)()</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">raii_t</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">raii_t</span><span class="p">(</span><span class="n">_Ty</span><span class="o">*</span> <span class="n">_obj</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">obj</span><span class="p">(</span><span class="n">_obj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">obj</span><span class="o">-&gt;*</span><span class="n">begin</span><span class="p">)();</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="kt">raii_t</span><span class="p">()</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">obj</span><span class="o">-&gt;*</span><span class="n">end</span><span class="p">)();</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="n">_Ty</span><span class="o">*</span> <span class="n">obj</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>raii_t</code>라는 class는 특정 type과, 그 type에 대해 시작 시 수행할 함수와 끝날 때 수행될 함수를 template 인자로 받는다. 이제 <code>lock_t</code>에 대한 <code>lock_raii_t</code> class는 다음과 같은 typedef로 정의할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="kt">raii_t</span><span class="o">&lt;</span><span class="kt">lock_t</span><span class="p">,</span> <span class="o">&amp;</span><span class="kt">lock_t</span><span class="o">::</span><span class="n">lock</span><span class="p">,</span> <span class="o">&amp;</span><span class="kt">lock_t</span><span class="o">::</span><span class="n">unlock</span><span class="o">&gt;</span> <span class="kt">lock_raii_t</span><span class="p">;</span>
+</code></pre></div>
+<p><code>lock_raii_t</code>는 <code>lock_t</code>에 대해 동작하면서, 해당 변수가 생성 시 <code>lock_t::lock()</code> 함수를 부르고, 소멸될 때 <code>lock_t::unlock()</code> 함수를 부르게 된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">lock_t</span> <span class="n">lock</span><span class="p">;</span>
+<span class="kt">lock_raii_t</span> <span class="nf">raii</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
+</code></pre></div>
+<p>저 <code>raii_t</code>는 꽤 일반적이어서, 생성과 소멸 시 특정 함수를 통해 자원 관리가 되어야 하는 class에 대해 모두 적용될 수 있다. 예를 들면 <code>shared_ptr</code> (add_ref/release_ref) 등이 될 수 있다.</p>
+
+<p><a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님께서 예제로 달았던 finalizer를 raii의 예로 들어보자. 특정 scope가 끝나는 시점에 수행되어야할 작업들을 명시해주는 객체가 된다. 즉, 익명의 객체를 하나 만들고, 그 소멸자에서 수행될 함수를 인자로 받도록 한다.</p>
+
+<p>먼저 소멸자에서 무언가를 수행해줄 수 있는 class를 만들어보자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Func</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">finalizer</span> <span class="p">{</span>
+    <span class="n">finalizer</span><span class="p">(</span><span class="n">_Func</span><span class="o">&amp;&amp;</span> <span class="n">_func</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">func</span><span class="p">(</span><span class="n">_func</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">finalizer</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">func</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="n">_Func</span> <span class="n">func</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>보다 일반적인 함수 수행을 원한다면 (일반 함수, 함수자, 멤버 함수 등) <code>std::function</code> 등을 적절히 사용하는 것도 좋겠지만 본 예제에서는 간단히 위처럼 설계했다. 위 <code>finalizer</code> class는 생성자로 받은 함수를 소멸자에서 수행하므로, 해당 객체가 소멸될 때까지 인자로 받은 함수의 수행을 미루게 된다.</p>
+
+<p>이제 template argument 유추를 컴파일러에게 맡기기 위해 이 객체를 만들어주는 함수를 만들자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Func</span><span class="o">&gt;</span>
+<span class="n">finalizer</span><span class="o">&lt;</span><span class="n">_Func</span><span class="o">&gt;</span> <span class="n">do_exit_scope</span><span class="p">(</span><span class="n">_Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">finalizer</span><span class="o">&lt;</span><span class="n">_Func</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">func</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>그러면 다음과 같이 사용이 가능해진다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="n">do_exit_scope</span><span class="p">([</span><span class="o">=</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// implements here!</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>생성된 객체가 소멸될 때 불려야한다는 것은, 불편하게도 <code>auto f</code>와 같이 명시적으로 변수를 코드로 적어줘야 한다는 이야기다. 이왕이면 이런 것 정도는 자동으로 컴파일러가 해줬으면 좋겠다, 싶으니 약간의 장난을 쳐보자.</p>
+
+<p>g++은 어떻게 해야 좋을지 모르겠고, <code>__COUNTER__</code> macro가 있는 msvc기준으로 설명하겠다. <code>__COUNTER__</code>는 해당 매크로가 해석될 때마다 1씩 증가하는 predefined macro이다. 따라서 임시 변수 명을 지어주기에는 적합한 녀석이다. (대체품으로 <code>__LINE__</code>를 쓰기도 한데, 이러면 한 줄에 여러 코드를 작성할 수 없다.)</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#define __concat(a, b)      a##b</span>
+<span class="cp">#define __auto_var          __concat(_auto_var, __COUNTER__)</span>
+<span class="cp">#define __do_exit_scope(f)  auto __auto_var = do_exit_scope(f)</span>
+</code></pre></div>
+<p><code>__auto_var</code> 매크로는 자동으로 변수의 이름을 대충 지어주는 매크로다. _auto_var라는 prefix를 붙이고, 뒤에 <code>__COUNTER__</code>를 붙여서 _auto_var1, _auto_var2 등으로 해당 매크로를 사용할 때마다 이름이 알아서 지어지도록 한다.</p>
+
+<p><code>__COUNTER__</code>와 _auto_var를 붙이기 위해서 <code>##</code> 연산자를 썼다. 다만 이게 <code>_auto_var##__COUNTER__</code>처럼 사용하면 <code>__COUNTER__</code>이 문자열로 해석되므로 <code>__concat</code>와 같은 다른 macro를 만들어서 사용해야 한다.</p>
+
+<p>마지막으로 <code>__do_exit_scope</code>라는 매크로 함수를 만들어서, 인자로 받은 함수에 대해 자동 변수 이름을 부여하도록 한다. 이러면 <code>auto f</code>와 같이 명시적으로 이름을 지정해주지 않아도 자동으로 변수를 할당하므로 조금이나마 더 나은 코드를 작성할 수 있다 (라는 기분이 든다-_-)</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">__do_exit_scope</span><span class="p">([</span><span class="o">=</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span> <span class="n">_tprintf_s</span><span class="p">(</span><span class="n">_T</span><span class="p">(</span><span class="s">&quot;third</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">));</span> <span class="p">});</span>
+<span class="n">__do_exit_scope</span><span class="p">([</span><span class="o">=</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span> <span class="n">_tprintf_s</span><span class="p">(</span><span class="n">_T</span><span class="p">(</span><span class="s">&quot;second</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">));</span> <span class="p">});</span>
+<span class="n">__do_exit_scope</span><span class="p">([</span><span class="o">=</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span> <span class="n">_tprintf_s</span><span class="p">(</span><span class="n">_T</span><span class="p">(</span><span class="s">&quot;first</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">));</span> <span class="p">});</span>
+</code></pre></div>
+<p>(변수의 소멸 순서는 생성 순서의 역순이므로, 출력 순서는 first - second - third 가 된다.)</p>
+
+<p>raii 기법은 단순히 생성자/소멸자 쌍에서 관리 대상 객체의 특정 함수 호출 쌍을 맞춰줌으로써 자원 관리에 문제가 없도록 해주는 기법이라 정리해볼 수 있겠다.</p>
+
+<p>이를 위해 자원이 사용되는 구간을 scope로 한정 짓기 위해 lambda를 사용하는 방법, 그리고 generic한 <code>raii_t</code> template class를 구현하여 사용하는 방법에 대해 간단히 알아보았다.</p>
+
+<p>여기서 그치지 않고 더 나아가본다면 <strong>raii class 를 단위 전략 기법</strong>을 사용하여 설계하는 것이다. 간단히 설명하면,</p>
+
+<ul>
+<li>raii 객체가 생성자로 관리할 객체의 주소를 인자로 받는데, 그냥 자신의 멤버 변수로 가지고 있으면 안되나?</li>
+<li>raii 객체가 생성자, 소멸자에서 호출될 함수를 모두 template 인자로 받는데, 위의 finalizer 예제 처럼 한 쪽에 대해 아무 동작을 수행하지 않도록 할 수 있는 다른 장치를 구현할 수 없을까?</li>
+<li>raii 객체의 복사/대입 가능성은 전혀 고려하지 않고 있는데, 이것에 대해서는 어떻게 다루는 것이 좋을까?</li>
+<li>raii 객체에 대해 multi-thread에서 접근한다고 할 필요가 있을 수 있는데, 위 raii class는 그런 관점에서는 일반적이라고 하기에는 무리가 있지 않을까?</li>
+</ul>
+
+<p>등등, storage, default template argument, ownership, thread-safety 등 몇 가지 세부 구현 전략에 대해서 더 raii class를 더 고민해볼 수 있는데, 이러한 것들을 <strong>단위 전략(policy)</strong> 이라고 불렀던 것이다(MC++D)</p>
+
+<p>이 내용은 굉장히 흥미롭겠지만, 여백이 부족하여 더 이상 적지 않는다.</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2012/04/01/lambda-and-raii-1/" title="lambda와 RAII 1">&laquo; lambda와 RAII 1</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2012/05/28/simply-wait-using-FutureTask-at-java/" title="java의 FutureTask를 사용한 간단한 수행 대기">&raquo; java의 FutureTask를 사용한 간단한 수행 대기</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

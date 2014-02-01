@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="반복자 i++과 ++i에 대한 헛소리 01 Jul 2011 c++ 반복문에서 반복자를 증가시킬 때, for ( ; ; i++)과 for ( ; ; ++i)를 이야기할 때, 뭐가 빠르네 느리네 이야기가 왜 나왔을까? 간단히 생각해보면, i++과 ++i는 동작이 약간 다르다. 연산자 우선순위는 i++이 좀 더 빠르지만, 실행 측면에서 본다면 i++은 자신의 상태를 저장한다 자신의 상태를 변화한다 저장한 예전 상태를 반환한다 ++i는 자신의 상태를 변화한다 자신 자체를 반환한다. i++의 3)과 ++i의 2)를 보면 i++의 경우 복사해둔 것을 반환하지만, ++i의 경우는 자기 자체(reference)를 반환한다. i++++은 안되지만 ++++i는 되는 이유가 그것이다. 함수 prototype으로 치자면 전항연산의 int &amp; operator ++ (void)와 후항연산의 int operator ++ (int dummy)의 차이랄까. 반환 값의 type이 다르다. 이게 단순 primitive type이면서 value type일 때는, i++의 3)과 ++i의 2) 가 결국 복사된..." />
+
+	<meta http-equiv="date" content="Friday, 01  2011 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>반복자 i++과 ++i에 대한 헛소리</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">반복자 i++과 ++i에 대한 헛소리</h1>
+				<p class="page-date">01 Jul 2011</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>반복문에서 반복자를 증가시킬 때, <code>for ( ; ; i++)</code>과 <code>for ( ; ; ++i)</code>를 이야기할 때, 뭐가 빠르네 느리네 이야기가 왜 나왔을까?<br>
+간단히 생각해보면, <code>i++</code>과 <code>++i</code>는 동작이 약간 다르다. 연산자 우선순위는 <code>i++</code>이 좀 더 빠르지만, 실행 측면에서 본다면</p>
+
+<p><code>i++</code>은</p>
+
+<ol>
+<li>자신의 상태를 저장한다</li>
+<li>자신의 상태를 변화한다</li>
+<li>저장한 예전 상태를 반환한다</li>
+</ol>
+
+<p><code>++i</code>는</p>
+
+<ol>
+<li>자신의 상태를 변화한다</li>
+<li>자신 자체를 반환한다.</li>
+</ol>
+
+<p><code>i++</code>의 3)과 <code>++i</code>의 2)를 보면 <code>i++</code>의 경우 복사해둔 것을 반환하지만, <code>++i</code>의 경우는 자기 자체(reference)를 반환한다. <code>i++++</code>은 안되지만 <code>++++i</code>는 되는 이유가 그것이다.<br>
+함수 prototype으로 치자면</p>
+
+<ul>
+<li>전항연산의 <code>int &amp; operator ++ (void)</code>와 </li>
+<li>후항연산의 <code>int operator ++ (int dummy)</code>의</li>
+</ul>
+
+<p>차이랄까. 반환 값의 type이 다르다.</p>
+
+<p>이게 단순 primitive type이면서 value type일 때는, <code>i++</code>의 3)과 <code>++i</code>의 2) 가 결국 복사된 값이므로 저기서 발생하는 부담은 같지만, 이를 수행하기 위한 instruction 차이가 난다.</p>
+
+<p>하지만 이게 wrapper class에 의한 object이면 좀 달라진다.<br>
+<code>i++</code>의 경우 반환하기 위한 임시 객체를 복사해서 준비해야하고, 자신을 변화시킨 후, 복사해둔 객체를 반환해야한다. 하지만 <code>++i</code>는? 그냥 자기 자신 (*this) 을 반환하면 된다.</p>
+
+<p>객체의 복사라는게 객체의 크기에 따라 안드로메다급으로 걸릴 수 있는 일인데다가 <code>obj next = current++;</code>와 같이 작성할 경우</p>
+
+<ol>
+<li>++ 함수 내부에서 임시 객체 생성 위한 복사 1번</li>
+<li>++ 함수 반환 값에서 next 로 대입되기 위한 복사 1번</li>
+<li>재수없다면 next 객체 생성 따로 ++ 함수 반환 값 대입 연산 따로 까지 칠 경우 1번</li>
+</ol>
+
+<p>총 2번 (컴파일러가 바보면 3번) 복사 짓을 해야한다는 것이다. 메모리도 그렇고 명령어도 그렇고 낭비가 심하다.</p>
+
+<p>STL의 iterator 같은 걸 쓸 때 iterator는 object이다. 따라서 전항 ++ 이 후항 ++ 보다 성능이 빠르다는 이야기가 위 근거에 의해 성립되는 것이다.</p>
+
+<p>자 그럼 이게 왜 헛소리인지 보자. 일단 <strong>컴파일러가 그렇게 멍청하지 않다.</strong><br>
+for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴파일러가 바보가 아닌 이상에야 <code>INC instruction</code> 넣어주면 된다.</p>
+
+<p>저게 iterator 같은 class라면?</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#include &lt;iostream&gt;</span>
+<span class="k">class</span> <span class="nc">serial</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">serial</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;prefix&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">serial</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="kt">int</span> <span class="n">dummy</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;postfix&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">serial</span> <span class="n">s</span><span class="p">;</span>
+    <span class="o">++++</span><span class="n">s</span><span class="p">;</span>
+    <span class="n">s</span><span class="o">++++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>재밌게도 후항(postfix) ++ 연산을 overloading할 때 반환 값에 대해서 신경을 쓰지 않아도 된다. 그런고로 전항(prefix) ++ 연산과 동일한 동작을 수행하게 하면 성능상 문제가 없다 할 수 있겠다.</p>
+
+<p>물론, </p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">serial</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="kt">int</span> <span class="n">dummy</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span> <span class="p">}</span>
+</code></pre></div>
+<p>와 같이 후항 연산에서 전항 연산을 호출해버려도 되고, (컴파일러가 함수 호출은 최적화시켜 줄거라 믿자)</p>
+
+<p>Visual Studio 2010에서 해본 결과 아예 후항 ++ 연산 함수를 정의하지 않으면 알아서 전항 ++ 함수를 호출해버린다-_-
+(g++ 4.5.2에서는 error: no &#39;operator++(int)&#39; declared for postfix &#39;++&#39; 와 같이 에러를 띄운다)</p>
+
+<p>그런고로 값 타입이든 객체 타입이든 반복문 등에서 반복자를 증가시킬 때 ++을 앞에 쓰냐 뒤에 쓰냐는 성능에 영향이 없다는 소리. 물론 컴파일러에 따라 다를 수 있다는 말이 제일 정답일 것이다만-_-</p>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2011/05/21/program-segment/" title="프로그램 세그먼트">&laquo; 프로그램 세그먼트</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2011/07/13/generic-interface-implemented-by-template/" title="template에 의한 generic interface 정의">&raquo; template에 의한 generic interface 정의</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

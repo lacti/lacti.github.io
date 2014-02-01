@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="concurrency 알고리즘과 memory model 10 Aug 2013 concurrency memory study 오늘 스터디에서 공부한 내용을 간략히 정리해보자. 원래 의도는, peterson&#39;s algorithm을 보고 여기서 비순차 실행이 일어날 때 발생하는 문제를 보고, memory consistency model의 memory order를 통해 문제를 어떻게 해결할 수 있는지 본 후에, lock free stack, lock free queue algorithm을 보고 문제를 파악한 후에 이를 해결하기 위해 hazard pointer를 보려고 했는데 순서가 꼬였다-_- 아무튼 의도했던 순서로 정리하겠음 peterson&#39;s algorithm Wiki: Peterson&#39;s algorithm 그냥 눈에 보이는대로 코드가 수행되면 문제가 발생하지 않는데, 비순차 실행에 의해 flag[my_index] = true; turn = other_index; 대입의 순서가 뒤집히면 critical section에 두 thread가 진입할 수 있는 문제가 발생한다. P0: turn = 1; flag[0] = true; while (flag[1] == true &amp;&amp; turn == 1) { // busy wait }..." />
+
+	<meta http-equiv="date" content="Saturday, 10  2013 00:00:00 GMT" />
+
+	<meta name="keywords" content="concurrency,memory,study,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>concurrency 알고리즘과 memory model</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">concurrency 알고리즘과 memory model</h1>
+				<p class="page-date">10 Aug 2013</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#concurrency">concurrency</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#memory">memory</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#study">study</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>오늘 스터디에서 공부한 내용을 간략히 정리해보자.</p>
+
+<p>원래 의도는,</p>
+
+<ul>
+<li>peterson&#39;s algorithm을 보고 여기서 비순차 실행이 일어날 때 발생하는 문제를 보고,</li>
+<li>memory consistency model의 memory order를 통해 문제를 어떻게 해결할 수 있는지 본 후에,</li>
+<li>lock free stack, lock free queue algorithm을 보고 문제를 파악한 후에 이를 해결하기 위해</li>
+<li>hazard pointer를 보려고 했는데</li>
+</ul>
+
+<p>순서가 꼬였다-_-
+아무튼 의도했던 순서로 정리하겠음</p>
+
+<h3>peterson&#39;s algorithm</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Peterson&#x27;s_algorithm">Wiki: Peterson&#39;s algorithm</a></p>
+
+<p>그냥 눈에 보이는대로 코드가 수행되면 문제가 발생하지 않는데, 비순차 실행에 의해 <code>flag[my_index] = true; turn = other_index;</code> 대입의 순서가 뒤집히면 critical section에 두 thread가 진입할 수 있는 문제가 발생한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="nl">P0:</span> <span class="n">turn</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">true</span> <span class="o">&amp;&amp;</span> <span class="n">turn</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// busy wait</span>
+    <span class="p">}</span>
+    <span class="c1">// critical section</span>
+    <span class="p">...</span>
+    <span class="c1">// end of critical section</span>
+    <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+<span class="nl">P1:</span> <span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">true</span> <span class="o">&amp;&amp;</span> <span class="n">turn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// busy wait</span>
+    <span class="p">}</span>
+    <span class="c1">// critical section</span>
+    <span class="p">...</span>
+    <span class="c1">// end of critical section</span>
+    <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</code></pre></div>
+<p>위 코드에 대해 아래와 같은 수행 흐름이 나오면 critical section이 보호되지 않는다.</p>
+
+<table><thead>
+<tr>
+<th>turn</th>
+<th>flag_0</th>
+<th>flag_1</th>
+<th>진행</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>0</td>
+<td>false</td>
+<td>false</td>
+<td>초기상태</td>
+</tr>
+<tr>
+<td>1</td>
+<td>false</td>
+<td>false</td>
+<td>p0: turn = 1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>false</td>
+<td>false</td>
+<td>p1: turn = 0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>false</td>
+<td>true</td>
+<td>p1: flag_1 = true // p1 진입</td>
+</tr>
+<tr>
+<td>0</td>
+<td>true</td>
+<td>true</td>
+<td>p2: flag_0 = true // p0 진입</td>
+</tr>
+</tbody></table>
+
+<h3>memory consistency model</h3>
+
+<p>비순차 실행에 의해 의존성이 없다고 판단되는 연산의 순서가 뒤집히는 것을 방지하기 위해 memory consistency model을 고민해야 한다.</p>
+
+<ul>
+<li><a href="http://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL RR: Shared MEmory Consistency Models: A Tutorial</a></li>
+<li><a href="http://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html">Boost: Thread coordination using Boost.Atomic</a></li>
+<li><a href="http://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
+</ul>
+
+<p>메모리 가시성 개념도 포함되어 있음. fence를 경계로 비순차 수행 가능 범위의 경계가 생김.<br>
+인텔 x86-64 core를 쓰면 알아서 해주기 때문에 프로그래머가 신경 쓸 필요가 없다.</p>
+
+<p>표준에서 설명하는 <code>memory_order_consume</code>, <code>memory_order_acquire</code>의 차이를 잘 모르겠음.
+그리고 boost thread_coordination 문서의 마지막 예제 내용을 잘 모르겠음.</p>
+
+<p>위 질문에 대한 <a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님의 답변</p>
+
+<blockquote>
+<p>consume와 acquire 시멘틱에 대한 차이: DEC alpha에서 작업할거 아니면 그냥 acquire로 통일하면 됨.</p>
+</blockquote>
+
+<h3>lock free algorithm과 aba problem</h3>
+
+<ul>
+<li>lock free algorithm과 aba problem: <a href="https://sites.google.com/site/doc4code/Non-Blocking%20Algorithm.pdf">Non_Blocking_Algorithm.pdf</a></li>
+<li>obstruction-free, lock-free, wait-free 개념 구분</li>
+<li>CAS, CAS2(CASW), DCAS, TSX, RTM 대충</li>
+<li>aba problem이 잘 설명되어 있다. CAS를 node pointer로만 하기 때문에 그 주소값만 같으면 해당 주소가 가리키는 객체의 상태가 어떻게 변했어도 작업이 진행될 수 있는 것이 문제.<br>
+(즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)</li>
+</ul>
+
+<p>즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.</p>
+
+<p>근데 InterlockedSList는 가난한 시절이라 CAS2 못 쓰고 memory alignment해서 남는 하위 4bit를 count로 쓴 것으로 알고 있다.<br>
+(어설픈 기억으로는 MPMC concurrency queue를 lock free algorithm으로 만들 때 CAS 뭔가 잘못써서 aba problem 발생하면 해당 node가 다른 queue로 들어간 시점에도 뭔가 오동작하여 해당 queue까지 파괴했던 시나리오가 있었는데-_-; 자세히 기억이 안 난다.)</p>
+
+<h3><a href="http://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890">hazard pointer</a></h3>
+
+<p>오늘 출력해간 논문보다 위 링크가 더 읽기 좋다. 완전 오늘 헛소리한 듯-_- 나중에 다시 자세히 읽어보고 정리하겠음</p>
+
+<p>어쨌든 위 lock free algorithm 설명할 때 node를 언제 해제할 지는 굉장히 골치아픈 문제이다. 아직 어떤 thread가 그 node를 접근하고 있을 수 있는데 마음대로 delete했다가는 access violation이 발생하기 때문. 따라서 이를 안전하게 지울 수 있도록(safe memory reclamation) 여러 방법이 고안되었는데 그 중 하나가 hazard pointer이다.</p>
+
+<h3>환형큐의 concurrency 문제</h3>
+
+<ul>
+<li><a href="/2012/02/23/thread-unsafety-problem-in-circular-queue/">환형큐의 thread unsafety 문제</a></li>
+</ul>
+
+<h3><a href="/2011/08/11/synchronize-function-execution-in-each-object/">객체별 수행 동기화</a> 글 코드의 문제</h3>
+
+<p><a href="http://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 문제 해결법</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">mJobQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">RequestJobPtr</span><span class="p">(</span><span class="k">new</span> <span class="n">_RequestJobImpl</span><span class="p">(</span><span class="n">functor</span><span class="p">)));</span>
+<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">mJobQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">InterlockedExchange</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mExclusiveFlag</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">RequestJobPtr</span> <span class="n">job</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span> <span class="n">mJobQueue</span><span class="p">.</span><span class="n">try_pop</span><span class="p">(</span><span class="n">job</span><span class="p">);</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">job</span><span class="p">)();</span>
+        <span class="k">delete</span> <span class="n">job</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">InterlockedExchange</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mExclusiveFlag</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>과제 풀이법</h3>
+
+<ul>
+<li>제빵사와 먹깨비 Actor가 주기적으로 공유자원 Basket을 감지하여 동작하는 방법</li>
+<li>제빵사와 먹깨비와 바구니까지 모두 Actor이고 메시지를 잘 주고 받으면서 동기화</li>
+<li>제빵사, 먹깨비 Actor가 모두 각자의 thread를 갖고 공유자원 Basket을 blocking-wait하면서 동작</li>
+</ul>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2013/08/04/implements-thread-safe-counter/" title="thread-safe한 counter 구현">&laquo; thread-safe한 counter 구현</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2013/08/12/implements-producer-consumer-model/" title="producer/consumer model 구현">&raquo; producer/consumer model 구현</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

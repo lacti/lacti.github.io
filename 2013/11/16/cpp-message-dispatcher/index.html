@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="lacti">
+
+	<meta name="description" content="c++ message dispatcher 16 Nov 2013 c++ template study 간단한 message dispatch 코드를 c++로 구현해보자. 일단 std::function을 안 쓰고 구현해보고, 그 다음에 std::function을 써서 구현해보자. 지난 번 글에서 functor_ii로 handler_t의 근간을 이미 설명했다. template &lt;typename R, typename T&gt; struct handler_t { handler_t() : _impl(nullptr) { } template &lt;typename F&gt; handler_t(F f) : _impl(new impl_t&lt;F&gt;(f)) {} R operator () (T arg) const { return (*_impl)(arg); } private: struct wrapper_t { virtual R operator () (T arg) const = 0; }; template &lt;typename F&gt; struct impl_t : public wrapper_t { impl_t(F f) : _f(f) {} virtual R operator () (T arg) const { return _f(arg); } F _f; }; std::shared_ptr&lt;wrapper_t&gt; _impl; }; interface인 wrapper_t, 실 구현체인 impl_t, 그리고 그것을 멤버로 갖는 type..." />
+
+	<meta http-equiv="date" content="Saturday, 16  2013 00:00:00 GMT" />
+
+	<meta name="keywords" content="c++,template,study,-pub" />
+
+	<meta name="robots" content="INDEX,FOLLOW" />
+	<title>c++ message dispatcher</title>
+	<link href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
+	<link href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+	<link href="/css/markdownpad-github.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="/css/blog-post.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="head">
+		<div class="pure-g">
+			<div class="pure-u-1 pure-u-md-1-2">
+				<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+				<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+				<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+				<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+			</div>
+			<div class="pure-u-1 pure-u-md-1-2 text-right">
+				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">c++ message dispatcher</h1>
+				<p class="page-date">16 Nov 2013</p>
+				<p class="page-tags">
+				
+				
+					<code class="tag"><a href="/tags/#c++">c++</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#template">template</a></code>
+				
+				
+				
+					<code class="tag"><a href="/tags/#study">study</a></code>
+				
+				
+				
+				
+				</p>
+				
+				<div class="content">
+				<p>간단한 message dispatch 코드를 c++로 구현해보자. 일단 <code>std::function</code>을 안 쓰고 구현해보고, 그 다음에 <code>std::function</code>을 써서 구현해보자.</p>
+
+<p>지난 번 글에서 <code>functor_ii</code>로 <code>handler_t</code>의 근간을 이미 설명했다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">R</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="kt">handler_t</span> <span class="p">{</span>
+    <span class="kt">handler_t</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">_impl</span><span class="p">(</span><span class="n">nullptr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">F</span><span class="o">&gt;</span>
+    <span class="kt">handler_t</span><span class="p">(</span><span class="n">F</span> <span class="n">f</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">_impl</span><span class="p">(</span><span class="k">new</span> <span class="kt">impl_t</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="p">{}</span>
+
+    <span class="n">R</span> <span class="k">operator</span> <span class="p">()</span> <span class="p">(</span><span class="n">T</span> <span class="n">arg</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">_impl</span><span class="p">)(</span><span class="n">arg</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="k">struct</span> <span class="kt">wrapper_t</span> <span class="p">{</span>
+        <span class="k">virtual</span> <span class="n">R</span> <span class="k">operator</span> <span class="p">()</span> <span class="p">(</span><span class="n">T</span> <span class="n">arg</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">F</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="kt">impl_t</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">wrapper_t</span> <span class="p">{</span>
+        <span class="kt">impl_t</span><span class="p">(</span><span class="n">F</span> <span class="n">f</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">_f</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="k">virtual</span> <span class="n">R</span> <span class="k">operator</span> <span class="p">()</span> <span class="p">(</span><span class="n">T</span> <span class="n">arg</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_f</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">F</span> <span class="n">_f</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">wrapper_t</span><span class="o">&gt;</span> <span class="n">_impl</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>interface인 <code>wrapper_t</code>, 실 구현체인 <code>impl_t</code>, 그리고 그것을 멤버로 갖는 type erasure가 적용된 대표 type인 <code>handler_t</code>이다. 1개의 인자와 반환 값을 가질 수 있으므로 이를 template parameter인 <code>R</code>과 <code>T</code>로 표현한 것이다.</p>
+
+<p>각 message handler가 받을 message의 최상위 class를 만들고, 추후 코딩을 편하게 하기 위해 handler에 대한 typedef를 걸어준다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">message_t</span> <span class="p">{</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="kt">message_t</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">};</span>
+<span class="k">typedef</span> <span class="kt">handler_t</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;&gt;</span> <span class="kt">msg_handler_t</span><span class="p">;</span>
+</code></pre></div>
+<p>이제 모든 작업이 완료되었다. <code>msg_handler_t</code>에 대한 <a href="http://en.cppreference.com/w/cpp/container/unordered_map">unordered_map</a> 객체 만들고, 적절히 불러주기만 하면 된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="n">__handler_table</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">dispatch</span><span class="p">(</span><span class="kt">int</span> <span class="n">opcode</span><span class="p">,</span> <span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">__handler_table</span><span class="p">[</span><span class="n">opcode</span><span class="p">](</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>std::function</code>을 사용할 경우 template parameter만 function type으로 넣어서 <code>msg_handler_t</code>에 대한 typedef을 바꿔주면 된다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="kt">msg_handler_t</span><span class="p">;</span>
+</code></pre></div>
+<p>표준 라이브러리에서 인자를 저렇게 받는 이유는 저 표현식이 단순히 반환 타입, 인자 타입을 나열하는 것에 비해 더 가독성이 좋다고 판단했기 때문이다. 저렇게 받은 인자는 내부에서 <code>function_traits</code>에 의해 다시 반환 타입과 인자 타입이 분리되어 결국 <code>handler_t</code>와 같은 구현을 하게 된다.</p>
+
+<p>위와 같이 코드를 구현하면 조금 아쉬운 점이 있다. 예를 들어 <code>message_t</code>를 상속받은 <code>int_msg_t</code>와 <code>string_msg_t</code>가 있다고 하자. 그리고 이를 처리하는 <code>int_msg_handler</code>, <code>string_msg_handler</code>가 있을 때 코드는 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">int_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int_msg_t</span><span class="o">&amp;</span> <span class="n">msg</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">int_msg_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+    <span class="c1">// do something with int_msg</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">string_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">string_msg_t</span><span class="o">&amp;</span> <span class="n">msg</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">string_msg_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+    <span class="c1">// do something with string_msg</span>
+<span class="p">}</span>
+<span class="k">enum</span> <span class="n">msg_id</span> <span class="p">{</span>
+    <span class="n">int_msg_id</span><span class="p">,</span>
+    <span class="n">string_msg_id</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">__handler_table</span><span class="p">[</span><span class="n">int_msg_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">int_msg_handler</span><span class="p">;</span>
+    <span class="n">__handler_table</span><span class="p">[</span><span class="n">string_msg_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">string_msg_handler</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>먼저, 각 handler의 type은 모두 <code>void (const message_t&amp;)</code> 이기 때문에 실제 우리가 원하는 type으로 인자를 받을 수가 없다. 따라서 매번 casting해주는 과정이 필요하다.</li>
+<li>그리고 각 msg가 추가될 때마다 <code>msg_id</code> 값을 정의해주어야 한다.</li>
+<li>마지막으로 구현한 handler를 handler_table에다가 등록해주는 코드를 작성해야 한다.</li>
+</ul>
+
+<p>일단 <code>msg_id</code> 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 <a href="http://en.cppreference.com/w/cpp/types/type_index">type_index</a>를 사용하자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="n">__handler_table</span><span class="p">;</span>
+</code></pre></div>
+<p><code>message_t</code>를 받는 함수와 원하는 type을 받는 함수를 분리하고, <code>__handler_table</code>에 함수를 프로그램 시작 시에 등록하기 위해 static 전역 변수를 사용해 코드를 정리하면 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+<span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">cast</span><span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="n">int_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">int_msg_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">_int_msg_wrapper</span><span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">int_msg_handler</span><span class="p">(</span><span class="n">cast</span><span class="o">&lt;</span><span class="kt">int_msg_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">int_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">int_msg_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with int_msg_t</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="kt">_table_register_t</span> <span class="p">{</span>
+    <span class="kt">_table_table_t</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">__handler_table</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="kt">int_msg_t</span><span class="p">)),</span> <span class="n">_int_msg_wrapper</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="n">__register1</span><span class="p">;</span>
+</code></pre></div>
+<p>일단 편하게 message를 casting하기 위한 cast 함수를 만들었다. 그냥 const reference 지키면서 static_cast를 해주는 함수이다.</p>
+
+<ul>
+<li>dynamic_cast를 하지 않은 이유는 항상 올바른 type만 casting을 요청할 것이라는 믿음을 갖고 불필요한 검사를 피하기 위함이다</li>
+<li><code>_Ty</code>가 정말 <code>message_t</code>를 상속받았는지 보려면 <a href="http://en.cppreference.com/w/cpp/types/is_base_of">std::is_base_of</a>를 쓰면 되겠다.</li>
+</ul>
+
+<p>실제 작업을 수행할 함수인 <code>int_msg_handler</code>를 선언한다. 그리고 전달 함수인 <code>_int_msg_wrapper</code> 함수를 작성한다. <code>_int_msg_wrapper</code> 함수에서는 <code>message_t</code>를 <code>int_msg_t</code>로 casting만 해서 <code>int_msg_handler</code> 함수로 넘겨준다. 그리고 실질적인 작업은 <code>int_msg_handler</code>에서 <code>int_msg_t</code>를 인자로 받아 처리하게 된다.</p>
+
+<p>프로그램 시작과 동시에 <code>__handler_table</code>에 등록하는 가장 좋은 방법은 전역 객체의 생성자를 사용하는 방법이다. 전역으로 정의된 객체의 생성자는 프로그램 시작 시에 호출된다는 점을 이용하는 것이다. 따라서 전역 객체 <code>__register1</code>를 정의한다. 그러면 프로그램 시작 시 <code>_table_register_t</code>의 생성자가 호출되고, 그 생성자에서 <code>__handler_table</code>에게 <code>int_msg_t</code>에 대한 <code>type_index</code>와 <code>_int_msg_wrapper</code>를 넣어주면 된다.</p>
+
+<p>그런데 위 코드를 보면 <code>int_msg_t</code>에 해당하는 부분을 <code>string_msg_t</code>로 치환했을 때, <code>string_msg_t</code>를 위해서도 사용할 수 있는 것을 확인할 수 있다. 즉, <strong>대부분의 코드가 무의미하게 반복된다는 것이다</strong>. 이러한 boilerplate code를 적절히 제거하기 위해 반복되는 부분을 다음과 같이 macro로 묶어내자.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="kt">table_register_t</span> <span class="p">{</span>
+    <span class="kt">table_register_t</span><span class="p">(</span><span class="kt">msg_handler_t</span> <span class="n">handler</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">handler_table</span><span class="p">().</span><span class="n">insert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">_Ty</span><span class="p">)),</span> <span class="n">handler</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="cp">#define HANDLER(msg_type) \</span>
+<span class="cp">    static void msg_type##_handler(const msg_type&amp; msg); \</span>
+<span class="cp">    static void _##msg_type##_wrapper(const message_t&amp; m) { \</span>
+<span class="cp">        msg_type##_handler(cast&lt;msg_type&gt;(m)); \</span>
+<span class="cp">    } \</span>
+<span class="cp">    static table_register_t&lt;msg_type&gt; __reg_##msg_type##(_##msg_type##_wrapper); \</span>
+<span class="cp">    static void msg_type##_handler(const msg_type&amp; msg)</span>
+</code></pre></div>
+<p>이제 다음과 같이 사용할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">int_msg_t</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">message_t</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">HANDLER</span><span class="p">(</span><span class="kt">int_msg_t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">msg</span><span class="p">.</span><span class="n">a</span> <span class="o">+</span> <span class="n">msg</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>이제 message를 하나 만들어서 날려보자. 이를 처리하는 dispatch 함수는 다음과 같이 간단하게 작성할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">dispatch</span><span class="p">(</span><span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">__handler_table</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">_Ty</span><span class="p">))](</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int_msg_t</span> <span class="n">msg</span><span class="p">;</span>
+    <span class="n">msg</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="n">msg</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+    <span class="n">dispatch</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>아무 message 객체나 받아서 그 <code>type_index</code>로 적절한 handler를 
+찾고, 그 handler에게 message 객체를 넘겨서 처리될 수 있도록 하는 것이다.</p>
+
+<p>하지만 위 코드에는 문제가 있다. 전역 <code>table_register_t</code> 객체와 <code>__handler_table</code> 객체가 다른 번역 단위에 있을 경우, 두 객체의 생성자가 불리는 시점이 undefined이기 때문에 아직 <code>__handler_table</code> 객체가 초기화되지 않은 시점에서 register를 수행하다가 프로그램이 죽는 문제이다.</p>
+
+<p>이 문제를 해결하는 가장 쉬운 방법은 <code>handler_table</code> 객체를 전역 변수 말고 singleton으로 만드는 것이다. 원칙적으로 singleton 객체는 처음 접근할 때 생성되기 때문에, 어떤 register 객체든 <code>handler_table</code> 객체를 처음 접근하는 때 <code>handler_table</code> 객체를 생성하게 되니 위 문제를 해결할 수 있다.</p>
+
+<p>그리고 c++11에서는 간단하게 singleton을 구현할 수 있다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kr">inline</span> <span class="kt">handler_table_t</span><span class="o">&amp;</span> <span class="n">handler_table</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">handler_table_t</span> <span class="n">_handler_table</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">_handler_table</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>코드 전문은 다음과 같다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">message_t</span> <span class="p">{</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="kt">message_t</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="kt">msg_handler_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="kt">handler_table_t</span><span class="p">;</span>
+
+<span class="kr">inline</span> <span class="kt">handler_table_t</span><span class="o">&amp;</span> <span class="n">handler_table</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">handler_table_t</span> <span class="n">_handler_table</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">_handler_table</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+<span class="kr">inline</span> <span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">cast</span><span class="p">(</span><span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="kt">table_register_t</span> <span class="p">{</span>
+    <span class="kt">table_register_t</span><span class="p">(</span><span class="kt">msg_handler_t</span> <span class="n">handler</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">handler_table</span><span class="p">().</span><span class="n">insert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">_Ty</span><span class="p">)),</span> <span class="n">handler</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cp">#define HANDLER(msg_type) \</span>
+<span class="cp">    static void msg_type##_handler(const msg_type&amp; msg); \</span>
+<span class="cp">    static void _##msg_type##_wrapper(const message_t&amp; m) { \</span>
+<span class="cp">        msg_type##_handler(cast&lt;msg_type&gt;(m)); \</span>
+<span class="cp">    } \</span>
+<span class="cp">    static table_register_t&lt;msg_type&gt; __register_##msg_type##(_##msg_type##_wrapper); \</span>
+<span class="cp">    static void msg_type##_handler(const msg_type&amp; msg)</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Ty</span><span class="o">&gt;</span>
+<span class="kr">inline</span> <span class="kt">void</span> <span class="n">dispatch</span><span class="p">(</span><span class="k">const</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">handler_table</span><span class="p">()[</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">_Ty</span><span class="p">))](</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>그리고 main 함수에서는 다음과 같이 사용한다.</p>
+<div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="kt">int_msg_t</span> <span class="o">:</span> <span class="k">public</span> <span class="kt">message_t</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">HANDLER</span><span class="p">(</span><span class="kt">int_msg_t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">msg</span><span class="p">.</span><span class="n">a</span> <span class="o">+</span> <span class="n">msg</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int_msg_t</span> <span class="n">msg</span><span class="p">;</span>
+    <span class="n">msg</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="n">msg</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+    <span class="n">dispatch</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>정리</h3>
+
+<p>이번 과제에서는 간단하게 c++의 message dispatch 코드를 구현해보았다. 위와 같은 코드는 queue를 붙여서 message pattern이나 event pattern을 구현할 때 쓰이거나 네트워크를 붙여서 서버의 packet dispatch 코드로도 사용된다. 언듯 보면 복잡해보일 수도 있으나 실상은 function map이고, 여기저기서 자주 만나게 될 개념이니 이번 기회에(?) 익숙해지도록 하자.</p>
+
+<p>추가 과제였던 reflection 과제에 대한 풀이는 예전에 작성한 글에 대한 링크로 대신하겠다.</p>
+
+<ul>
+<li><a href="/2012/06/04/using-reflection-at-cpp-2/">c++에서 reflection 사용하기 2</a></li>
+<li><a href="/2012/06/09/using-reflection-at-cpp-3/">c++에서 reflection 사용하기 3</a></li>
+</ul>
+
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					
+						<a href="/2013/11/10/template-programming-and-type-erasure/" title="template 프로그래밍과 type erasure">&laquo; template 프로그래밍과 type erasure</a>
+					
+					</div>
+					<div class="pure-u-1-2 text-right">
+					
+						<a href="/2013/11/19/asynchronous-programming-pattern-2/" title="비동기 프로그래밍 패턴 2">&raquo; 비동기 프로그래밍 패턴 2</a>
+					
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>
+
+		
+		<footer>
+			<hr />
+			<div id="footer-menu">
+				<a href="#top" title="go to top"><i class="fa fa-chevron-up fa-lg"></i></a>
+				<div class="mobile-only">
+					<a href="/" title="home"><i class="fa fa-home fa-lg"></i></a>
+					<a href="/about/" title="about"><i class="fa fa-male fa-lg"></i></a>
+					<a href="/archives/" title="archives"><i class="fa fa-file-text-o fa-lg"></i></a>
+					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
+					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
+					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
+					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
+					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
+				</div>
+			</div>
+			<p class="text-right">
+				<em>© 2008-2015 Jaeyoung Choi</em>
+			</p>
+		</footer>
+	</div>
+	<!-- /.container -->
+	<!-- ga -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

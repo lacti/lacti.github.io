@@ -1,0 +1,48 @@
+---
+layout: default
+---
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<h1 class="page-title">{{ page.title }}</h1>
+				<p class="page-date">{{ page.date | date_to_string }}</p>
+				<p class="page-tags">
+				{% for tag in page.tags %}
+				{% if tag != '-pub' %}
+					<code class="tag"><a href="/tags/#{{tag }}">{{ tag }}</a></code>
+				{% endif %}
+				{% endfor %}
+				</p>
+				
+				<div class="content">
+				{{ content }}
+				</div>
+
+				<div class="pure-g page-navigator">
+					<div class="pure-u-1-2">
+					{% if page.previous.url %}
+						<a href="{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; {{ page.previous.title }}</a>
+					{% endif %}
+					</div>
+					<div class="pure-u-1-2 text-right">
+					{% if page.next.url %}
+						<a href="{{ page.next.url }}" title="{{ page.next.title }}">&raquo; {{ page.next.title }}</a>
+					{% endif %}
+					</div>
+				</div>
+
+				<!-- the comments -->
+				<div id="disqus_container">
+					<div id="disqus_thread"></div>
+					<script type="text/javascript">
+						var disqus_shortname = 'lacti';
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+					<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</div>
+			</div>
+		</div>

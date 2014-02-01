@@ -1,0 +1,26 @@
+url: http://lacti.me
+username: lacti
+repo: lacti.github.io
+branch: source
+relative_source: .
+destination: ../site-deploy/
+
+permalink: pretty
+highlighter: pygments
+markdown: redcarpet
+redcarpet:
+  extensions:
+    - no_intra_emphasis
+    - fenced_code_blocks
+    - autolink
+    - strikethrough
+    - superscript
+    - tables
+
+exclude:
+  - Rakefile.rb
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - .travis.yml
+  - vendor

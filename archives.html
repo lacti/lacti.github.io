@@ -1,0 +1,25 @@
+---
+layout: default
+title: lacti's blog
+---
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<ul id="indexes">
+				{% for post in site.posts %}
+					{% unless post.next %}
+						<h3>{{ post.date | date: '%b %Y' }}</h3>
+					{% else %}
+						{% capture year %}{{ post.date | date: '%b %Y' }}{% endcapture %}
+						{% capture nyear %}{{ post.next.date | date: '%b %Y' }}{% endcapture %}
+						{% if year != nyear %}
+							<h3>{{ post.date | date: '%b %Y' }}</h3>
+						{% endif %}
+					{% endunless %}
+					<li>
+						<span class="index-date">{{ post.date | date: '%d.' }}</span>
+						<a href="{{ post.url }}">{{ post.title }}</a>
+					</li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>

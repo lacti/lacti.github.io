@@ -1,0 +1,25 @@
+---
+layout: default
+title: lacti's blog
+---
+
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<ul id="indexes">
+				{% sorted_keys_for tag in site.tags %}
+				{% if tag != '-pub' %}
+					<h3><a id="{{ tag }}" href="#{{ tag }}">{{ tag }}</a></h3>
+					{% for post in site.posts %}
+						{% if post.tags contains tag %}
+					<li>
+						<span class="index-date">{{ post.date | date: '%d %b %Y' }}</span>
+						<a href="{{ post.url }}">{{ post.title }}</a>
+					</li>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+				{% endsorted_keys_for %}
+				</ul>
+			</div>
+		</div>
+

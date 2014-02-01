@@ -1,0 +1,7 @@
+_site
+*.swp
+Thumbs.db
+Gemfile.lock
+vendor
+bundle.tbz
+.bundle

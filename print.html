@@ -1,0 +1,37 @@
+---
+layout: default
+title: lacti's blog
+---
+
+		<div class="pure-g">
+			<div class="pure-u-1">
+				{% sorted_keys_for tag in site.tags %}
+				{% if tag != '-pub' %}
+					{% assign need_to_print_tag = true %}
+					{% sorted_for post in site.posts sort_by:title %}
+					{% assign category = post.tags | first %}
+					{% if post.tags contains '-pub' and category == tag %}
+						{% if need_to_print_tag %}
+				<h1><a id="{{ tag }}" href="#{{ tag }}">{{ tag }}</a></h1>
+				<hr />
+				<div class="page-breaker"></div>
+							{% assign need_to_print_tag = false %}
+						{% endif %}
+				<h1 class="page-title">{{ post.title }}</h1>
+				<p class="page-date">{{ post.date | date_to_string }}</p>
+				<p class="page-tags">
+						{% for tag in post.tags %}
+						{% if tag != '-pub' %}
+					<code class="tag">{{ tag }}</code>
+						{% endif %}
+						{% endfor %}
+				</p>
+				<div class="content">{{ post.content }}</div>
+				<hr />
+				<div class="page-breaker"></div>
+					{% endif %}
+					{% endsorted_for %}
+				{% endif %}
+				{% endsorted_keys_for %}
+			</div>
+		</div>

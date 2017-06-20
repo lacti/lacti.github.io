@@ -9,4 +9,4 @@ env:
   global:
     - GIT_NAME=lacti
     - GIT_EMAIL=lactrious@gmail.com
-    - secure: ucuiqw8qfgXwWBf6JqmxcDmqGmsGSui/OY9RkqxDtkSUgKQycnrjKneo/N2pSAuxIJGR7SXLTtLA9O49ZfLXidQ++kpsIw8PACRlFYng3WGjY/dE+yIMHJdwhZ91QD2Bmed07/drW1C5DgNIxD0TyzlKRXeWe82567u53mloTkg=
+    - secure: UeQd//JPgGy3hbilS/+Z+4M7ukptyR69QPJGggPFIeOotmDxCDlB2kiBnD3m/ohvMZ+5MtYYuqe4xBSypiyYVZiLO7HC9u+66L1A/S7RP0ckw4eTH3Oz4B5ZQQHUjizMm4/jx/xkDvnrbwtLKgKXJf0MXszYYi5NBHJ+t/6aZWg=

@@ -4,13 +4,82 @@
  <title>lacti</title>
  <link href="http://blog.lacti.me/atom.xml" rel="self"/>
  <link href="http://blog.lacti.me/"/>
- <updated>2017-06-20T13:53:11+00:00</updated>
+ <updated>2017-10-28T16:04:28+00:00</updated>
  <id>http://blog.lacti.me/</id>
  <author>
    <name>lacti</name>
    <email>lactrious@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>잉여톤 4회 후기</title>
+   <link href="http://lacti.me/2017/10/29/yingyeoton-4/"/>
+   <updated>2017-10-29T00:00:00+00:00</updated>
+   <id>http://lacti.me/2017/10/29/yingyeoton-4</id>
+   <content type="html">&lt;p&gt;과거 동아리 내 게임잼과 그 이후 AWS Serverless 대회들, 그리고 지난 번 대리님 집에서의 코딩잼으로 자리잡게 된 잉여톤의 4회차를 이번 개롱 집들이를 겸해서 진행하게 되었다.&lt;/p&gt;
+
+&lt;p&gt;앞으로 얼마나 흥할지는 모르겠지만 간단히 정리해 github에 올려놨고, 여러 피드백을 받으며 간단히 언제 어디서 뭘 하고 싶은 지를 정리한 후 google forms로 신청을 받았더니 놀랍게도 나를 포함 총 9명이라는 인원이 참여를 하게 되었다. 생각보다 흥했고, 다들 재미있게 진행해주었다는 점에서 이 자리를 빌어 다시 한 번 감사의 말씀을 드리고 싶다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/lacti/yyt&quot;&gt;github:lacti/yyt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/lacti/yyt/4&quot;&gt;github:lacti/yyt/4&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;집들이를 겸했기 때문에 전날부터 아내와 열심히 간식들과 술(!) 그리고 약간의 소품들을 준비했다. 그리고 당일 아침 열심히 집 청소를 하여 준비를 마쳤다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_1.jpg&quot; alt=&quot;YYT Wall&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;사람들이 도착하고 대회가 시작되었다. 이미 팀을 구성해 온 대리님과 그의 동료 분도 있었고, 랜덤으로 진행할 계획을 한 사람과 관전으로 참가한 사람도 있었다. 관전자들의 참여도 최대한 이끌어내기 위해 랜덤 참가자들은 본인이 어떤 주제로 진행할 것인지 발표를 진행하였고 그렇게 각자의 목표가 일치하는 팀이 생성되었다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;대리님과 동료분은 vvvvv 비슷한 게임을 네트워크로 만들기로 하였고&lt;/li&gt;
+&lt;li&gt;gasbank 팀은 당구 비슷한 게임을 네트워크로 만들기로 하였고&lt;/li&gt;
+&lt;li&gt;나는 좀 유연하게 분리될 수 있는 서버 모델에 대한 설계를 하기로 하였다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_2.jpg&quot; alt=&quot;gasbank on coding&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;냉면을 먹고 과자를 먹고 맥주를 먹고 그렇게 끊임없이 머리에 에너지를 공급하며 코드를 쏟아내었다. 6시간이라는 대단히 짧은 시간 내에서 네트워크로 게임을 만드는 것이 간단하지 않기 때문에, gasbank님과 대리님은 어느 정도 게임 클라이언트를 준비해온 터였다.&lt;/p&gt;
+
+&lt;p&gt;그럼에도 네트워크로 무언가를 연결한다는 작업은 아주 간단하지는 않았고, 생각보다 이러저러한 시행착오 끝에 결과물이 슬슬 윤곽을 드러냈다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_3.jpg&quot; alt=&quot;coding harder&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;대리님 팀은 C#의 graphics로 간단한 게임 클라이언트를 만든 후, 여러 클라이언트가 간단히 서버와 http로 json 통신을 하며 서로의 상태를 갱신하는 구조였고,&lt;/li&gt;
+&lt;li&gt;gasbank 팀은 c 클라이언트와 nodejs 서버가 udp로 매 frame마다 메시지를 주고 받으며 통신하는 구조였고, 서버에 접속하는 클라이언트를 순서대로 1:1 매칭하여 게임을 진행하게 할 수 있는 구조였다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;생각보다 c#의 http+json이 간단히 안 되어서 고생한다든가, 혹은 nodejs에서 udp로 raw byte buffer를 다뤄본 적이 없어서 시간이 좀 소요된다든가 하는 일이 있었지만, 그래도 부족한 시간을 최대한 활용하며 다들 놀라운 결과를 만들어냈다. 즉, 어느 정도 제대로 돌아가는 게임을 만들어냈다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_4.jpg&quot; alt=&quot;presentation_1&quot;&gt;
+&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_5.jpg&quot; alt=&quot;presentation_2&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;작업물을 발표하고 각자 궁금했던 부분들에 대해 논의했다. 각자 만들었던 서버 모델이 달랐기 때문에 재미있는 이야기가 꽤 오고 갔다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;서버 세션을 관리하기 위한 공유 메모리 구조는 어떤 구조이면 더 효율적일까&lt;/li&gt;
+&lt;li&gt;서버 모델에서 동기와 비동기, 어떤 모델이 더 유리할까&lt;/li&gt;
+&lt;li&gt;UDP 통신이 TCP에 비해 정말 더 속도가 좋을까&lt;/li&gt;
+&lt;li&gt;어떤 언어/기반을 사용할 때 서버에서의 물리 엔진 구현이 쉬울까&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;등 꽤 많이 있었는데 벌써 잘 기억이 안 나니 아쉽다. 물론 다 경우에 따라 다르겠지만, 어쨌든 하나씩 깊게 다뤄볼만한 재미있는 주제들인 것 같다.&lt;/p&gt;
+
+&lt;p&gt;그렇게 다들 즐겁게 발표를 마치고, 시연을 하고, 서로 즐겨보면서 대회가 막을 내렸다. 순위를 매기고 선물을 증정하며 대회의 마무리를 기념하기 위해 기록을 남겼다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_6.jpg&quot; alt=&quot;end of yyt4&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;먼 위치였음에도 불구하고, 다들 소중한 주말에 늦은 시간까지 코딩에 대한 혼을 즐겁게 불태워주어서 다시 한 번 감사의 말씀을 전하고 싶다. 생각만 하고 있었던 소소한 코딩을 잠깐이나마 모여서 즐길 수 있게 되었다면 그보다 더 바랄게 없을 것 같다.&lt;/p&gt;
+
+&lt;p&gt;앞으로도 종종 이런 기회에 많아졌으면 좋겠다 :)&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;개인적으로 내가 생각했던 모델에 대한 PoC를 못 했던 것은 좀 아쉽지만, 평소 수련의 부족으로 생각보다 뭔가 하나를 제대로 하는데에 시간이 너무 오래 걸리다보니 그냥 자연스럽게 포기를 하게 되었던 것 같다. 이는 좀 천천히 진행하면서 다른 글에 정리를 해보고 싶다.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>아내 블로그 구축기</title>
@@ -1755,7 +1824,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/29/ndc14-the-npc-master/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/29/ndc14-the-npc-master</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/Hs0bldn3Z100wv&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617&quot; title=&quot;THE_NPCMASTER_PUBLIC&quot; target=&quot;_blank&quot;&gt;THE_NPCMASTER_PUBLIC&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/khalbora&quot;&gt;khalbora&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/Hs0bldn3Z100wv&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617&quot; title=&quot;THE_NPCMASTER_PUBLIC&quot; target=&quot;_blank&quot;&gt;THE_NPCMASTER_PUBLIC&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/khalbora&quot; target=&quot;_blank&quot;&gt;khalbora&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -1970,7 +2039,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/29/ndc14-mobile-data-mining/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/29/ndc14-mobile-data-mining</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/gffS3dV55aLfUI&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/5rocks_io/ndc-20140529&quot; title=&quot;[NDC 발표] 모바일 게임데이터분석 및 실전 활용&quot; target=&quot;_blank&quot;&gt;[NDC 발표] 모바일 게임데이터분석 및 실전 활용&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/5rocks_io&quot;&gt;Tapjoy X 5Rocks&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/gffS3dV55aLfUI&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/5rocks_io/ndc-20140529&quot; title=&quot;[NDC 발표] 모바일 게임데이터분석 및 실전 활용&quot; target=&quot;_blank&quot;&gt;[NDC 발표] 모바일 게임데이터분석 및 실전 활용&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/5rocks_io&quot; target=&quot;_blank&quot;&gt;Tapjoy X 5Rocks&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -2407,7 +2476,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/lOtZPsSUBtfbVp&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/JaeseungHa/ndc-2014-35508014&quot; title=&quot;[NDC 2014] 던전앤파이터 클라이언트 로딩 최적화&quot; target=&quot;_blank&quot;&gt;[NDC 2014] 던전앤파이터 클라이언트 로딩 최적화&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/JaeseungHa&quot;&gt;Jaeseung Ha&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/lOtZPsSUBtfbVp&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/JaeseungHa/ndc-2014-35508014&quot; title=&quot;[NDC 2014] 던전앤파이터 클라이언트 로딩 최적화&quot; target=&quot;_blank&quot;&gt;[NDC 2014] 던전앤파이터 클라이언트 로딩 최적화&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/JaeseungHa&quot; target=&quot;_blank&quot;&gt;Jaeseung Ha&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -2636,7 +2705,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/28/ndc14-rx-server-application/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/28/ndc14-rx-server-application</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/E85jkcnmqPhpsO&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/jongwookkim/ndc14-rx-functional-reactive-programming&quot; title=&quot;NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기&quot; target=&quot;_blank&quot;&gt;NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/jongwookkim&quot;&gt;Jong Wook Kim&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/E85jkcnmqPhpsO&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/jongwookkim/ndc14-rx-functional-reactive-programming&quot; title=&quot;NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기&quot; target=&quot;_blank&quot;&gt;NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/jongwookkim&quot; target=&quot;_blank&quot;&gt;Jong Wook Kim&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -2852,7 +2921,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/28/ndc14-distributed-mmorpg-server-without-spof/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/28/ndc14-distributed-mmorpg-server-without-spof</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/t9rfxofKihVSFF&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/sublee/spof-mmorpg&quot; title=&quot;[야생의 땅: 듀랑고] 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버&quot; target=&quot;_blank&quot;&gt;[야생의 땅: 듀랑고] 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/sublee&quot;&gt;흥섭 이&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/t9rfxofKihVSFF&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/sublee/spof-mmorpg&quot; title=&quot;[야생의 땅: 듀랑고] 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버&quot; target=&quot;_blank&quot;&gt;[야생의 땅: 듀랑고] 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/sublee&quot; target=&quot;_blank&quot;&gt;흥섭 이&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -3000,7 +3069,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/28/ndc14-design-generic-game-server/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/28/ndc14-design-generic-game-server</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/8CCbTMPDEQdwX4&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/iFunFactory/20140524-ndc-sharing&quot; title=&quot;NDC14 범용 게임 서버 프레임워크 디자인 및 테크닉&quot; target=&quot;_blank&quot;&gt;NDC14 범용 게임 서버 프레임워크 디자인 및 테크닉&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/iFunFactory&quot;&gt;iFunFactory Inc.&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/8CCbTMPDEQdwX4&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/iFunFactory/20140524-ndc-sharing&quot; title=&quot;NDC14 범용 게임 서버 프레임워크 디자인 및 테크닉&quot; target=&quot;_blank&quot;&gt;NDC14 범용 게임 서버 프레임워크 디자인 및 테크닉&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/iFunFactory&quot; target=&quot;_blank&quot;&gt;iFunFactory Inc.&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -3307,7 +3376,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
    <link href="http://lacti.me/2014/05/28/ndc14-build-private-cloud/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
    <id>http://lacti.me/2014/05/28/ndc14-build-private-cloud</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/lUq7JAKaH6FUxC&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/reinkim/ndc14&quot; title=&quot;NDC14 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기&quot; target=&quot;_blank&quot;&gt;NDC14 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/reinkim&quot;&gt;Jinuk Kim&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/lUq7JAKaH6FUxC&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/reinkim/ndc14&quot; title=&quot;NDC14 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기&quot; target=&quot;_blank&quot;&gt;NDC14 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/reinkim&quot; target=&quot;_blank&quot;&gt;Jinuk Kim&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -5219,7 +5288,7 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
    <link href="http://lacti.me/2013/08/23/preprocessor-programming/"/>
    <updated>2013-08-23T00:00:00+00:00</updated>
    <id>http://lacti.me/2013/08/23/preprocessor-programming</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/bmvmLA0MnvppgH&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/preprocessor-programming&quot; title=&quot;Preprocessor Programming&quot; target=&quot;_blank&quot;&gt;Preprocessor Programming&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/lactrious&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/bmvmLA0MnvppgH&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/preprocessor-programming&quot; title=&quot;Preprocessor Programming&quot; target=&quot;_blank&quot;&gt;Preprocessor Programming&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -6803,7 +6872,7 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
    <link href="http://lacti.me/2013/07/12/aws-gameserver-management/"/>
    <updated>2013-07-12T00:00:00+00:00</updated>
    <id>http://lacti.me/2013/07/12/aws-gameserver-management</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/q3gZSV2pG9W65K&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/aws-gameserver-management&quot; title=&quot;AWS GameServer Management&quot; target=&quot;_blank&quot;&gt;AWS GameServer Management&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/lactrious&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/q3gZSV2pG9W65K&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/aws-gameserver-management&quot; title=&quot;AWS GameServer Management&quot; target=&quot;_blank&quot;&gt;AWS GameServer Management&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -7147,7 +7216,7 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
    <link href="http://lacti.me/2013/06/07/csharp-game-server/"/>
    <updated>2013-06-07T00:00:00+00:00</updated>
    <id>http://lacti.me/2013/06/07/csharp-game-server</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/JypZgbfXMHXvn8&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/c-game-server&quot; title=&quot;C# Game Server&quot; target=&quot;_blank&quot;&gt;C# Game Server&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/lactrious&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/JypZgbfXMHXvn8&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/c-game-server&quot; title=&quot;C# Game Server&quot; target=&quot;_blank&quot;&gt;C# Game Server&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 
@@ -7620,7 +7689,7 @@ nmap J :call SearchKeyword&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&amp;lt
    <link href="http://lacti.me/2012/11/20/index-analysis/"/>
    <updated>2012-11-20T00:00:00+00:00</updated>
    <id>http://lacti.me/2012/11/20/index-analysis</id>
-   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/caQtMbYRHLYkIW&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/index-analysis&quot; title=&quot;Index Analysis&quot; target=&quot;_blank&quot;&gt;Index Analysis&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://www.slideshare.net/lactrious&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+   <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/caQtMbYRHLYkIW&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/index-analysis&quot; title=&quot;Index Analysis&quot; target=&quot;_blank&quot;&gt;Index Analysis&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
 

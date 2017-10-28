@@ -9,7 +9,7 @@ tags: diary
 앞으로 얼마나 흥할지는 모르겠지만 간단히 정리해 github에 올려놨고, 여러 피드백을 받으며 간단히 언제 어디서 뭘 하고 싶은 지를 정리한 후 google forms로 신청을 받았더니 놀랍게도 나를 포함 총 9명이라는 인원이 참여를 하게 되었다. 생각보다 흥했고, 다들 재미있게 진행해주었다는 점에서 이 자리를 빌어 다시 한 번 감사의 말씀을 드리고 싶다.
 
 - [github:lacti/yyt](https://github.com/lacti/yyt)
-- [github:lacti/yyt/4](https://github.com/lacti/yyt/4)
+- [github:lacti/yyt/4](https://github.com/lacti/yyt/tree/master/4)
 
 집들이를 겸했기 때문에 전날부터 아내와 열심히 간식들과 술(!) 그리고 약간의 소품들을 준비했다. 그리고 당일 아침 열심히 집 청소를 하여 준비를 마쳤다.
 

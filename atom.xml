@@ -5,10 +5,10 @@ layout: nil
 <feed xmlns="http://www.w3.org/2005/Atom">
  
  <title>lacti</title>
- <link href="http://blog.lacti.me/atom.xml" rel="self"/>
- <link href="http://blog.lacti.me/"/>
+ <link href="https://lacti.github.io/atom.xml" rel="self"/>
+ <link href="https://lacti.github.io/"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
- <id>http://blog.lacti.me/</id>
+ <id>https://lacti.github.io/</id>
  <author>
    <name>lacti</name>
    <email>lactrious@gmail.com</email>

@@ -89,7 +89,7 @@ tags: ndc14 distributed -pub
 ----------
 
 * **중간중간 무슨 소리인지 잘 이해가 안 되는 부분이 있었다.**
-	* [이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.](http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&forum=3026737&thread=2763589449&behavior=click&url=http%3A%2F%2Flacti.me%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&post=1483795001&type=notification.post.moderator&event=email)
+	* [이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.](http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&forum=3026737&thread=2763589449&behavior=click&url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&post=1483795001&type=notification.post.moderator&event=email)
 * chat의 경우 시야 범위의 broadcasting이 아닌 전체 전달 같은 경우엔 독립적 기능이니 community server를 따로 두어 io를 분산시키는 방법이 유효할지 모르겠는데, broadcasting의 network io를 분리한다는 발상은 좀 이상해보인다. 차라리 io를 전담하는 server를 둔다면 모르겠는데 어차피 분산 서버를 설계하는 상황에서 그게 무슨 큰 의미가 있는지 모르겠다.
 * singleton 이야기는 그냥 concurrency control의 어려움을 이야기하려는 것 같은데 multi threading에서 singleton을 쓰려면 lock을 전제로 하거나 tls를 이용한 replica를 생각해야 할텐데 뭘 생각하는 건지 자세히 이야기를 안 해줘서 잘 모르겠다.
 * 서비스 가용성 이야기하면서 계속 SEH 이야기를 하는데 heap corruption이 일어나거나 transaction 오류로 아이템 복사가 일어나도 SEH로 잡고 넘어갈 수 있다고 생각하는지 모르겠다.

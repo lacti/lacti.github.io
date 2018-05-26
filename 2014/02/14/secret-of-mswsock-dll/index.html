@@ -32,8 +32,8 @@
 			<div class="pure-u-1 pure-u-md-1-2 text-right">
 				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
 			</div>
@@ -73,15 +73,15 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
 
 <p>.net <code>Socket</code>의 <code>BeginReceive</code>, <code>EndReceive</code> 함수를 사용하면 내부에서 pinvoke로 <code>WSARecv</code> 함수를 부르게 된다. <code>WSARecv</code> 함수는 <code>ws2_32.dll</code>에 정의된 함수로 얼핏보기에는 socket 확장 api가 담겨있는 <code>mswsock.dll</code>이 부를 필요가 없어 보인다. 이를 정확히 확인하기 위해 ms symbol server에서 clr 관련 symbol을 받고 다시 profiler를 돌려보았다.</p>
 
-<p><img src="http://lacti.me/images/mswsock_secret_functions.png" alt="functions"></p>
+<p><img src="https://lacti.github.io/images/mswsock_secret_functions.png" alt="functions"></p>
 
 <p>진범이 나온 것 같다. <code>NtDeviceIoControlFile()</code>과 <code>NtRemoveIoCompletion()</code>이 1, 2위로 나왔다. 여기서 <code>NtRemoveIoCompletion()</code> 함수는 <code>GetQueuedCompletionStatus()</code> 때문에 불리는 것으로 추측되니 <code>NtDeviceIoControlFile()</code>의 정체만 밝히면 되겠다.</p>
 
 <p>간단히 calling, called를 확인해보자.</p>
 
-<p><img src="http://lacti.me/images/mswsock_secret_ws2_32_dll.png" alt="ws2_32.dll"></p>
+<p><img src="https://lacti.github.io/images/mswsock_secret_ws2_32_dll.png" alt="ws2_32.dll"></p>
 
-<p><img src="http://lacti.me/images/mswsock_secret_mswsock_dll.png" alt="mswsock.dll"></p>
+<p><img src="https://lacti.github.io/images/mswsock_secret_mswsock_dll.png" alt="mswsock.dll"></p>
 
 <p>원인이 명확해졌다.<br>
 다량의 패킷 수신자가 <code>WSARecv</code>를 부르는 과정에서 <code>ws2_32.dll</code>의 함수가 호출된 것은 당연했다. 하지만 그 과정에서 알 수 없는 오류가 발생했고, 그 오류를 처리하기 위해 불린 <code>NtStatusToSocketError()</code> 함수가 <code>mswsock.dll</code>의 <code>NtDeviceIoControlFile()</code> 함수를 불렀던 것이다.</p>
@@ -135,8 +135,8 @@ profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷
 					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
 					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
 				</div>
@@ -154,7 +154,7 @@ profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('create', 'UA-51932355-1', 'lacti.github.io');
 		ga('send', 'pageview');
 	</script>
 </body>

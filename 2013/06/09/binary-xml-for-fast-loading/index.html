@@ -32,8 +32,8 @@
 			<div class="pure-u-1 pure-u-md-1-2 text-right">
 				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
 			</div>
@@ -90,7 +90,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 <p>binary로 serialize하기 위해 만든 파일의 구조를 간단히 보면 다음과 같다.</p>
 
-<p><img src="http://lacti.me/images/binary_xml_each.png" alt="internal structure"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_each.png" alt="internal structure"></p>
 
 <p>위 그림은 하나의 xml 파일에 해당하는 정보를 갖는다. 먼저 한 파일에 대한 <code>header 정보</code> - 파일 길이, 이름, 최종 수정 시각을 갖는다. (최종 수정 시각이 필요한 이유는 이 글 마지막 부분에 설명하겠다.) 그리고 <code>XmlData</code> 영역에 <code>Node</code>와 <code>Attribute</code>를 차례대로 기록하게 된다.</p>
 
@@ -100,7 +100,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 <p>궁금해할 사람은 없어보이지만 string이나 list-type은 다음과 같이 serialize했다.</p>
 
-<p><img src="http://lacti.me/images/binary_xml_string_list_type.png" alt="string, list-type"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_string_list_type.png" alt="string, list-type"></p>
 
 <p>이렇게 Serialize한 내용을 <code>BinaryXml</code>이라고 불렀다.</p>
 
@@ -108,7 +108,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 <p>이 문제를 해결하기 위해서 BinaryXml 앞 부분에다가 TypeDefine을 넣어주었다. TypeDefine 역시 xml으로 기록이 가능하기 때문에 BinaryXml로 변환이 가능하기 때문이다.</p>
 
-<p><img src="http://lacti.me/images/binary_xml_whole_file.png" alt="string, list-type"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_whole_file.png" alt="string, list-type"></p>
 
 <p>물론 TypeDefine을 BinaryXml으로 기록하기 위해서는 <code>TypeDefine에 대한 TypeDefine</code>이 필요하다. 그래야 <code>NodeIndex</code>와 <code>AttributeIndex</code>를 얻을 수 있으니까. 그 내용을 서버에서는 <code>DefineDefine.xml</code> 이라는 것으로 기술해놨는데 사실 이 부분은 그냥 코드에 박아넣어도 문제가 없었을 것이다.</p>
 
@@ -146,7 +146,7 @@ DataChunk를 만드는 과정에서 약간의 번거로움이 있지만 (XmlType
 <li>stack 변수로 attribute 이름이 조합되어 넘어올 수 있으니 잘 integrity를 검사해준다.</li>
 </ol>
 
-<p><img src="http://lacti.me/images/binary_xml_attribute_index_cache.png" alt="attribute index cache"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_attribute_index_cache.png" alt="attribute index cache"></p>
 
 <p>BinaryXml의 각 node에 attribute 개수만큼 배열을 미리 만들어둔다. 그러면 <code>TypeDefine</code>에서 찾은 <code>AttributeIndex</code>로 바로 접근이 가능하기 때문이다. (물론 TypeDefine에서 Attribute를 찾을 때에는 string_map을 쓴다)</p>
 
@@ -227,8 +227,8 @@ DataChunk를 만드는 과정에서 약간의 번거로움이 있지만 (XmlType
 					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
 					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
 				</div>
@@ -246,7 +246,7 @@ DataChunk를 만드는 과정에서 약간의 번거로움이 있지만 (XmlType
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('create', 'UA-51932355-1', 'lacti.github.io');
 		ga('send', 'pageview');
 	</script>
 </body>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
  
  <title>lacti</title>
- <link href="http://blog.lacti.me/atom.xml" rel="self"/>
- <link href="http://blog.lacti.me/"/>
- <updated>2017-10-28T16:15:46+00:00</updated>
- <id>http://blog.lacti.me/</id>
+ <link href="https://lacti.github.io/atom.xml" rel="self"/>
+ <link href="https://lacti.github.io/"/>
+ <updated>2018-05-26T04:55:28+00:00</updated>
+ <id>https://lacti.github.io/</id>
  <author>
    <name>lacti</name>
    <email>lactrious@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>잉여톤 4회 후기</title>
-   <link href="http://lacti.me/2017/10/29/yingyeoton-4/"/>
+   <link href="https://lacti.github.io/2017/10/29/yingyeoton-4/"/>
    <updated>2017-10-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2017/10/29/yingyeoton-4</id>
+   <id>https://lacti.github.io/2017/10/29/yingyeoton-4</id>
    <content type="html">&lt;p&gt;과거 동아리 내 게임잼과 그 이후 AWS Serverless 대회들, 그리고 지난 번 대리님 집에서의 코딩잼으로 자리잡게 된 잉여톤의 4회차를 이번 개롱 집들이를 겸해서 진행하게 되었다.&lt;/p&gt;
 
 &lt;p&gt;앞으로 얼마나 흥할지는 모르겠지만 간단히 정리해 github에 올려놨고, 여러 피드백을 받으며 간단히 언제 어디서 뭘 하고 싶은 지를 정리한 후 google forms로 신청을 받았더니 놀랍게도 나를 포함 총 9명이라는 인원이 참여를 하게 되었다. 생각보다 흥했고, 다들 재미있게 진행해주었다는 점에서 이 자리를 빌어 다시 한 번 감사의 말씀을 드리고 싶다.&lt;/p&gt;
@@ -28,7 +28,7 @@
 
 &lt;p&gt;집들이를 겸했기 때문에 전날부터 아내와 열심히 간식들과 술(!) 그리고 약간의 소품들을 준비했다. 그리고 당일 아침 열심히 집 청소를 하여 준비를 마쳤다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_1.jpg&quot; alt=&quot;YYT Wall&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/20171029/yyt_4_1.jpg&quot; alt=&quot;YYT Wall&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;사람들이 도착하고 대회가 시작되었다. 이미 팀을 구성해 온 대리님과 그의 동료 분도 있었고, 랜덤으로 진행할 계획을 한 사람과 관전으로 참가한 사람도 있었다. 관전자들의 참여도 최대한 이끌어내기 위해 랜덤 참가자들은 본인이 어떤 주제로 진행할 것인지 발표를 진행하였고 그렇게 각자의 목표가 일치하는 팀이 생성되었다.&lt;/p&gt;
 
@@ -38,13 +38,13 @@
 &lt;li&gt;나는 좀 유연하게 분리될 수 있는 서버 모델에 대한 설계를 하기로 하였다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_2.jpg&quot; alt=&quot;gasbank on coding&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/20171029/yyt_4_2.jpg&quot; alt=&quot;gasbank on coding&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;냉면을 먹고 과자를 먹고 맥주를 먹고 그렇게 끊임없이 머리에 에너지를 공급하며 코드를 쏟아내었다. 6시간이라는 대단히 짧은 시간 내에서 네트워크로 게임을 만드는 것이 간단하지 않기 때문에, gasbank님과 대리님은 어느 정도 게임 클라이언트를 준비해온 터였다.&lt;/p&gt;
 
 &lt;p&gt;그럼에도 네트워크로 무언가를 연결한다는 작업은 아주 간단하지는 않았고, 생각보다 이러저러한 시행착오 끝에 결과물이 슬슬 윤곽을 드러냈다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_3.jpg&quot; alt=&quot;coding harder&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/20171029/yyt_4_3.jpg&quot; alt=&quot;coding harder&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;대리님 팀은 C#의 graphics로 간단한 게임 클라이언트를 만든 후, 여러 클라이언트가 간단히 서버와 http로 json 통신을 하며 서로의 상태를 갱신하는 구조였고,&lt;/li&gt;
@@ -53,8 +53,8 @@
 
 &lt;p&gt;생각보다 c#의 http+json이 간단히 안 되어서 고생한다든가, 혹은 nodejs에서 udp로 raw byte buffer를 다뤄본 적이 없어서 시간이 좀 소요된다든가 하는 일이 있었지만, 그래도 부족한 시간을 최대한 활용하며 다들 놀라운 결과를 만들어냈다. 즉, 어느 정도 제대로 돌아가는 게임을 만들어냈다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_4.jpg&quot; alt=&quot;presentation_1&quot;&gt;
-&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_5.jpg&quot; alt=&quot;presentation_2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/20171029/yyt_4_4.jpg&quot; alt=&quot;presentation_1&quot;&gt;
+&lt;img src=&quot;https://lacti.github.io/images/20171029/yyt_4_5.jpg&quot; alt=&quot;presentation_2&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;작업물을 발표하고 각자 궁금했던 부분들에 대해 논의했다. 각자 만들었던 서버 모델이 달랐기 때문에 재미있는 이야기가 꽤 오고 갔다.&lt;/p&gt;
 
@@ -69,7 +69,7 @@
 
 &lt;p&gt;그렇게 다들 즐겁게 발표를 마치고, 시연을 하고, 서로 즐겨보면서 대회가 막을 내렸다. 순위를 매기고 선물을 증정하며 대회의 마무리를 기념하기 위해 기록을 남겼다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/20171029/yyt_4_6.jpg&quot; alt=&quot;end of yyt4&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/20171029/yyt_4_6.jpg&quot; alt=&quot;end of yyt4&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;먼 위치였음에도 불구하고, 다들 소중한 주말에 늦은 시간까지 코딩에 대한 혼을 즐겁게 불태워주어서 다시 한 번 감사의 말씀을 전하고 싶다. 생각만 하고 있었던 소소한 코딩을 잠깐이나마 모여서 즐길 수 있게 되었다면 그보다 더 바랄게 없을 것 같다.&lt;/p&gt;
 
@@ -83,9 +83,9 @@
  
  <entry>
    <title>아내 블로그 구축기</title>
-   <link href="http://lacti.me/2017/03/29/new-ssg/"/>
+   <link href="https://lacti.github.io/2017/03/29/new-ssg/"/>
    <updated>2017-03-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2017/03/29/new-ssg</id>
+   <id>https://lacti.github.io/2017/03/29/new-ssg</id>
    <content type="html">&lt;p&gt;아내 블로그를 만들어 주고 있는데 이왕이면 네이버 블로그나 티스토리 말고 github pages로 만들어주고 싶었다.&lt;br&gt;
 템플릿은 추후에 걱정하고 일단 내 블로그를 그대로 복사해서 아내의 github 계정에 넣고 travis-ci를 연동하는 것까지는 해봤던 일이라 금방 할 줄 알았는데,&lt;/p&gt;
 
@@ -125,9 +125,9 @@
  
  <entry>
    <title>aws serverless hackathon 2016</title>
-   <link href="http://lacti.me/2016/09/26/aws-serverless-hackathon-2016/"/>
+   <link href="https://lacti.github.io/2016/09/26/aws-serverless-hackathon-2016/"/>
    <updated>2016-09-26T00:00:00+00:00</updated>
-   <id>http://lacti.me/2016/09/26/aws-serverless-hackathon-2016</id>
+   <id>https://lacti.github.io/2016/09/26/aws-serverless-hackathon-2016</id>
    <content type="html">&lt;p&gt;작년에 참가하지 못했던 &lt;a href=&quot;https://aws.amazon.com/ko/events/gaming-on-aws/seoul-02/hackathon/&quot;&gt;serverless gaming on aws&lt;/a&gt;을 올해는 드디어 참가할 수가 있었다. 개인적으로 행사에 대한 참가 소회를 생생하게 밝힐 자신은 없으므로 같이 참가했던 분의 글을 소개하는 것으로 넘어가려고 한다.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -229,9 +229,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>kroot ctf 2015</title>
-   <link href="http://lacti.me/2015/02/20/yonsei-kroot-ctf-2015/"/>
+   <link href="https://lacti.github.io/2015/02/20/yonsei-kroot-ctf-2015/"/>
    <updated>2015-02-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2015/02/20/yonsei-kroot-ctf-2015</id>
+   <id>https://lacti.github.io/2015/02/20/yonsei-kroot-ctf-2015</id>
    <content type="html">&lt;p&gt;연세대학교 보안 동아리 &lt;a href=&quot;http://kroot.yonsei.ac.kr/&quot;&gt;Kroot&lt;/a&gt;에서 주최하는 &lt;a href=&quot;http://krootctf.yonsei.ac.kr/&quot;&gt;CTF 2015&lt;/a&gt;에 참가했다. 보안이란 주제랑은 별로 관련이 없는 삶을 살아온지라 [...] 난이도 낮은 문제 + 힌트가 공개된 문제를 중점으로 풀었다.&lt;/p&gt;
 
 &lt;p&gt;웹은 아는게 없는지라 바로 스킵했다-_-;&lt;/p&gt;
@@ -564,9 +564,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>c# 데이터 서버 라이브러리 구현</title>
-   <link href="http://lacti.me/2014/07/15/csharp-data-server-library-impl/"/>
+   <link href="https://lacti.github.io/2014/07/15/csharp-data-server-library-impl/"/>
    <updated>2014-07-15T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/07/15/csharp-data-server-library-impl</id>
+   <id>https://lacti.github.io/2014/07/15/csharp-data-server-library-impl</id>
    <content type="html">&lt;p&gt;지난 글에서는 csv 데이터를 binary 파일로 serialize하여 데이터의 loading 속도를 올리는 방법에 대해 알아보았다. 해당 방법은 용량이 큰 csv 파일에 대해서도 효과가 크지만, 작게 분할된 많은 csv 파일을 다시 적절한 크기의 binary 파일로 재구성하여 작업할 때 더욱 효과를 크게 느낄 수 있다.&lt;/p&gt;
 
 &lt;p&gt;하지만 csv 파일의 용량이 너무 크거나, 아니면 csv 파일이 너무 많을 경우에는 해당 방법을 사용하기가 어렵다. &lt;a href=&quot;http://stackoverflow.com/questions/1087982/single-objects-still-limited-to-2-gb-in-size-in-clr-4-0&quot;&gt;.net vm은 x64 모드에서도 단일 객체에 대해 2GB 이상의 크기에 대한 메모리 할당 요청을 하면 &lt;code&gt;OutOfMemoryException&lt;/code&gt;이 발생&lt;/a&gt;하는데, 위 구조에서는 파일의 내용을 한 번에 &lt;code&gt;byte[]&lt;/code&gt; 배열로 읽고, 그 결과물을 하나의 &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt;에 담는 구조이기 때문이다.&lt;/p&gt;
@@ -807,9 +807,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>c# binary 파일을 사용해 csv 파일 빨리 읽기</title>
-   <link href="http://lacti.me/2014/07/09/csharp-csv-to-binary/"/>
+   <link href="https://lacti.github.io/2014/07/09/csharp-csv-to-binary/"/>
    <updated>2014-07-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/07/09/csharp-csv-to-binary</id>
+   <id>https://lacti.github.io/2014/07/09/csharp-csv-to-binary</id>
    <content type="html">&lt;p&gt;데이터 분석을 위해 데이터를 열심히 수집해서 몇 개의 csv 파일을 얻었고, 이 csv 파일들은 각각 약 1GB 정도로 조금 큰 수준이라고 해보자. 데이터베이스가 있으면 데이터를 넣고 적절한 쿼리를 넣으면 되니 편하게 작업을 진행할 수가 있다. 하지만 데이터베이스가 없는 시스템에서 이 데이터들을 분석하거나, 쿼리로는 데이터 분석을 하기가 좀 어려운 상황이라고 할 경우에는 적어도 다음의 방법을 사용하여 분석을 진행해 볼 것이다.&lt;/p&gt;
 
 &lt;ol&gt;
@@ -1070,9 +1070,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>왜 c#으로 서버를 작성하려 하나?</title>
-   <link href="http://lacti.me/2014/06/30/why-implements-csharp-server/"/>
+   <link href="https://lacti.github.io/2014/06/30/why-implements-csharp-server/"/>
    <updated>2014-06-30T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/06/30/why-implements-csharp-server</id>
+   <id>https://lacti.github.io/2014/06/30/why-implements-csharp-server</id>
    <content type="html">&lt;p&gt;본 글은 동아리 친구의 질문인 &lt;em&gt;&amp;#39;왜 게임 서버를 c++이 아닌 c#으로 작성하려 하냐?&amp;#39;&lt;/em&gt;에 대한 답변이다.&lt;/p&gt;
 
 &lt;p&gt;간단히 c++과 c#의 차이를 통해 답변하면 이렇다.&lt;/p&gt;
@@ -1144,10 +1144,10 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>dumpable 고찰</title>
-   <link href="http://lacti.me/2014/06/30/dumpable-analysis/"/>
+   <link href="https://lacti.github.io/2014/06/30/dumpable-analysis/"/>
    <updated>2014-06-30T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/06/30/dumpable-analysis</id>
-   <content type="html">&lt;p&gt;하재승님께서 &lt;a href=&quot;http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/&quot;&gt;던전 앤 파이터 클라이언트 로딩 속도 최적화&lt;/a&gt;에서 언급하신 &lt;a href=&quot;https://github.com/ipkn/dumpable&quot;&gt;dumpable&lt;/a&gt; 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 &lt;code&gt;operator =&lt;/code&gt;를 사용하여 dumpable한 struct를 만들어준다.&lt;/p&gt;
+   <id>https://lacti.github.io/2014/06/30/dumpable-analysis</id>
+   <content type="html">&lt;p&gt;하재승님께서 &lt;a href=&quot;https://lacti.github.io/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/&quot;&gt;던전 앤 파이터 클라이언트 로딩 속도 최적화&lt;/a&gt;에서 언급하신 &lt;a href=&quot;https://github.com/ipkn/dumpable&quot;&gt;dumpable&lt;/a&gt; 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 &lt;code&gt;operator =&lt;/code&gt;를 사용하여 dumpable한 struct를 만들어준다.&lt;/p&gt;
 
 &lt;p&gt;다만 몇 가지 아쉬운 점이 있었다. &lt;/p&gt;
 
@@ -1224,9 +1224,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>variadic template을 사용한 typelist 구현</title>
-   <link href="http://lacti.me/2014/06/29/variadic-template-typelist/"/>
+   <link href="https://lacti.github.io/2014/06/29/variadic-template-typelist/"/>
    <updated>2014-06-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/06/29/variadic-template-typelist</id>
+   <id>https://lacti.github.io/2014/06/29/variadic-template-typelist</id>
    <content type="html">&lt;p&gt;Modern C++ Design 책에서 소개한 typelist를 c++11 문법인 variadic template으로 구현해보자.&lt;/p&gt;
 
 &lt;p&gt;typelist는 type들의 list형태로 compile time에 여러 type에 대한 동일한 작업을 할 때 사용된다. 예를 들면,&lt;/p&gt;
@@ -1421,9 +1421,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>github pages와 jekyll을 사용한 blog 만들기</title>
-   <link href="http://lacti.me/2014/06/23/blog-with-github-pages-and-jekyll/"/>
+   <link href="https://lacti.github.io/2014/06/23/blog-with-github-pages-and-jekyll/"/>
    <updated>2014-06-23T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/06/23/blog-with-github-pages-and-jekyll</id>
+   <id>https://lacti.github.io/2014/06/23/blog-with-github-pages-and-jekyll</id>
    <content type="html">&lt;p&gt;본 글에서는 &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;jekyll&lt;/a&gt;과 &lt;a href=&quot;http://travis-ci.org/&quot;&gt;travis-ci&lt;/a&gt;를 사용하여 &lt;a href=&quot;http://pages.github.com/&quot;&gt;github pages&lt;/a&gt;에 publish하고, 이를 custom domain에 연결하여 blog를 구축하는 방법에 대해 서술한다.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://pages.github.com/&quot;&gt;github pages&lt;/a&gt;는 &lt;a href=&quot;http://github.com/&quot;&gt;github&lt;/a&gt;에서 제공하는 cdn으로 static page를 서비스해주는 공간이다. github pages에 자세한 설명이 나와있지만 간단히 요약하면,&lt;/p&gt;
@@ -1552,9 +1552,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>IT 아키텍트가 하지 말아야 할 128가지</title>
-   <link href="http://lacti.me/2014/06/02/128-things-that-it-architect-doesn-t-do/"/>
+   <link href="https://lacti.github.io/2014/06/02/128-things-that-it-architect-doesn-t-do/"/>
    <updated>2014-06-02T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/06/02/128-things-that-it-architect-doesn-t-do</id>
+   <id>https://lacti.github.io/2014/06/02/128-things-that-it-architect-doesn-t-do</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.roadbook.co.kr/73&quot;&gt;IT 아키텍트가 하지 말아야 할 128가지&lt;/a&gt;&lt;br&gt;
 누구도 알려주지 않았던 시스템 개발 현장의 128가지 해결책&lt;/p&gt;
 
@@ -1571,9 +1571,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>팀을 구하는 툴 개발</title>
-   <link href="http://lacti.me/2014/05/29/ndc14-tool-development/"/>
+   <link href="https://lacti.github.io/2014/05/29/ndc14-tool-development/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/29/ndc14-tool-development</id>
+   <id>https://lacti.github.io/2014/05/29/ndc14-tool-development</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://kyungjaepark.com/&quot;&gt;박경재&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3&gt;요약&lt;/h3&gt;
@@ -1821,9 +1821,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>THE NPCM@STER - 라이브 게임에 어울리는 스토리 텔링의 접근법</title>
-   <link href="http://lacti.me/2014/05/29/ndc14-the-npc-master/"/>
+   <link href="https://lacti.github.io/2014/05/29/ndc14-the-npc-master/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/29/ndc14-the-npc-master</id>
+   <id>https://lacti.github.io/2014/05/29/ndc14-the-npc-master</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/Hs0bldn3Z100wv&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617&quot; title=&quot;THE_NPCMASTER_PUBLIC&quot; target=&quot;_blank&quot;&gt;THE_NPCMASTER_PUBLIC&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/khalbora&quot; target=&quot;_blank&quot;&gt;khalbora&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -2036,9 +2036,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>모바일 데이터 분석</title>
-   <link href="http://lacti.me/2014/05/29/ndc14-mobile-data-mining/"/>
+   <link href="https://lacti.github.io/2014/05/29/ndc14-mobile-data-mining/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/29/ndc14-mobile-data-mining</id>
+   <id>https://lacti.github.io/2014/05/29/ndc14-mobile-data-mining</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/gffS3dV55aLfUI&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/5rocks_io/ndc-20140529&quot; title=&quot;[NDC 발표] 모바일 게임데이터분석 및 실전 활용&quot; target=&quot;_blank&quot;&gt;[NDC 발표] 모바일 게임데이터분석 및 실전 활용&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/5rocks_io&quot; target=&quot;_blank&quot;&gt;Tapjoy X 5Rocks&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -2207,9 +2207,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>신입 프로그래머들의 고민을 통해 생각해보는 누구나 쉽게 적응할 수 있는 프로젝트 만들기</title>
-   <link href="http://lacti.me/2014/05/29/ndc14-live-methodology/"/>
+   <link href="https://lacti.github.io/2014/05/29/ndc14-live-methodology/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/29/ndc14-live-methodology</id>
+   <id>https://lacti.github.io/2014/05/29/ndc14-live-methodology</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://twitter.com/LTeaRain&quot;&gt;최진욱&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://twitter.com/skyser2003&quot;&gt;장승호&lt;/a&gt;&lt;/li&gt;
@@ -2473,9 +2473,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아이가 세배 빨라졌어요!</title>
-   <link href="http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/"/>
+   <link href="https://lacti.github.io/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/"/>
    <updated>2014-05-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization</id>
+   <id>https://lacti.github.io/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/lOtZPsSUBtfbVp&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/JaeseungHa/ndc-2014-35508014&quot; title=&quot;[NDC 2014] 던전앤파이터 클라이언트 로딩 최적화&quot; target=&quot;_blank&quot;&gt;[NDC 2014] 던전앤파이터 클라이언트 로딩 최적화&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/JaeseungHa&quot; target=&quot;_blank&quot;&gt;Jaeseung Ha&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -2702,9 +2702,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>Rx와 Functional Reactive Programming으로 고성능 서버 어플리케이션 만들기</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-rx-server-application/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-rx-server-application/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-rx-server-application</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-rx-server-application</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/E85jkcnmqPhpsO&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/jongwookkim/ndc14-rx-functional-reactive-programming&quot; title=&quot;NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기&quot; target=&quot;_blank&quot;&gt;NDC14 - Rx와 Functional Reactive Programming으로 고성능 서버 만들기&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/jongwookkim&quot; target=&quot;_blank&quot;&gt;Jong Wook Kim&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -2859,9 +2859,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>라이브 상황에서 윈도우 서버 개발자가 겪은 좌충우돌 Redis 적용 경험담</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-experience-of-using-redis/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-experience-of-using-redis/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-experience-of-using-redis</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-experience-of-using-redis</id>
    <content type="html">&lt;h3&gt;요약&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -2918,9 +2918,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>프로젝트K 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-distributed-mmorpg-server-without-spof/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-distributed-mmorpg-server-without-spof/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-distributed-mmorpg-server-without-spof</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-distributed-mmorpg-server-without-spof</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/t9rfxofKihVSFF&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/sublee/spof-mmorpg&quot; title=&quot;[야생의 땅: 듀랑고] 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버&quot; target=&quot;_blank&quot;&gt;[야생의 땅: 듀랑고] 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/sublee&quot; target=&quot;_blank&quot;&gt;흥섭 이&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -3066,9 +3066,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>범용 게임 서버 프레임워크 디자인 및 테크닉</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-design-generic-game-server/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-design-generic-game-server/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-design-generic-game-server</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-design-generic-game-server</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/8CCbTMPDEQdwX4&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/iFunFactory/20140524-ndc-sharing&quot; title=&quot;NDC14 범용 게임 서버 프레임워크 디자인 및 테크닉&quot; target=&quot;_blank&quot;&gt;NDC14 범용 게임 서버 프레임워크 디자인 및 테크닉&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/iFunFactory&quot; target=&quot;_blank&quot;&gt;iFunFactory Inc.&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -3219,9 +3219,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>나이키 런더시티로 본 클라우드 서비스의 장애 복구 프로세스</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-cloud-fail-over-process/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-cloud-fail-over-process/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-cloud-fail-over-process</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-cloud-fail-over-process</id>
    <content type="html">&lt;h3&gt;요약&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -3373,9 +3373,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-build-private-cloud/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-build-private-cloud/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-build-private-cloud</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-build-private-cloud</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/lUq7JAKaH6FUxC&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/reinkim/ndc14&quot; title=&quot;NDC14 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기&quot; target=&quot;_blank&quot;&gt;NDC14 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분투기&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/reinkim&quot; target=&quot;_blank&quot;&gt;Jinuk Kim&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -3505,9 +3505,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>분산서버 구축의 ABC - 대규모 분산 시스템을 구축하기 위한 실용적 예와 그 원칙들</title>
-   <link href="http://lacti.me/2014/05/28/ndc14-build-distributed-system/"/>
+   <link href="https://lacti.github.io/2014/05/28/ndc14-build-distributed-system/"/>
    <updated>2014-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/28/ndc14-build-distributed-system</id>
+   <id>https://lacti.github.io/2014/05/28/ndc14-build-distributed-system</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://twitter.com/hoblue&quot;&gt;이호규&lt;/a&gt; / &lt;a href=&quot;http://www.slideshare.net/HoGyuLee/ndc14-abc&quot;&gt;발표자료&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -3690,7 +3690,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
 &lt;li&gt;&lt;strong&gt;중간중간 무슨 소리인지 잘 이해가 안 되는 부분이 있었다.&lt;/strong&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;amp;forum=3026737&amp;amp;thread=2763589449&amp;amp;behavior=click&amp;amp;url=http%3A%2F%2Flacti.me%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;amp;post=1483795001&amp;amp;type=notification.post.moderator&amp;amp;event=email&quot;&gt;이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;amp;forum=3026737&amp;amp;thread=2763589449&amp;amp;behavior=click&amp;amp;url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;amp;post=1483795001&amp;amp;type=notification.post.moderator&amp;amp;event=email&quot;&gt;이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;chat의 경우 시야 범위의 broadcasting이 아닌 전체 전달 같은 경우엔 독립적 기능이니 community server를 따로 두어 io를 분산시키는 방법이 유효할지 모르겠는데, broadcasting의 network io를 분리한다는 발상은 좀 이상해보인다. 차라리 io를 전담하는 server를 둔다면 모르겠는데 어차피 분산 서버를 설계하는 상황에서 그게 무슨 큰 의미가 있는지 모르겠다.&lt;/li&gt;
 &lt;li&gt;singleton 이야기는 그냥 concurrency control의 어려움을 이야기하려는 것 같은데 multi threading에서 singleton을 쓰려면 lock을 전제로 하거나 tls를 이용한 replica를 생각해야 할텐데 뭘 생각하는 건지 자세히 이야기를 안 해줘서 잘 모르겠다.&lt;/li&gt;
@@ -3702,9 +3702,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>WCF를 이용하여 쉽게 만드는 모바일 게임서버</title>
-   <link href="http://lacti.me/2014/05/27/ndc14-wcf-mobile-server/"/>
+   <link href="https://lacti.github.io/2014/05/27/ndc14-wcf-mobile-server/"/>
    <updated>2014-05-27T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/27/ndc14-wcf-mobile-server</id>
+   <id>https://lacti.github.io/2014/05/27/ndc14-wcf-mobile-server</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;WebServiceHost를 사용한 모바일 rest web api 서버를 만들어보자.&lt;/li&gt;
 &lt;li&gt;msdn에 있을 법한 wcf 설명을 한참 함. &lt;a href=&quot;http://msdn.microsoft.com/ko-kr/library/ms731190.aspx&quot;&gt;msdn 참고&lt;/a&gt;&lt;/li&gt;
@@ -3764,9 +3764,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>파이썬과 친구들 - 체계적이고 빠른 모바일 게임 서버 개발을 위한 최적의 도구</title>
-   <link href="http://lacti.me/2014/05/27/ndc14-python-mobile-server/"/>
+   <link href="https://lacti.github.io/2014/05/27/ndc14-python-mobile-server/"/>
    <updated>2014-05-27T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/05/27/ndc14-python-mobile-server</id>
+   <id>https://lacti.github.io/2014/05/27/ndc14-python-mobile-server</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;모바일은 connectivity가 불안정하다.&lt;/li&gt;
 &lt;li&gt;고로 WebServer 형태로 감&lt;/li&gt;
@@ -3852,9 +3852,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>네트워크 offload 장애</title>
-   <link href="http://lacti.me/2014/02/16/network-offload-error/"/>
+   <link href="https://lacti.github.io/2014/02/16/network-offload-error/"/>
    <updated>2014-02-16T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/02/16/network-offload-error</id>
+   <id>https://lacti.github.io/2014/02/16/network-offload-error</id>
    <content type="html">&lt;p&gt;최근 네트워크 장비 이상 현상으로 고생을 한 적이 있다. 패킷량이 특정 이상일 때 주기적으로 throughput이 감소하는 현상을 보였던 것이다. 플랫폼팀 팀장님께서 각고의 노력 끝에 원인을 찾아내셨다.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -3879,9 +3879,9 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
  
  <entry>
    <title>mswsock.dll의 비밀</title>
-   <link href="http://lacti.me/2014/02/14/secret-of-mswsock-dll/"/>
+   <link href="https://lacti.github.io/2014/02/14/secret-of-mswsock-dll/"/>
    <updated>2014-02-14T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/02/14/secret-of-mswsock-dll</id>
+   <id>https://lacti.github.io/2014/02/14/secret-of-mswsock-dll</id>
    <content type="html">&lt;p&gt;최근 회사에서 c#으로 네트워크 프로그래밍을 하고 있다. 일은 아니고 그냥 개인의 취향
 나름 c#도 속도가 괜찮다는 것을 보여주려고 시작을 했는데, 진행하면서 점점 보이는 결과는 영 좋지 않다.&lt;/p&gt;
 
@@ -3892,15 +3892,15 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
 
 &lt;p&gt;.net &lt;code&gt;Socket&lt;/code&gt;의 &lt;code&gt;BeginReceive&lt;/code&gt;, &lt;code&gt;EndReceive&lt;/code&gt; 함수를 사용하면 내부에서 pinvoke로 &lt;code&gt;WSARecv&lt;/code&gt; 함수를 부르게 된다. &lt;code&gt;WSARecv&lt;/code&gt; 함수는 &lt;code&gt;ws2_32.dll&lt;/code&gt;에 정의된 함수로 얼핏보기에는 socket 확장 api가 담겨있는 &lt;code&gt;mswsock.dll&lt;/code&gt;이 부를 필요가 없어 보인다. 이를 정확히 확인하기 위해 ms symbol server에서 clr 관련 symbol을 받고 다시 profiler를 돌려보았다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mswsock_secret_functions.png&quot; alt=&quot;functions&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mswsock_secret_functions.png&quot; alt=&quot;functions&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;진범이 나온 것 같다. &lt;code&gt;NtDeviceIoControlFile()&lt;/code&gt;과 &lt;code&gt;NtRemoveIoCompletion()&lt;/code&gt;이 1, 2위로 나왔다. 여기서 &lt;code&gt;NtRemoveIoCompletion()&lt;/code&gt; 함수는 &lt;code&gt;GetQueuedCompletionStatus()&lt;/code&gt; 때문에 불리는 것으로 추측되니 &lt;code&gt;NtDeviceIoControlFile()&lt;/code&gt;의 정체만 밝히면 되겠다.&lt;/p&gt;
 
 &lt;p&gt;간단히 calling, called를 확인해보자.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mswsock_secret_ws2_32_dll.png&quot; alt=&quot;ws2_32.dll&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mswsock_secret_ws2_32_dll.png&quot; alt=&quot;ws2_32.dll&quot;&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mswsock_secret_mswsock_dll.png&quot; alt=&quot;mswsock.dll&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mswsock_secret_mswsock_dll.png&quot; alt=&quot;mswsock.dll&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;원인이 명확해졌다.&lt;br&gt;
 다량의 패킷 수신자가 &lt;code&gt;WSARecv&lt;/code&gt;를 부르는 과정에서 &lt;code&gt;ws2_32.dll&lt;/code&gt;의 함수가 호출된 것은 당연했다. 하지만 그 과정에서 알 수 없는 오류가 발생했고, 그 오류를 처리하기 위해 불린 &lt;code&gt;NtStatusToSocketError()&lt;/code&gt; 함수가 &lt;code&gt;mswsock.dll&lt;/code&gt;의 &lt;code&gt;NtDeviceIoControlFile()&lt;/code&gt; 함수를 불렀던 것이다.&lt;/p&gt;
@@ -3914,9 +3914,9 @@ profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷
  
  <entry>
    <title>빠른 메시지 만들기</title>
-   <link href="http://lacti.me/2014/02/11/fast-message-serialization/"/>
+   <link href="https://lacti.github.io/2014/02/11/fast-message-serialization/"/>
    <updated>2014-02-11T00:00:00+00:00</updated>
-   <id>http://lacti.me/2014/02/11/fast-message-serialization</id>
+   <id>https://lacti.github.io/2014/02/11/fast-message-serialization</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://kentonv.github.io/capnproto/&quot;&gt;Cap&amp;#39;n Proto&lt;/a&gt;와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까?&lt;/p&gt;
 
 &lt;p&gt;이를 위해 잠깐 네트워크로 정보를 전달하는 과정을 생각해보자.&lt;/p&gt;
@@ -4018,9 +4018,9 @@ profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷
  
  <entry>
    <title>서버 프로그래밍</title>
-   <link href="http://lacti.me/2013/12/22/server-programming/"/>
+   <link href="https://lacti.github.io/2013/12/22/server-programming/"/>
    <updated>2013-12-22T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/12/22/server-programming</id>
+   <id>https://lacti.github.io/2013/12/22/server-programming</id>
    <content type="html">&lt;h3&gt;설계&lt;/h3&gt;
 
 &lt;p&gt;동기화 수준과 성능(규모) 수준을 고려해서 작성한다.&lt;/p&gt;
@@ -4100,9 +4100,9 @@ profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷
  
  <entry>
    <title>메시지 enum에 따른 message 콜백 함수 자동생성</title>
-   <link href="http://lacti.me/2013/11/19/message-dispatch-code-generation-by-enum-value/"/>
+   <link href="https://lacti.github.io/2013/11/19/message-dispatch-code-generation-by-enum-value/"/>
    <updated>2013-11-19T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/11/19/message-dispatch-code-generation-by-enum-value</id>
+   <id>https://lacti.github.io/2013/11/19/message-dispatch-code-generation-by-enum-value</id>
    <content type="html">&lt;p&gt;일단 message에 대한 기본 type과 각 message을 구분하기 위한 enum이 있다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;message_base_t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{};&lt;/span&gt;
 
@@ -4180,9 +4180,9 @@ profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷
  
  <entry>
    <title>비동기 프로그래밍 패턴 2</title>
-   <link href="http://lacti.me/2013/11/19/asynchronous-programming-pattern-2/"/>
+   <link href="https://lacti.github.io/2013/11/19/asynchronous-programming-pattern-2/"/>
    <updated>2013-11-19T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/11/19/asynchronous-programming-pattern-2</id>
+   <id>https://lacti.github.io/2013/11/19/asynchronous-programming-pattern-2</id>
    <content type="html">&lt;p&gt;위 이야기에 이어, async 작업과 then 작업 간의 상태 공유에 대해서 알아보자.&lt;br&gt;
 async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반환값을 사용하는 방법이다. 다른 방법으로는 lambda function에 의한 variable capture가 있겠다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// method 1: using return value&lt;/span&gt;
@@ -4261,9 +4261,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>c++ message dispatcher</title>
-   <link href="http://lacti.me/2013/11/16/cpp-message-dispatcher/"/>
+   <link href="https://lacti.github.io/2013/11/16/cpp-message-dispatcher/"/>
    <updated>2013-11-16T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/11/16/cpp-message-dispatcher</id>
+   <id>https://lacti.github.io/2013/11/16/cpp-message-dispatcher</id>
    <content type="html">&lt;p&gt;간단한 message dispatch 코드를 c++로 구현해보자. 일단 &lt;code&gt;std::function&lt;/code&gt;을 안 쓰고 구현해보고, 그 다음에 &lt;code&gt;std::function&lt;/code&gt;을 써서 구현해보자.&lt;/p&gt;
 
 &lt;p&gt;지난 번 글에서 &lt;code&gt;functor_ii&lt;/code&gt;로 &lt;code&gt;handler_t&lt;/code&gt;의 근간을 이미 설명했다.&lt;/p&gt;
@@ -4488,9 +4488,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>template 프로그래밍과 type erasure</title>
-   <link href="http://lacti.me/2013/11/10/template-programming-and-type-erasure/"/>
+   <link href="https://lacti.github.io/2013/11/10/template-programming-and-type-erasure/"/>
    <updated>2013-11-10T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/11/10/template-programming-and-type-erasure</id>
+   <id>https://lacti.github.io/2013/11/10/template-programming-and-type-erasure</id>
    <content type="html">&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typename&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_Iter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;typename&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_FuncTy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;for_each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_Iter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_Iter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_FuncTy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;functor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -4671,9 +4671,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>function adapter와 type inference</title>
-   <link href="http://lacti.me/2013/11/10/function-adapter/"/>
+   <link href="https://lacti.github.io/2013/11/10/function-adapter/"/>
    <updated>2013-11-10T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/11/10/function-adapter</id>
+   <id>https://lacti.github.io/2013/11/10/function-adapter</id>
    <content type="html">&lt;p&gt;과제는 다음의 Adapter를 만들어보자는 것이다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -4781,9 +4781,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>template을 사용한 generic 프로그래밍</title>
-   <link href="http://lacti.me/2013/11/04/generic-programming-with-template/"/>
+   <link href="https://lacti.github.io/2013/11/04/generic-programming-with-template/"/>
    <updated>2013-11-04T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/11/04/generic-programming-with-template</id>
+   <id>https://lacti.github.io/2013/11/04/generic-programming-with-template</id>
    <content type="html">&lt;p&gt;&lt;em&gt;(한 번에 1~2시간 정도로 짧게(?) 하고 있다. 대충 accelerated c++ 책이랑 EC++ 책을 보고 있다.)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;C++ 언어를 가지고 C++스럽게 프로그래밍을 해보자! 는 어떤 의미일까?&lt;br&gt;
@@ -4898,9 +4898,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>비동기 프로그래밍 패턴 1</title>
-   <link href="http://lacti.me/2013/10/09/asynchronous-programming-pattern-1/"/>
+   <link href="https://lacti.github.io/2013/10/09/asynchronous-programming-pattern-1/"/>
    <updated>2013-10-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/10/09/asynchronous-programming-pattern-1</id>
+   <id>https://lacti.github.io/2013/10/09/asynchronous-programming-pattern-1</id>
    <content type="html">&lt;p&gt;일련의 순서로 호출되어야 하는 비동기 함수들이 있다. 이 때 사용되는 method chaining을 사용한 async/then 패턴과 수행할 비동기 context를 갖고 직접 비동기 수행을 연쇄적으로 진행하는 async_worker 패턴을 알아보자.&lt;/p&gt;
 
 &lt;p&gt;연속적인 비동기 작업을 처리할 때에는 동기적 프로그래밍과는 다르게 코드를 순차적으로 서술할 수 없다. 만약 아래와 같이 작성된다면, &lt;code&gt;async_work2&lt;/code&gt;나 &lt;code&gt;async_work3&lt;/code&gt;는 그 위의 &lt;code&gt;async_work1&lt;/code&gt; 혹은 &lt;code&gt;async_work2&lt;/code&gt;가 완료되기 전에 시작될 것이다.&lt;/p&gt;
@@ -4995,9 +4995,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>ZhConverter (Simplified, Traditional)</title>
-   <link href="http://lacti.me/2013/09/08/zhconverter-simplified-traditional/"/>
+   <link href="https://lacti.github.io/2013/09/08/zhconverter-simplified-traditional/"/>
    <updated>2013-09-08T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/09/08/zhconverter-simplified-traditional</id>
+   <id>https://lacti.github.io/2013/09/08/zhconverter-simplified-traditional</id>
    <content type="html">&lt;p&gt;대만에 Localization(이라고 쓰고 번역이라고 읽는다)을 담당하시는 분이 있었는데 사람이 부족하다고 중국 번역도 시키고 있다. ~~대만은 번체, 중국은 간체를 사용하는데 이론상으로는 어느 정도 수준에서 글자의 1:1 치환으로 두 언어간 변환이 가능하다고 한다. &lt;em&gt;(후술하자면 단어 치환으로 번역할 경우 논조가 달라지므로, 해당 결과물은 제대로 사용할 수 없다고 한다.)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;그런데도 그걸 사람이 하고 있다면 참 안 좋은 일이겠지.&lt;/p&gt;
@@ -5020,9 +5020,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>websocket, webRTC</title>
-   <link href="http://lacti.me/2013/09/07/websocket-webrtc/"/>
+   <link href="https://lacti.github.io/2013/09/07/websocket-webrtc/"/>
    <updated>2013-09-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/09/07/websocket-webrtc</id>
+   <id>https://lacti.github.io/2013/09/07/websocket-webrtc</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://www.websocket.org/&quot;&gt;websocket.org&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/WebSocket&quot;&gt;Wiki: WebSocket&lt;/a&gt;&lt;/li&gt;
@@ -5064,9 +5064,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>분산 시스템 구현 과제 정리</title>
-   <link href="http://lacti.me/2013/08/27/distributed-system-implementation-homework/"/>
+   <link href="https://lacti.github.io/2013/08/27/distributed-system-implementation-homework/"/>
    <updated>2013-08-27T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/27/distributed-system-implementation-homework</id>
+   <id>https://lacti.github.io/2013/08/27/distributed-system-implementation-homework</id>
    <content type="html">&lt;p&gt;뭐라도 좋으니 간단한 분산 시스템을 구현해보자!&lt;br&gt;
 단일 시스템과 비교하여 성능 혹은 가용성을 높이기 위해 분산 시스템을 설계해야 하는 것이니 일단 네트워크 프로그래밍은 필수이다. 효율을 높이기 위해 얼마나 작업을 잘 쪼개고 합치는가도 고민해야 하고, 장애가 발생했을 때 얼마나 복구될 수 있는지도 고민해야 한다.&lt;/p&gt;
 
@@ -5128,9 +5128,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>concurrency pattern과 분산 시스템 스터디</title>
-   <link href="http://lacti.me/2013/08/26/concurrency-pattern-and-distributed-system-study/"/>
+   <link href="https://lacti.github.io/2013/08/26/concurrency-pattern-and-distributed-system-study/"/>
    <updated>2013-08-26T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/26/concurrency-pattern-and-distributed-system-study</id>
+   <id>https://lacti.github.io/2013/08/26/concurrency-pattern-and-distributed-system-study</id>
    <content type="html">&lt;p&gt;Concurrency Pattern부터 Distributed System까지! 근데 대충함 [...]&lt;/p&gt;
 
 &lt;h3&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Concurrency_pattern&quot;&gt;Concurrency pattern&lt;/a&gt;&lt;/h3&gt;
@@ -5285,9 +5285,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>preprocessor programming</title>
-   <link href="http://lacti.me/2013/08/23/preprocessor-programming/"/>
+   <link href="https://lacti.github.io/2013/08/23/preprocessor-programming/"/>
    <updated>2013-08-23T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/23/preprocessor-programming</id>
+   <id>https://lacti.github.io/2013/08/23/preprocessor-programming</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/bmvmLA0MnvppgH&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/preprocessor-programming&quot; title=&quot;Preprocessor Programming&quot; target=&quot;_blank&quot;&gt;Preprocessor Programming&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -5305,9 +5305,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>generic한 c++ rpc 구현</title>
-   <link href="http://lacti.me/2013/08/20/simple-cpp-rpc/"/>
+   <link href="https://lacti.github.io/2013/08/20/simple-cpp-rpc/"/>
    <updated>2013-08-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/20/simple-cpp-rpc</id>
+   <id>https://lacti.github.io/2013/08/20/simple-cpp-rpc</id>
    <content type="html">&lt;p&gt;generic한 rpc를 간단히 구현해보자.&lt;/p&gt;
 
 &lt;p&gt;원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 &lt;a href=&quot;http://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage&quot;&gt;DSEL&lt;/a&gt;을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.&lt;/p&gt;
@@ -5752,9 +5752,9 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
  
  <entry>
    <title>c++11 async, corotuine, io 스터디</title>
-   <link href="http://lacti.me/2013/08/18/cpp11-async-corotuine-io-study/"/>
+   <link href="https://lacti.github.io/2013/08/18/cpp11-async-corotuine-io-study/"/>
    <updated>2013-08-18T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/18/cpp11-async-corotuine-io-study</id>
+   <id>https://lacti.github.io/2013/08/18/cpp11-async-corotuine-io-study</id>
    <content type="html">&lt;p&gt;오늘 스터디에서 공부한 내용을 간단히 정리해보자.&lt;/p&gt;
 
 &lt;h3&gt;async, future&lt;/h3&gt;
@@ -6000,9 +6000,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>producer/consumer model 구현</title>
-   <link href="http://lacti.me/2013/08/12/implements-producer-consumer-model/"/>
+   <link href="https://lacti.github.io/2013/08/12/implements-producer-consumer-model/"/>
    <updated>2013-08-12T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/12/implements-producer-consumer-model</id>
+   <id>https://lacti.github.io/2013/08/12/implements-producer-consumer-model</id>
    <content type="html">&lt;p&gt;먹깨비 과제를 풀어보자. 여러 가지 구현법이 있을 것인데, 나는 간단하게&lt;/p&gt;
 
 &lt;ul&gt;
@@ -6310,9 +6310,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>concurrency 알고리즘과 memory model</title>
-   <link href="http://lacti.me/2013/08/10/concurrency-algorithm-and-memory-model/"/>
+   <link href="https://lacti.github.io/2013/08/10/concurrency-algorithm-and-memory-model/"/>
    <updated>2013-08-10T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/10/concurrency-algorithm-and-memory-model</id>
+   <id>https://lacti.github.io/2013/08/10/concurrency-algorithm-and-memory-model</id>
    <content type="html">&lt;p&gt;오늘 스터디에서 공부한 내용을 간략히 정리해보자.&lt;/p&gt;
 
 &lt;p&gt;원래 의도는,&lt;/p&gt;
@@ -6469,9 +6469,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>thread-safe한 counter 구현</title>
-   <link href="http://lacti.me/2013/08/04/implements-thread-safe-counter/"/>
+   <link href="https://lacti.github.io/2013/08/04/implements-thread-safe-counter/"/>
    <updated>2013-08-04T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/04/implements-thread-safe-counter</id>
+   <id>https://lacti.github.io/2013/08/04/implements-thread-safe-counter</id>
    <content type="html">&lt;p&gt;먼저 간단한 counter example을 만들어보자.
 문제를 확인하기 위해서 다음과 같은 코드를 작성해본다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread_count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;128&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -6619,9 +6619,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>concurrency 스터디</title>
-   <link href="http://lacti.me/2013/08/03/concurrency-study/"/>
+   <link href="https://lacti.github.io/2013/08/03/concurrency-study/"/>
    <updated>2013-08-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/08/03/concurrency-study</id>
+   <id>https://lacti.github.io/2013/08/03/concurrency-study</id>
    <content type="html">&lt;p&gt;오늘 스터디에서 공부한 내용을 간략히 정리해보자.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -6748,9 +6748,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>게임 데이터 작성하기 1</title>
-   <link href="http://lacti.me/2013/07/25/write-game-data/"/>
+   <link href="https://lacti.github.io/2013/07/25/write-game-data/"/>
    <updated>2013-07-25T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/07/25/write-game-data</id>
+   <id>https://lacti.github.io/2013/07/25/write-game-data</id>
    <content type="html">&lt;p&gt;보통 프로그램을 작성할 때에는 필요한 데이터를 읽고, 해석하여 동작하는 구조로 많이 작성한다.
 게임 역시 마찬가지의 구조를 갖는데, &lt;strong&gt;데이터의 종류가 좀 많고, 상호 연관성이 있으며, 양도 꽤 많다&lt;/strong&gt;는 점이 특징이라 할 수 있겠다.&lt;/p&gt;
 
@@ -6869,9 +6869,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>AWS를 이용한 서버 운영</title>
-   <link href="http://lacti.me/2013/07/12/aws-gameserver-management/"/>
+   <link href="https://lacti.github.io/2013/07/12/aws-gameserver-management/"/>
    <updated>2013-07-12T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/07/12/aws-gameserver-management</id>
+   <id>https://lacti.github.io/2013/07/12/aws-gameserver-management</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/q3gZSV2pG9W65K&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/aws-gameserver-management&quot; title=&quot;AWS GameServer Management&quot; target=&quot;_blank&quot;&gt;AWS GameServer Management&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -6909,9 +6909,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
  
  <entry>
    <title>xml 기반의 데이터시트 빨리 읽기</title>
-   <link href="http://lacti.me/2013/06/09/binary-xml-for-fast-loading/"/>
+   <link href="https://lacti.github.io/2013/06/09/binary-xml-for-fast-loading/"/>
    <updated>2013-06-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/06/09/binary-xml-for-fast-loading</id>
+   <id>https://lacti.github.io/2013/06/09/binary-xml-for-fast-loading</id>
    <content type="html">&lt;p&gt;지금 일하고 있는 회사에서는 모든 게임 데이터를 xml로 기술하고 있다. 서버가 시작할 때 읽게 되는 xml의 양만 본다면 대략 800~900MB로 엄청난 양을 읽어야 한다. 덕분에 서버가 저 모든 데이터시트를 읽어서 메모리에 올리는 시간만 약 4~5분이 소요가 되었고, 이 시간으로 인해 발생하는 비효율은 말할 필요가 없을 정도였다.&lt;/p&gt;
 
 &lt;p&gt;본 글에서는 이 문제를 해결하기 위해 어떠한 탐색 과정을 거쳤으며 결과적으로 문제를 어떻게 해결하였는지 서술하려고 한다.&lt;/p&gt;
@@ -6943,7 +6943,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 &lt;p&gt;binary로 serialize하기 위해 만든 파일의 구조를 간단히 보면 다음과 같다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/binary_xml_each.png&quot; alt=&quot;internal structure&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/binary_xml_each.png&quot; alt=&quot;internal structure&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;위 그림은 하나의 xml 파일에 해당하는 정보를 갖는다. 먼저 한 파일에 대한 &lt;code&gt;header 정보&lt;/code&gt; - 파일 길이, 이름, 최종 수정 시각을 갖는다. (최종 수정 시각이 필요한 이유는 이 글 마지막 부분에 설명하겠다.) 그리고 &lt;code&gt;XmlData&lt;/code&gt; 영역에 &lt;code&gt;Node&lt;/code&gt;와 &lt;code&gt;Attribute&lt;/code&gt;를 차례대로 기록하게 된다.&lt;/p&gt;
 
@@ -6953,7 +6953,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 &lt;p&gt;궁금해할 사람은 없어보이지만 string이나 list-type은 다음과 같이 serialize했다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/binary_xml_string_list_type.png&quot; alt=&quot;string, list-type&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/binary_xml_string_list_type.png&quot; alt=&quot;string, list-type&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;이렇게 Serialize한 내용을 &lt;code&gt;BinaryXml&lt;/code&gt;이라고 불렀다.&lt;/p&gt;
 
@@ -6961,7 +6961,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 &lt;p&gt;이 문제를 해결하기 위해서 BinaryXml 앞 부분에다가 TypeDefine을 넣어주었다. TypeDefine 역시 xml으로 기록이 가능하기 때문에 BinaryXml로 변환이 가능하기 때문이다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/binary_xml_whole_file.png&quot; alt=&quot;string, list-type&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/binary_xml_whole_file.png&quot; alt=&quot;string, list-type&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;물론 TypeDefine을 BinaryXml으로 기록하기 위해서는 &lt;code&gt;TypeDefine에 대한 TypeDefine&lt;/code&gt;이 필요하다. 그래야 &lt;code&gt;NodeIndex&lt;/code&gt;와 &lt;code&gt;AttributeIndex&lt;/code&gt;를 얻을 수 있으니까. 그 내용을 서버에서는 &lt;code&gt;DefineDefine.xml&lt;/code&gt; 이라는 것으로 기술해놨는데 사실 이 부분은 그냥 코드에 박아넣어도 문제가 없었을 것이다.&lt;/p&gt;
 
@@ -6999,7 +6999,7 @@ DataChunk를 만드는 과정에서 약간의 번거로움이 있지만 (XmlType
 &lt;li&gt;stack 변수로 attribute 이름이 조합되어 넘어올 수 있으니 잘 integrity를 검사해준다.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/binary_xml_attribute_index_cache.png&quot; alt=&quot;attribute index cache&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/binary_xml_attribute_index_cache.png&quot; alt=&quot;attribute index cache&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;BinaryXml의 각 node에 attribute 개수만큼 배열을 미리 만들어둔다. 그러면 &lt;code&gt;TypeDefine&lt;/code&gt;에서 찾은 &lt;code&gt;AttributeIndex&lt;/code&gt;로 바로 접근이 가능하기 때문이다. (물론 TypeDefine에서 Attribute를 찾을 때에는 string_map을 쓴다)&lt;/p&gt;
 
@@ -7040,9 +7040,9 @@ DataChunk를 만드는 과정에서 약간의 번거로움이 있지만 (XmlType
  
  <entry>
    <title>분산 처리 환경 구현 3</title>
-   <link href="http://lacti.me/2013/06/08/simple-distributed-system-implementation-3/"/>
+   <link href="https://lacti.github.io/2013/06/08/simple-distributed-system-implementation-3/"/>
    <updated>2013-06-08T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/06/08/simple-distributed-system-implementation-3</id>
+   <id>https://lacti.github.io/2013/06/08/simple-distributed-system-implementation-3</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/lacti/DistWork/tree/simpler&quot;&gt;Github: DistWork - simpler&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -7213,9 +7213,9 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
  
  <entry>
    <title>c# 게임 서버 만들기</title>
-   <link href="http://lacti.me/2013/06/07/csharp-game-server/"/>
+   <link href="https://lacti.github.io/2013/06/07/csharp-game-server/"/>
    <updated>2013-06-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/06/07/csharp-game-server</id>
+   <id>https://lacti.github.io/2013/06/07/csharp-game-server</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/JypZgbfXMHXvn8&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/c-game-server&quot; title=&quot;C# Game Server&quot; target=&quot;_blank&quot;&gt;C# Game Server&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -7260,9 +7260,9 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
  
  <entry>
    <title>How much faster is C++ than C#?</title>
-   <link href="http://lacti.me/2013/05/19/how-much-faster-is-cpp-than-c-sharp/"/>
+   <link href="https://lacti.github.io/2013/05/19/how-much-faster-is-cpp-than-c-sharp/"/>
    <updated>2013-05-19T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/05/19/how-much-faster-is-cpp-than-c-sharp</id>
+   <id>https://lacti.github.io/2013/05/19/how-much-faster-is-cpp-than-c-sharp</id>
    <content type="html">&lt;p&gt;마음에 드는 답변&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -7279,9 +7279,9 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
  
  <entry>
    <title>분산 처리 환경 구현 2</title>
-   <link href="http://lacti.me/2013/05/07/simple-distributed-system-implementation-2/"/>
+   <link href="https://lacti.github.io/2013/05/07/simple-distributed-system-implementation-2/"/>
    <updated>2013-05-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/05/07/simple-distributed-system-implementation-2</id>
+   <id>https://lacti.github.io/2013/05/07/simple-distributed-system-implementation-2</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/lacti/DistWork/tree/simplest&quot;&gt;Github: DistWork - simplest&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -7292,7 +7292,7 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
 
 &lt;p&gt;일단 구현하기에 앞서 간단히 설계도를 살펴보자.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mdf_arch.png&quot; alt=&quot;구현 설계도&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mdf_arch.png&quot; alt=&quot;구현 설계도&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;master에는 여러 slave가 연결한다. 각 연결된 slave는 master 내에 어떤 작업을 수행하는지/했는지 info를 갖는다. master에 command가 들어오면 수행할 work를 만든다. 연결된 slave의 info를 살펴보고 적절한 slave를 선택한 후 work를 보내준다**(distribute)**. 그러면 slave는 그 작업을 처리하고 결과를 master에게 보내주던가 한다.&lt;/p&gt;
 
@@ -7534,9 +7534,9 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
  
  <entry>
    <title>분산 처리 환경 구현 1</title>
-   <link href="http://lacti.me/2013/04/22/simple-distributed-system-implementation-1/"/>
+   <link href="https://lacti.github.io/2013/04/22/simple-distributed-system-implementation-1/"/>
    <updated>2013-04-22T00:00:00+00:00</updated>
-   <id>http://lacti.me/2013/04/22/simple-distributed-system-implementation-1</id>
+   <id>https://lacti.github.io/2013/04/22/simple-distributed-system-implementation-1</id>
    <content type="html">&lt;p&gt;잉여 컴퓨팅 자원을 십분 활용하여 처리량을 늘리기 위한 분산 처리 환경을 구축해보자.&lt;br&gt;
 (hadoop, incredibuild 같은 프로그램을 만드려면 어떤 고민이 필요한지 생각해볼 수 있겠다.)&lt;/p&gt;
 
@@ -7565,7 +7565,7 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
 
 &lt;p&gt;가장 간단한 master-slave 구조를 보면 다음과 같다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mdf_basic.png&quot; alt=&quot;master-slave 구조&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mdf_basic.png&quot; alt=&quot;master-slave 구조&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;master는 여러 slave들을 관리하고, 실제 작업들은 slave가 처리한다고 보면 된다.
 master는 작업 요청을 받아서, &lt;strong&gt;적절히 쪼개서&lt;/strong&gt;, &lt;strong&gt;적절히 slave에게 넘겨서 처리시키고&lt;/strong&gt;, &lt;strong&gt;결과를 적절히 받아서 합친다&lt;/strong&gt;&lt;/p&gt;
@@ -7586,7 +7586,7 @@ master는 작업 요청을 받아서, &lt;strong&gt;적절히 쪼개서&lt;/stro
 
 &lt;p&gt;이 때 slave의 상태를 master에게 보고하기 위해 connection을 유지하거나 다시 connection을 맺는 것은 귀찮은 일이므로 다음과 같은 구조를 생각해볼 수 있다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mdf_sync_db.png&quot; alt=&quot;sync-db 구조&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mdf_sync_db.png&quot; alt=&quot;sync-db 구조&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;slave들은 자신의 상태를 주기적으로 state db에 기록하고, master는 state db에 기록된 정보를 참고해서 slave에게 명령을 내린다. 이 경우 master는 slave와 connection을 유지할 필요가 없게 되고 이는 master의 구현 부담을 줄일 수 있을 뿐더러 connectivity가 좋지 않은 master-slave 환경에서 보다 유연하게 동작할 수 있다.&lt;/p&gt;
 
@@ -7594,7 +7594,7 @@ master는 작업 요청을 받아서, &lt;strong&gt;적절히 쪼개서&lt;/stro
 
 &lt;p&gt;약간 다른 관점이지만 다음과 같은 모델도 생각해볼 수 있다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://lacti.me/images/mdf_stated.png&quot; alt=&quot;stated 구조&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lacti.github.io/images/mdf_stated.png&quot; alt=&quot;stated 구조&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;slave 프로그램이 해야할 일은 두 가지이다. master로부터 받은 job 처리와 master에게 state를 보고하는 것. 이 둘을 나눈 구조라고 생각하면 된다.&lt;/p&gt;
 
@@ -7616,9 +7616,9 @@ master는 작업 요청을 받아서, &lt;strong&gt;적절히 쪼개서&lt;/stro
  
  <entry>
    <title>ctags, cscope 설정 등 vim을 잘 써보자</title>
-   <link href="http://lacti.me/2012/11/30/ctags-cscope-with-vim/"/>
+   <link href="https://lacti.github.io/2012/11/30/ctags-cscope-with-vim/"/>
    <updated>2012-11-30T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/11/30/ctags-cscope-with-vim</id>
+   <id>https://lacti.github.io/2012/11/30/ctags-cscope-with-vim</id>
    <content type="html">&lt;p&gt;시스템 프로그래밍 수업 듣는 친구들이 vim을 써서 보다 빠르게 커널 탐색을 하는데 도움이 되었으면 해서 쓰는 글이지만 본인이 직접 정리하기는 귀찮으니 다음의 링크를 참조 바람 [...]&lt;/p&gt;
 
 &lt;ul&gt;
@@ -7686,9 +7686,9 @@ nmap J :call SearchKeyword&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&amp;lt
  
  <entry>
    <title>Index Analysis</title>
-   <link href="http://lacti.me/2012/11/20/index-analysis/"/>
+   <link href="https://lacti.github.io/2012/11/20/index-analysis/"/>
    <updated>2012-11-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/11/20/index-analysis</id>
+   <id>https://lacti.github.io/2012/11/20/index-analysis</id>
    <content type="html">&lt;div class=&quot;embed rich SlideShare&quot;&gt;&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/caQtMbYRHLYkIW&quot; width=&quot;427&quot; height=&quot;356&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&quot;margin-bottom:5px&quot;&gt; &lt;strong&gt; &lt;a href=&quot;https://www.slideshare.net/lactrious/index-analysis&quot; title=&quot;Index Analysis&quot; target=&quot;_blank&quot;&gt;Index Analysis&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&quot;https://www.slideshare.net/lactrious&quot; target=&quot;_blank&quot;&gt;lactrious&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
 
 &lt;p&gt;&lt;/div&gt;&lt;/p&gt;
@@ -7701,9 +7701,9 @@ nmap J :call SearchKeyword&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&amp;lt
  
  <entry>
    <title>Fiddler Web Debugger</title>
-   <link href="http://lacti.me/2012/11/18/fiddler-web-debugger/"/>
+   <link href="https://lacti.github.io/2012/11/18/fiddler-web-debugger/"/>
    <updated>2012-11-18T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/11/18/fiddler-web-debugger</id>
+   <id>https://lacti.github.io/2012/11/18/fiddler-web-debugger</id>
    <content type="html">&lt;p&gt;써보니까 꽤 괜찮아서 잊기 전에 링크함&lt;/p&gt;
 
 &lt;ul&gt;
@@ -7716,9 +7716,9 @@ nmap J :call SearchKeyword&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&amp;lt
  
  <entry>
    <title>멤버 데이터 포인터의 casting과 안정성 1</title>
-   <link href="http://lacti.me/2012/10/31/member-data-pointer-casting-safety/"/>
+   <link href="https://lacti.github.io/2012/10/31/member-data-pointer-casting-safety/"/>
    <updated>2012-10-31T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/10/31/member-data-pointer-casting-safety</id>
+   <id>https://lacti.github.io/2012/10/31/member-data-pointer-casting-safety</id>
    <content type="html">&lt;p&gt;어제 동아리 친구와 이야기를 나누다 run-time에서는 float array를 float pointer로 casting하여 사용할 수 있는데 compile time에서는 왜 그럴 수 없냐는 이야기가 나왔다.&lt;/p&gt;
 
 &lt;p&gt;질문이 좀 미묘한데, 좀 더 정확히 정의하자면 &lt;em&gt;float array type의 member data pointer를 float pointer type의 member data pointer로 casting하여 사용할 수 없냐&lt;/em&gt;는 이야기이다.&lt;/p&gt;
@@ -7789,9 +7789,9 @@ nmap J :call SearchKeyword&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&amp;lt
  
  <entry>
    <title>member-data-pointer와 pointer의 차이</title>
-   <link href="http://lacti.me/2012/10/13/different-between-member-data-pointer-and-pointer/"/>
+   <link href="https://lacti.github.io/2012/10/13/different-between-member-data-pointer-and-pointer/"/>
    <updated>2012-10-13T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/10/13/different-between-member-data-pointer-and-pointer</id>
+   <id>https://lacti.github.io/2012/10/13/different-between-member-data-pointer-and-pointer</id>
    <content type="html">&lt;p&gt;pointer는 메모리의 특정 공간의 주소를 지칭하기 위해 사용된다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;some_var&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.0f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;float_ptr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;some_var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -7827,9 +7827,9 @@ nmap J :call SearchKeyword&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&amp;lt
  
  <entry>
    <title>멤버 데이터 포인터를 사용하여 연산식 묶어내기 3</title>
-   <link href="http://lacti.me/2012/10/07/extract-code-using-member-data-pointer-3/"/>
+   <link href="https://lacti.github.io/2012/10/07/extract-code-using-member-data-pointer-3/"/>
    <updated>2012-10-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/10/07/extract-code-using-member-data-pointer-3</id>
+   <id>https://lacti.github.io/2012/10/07/extract-code-using-member-data-pointer-3</id>
    <content type="html">&lt;p&gt;지난 두 글에서 사용한 전략은, 멤버에 접근하기 위한 방법을 동일한 인터페이스로 맞춰서 (첫 번째 글에서는 멤버 데이터 포인터, 두 번째 글에서는 멤버 함수 포인터) &lt;code&gt;BuffType&lt;/code&gt;과 그 인터페이스를 대응시키는 방법을 사용하였다.&lt;/p&gt;
 
 &lt;p&gt;동일한 인터페이스를 사용하기 위해서 그들을 하나의 동일한 타입으로 지칭하는 방법을 사용하였고, 그렇기 때문에 서로 다른 type, int 변수와 float 변수, 그리고 그에 대한 배열 변수가 있을 때에는 사용할 수 없는 방법이었다.&lt;/p&gt;
@@ -8018,9 +8018,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>멤버 데이터 포인터를 사용하여 연산식 묶어내기 2</title>
-   <link href="http://lacti.me/2012/10/03/extract-code-using-member-data-pointer-2/"/>
+   <link href="https://lacti.github.io/2012/10/03/extract-code-using-member-data-pointer-2/"/>
    <updated>2012-10-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/10/03/extract-code-using-member-data-pointer-2</id>
+   <id>https://lacti.github.io/2012/10/03/extract-code-using-member-data-pointer-2</id>
    <content type="html">&lt;p&gt;이번 글에서는 &lt;code&gt;Stat&lt;/code&gt; 자료구조 내에 배열이 있을 때 이를 어떻게 처리할지에 대해서 알아보도록 하자.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;Stat&lt;/code&gt; 코드를 작성하다보니, 이동 속도에 관해서는 각각의 변수를 따로 두는 것 보다, 배열 하나로 처리하는 것이 더 낫다는 것을 깨닫게 되었다.&lt;/p&gt;
@@ -8139,9 +8139,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>멤버 데이터 포인터를 사용하여 연산식 묶어내기 1</title>
-   <link href="http://lacti.me/2012/10/01/extract-code-using-member-data-pointer-1/"/>
+   <link href="https://lacti.github.io/2012/10/01/extract-code-using-member-data-pointer-1/"/>
    <updated>2012-10-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/10/01/extract-code-using-member-data-pointer-1</id>
+   <id>https://lacti.github.io/2012/10/01/extract-code-using-member-data-pointer-1</id>
    <content type="html">&lt;p&gt;게임 내 스탯 시스템을 구현한다고 해보자. 그 스탯들은 여러 상황에서 버프에 의해 값이 변경될 수 있기 때문에&lt;/p&gt;
 
 &lt;ul&gt;
@@ -8227,9 +8227,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>go interface 구현하기</title>
-   <link href="http://lacti.me/2012/06/21/implement-go-interface-like-at-java/"/>
+   <link href="https://lacti.github.io/2012/06/21/implement-go-interface-like-at-java/"/>
    <updated>2012-06-21T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/06/21/implement-go-interface-like-at-java</id>
+   <id>https://lacti.github.io/2012/06/21/implement-go-interface-like-at-java</id>
    <content type="html">&lt;p&gt;사실 go interface가 어떤 스펙을 가졌는지는 모르겠고
 그냥 &lt;a href=&quot;https://twitter.com/summerlight00&quot; title=&quot;summerlight00&quot;&gt;summerlight&lt;/a&gt;님께서 그걸 c++로 구현하면 재미있겠다고 해서 시작을 한건데 대충 내용은 다음과 같다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -8330,9 +8330,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>ClassLoader를 사용하여 Resource Stream 얻기</title>
-   <link href="http://lacti.me/2012/06/10/get-resource-stream-using-ClassLoader/"/>
+   <link href="https://lacti.github.io/2012/06/10/get-resource-stream-using-ClassLoader/"/>
    <updated>2012-06-10T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/06/10/get-resource-stream-using-ClassLoader</id>
+   <id>https://lacti.github.io/2012/06/10/get-resource-stream-using-ClassLoader</id>
    <content type="html">&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Scanner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Loader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -8354,9 +8354,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>c++에서 reflection 사용하기 4</title>
-   <link href="http://lacti.me/2012/06/09/using-reflection-at-cpp-4/"/>
+   <link href="https://lacti.github.io/2012/06/09/using-reflection-at-cpp-4/"/>
    <updated>2012-06-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/06/09/using-reflection-at-cpp-4</id>
+   <id>https://lacti.github.io/2012/06/09/using-reflection-at-cpp-4</id>
    <content type="html">&lt;p&gt;이전 글에서는 자료구조가 선언된 header파일을 여러 번 include하면 문제가 발생했었다. 하지만 이리저리 참조가 되다보면 각 번역 단위에서 include가 한 번만 되는 것은 굉장히 힘든 일일 것이다.&lt;/p&gt;
 
 &lt;p&gt;따라서 본 글에서는 매크로를 잘 정의해서 선언 header파일이 구조체 선언, reflection 등록 딱 2번만 include가 될 수 있도록 만들어볼 것이다. &lt;a href=&quot;https://github.com/lacti/FieldInfo/tree/v0.3&quot;&gt;이전 글(#3)의 소스 코드&lt;/a&gt; 내의,&lt;/p&gt;
@@ -8476,9 +8476,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>c++에서 reflection 사용하기 3</title>
-   <link href="http://lacti.me/2012/06/09/using-reflection-at-cpp-3/"/>
+   <link href="https://lacti.github.io/2012/06/09/using-reflection-at-cpp-3/"/>
    <updated>2012-06-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/06/09/using-reflection-at-cpp-3</id>
+   <id>https://lacti.github.io/2012/06/09/using-reflection-at-cpp-3</id>
    <content type="html">&lt;p&gt;지난 #2에서는 &lt;code&gt;class_t&lt;/code&gt;, &lt;code&gt;field_t&lt;/code&gt; 자체가 가상 함수를 갖고, &lt;code&gt;class_impl_t&lt;/code&gt;와 &lt;code&gt;field_impl_t&lt;/code&gt;가 이 class를 상속 받아서 구현하는 방식을 사용하였다. 사실 굳이 이 &lt;code&gt;impl_t&lt;/code&gt; class 들은 노출될 필요가 없으므로 이를 감추도록 해보자.&lt;/p&gt;
 
 &lt;p&gt;그리고 다 완성된 type을 register함에 있어, 따로 &lt;code&gt;register_class&lt;/code&gt;, &lt;code&gt;register_field&lt;/code&gt; 함수를 직접 불러서 등록을 하였는데, 이것을 &lt;a href=&quot;http://en.wikipedia.org/wiki/X_Macro&quot;&gt;X-Macro pattern&lt;/a&gt;을 사용하여 개선해보도록 하자.&lt;/p&gt;
@@ -8707,9 +8707,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>c++에서 reflection 사용하기 2</title>
-   <link href="http://lacti.me/2012/06/04/using-reflection-at-cpp-2/"/>
+   <link href="https://lacti.github.io/2012/06/04/using-reflection-at-cpp-2/"/>
    <updated>2012-06-04T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/06/04/using-reflection-at-cpp-2</id>
+   <id>https://lacti.github.io/2012/06/04/using-reflection-at-cpp-2</id>
    <content type="html">&lt;p&gt;지난 번 글의 문제점은 다음과 같다.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -8890,9 +8890,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>c++에서 reflection 사용하기 1</title>
-   <link href="http://lacti.me/2012/06/03/using-reflection-at-cpp-1/"/>
+   <link href="https://lacti.github.io/2012/06/03/using-reflection-at-cpp-1/"/>
    <updated>2012-06-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/06/03/using-reflection-at-cpp-1</id>
+   <id>https://lacti.github.io/2012/06/03/using-reflection-at-cpp-1</id>
    <content type="html">&lt;p&gt;mmo-server에서 attribute를 json serialize하기 위해 attribute가 가지고 있는 field의 정보를 enumerate 해야할 일이 생겼다. 그런데 c++은 reflection이 없잖아?&lt;/p&gt;
 
 &lt;p&gt;그렇게 고민하다가 예전에 쓴 글을 발견했다.&lt;/p&gt;
@@ -9027,9 +9027,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>java annotation과 reflection을 사용한 xml mapping</title>
-   <link href="http://lacti.me/2012/05/31/xml-mapping-using-java-annotation-and-reflection/"/>
+   <link href="https://lacti.github.io/2012/05/31/xml-mapping-using-java-annotation-and-reflection/"/>
    <updated>2012-05-31T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/05/31/xml-mapping-using-java-annotation-and-reflection</id>
+   <id>https://lacti.github.io/2012/05/31/xml-mapping-using-java-annotation-and-reflection</id>
    <content type="html">&lt;p&gt;마침 요즘 spring을 쓰면서 자바를 공부한다는 친구를 채팅방에서 만나게 되어 reflection과 annotation을 사용한 xml mapping에 대한 코드를 작성해보라고 이야기하였다. 그 친구가 언급한 DI와는 좀 다른 방향이지만, annotation을 사용한 metadata 사용과 reflection을 통한 설계적 유연성을 공부해보면 spring framework을 이해하는데 도움이 되지 않을까 하여 이야기했던 것이다.&lt;/p&gt;
 
 &lt;p&gt;annotation은 java에서 코드 내에 metadata를 넣기 위해 도입한 개념으로 1.5부터 추가되었다. 특정 지점(ElementType: Type, Method, Field, ...)에 특정 시점(Retention: Source, Class, Runtime)까지 유지되는 metadata 정보를 남길 수 있다.&lt;/p&gt;
@@ -9244,9 +9244,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>java의 FutureTask를 사용한 간단한 수행 대기</title>
-   <link href="http://lacti.me/2012/05/28/simply-wait-using-FutureTask-at-java/"/>
+   <link href="https://lacti.github.io/2012/05/28/simply-wait-using-FutureTask-at-java/"/>
    <updated>2012-05-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/05/28/simply-wait-using-FutureTask-at-java</id>
+   <id>https://lacti.github.io/2012/05/28/simply-wait-using-FutureTask-at-java</id>
    <content type="html">&lt;p&gt;어떤 작업에 timeout을 주고 실행하고 싶은 경우가 있다. 예를 들어 web crawler를 만들 때에는 해당 페이지에 대한 응답이 10초정도 없을 경우에 그냥 그 페이지를 읽지 않도록 예외처리 하는 것이다.&lt;/p&gt;
 
 &lt;p&gt;이 글에서는 &lt;code&gt;ExecutorService&lt;/code&gt;와 &lt;code&gt;FutureTask&lt;/code&gt;를 사용하여 timeout 처리를 하는 간단한 예제를 소개한다.&lt;/p&gt;
@@ -9290,9 +9290,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>lambda와 RAII 2</title>
-   <link href="http://lacti.me/2012/05/12/lambda-and-raii-2/"/>
+   <link href="https://lacti.github.io/2012/05/12/lambda-and-raii-2/"/>
    <updated>2012-05-12T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/05/12/lambda-and-raii-2</id>
+   <id>https://lacti.github.io/2012/05/12/lambda-and-raii-2</id>
    <content type="html">&lt;p&gt;C++11은 lambda expression을 지원해주니 좀 다르게 생각해볼 수 있다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;lock_t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 &lt;span class=&quot;nl&quot;&gt;public:&lt;/span&gt;
@@ -9433,9 +9433,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>lambda와 RAII 1</title>
-   <link href="http://lacti.me/2012/04/01/lambda-and-raii-1/"/>
+   <link href="https://lacti.github.io/2012/04/01/lambda-and-raii-1/"/>
    <updated>2012-04-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/04/01/lambda-and-raii-1</id>
+   <id>https://lacti.github.io/2012/04/01/lambda-and-raii-1</id>
    <content type="html">&lt;p&gt;C++11 에서 도입된 lambda expression을 통한 RAII 구현 방식의 한 예와, 단위 전략을 통한 RAII 구현을 통해 장단점을 비교해보자.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization&quot;&gt;Wiki: Resource Acquisition Is Initialization(RAII)&lt;/a&gt;는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통&lt;/p&gt;
@@ -9510,9 +9510,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>asynchronous programming과 async, await</title>
-   <link href="http://lacti.me/2012/03/18/asynchronous-programming-and-async-await/"/>
+   <link href="https://lacti.github.io/2012/03/18/asynchronous-programming-and-async-await/"/>
    <updated>2012-03-18T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/03/18/asynchronous-programming-and-async-await</id>
+   <id>https://lacti.github.io/2012/03/18/asynchronous-programming-and-async-await</id>
    <content type="html">&lt;p&gt;함수를 호출하는 코드를 작성한다고 해보자. synchronous하게 호출하는 방법이 있고, asynchronous하게 호출하는 방법이 있다. (보통 후자는 호출이라고 하기보다는 요청을 한다고 할 것이다)&lt;/p&gt;
 
 &lt;p&gt;코드를 작성하는 프로그래머 입장에서는 당연히 synchronous한 로직이 훨씬 직관적이고 이해하기 편한다. 위에서부터 아래로 코드를 읽어내리기만 해도 이게 무슨 동작을 하는 코드인지 이해하기가 쉽기 때문이다.&lt;/p&gt;
@@ -9592,9 +9592,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>C# UI Cross thread problem 해결</title>
-   <link href="http://lacti.me/2012/03/01/c-sharp-ui-cross-thread-problem/"/>
+   <link href="https://lacti.github.io/2012/03/01/c-sharp-ui-cross-thread-problem/"/>
    <updated>2012-03-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/03/01/c-sharp-ui-cross-thread-problem</id>
+   <id>https://lacti.github.io/2012/03/01/c-sharp-ui-cross-thread-problem</id>
    <content type="html">&lt;p&gt;다른 Thread에서 UI component에 접근하려면 문제가 발생한다. (cross thread)
 동기화 이슈에서보면 당연한 이야기니 바로 해결책을 보자.&lt;/p&gt;
 
@@ -9612,9 +9612,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>환형큐의 thread unsafety 문제</title>
-   <link href="http://lacti.me/2012/02/23/thread-unsafety-problem-in-circular-queue/"/>
+   <link href="https://lacti.github.io/2012/02/23/thread-unsafety-problem-in-circular-queue/"/>
    <updated>2012-02-23T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/02/23/thread-unsafety-problem-in-circular-queue</id>
+   <id>https://lacti.github.io/2012/02/23/thread-unsafety-problem-in-circular-queue</id>
    <content type="html">&lt;p&gt;어떤 자원에 대한 환형큐가 있다고 해보자. size는 2의 자승이다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;resource_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;atomic_inc32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rear_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
@@ -9655,9 +9655,9 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
  
  <entry>
    <title>template의 암시적 interface 요구</title>
-   <link href="http://lacti.me/2012/01/10/implicit-interface-by-template/"/>
+   <link href="https://lacti.github.io/2012/01/10/implicit-interface-by-template/"/>
    <updated>2012-01-10T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/01/10/implicit-interface-by-template</id>
+   <id>https://lacti.github.io/2012/01/10/implicit-interface-by-template</id>
    <content type="html">&lt;p&gt;상속을 통한 동적 다형성을 이용하려면, 명시적인 interface가 형성되어야 한다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;game_object&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 &lt;span class=&quot;nl&quot;&gt;public:&lt;/span&gt;
@@ -9749,9 +9749,9 @@ iterating하면서 &lt;code&gt;update&lt;/code&gt; 함수를 불러준다. 이 �
  
  <entry>
    <title>template 인자를 상속 받기</title>
-   <link href="http://lacti.me/2012/01/09/inherits-template-argument/"/>
+   <link href="https://lacti.github.io/2012/01/09/inherits-template-argument/"/>
    <updated>2012-01-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2012/01/09/inherits-template-argument</id>
+   <id>https://lacti.github.io/2012/01/09/inherits-template-argument</id>
    <content type="html">&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;_Base&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyClass&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_Base&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{};&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -9892,9 +9892,9 @@ iterating하면서 &lt;code&gt;update&lt;/code&gt; 함수를 불러준다. 이 �
  
  <entry>
    <title>EventHandler와 Message Passing</title>
-   <link href="http://lacti.me/2011/12/20/event-handler-and-message-passing/"/>
+   <link href="https://lacti.github.io/2011/12/20/event-handler-and-message-passing/"/>
    <updated>2011-12-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/12/20/event-handler-and-message-passing</id>
+   <id>https://lacti.github.io/2011/12/20/event-handler-and-message-passing</id>
    <content type="html">&lt;p&gt;객체(object)는 상태(state)를 갖고 외부의 조작(mutator)에 의해서 변경될 수 있다.
 이러한 객체를 다루는 프로그래밍을 할 때는, 관찰자(observer)가 객체의 상태 변화(property change)를 감지하여 어떠한 동작(action)을 수행하는 경우가 많이 있다.&lt;/p&gt;
 
@@ -10039,9 +10039,9 @@ Event와 Message는 정보를 담은 객체이면서, 송신/수신 객체의 �
  
  <entry>
    <title>간단한 Message 체계 구현 (Java)</title>
-   <link href="http://lacti.me/2011/11/27/java-message-dispatcher/"/>
+   <link href="https://lacti.github.io/2011/11/27/java-message-dispatcher/"/>
    <updated>2011-11-27T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/11/27/java-message-dispatcher</id>
+   <id>https://lacti.github.io/2011/11/27/java-message-dispatcher</id>
    <content type="html">&lt;p&gt;본 글을 객체 간의 메시지 통신이 아니라 모듈 간의 메시지 통신에 대해 다룬다.
 즉, 특정 대상 객체를 지정하여 메시지를 보내는 내용이 아니라 전역 MessageQueue에 대해 어떤 Message를 수신할지를 등록하는 Handler 객체에 대한 내용이다.&lt;/p&gt;
 
@@ -10203,9 +10203,9 @@ Event와 Message는 정보를 담은 객체이면서, 송신/수신 객체의 �
  
  <entry>
    <title>type_t class 도입을 통한 임시 객체 없는 type 분기</title>
-   <link href="http://lacti.me/2011/11/15/type-dispatching-by-type-trait-class/"/>
+   <link href="https://lacti.github.io/2011/11/15/type-dispatching-by-type-trait-class/"/>
    <updated>2011-11-15T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/11/15/type-dispatching-by-type-trait-class</id>
+   <id>https://lacti.github.io/2011/11/15/type-dispatching-by-type-trait-class</id>
    <content type="html">&lt;p&gt;어떤 class 2개가 있다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;big_class&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{};&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;huge_class&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{};&lt;/span&gt;
@@ -10328,9 +10328,9 @@ Event와 Message는 정보를 담은 객체이면서, 송신/수신 객체의 �
  
  <entry>
    <title>자바로 만드는 비행기 게임 4</title>
-   <link href="http://lacti.me/2011/11/13/flight-game-with-java-4/"/>
+   <link href="https://lacti.github.io/2011/11/13/flight-game-with-java-4/"/>
    <updated>2011-11-13T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/11/13/flight-game-with-java-4</id>
+   <id>https://lacti.github.io/2011/11/13/flight-game-with-java-4</id>
    <content type="html">&lt;p&gt;이번과 다음은 코드 정리를 해보자.&lt;/p&gt;
 
 &lt;p&gt;이전까지의 비행기 게임 코드는 너무 하나의 class 에서 다 처리하는 방식으로, 뭐 하나 수정하기도 좋지 못한 구조였다 (물론 코드 전체가 별로 안 기니까 크게 상관없겠지만)&lt;/p&gt;
@@ -10731,9 +10731,9 @@ Event와 Message는 정보를 담은 객체이면서, 송신/수신 객체의 �
  
  <entry>
    <title>자바로 만드는 비행기 게임 3</title>
-   <link href="http://lacti.me/2011/11/06/flight-game-with-java-3/"/>
+   <link href="https://lacti.github.io/2011/11/06/flight-game-with-java-3/"/>
    <updated>2011-11-06T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/11/06/flight-game-with-java-3</id>
+   <id>https://lacti.github.io/2011/11/06/flight-game-with-java-3</id>
    <content type="html">&lt;p&gt;이번에는 적기의 등장과 충돌검사를 해보자.&lt;/p&gt;
 
 &lt;p&gt;적기는, &lt;code&gt;y=0&lt;/code&gt;에서 등장해서 &lt;code&gt;y=height&lt;/code&gt;까지 진행한다. 즉, 화면 위쪽에서 아래쪽으로 일직선으로 진행하도록 하자. 그러면 진행하는 y 값은 항상 동일할테니까&lt;code&gt;(0 -&amp;gt; height)&lt;/code&gt; 시작과 끝 x 값을 random으로 뽑으면 된다.&lt;/p&gt;
@@ -11194,9 +11194,9 @@ Event와 Message는 정보를 담은 객체이면서, 송신/수신 객체의 �
  
  <entry>
    <title>데이터베이스 설계</title>
-   <link href="http://lacti.me/2011/10/08/design-database/"/>
+   <link href="https://lacti.github.io/2011/10/08/design-database/"/>
    <updated>2011-10-08T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/10/08/design-database</id>
+   <id>https://lacti.github.io/2011/10/08/design-database</id>
    <content type="html">&lt;p&gt;데이터베이스는 데이터가 모여있는 것이다.&lt;/p&gt;
 
 &lt;p&gt;그 데이터를 보다 효율적으로 관리하기 위해 나온게 관리 시스템이고, 덕분에 데이터베이스라고 하면 데이터베이스 관리 시스템(Database Management System)으로 MSSQL이나 MySQL을 떠오르게 됬다.&lt;/p&gt;
@@ -11220,9 +11220,9 @@ binary로 넣어버리면 column이 하나 추가될 때마다 기존 사용자�
  
  <entry>
    <title>Java와 Getter/Setter</title>
-   <link href="http://lacti.me/2011/10/03/getter-and-setter-at-java/"/>
+   <link href="https://lacti.github.io/2011/10/03/getter-and-setter-at-java/"/>
    <updated>2011-10-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/10/03/getter-and-setter-at-java</id>
+   <id>https://lacti.github.io/2011/10/03/getter-and-setter-at-java</id>
    <content type="html">&lt;p&gt;객체지향 프로그래밍이라는 개념은 이름만으로는 상당히 추상적이라서 이해하기 영 좋지 않다. 약간 다르게 생각을 해보자. 객체지향이라는 개념이 왜 나왔는가를 통해서 대충 당시의 사람들이 무엇을 상상하고 만들었는지를 통해 이해해보는 것이다.&lt;/p&gt;
 
 &lt;h3&gt;옛날 이야기&lt;/h3&gt;
@@ -11349,9 +11349,9 @@ binary로 넣어버리면 column이 하나 추가될 때마다 기존 사용자�
  
  <entry>
    <title>c++ 에서 구조체 RTTI 정보 남기기</title>
-   <link href="http://lacti.me/2011/09/30/using-rtti-at-cpp/"/>
+   <link href="https://lacti.github.io/2011/09/30/using-rtti-at-cpp/"/>
    <updated>2011-09-30T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/09/30/using-rtti-at-cpp</id>
+   <id>https://lacti.github.io/2011/09/30/using-rtti-at-cpp</id>
    <content type="html">&lt;p&gt;RTTI는 Run-time Type Information의 약자로, 실행 중에 어떤 type에 대한 정보를 알 수 있다는 것이다. 보통 type 에 대한 정보는 컴파일 타임에 다 사용되고, 실행 중에는 없어지는데, 실행 중에 이 정보를 얻을 수 있으면 재밌는 일을 많이 할 수 있다.&lt;/p&gt;
 
 &lt;p&gt;Java나 C#, 아니면 여타 동적 언어들은 당연히 이 기능을 지원하고 (보통 reflection 이라고 한다)
@@ -11657,9 +11657,9 @@ xml에 어떤 순서로 기록될지는 모르지만, 어쨌든 구조체 내 �
  
  <entry>
    <title>자바로 만드는 비행기 게임 2</title>
-   <link href="http://lacti.me/2011/09/22/flight-game-with-java-2/"/>
+   <link href="https://lacti.github.io/2011/09/22/flight-game-with-java-2/"/>
    <updated>2011-09-22T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/09/22/flight-game-with-java-2</id>
+   <id>https://lacti.github.io/2011/09/22/flight-game-with-java-2</id>
    <content type="html">&lt;p&gt;노란색 타원 대신 비행기 이미지를 제대로 띄워보자.&lt;br&gt;
 자바에서 이미지를 읽는 것은 간단하다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;java language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;awt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Image&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ship&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;awt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Toolkit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDefaultToolkit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;player.gif&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -11841,9 +11841,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
  
  <entry>
    <title>자바로 만드는 비행기 게임 1</title>
-   <link href="http://lacti.me/2011/09/21/flight-game-with-java-1/"/>
+   <link href="https://lacti.github.io/2011/09/21/flight-game-with-java-1/"/>
    <updated>2011-09-21T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/09/21/flight-game-with-java-1</id>
+   <id>https://lacti.github.io/2011/09/21/flight-game-with-java-1</id>
    <content type="html">&lt;p&gt;본 글타래에서는 자바를 사용하여 간단한 비행기 게임을 만드는 과정을 서술해볼까 한다.&lt;/p&gt;
 
 &lt;p&gt;원활한 자바 프로그래밍을 위해서, &lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/index.html&quot;&gt;JDK&lt;/a&gt;와 &lt;a href=&quot;http://eclipse.org/downloads/&quot;&gt;Eclipse&lt;/a&gt;가 설치되어있어야 한다.
@@ -12010,9 +12010,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
  
  <entry>
    <title>탈무드 이야기</title>
-   <link href="http://lacti.me/2011/09/20/talmud-wealth-inherit/"/>
+   <link href="https://lacti.github.io/2011/09/20/talmud-wealth-inherit/"/>
    <updated>2011-09-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/09/20/talmud-wealth-inherit</id>
+   <id>https://lacti.github.io/2011/09/20/talmud-wealth-inherit</id>
    <content type="html">&lt;p&gt;탈무드에는 다음과 같은 이야기가 있다.&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -12129,9 +12129,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
  
  <entry>
    <title>Concurrent Pool (Static Size)</title>
-   <link href="http://lacti.me/2011/08/22/static-sized-concurrent-pool/"/>
+   <link href="https://lacti.github.io/2011/08/22/static-sized-concurrent-pool/"/>
    <updated>2011-08-22T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/22/static-sized-concurrent-pool</id>
+   <id>https://lacti.github.io/2011/08/22/static-sized-concurrent-pool</id>
    <content type="html">&lt;p&gt;정적인 크기의 Thread-safe한 (Concurrent) Object Pool을 만들어보자.&lt;br&gt;
 핵심은 배열을 사용한다는 것. 왜냐하면 여러 thread가 접근해도 자신만의 index 지점을 접근하면 한 지점에 동시에 thread가 접근하면서 발생하는 문제가 없기 때문.&lt;/p&gt;
 
@@ -12228,9 +12228,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
  
  <entry>
    <title>웹 기반 채팅방</title>
-   <link href="http://lacti.me/2011/08/14/web-based-chat-site/"/>
+   <link href="https://lacti.github.io/2011/08/14/web-based-chat-site/"/>
    <updated>2011-08-14T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/14/web-based-chat-site</id>
+   <id>https://lacti.github.io/2011/08/14/web-based-chat-site</id>
    <content type="html">&lt;p&gt;동아리에는 현재 대충 그지같이 만들어놓은 채팅방이 있다. &lt;del&gt;내가 만들었다 orz&lt;/del&gt;&lt;br&gt;
 코드 라인별 분석은 당연히 의미가 없을 것 같고, 핵심적인 부분에 대해 간략히 이야기해보려고 한다.&lt;/p&gt;
 
@@ -12370,9 +12370,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
  
  <entry>
    <title>IO와 메모리 복사</title>
-   <link href="http://lacti.me/2011/08/14/io-and-memory-copy/"/>
+   <link href="https://lacti.github.io/2011/08/14/io-and-memory-copy/"/>
    <updated>2011-08-14T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/14/io-and-memory-copy</id>
+   <id>https://lacti.github.io/2011/08/14/io-and-memory-copy</id>
    <content type="html">&lt;p&gt;동기와 비동기 IO 에 대해 지난번에 이야기했었다. &lt;a href=&quot;/2011/08/07/asynchronous-io/&quot;&gt;비동기 IO 함수&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;간단히 요약하면, 함수는 완료 알림 시점 때문에 동기와 비동기로 구분된다는 것이다.&lt;/p&gt;
@@ -12516,9 +12516,9 @@ IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때�
  
  <entry>
    <title>객체별 함수 수행 동기화</title>
-   <link href="http://lacti.me/2011/08/11/synchronize-function-execution-in-each-object/"/>
+   <link href="https://lacti.github.io/2011/08/11/synchronize-function-execution-in-each-object/"/>
    <updated>2011-08-11T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/11/synchronize-function-execution-in-each-object</id>
+   <id>https://lacti.github.io/2011/08/11/synchronize-function-execution-in-each-object</id>
    <content type="html">&lt;p&gt;(주의, 아래 글은 Visual Studio 2010 을 쓴다는 가정하에 작성하였다. 아무튼 C++11 이 지원되어야 한다)&lt;br&gt;
 여러 Thread가 동시에 접근을 수행하는 객체를 보호하기 위해서는 어떤 방법이 있을까?&lt;/p&gt;
 
@@ -12742,9 +12742,9 @@ IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때�
  
  <entry>
    <title>다중 입출력에 대한 효율적 처리</title>
-   <link href="http://lacti.me/2011/08/07/efficient-processing-for-multiplexing-io/"/>
+   <link href="https://lacti.github.io/2011/08/07/efficient-processing-for-multiplexing-io/"/>
    <updated>2011-08-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/07/efficient-processing-for-multiplexing-io</id>
+   <id>https://lacti.github.io/2011/08/07/efficient-processing-for-multiplexing-io</id>
    <content type="html">&lt;p&gt;다중 입출력 함수는 POSIX의 select 함수를 공부하면서 가장 많이 보게 되는 함수이다. 다중 입출력 함수라는 것은 영어로 바꿔보면 multiplex io function인데 말 그대로 여러 개의 io 를 하나의 함수로 처리한다는 것이다.&lt;/p&gt;
 
 &lt;p&gt;지난 글의 동기와 비동기에 이어서 여러 개의 io를 어떻게 처리하는 것이 효율적인지 알아보자.
@@ -12911,9 +12911,9 @@ multi core가 있는 환경에서 어떤 프로그램이 가장 빠르게 수행
  
  <entry>
    <title>비동기 IO 함수</title>
-   <link href="http://lacti.me/2011/08/07/asynchronous-io/"/>
+   <link href="https://lacti.github.io/2011/08/07/asynchronous-io/"/>
    <updated>2011-08-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/07/asynchronous-io</id>
+   <id>https://lacti.github.io/2011/08/07/asynchronous-io</id>
    <content type="html">&lt;p&gt;IO 함수라고 하면 생소하게 느끼는 경우가 많다. IO 함수는 input / output 함수의 줄임말인데 우리가 흔히 봐왔던 함수로는 scanf와 printf가 있겠다. &lt;code&gt;scanf&lt;/code&gt;는 keyboard에서 글자를 읽어(input) 오는 것이고, &lt;code&gt;printf&lt;/code&gt;는 문자열을 화면으로 출력(print)하는 함수다.&lt;br&gt;
 이 뿐만 아니라 &lt;code&gt;fprintf&lt;/code&gt;, &lt;code&gt;fscanf&lt;/code&gt; 등의 파일 입출력 관련의 함수 역시 io 함수들이고, 파일 관련 Windows API인 &lt;code&gt;ReadFile&lt;/code&gt;, &lt;code&gt;WriteFile&lt;/code&gt;, 네트워크 통신을 위한 &lt;code&gt;WSARecv&lt;/code&gt;, &lt;code&gt;WSASend&lt;/code&gt;, 기타 등등 입출력 장치와 통신하기 위한 함수들은 io 함수라고 보면 된다.&lt;/p&gt;
 
@@ -13091,9 +13091,9 @@ IO의 효율을 위해 비동기 IO를 사용했다. 그 이유는 흐름이 막
  
  <entry>
    <title>Interlocked Singly Linked Lists</title>
-   <link href="http://lacti.me/2011/08/03/interlocked-singly-linked-lists/"/>
+   <link href="https://lacti.github.io/2011/08/03/interlocked-singly-linked-lists/"/>
    <updated>2011-08-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/03/interlocked-singly-linked-lists</id>
+   <id>https://lacti.github.io/2011/08/03/interlocked-singly-linked-lists</id>
    <content type="html">&lt;p&gt;Concurrent Data Structure는 Lock을 최소화하여 동작해야 multi thread에서 해당 자료구조에 접근할 때 발생하는 부담이 최소화되어 효율적인 프로그래밍이 가능하다.&lt;/p&gt;
 
 &lt;p&gt;여러가지 방법이 있겠지만, 가장 간단한(?) Windows API로 제공되는 &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/ms684121.aspx&quot;&gt;Interlocked Singly Linked Lists&lt;/a&gt;에 대해 보자. (이후 SLIST 라고 이야기하겠다)&lt;/p&gt;
@@ -13221,9 +13221,9 @@ WinNT.h 파일에 보면 SLIST_ENTRY type 은 아래와 같이 정의되어 있�
  
  <entry>
    <title>volatile과 interlocked operation</title>
-   <link href="http://lacti.me/2011/08/02/volatile-interlocked-operation/"/>
+   <link href="https://lacti.github.io/2011/08/02/volatile-interlocked-operation/"/>
    <updated>2011-08-02T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/02/volatile-interlocked-operation</id>
+   <id>https://lacti.github.io/2011/08/02/volatile-interlocked-operation</id>
    <content type="html">&lt;h3&gt;volatile&lt;/h3&gt;
 
 &lt;p&gt;다음과 같은 코드가 있다.&lt;/p&gt;
@@ -13340,9 +13340,9 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
  
  <entry>
    <title>context switching과 simultaneously 실행</title>
-   <link href="http://lacti.me/2011/08/02/context-switching-and-simultaneously/"/>
+   <link href="https://lacti.github.io/2011/08/02/context-switching-and-simultaneously/"/>
    <updated>2011-08-02T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/08/02/context-switching-and-simultaneously</id>
+   <id>https://lacti.github.io/2011/08/02/context-switching-and-simultaneously</id>
    <content type="html">&lt;p&gt;multi thread (or process) programming에서 가장 기초적인 개념으로 ABA Problem과 연결(되나?) 되는 기본적인 개념을 설명하고자 한다. &lt;strong&gt;한 개의 코어는 한 시점에 한 개의 명령을 수행한다!&lt;/strong&gt; 라는 기본 전제를 깔고 이야기를 시작해보려 한다.&lt;/p&gt;
 
 &lt;h3&gt;context switching&lt;/h3&gt;
@@ -13414,9 +13414,9 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
  
  <entry>
    <title>class의 public과 private</title>
-   <link href="http://lacti.me/2011/07/20/public-private-at-c%2B%2B/"/>
+   <link href="https://lacti.github.io/2011/07/20/public-private-at-c%2B%2B/"/>
    <updated>2011-07-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/20/public-private-at-c++</id>
+   <id>https://lacti.github.io/2011/07/20/public-private-at-c++</id>
    <content type="html">&lt;p&gt;예전에 동아리 선배님께서 어떤 코드를 수정하시면서 하셨던 말이 있다.&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -13491,9 +13491,9 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
  
  <entry>
    <title>객체의 생성, 소멸과 goto 이야기</title>
-   <link href="http://lacti.me/2011/07/20/object-ctor-dtor-with-goto/"/>
+   <link href="https://lacti.github.io/2011/07/20/object-ctor-dtor-with-goto/"/>
    <updated>2011-07-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/20/object-ctor-dtor-with-goto</id>
+   <id>https://lacti.github.io/2011/07/20/object-ctor-dtor-with-goto</id>
    <content type="html">&lt;h3&gt;생성자 소멸자 이야기&lt;/h3&gt;
 
 &lt;p&gt;어떤 class의 생성자와 소멸자를 구현했다. 거기에서는 엄청나게 복잡한 작업을 수행한다. 예를 들면,&lt;/p&gt;
@@ -13630,9 +13630,9 @@ Object 예제로 확인해보자.&lt;/p&gt;
  
  <entry>
    <title>MSVC call stacktrace 구현</title>
-   <link href="http://lacti.me/2011/07/20/implement-call-stack-trace-at-c%2B%2B/"/>
+   <link href="https://lacti.github.io/2011/07/20/implement-call-stack-trace-at-c%2B%2B/"/>
    <updated>2011-07-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/20/implement-call-stack-trace-at-c++</id>
+   <id>https://lacti.github.io/2011/07/20/implement-call-stack-trace-at-c++</id>
    <content type="html">&lt;p&gt;이전에 Macro와 inline을 사용하여 log를 찍는 이야기를 했었다. 좀 더 나아가면 여러가지 재밌는 일을 할 수 있어 소개해보고자 한다.&lt;br&gt;
 다룰 내용은 &lt;code&gt;__FUNCSIG__&lt;/code&gt;와 &lt;code&gt;__if_exists&lt;/code&gt;이다. Visual Studio 전용일거다. gcc 유저는 저리가라&lt;/p&gt;
 
@@ -13776,9 +13776,9 @@ Object 예제로 확인해보자.&lt;/p&gt;
  
  <entry>
    <title>template을 사용한 type간 동등성, 대입가능성</title>
-   <link href="http://lacti.me/2011/07/19/check-type-equality-and-assignablity-by-template/"/>
+   <link href="https://lacti.github.io/2011/07/19/check-type-equality-and-assignablity-by-template/"/>
    <updated>2011-07-19T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/19/check-type-equality-and-assignablity-by-template</id>
+   <id>https://lacti.github.io/2011/07/19/check-type-equality-and-assignablity-by-template</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;runtime에 &lt;code&gt;typeid&lt;/code&gt;를 써서 객체 type의 동등성(Same)을 확인하고,&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;dynamic_cast&lt;/code&gt;를 써서 객체간의 대입가능성(Assignable)을 확인할 수 있다.&lt;/li&gt;
@@ -13855,9 +13855,9 @@ compiler는 최대한 근접한 type의 인자를 갖는 함수를 호출해준�
  
  <entry>
    <title>thread local storage 초기화</title>
-   <link href="http://lacti.me/2011/07/13/tls-initializer/"/>
+   <link href="https://lacti.github.io/2011/07/13/tls-initializer/"/>
    <updated>2011-07-13T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/13/tls-initializer</id>
+   <id>https://lacti.github.io/2011/07/13/tls-initializer</id>
    <content type="html">&lt;p&gt;Tls는 &lt;code&gt;Thread Local Storage&lt;/code&gt;로 Thread 내 전역변수라고 생각하면 간단하다(Local 인데 왠 전역!)&lt;br&gt;
 즉, 그냥 global 영역에 선언하는 변수는 프로그램 내에 여러 Thread 가 공유하는 자원이 되지만, Tls 로 선언한 자원들은 해당 Thread 별로 따로 갖는다고 보면 된다.&lt;br&gt;
 (이 때문에 strtok 같은 함수도 내부에서 static 변수를 써도 Tls 로 선언하면 Multithread 에서도 문제가 없다는 것)&lt;/p&gt;
@@ -13989,9 +13989,9 @@ compiler는 최대한 근접한 type의 인자를 갖는 함수를 호출해준�
  
  <entry>
    <title>template에 의한 generic interface 정의</title>
-   <link href="http://lacti.me/2011/07/13/generic-interface-implemented-by-template/"/>
+   <link href="https://lacti.github.io/2011/07/13/generic-interface-implemented-by-template/"/>
    <updated>2011-07-13T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/13/generic-interface-implemented-by-template</id>
+   <id>https://lacti.github.io/2011/07/13/generic-interface-implemented-by-template</id>
    <content type="html">&lt;p&gt;알고리즘 등의 일반화나 의존성 제거를 위해서 class 사이를 interface 로 쪼개는 경우가 있다.
 나는 C++ 보다는 Java가 더 익숙해서 template보다는 interface나 generics를 사용하는게 더 익숙한 편이다.&lt;/p&gt;
 
@@ -14091,9 +14091,9 @@ script 언어가 실행 중에 코드를 동적으로 해석하여 실행하는 
  
  <entry>
    <title>반복자 i++과 ++i에 대한 헛소리</title>
-   <link href="http://lacti.me/2011/07/01/nonsense-of-iterator-incremental-operator/"/>
+   <link href="https://lacti.github.io/2011/07/01/nonsense-of-iterator-incremental-operator/"/>
    <updated>2011-07-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/07/01/nonsense-of-iterator-incremental-operator</id>
+   <id>https://lacti.github.io/2011/07/01/nonsense-of-iterator-incremental-operator</id>
    <content type="html">&lt;p&gt;반복문에서 반복자를 증가시킬 때, &lt;code&gt;for ( ; ; i++)&lt;/code&gt;과 &lt;code&gt;for ( ; ; ++i)&lt;/code&gt;를 이야기할 때, 뭐가 빠르네 느리네 이야기가 왜 나왔을까?&lt;br&gt;
 간단히 생각해보면, &lt;code&gt;i++&lt;/code&gt;과 &lt;code&gt;++i&lt;/code&gt;는 동작이 약간 다르다. 연산자 우선순위는 &lt;code&gt;i++&lt;/code&gt;이 좀 더 빠르지만, 실행 측면에서 본다면&lt;/p&gt;
 
@@ -14179,9 +14179,9 @@ for 문에서 int 변수를 &lt;code&gt;i++&lt;/code&gt; 하나 &lt;code&gt;++i&
  
  <entry>
    <title>프로그램 세그먼트</title>
-   <link href="http://lacti.me/2011/05/21/program-segment/"/>
+   <link href="https://lacti.github.io/2011/05/21/program-segment/"/>
    <updated>2011-05-21T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/05/21/program-segment</id>
+   <id>https://lacti.github.io/2011/05/21/program-segment</id>
    <content type="html">&lt;p&gt;(리눅스 커널의 이해 개정 3판 810쪽)&lt;br&gt;
 유닉스 프로그램의 선형 주소 공간은 논리적인 관점으로 볼 때 몇 개의 선형 주소 구간으로 나뉘어있다&lt;/p&gt;
 
@@ -14310,9 +14310,9 @@ static 변수나 global 변수가 &lt;strong&gt;같은 공간&lt;/strong&gt;에 
  
  <entry>
    <title>Http Message header</title>
-   <link href="http://lacti.me/2011/05/19/http-message-header/"/>
+   <link href="https://lacti.github.io/2011/05/19/http-message-header/"/>
    <updated>2011-05-19T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/05/19/http-message-header</id>
+   <id>https://lacti.github.io/2011/05/19/http-message-header</id>
    <content type="html">&lt;p&gt;요번에 간단한 WebRequest / Response library를 작성하면서 HTTP 메시지 구조를 파악해야할 일이 있었는데 잘 정리해 놓은 사이트가 있었다.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -14325,9 +14325,9 @@ static 변수나 global 변수가 &lt;strong&gt;같은 공간&lt;/strong&gt;에 
  
  <entry>
    <title>Java에서 LayoutManager로 인해 width가 뜻대로 안될 때</title>
-   <link href="http://lacti.me/2011/05/15/how-to-control-width-in-java-due-to-LayoutManager/"/>
+   <link href="https://lacti.github.io/2011/05/15/how-to-control-width-in-java-due-to-LayoutManager/"/>
    <updated>2011-05-15T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/05/15/how-to-control-width-in-java-due-to-LayoutManager</id>
+   <id>https://lacti.github.io/2011/05/15/how-to-control-width-in-java-due-to-LayoutManager</id>
    <content type="html">&lt;p&gt;Java의 &lt;code&gt;LayoutManager&lt;/code&gt;는 유연한 component 배치를 위해 parent component의 width에 딱 맞춰서 자식 control을 배치해주는 작업을 수행한다. 그러다보니 자식의 가로 길이를 고정으로 하고 싶은 경우에도 그 크기가 변경되어서 문제가 생기는 경우가 있다.&lt;/p&gt;
 
 &lt;p&gt;여러 개의 출력 Pane이 하나의 Container Pane 안에 들어갈 때, Container Pane은 ScrollPane 내에 있어서 여러 개가 들어갈 경우 scrolling이 가능하도록 해보자.&lt;/p&gt;
@@ -14392,9 +14392,9 @@ GridLayout을 상속받은 &lt;code&gt;CustomLayout&lt;/code&gt;을 하나 만�
  
  <entry>
    <title>MySQL INSERT</title>
-   <link href="http://lacti.me/2011/05/01/mysql-insert/"/>
+   <link href="https://lacti.github.io/2011/05/01/mysql-insert/"/>
    <updated>2011-05-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/05/01/mysql-insert</id>
+   <id>https://lacti.github.io/2011/05/01/mysql-insert</id>
    <content type="html">&lt;p&gt;요번에 만든 동아리 홈페이지의 채팅방은 &lt;code&gt;MySQL Memory Table&lt;/code&gt;과 &lt;code&gt;Prototypejs&lt;/code&gt;의 polling 기반이다.&lt;br&gt;
 따라서 사용자가 꽤 접속하면 apache가 좀 힘들어할 수는 있지만, 그 양을 정량적으로 계산해봤을 때 크게 무리가 없다고 판단, 과도한 용도가 아닌 경우에서는 써도 괜찮겠다 싶어서 구현해놨다.&lt;/p&gt;
 
@@ -14428,9 +14428,9 @@ Memory Table이라서 그런건지 이유는 잘 모르겠는데 저 두 동작�
  
  <entry>
    <title>Classical Inheritance in JavaScript</title>
-   <link href="http://lacti.me/2011/03/20/classical-inheritance-in-javascript/"/>
+   <link href="https://lacti.github.io/2011/03/20/classical-inheritance-in-javascript/"/>
    <updated>2011-03-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/03/20/classical-inheritance-in-javascript</id>
+   <id>https://lacti.github.io/2011/03/20/classical-inheritance-in-javascript</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://javascript.crockford.com/inheritance.html&quot;&gt;Classical Inheritance in JavaScript&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;JavaScript: The World&amp;#39;s Most Misunderstood Programming Language을 쓴 Douglas Crockford란 분이 쓴 글인데 지난 번에 귀찮아서 안 읽었다가 요번에 읽어보니까 꽤 좋은 내용이다.&lt;br&gt;
@@ -14444,9 +14444,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>java annotation을 사용한 InstanceId 구현</title>
-   <link href="http://lacti.me/2011/03/02/implementation-instance-id-with-java-annotation/"/>
+   <link href="https://lacti.github.io/2011/03/02/implementation-instance-id-with-java-annotation/"/>
    <updated>2011-03-02T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/03/02/implementation-instance-id-with-java-annotation</id>
+   <id>https://lacti.github.io/2011/03/02/implementation-instance-id-with-java-annotation</id>
    <content type="html">&lt;p&gt;Java에서 생성하는 &lt;code&gt;Object&lt;/code&gt;마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자.&lt;/p&gt;
 
 &lt;p&gt;Index 발급 Group 관련해서 파일을 하나 작성하여 &lt;code&gt;IndexGeneratingManager&lt;/code&gt;를 구성해서 발급해도 되고, 아니면 발급 받는 시점을 적절히 조절하거나 발급 함수의 인자로 Group할 Class 정보를 넣어줘도 되겠다.&lt;br&gt;
@@ -14517,9 +14517,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>Object Database와 Value Object</title>
-   <link href="http://lacti.me/2011/02/22/object-database-and-value-object/"/>
+   <link href="https://lacti.github.io/2011/02/22/object-database-and-value-object/"/>
    <updated>2011-02-22T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/02/22/object-database-and-value-object</id>
+   <id>https://lacti.github.io/2011/02/22/object-database-and-value-object</id>
    <content type="html">&lt;p&gt;프로그램이 Client, Server의 2-tier 모델에서 Server가 Data의 persistence를 위해 database를 사용한다. 이 때 client가 요청한 정보를 server가 database로부터 반환받아 client에게 넘겨주는 framework를 작성해보자.&lt;/p&gt;
 
 &lt;h3&gt;설계 1&lt;/h3&gt;
@@ -14605,9 +14605,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>JPanel 상속</title>
-   <link href="http://lacti.me/2011/02/15/JPanel-inheritence/"/>
+   <link href="https://lacti.github.io/2011/02/15/JPanel-inheritence/"/>
    <updated>2011-02-15T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/02/15/JPanel-inheritence</id>
+   <id>https://lacti.github.io/2011/02/15/JPanel-inheritence</id>
    <content type="html">&lt;p&gt;Java에서 UI 코드를 작성할 때, 가장 많이 하는 코딩 방식이 UI Pane class를 만들고 이 class가 JPanel을 상속받는 것이다.&lt;br&gt;
 하지만 생각해보면 그 class는 전혀 &lt;code&gt;JPanel&lt;/code&gt;을 상속받을 필요가 없고 그냥 &lt;code&gt;JPanel&lt;/code&gt; 객체를 멤버 변수로 하나 만들어서 contain pane으로 사용해도 된다.&lt;br&gt;
 그러면 그 class는 정확히 &lt;code&gt;controller&lt;/code&gt; 역할을 수행할 것이고(event handling을 포함하여) &lt;code&gt;controller&lt;/code&gt;가 view(&lt;code&gt;JPanel&lt;/code&gt;, &lt;code&gt;JLabel&lt;/code&gt;... 등) 객체들의 reference 변수를 알고 변경시키는 깔끔한 MVC 구조가 성립된다.&lt;/p&gt;
@@ -14643,9 +14643,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>bash 참조 사이트</title>
-   <link href="http://lacti.me/2011/01/16/reference-sites-of-bash/"/>
+   <link href="https://lacti.github.io/2011/01/16/reference-sites-of-bash/"/>
    <updated>2011-01-16T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/01/16/reference-sites-of-bash</id>
+   <id>https://lacti.github.io/2011/01/16/reference-sites-of-bash</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://www.faqs.org/docs/Linux-HOWTO/Bash-Prog-Intro-HOWTO.html&quot;&gt;http://www.faqs.org/docs/Linux-HOWTO/Bash-Prog-Intro-HOWTO.html&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://tldp.org/LDP/abs/html/index.html&quot;&gt;http://tldp.org/LDP/abs/html/index.html&lt;/a&gt;&lt;/li&gt;
@@ -14673,9 +14673,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>typeof, container_of</title>
-   <link href="http://lacti.me/2011/01/09/typeof-and-container-of/"/>
+   <link href="https://lacti.github.io/2011/01/09/typeof-and-container-of/"/>
    <updated>2011-01-09T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/01/09/typeof-and-container-of</id>
+   <id>https://lacti.github.io/2011/01/09/typeof-and-container-of</id>
    <content type="html">&lt;p&gt;gcc의 additional standard?라고 하는데 generics를 지원하기 위한 도구가 만능 void * 이외에 이런 것도 있었다.&lt;br&gt;
 &lt;a href=&quot;http://gcc.gnu.org/onlinedocs/gcc/Typeof.html&quot;&gt;typeof&lt;/a&gt;&lt;/p&gt;
 
@@ -14690,9 +14690,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>당연하지만 간과하는 size_t ssize_t</title>
-   <link href="http://lacti.me/2011/01/08/different-between-size-t-ssize-t/"/>
+   <link href="https://lacti.github.io/2011/01/08/different-between-size-t-ssize-t/"/>
    <updated>2011-01-08T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/01/08/different-between-size-t-ssize-t</id>
+   <id>https://lacti.github.io/2011/01/08/different-between-size-t-ssize-t</id>
    <content type="html">&lt;p&gt;IO 함수를 사용함에 있어서 그 근간이 되는 것은 &lt;code&gt;read&lt;/code&gt;와 &lt;code&gt;write&lt;/code&gt; 함수이다.&lt;br&gt;
 이 함수는 모두 &lt;code&gt;ssize_t&lt;/code&gt;를 반환하는데, 보통은 너무나 축복받은 환경에 있기 때문에 저게 왜 &lt;code&gt;ssize_t&lt;/code&gt; 인지 모르는 경우가 많다.&lt;/p&gt;
 
@@ -14717,9 +14717,9 @@ javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있�
  
  <entry>
    <title>닫힌 descriptor와 write, SIGPIPE</title>
-   <link href="http://lacti.me/2011/01/08/closed-descriptor-and-write-when-SIGPIPE/"/>
+   <link href="https://lacti.github.io/2011/01/08/closed-descriptor-and-write-when-SIGPIPE/"/>
    <updated>2011-01-08T00:00:00+00:00</updated>
-   <id>http://lacti.me/2011/01/08/closed-descriptor-and-write-when-SIGPIPE</id>
+   <id>https://lacti.github.io/2011/01/08/closed-descriptor-and-write-when-SIGPIPE</id>
    <content type="html">&lt;p&gt;예전에도 엄청 고생했던 것인데, &lt;code&gt;socket&lt;/code&gt;이나 pipe 등에서
 &lt;code&gt;read&lt;/code&gt;와 &lt;code&gt;write&lt;/code&gt;로 IO를 수행할 때 상대쪽(opposite endpoint)이 닫혔다면 어떤 현상이 벌어질까?&lt;/p&gt;
 
@@ -14746,9 +14746,9 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 &lt;strong&gt;조용히 �
  
  <entry>
    <title>stl operator 실수</title>
-   <link href="http://lacti.me/2010/12/24/cpp-stl-fault/"/>
+   <link href="https://lacti.github.io/2010/12/24/cpp-stl-fault/"/>
    <updated>2010-12-24T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/12/24/cpp-stl-fault</id>
+   <id>https://lacti.github.io/2010/12/24/cpp-stl-fault</id>
    <content type="html">&lt;p&gt;어제 나를 1시간동안 고민하게 한 코드는 다음과 같다.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CMyData&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GetKey&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m_nKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -14789,9 +14789,9 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 &lt;strong&gt;조용히 �
  
  <entry>
    <title>class와 memset</title>
-   <link href="http://lacti.me/2010/12/24/cpp-class-memset-fault/"/>
+   <link href="https://lacti.github.io/2010/12/24/cpp-class-memset-fault/"/>
    <updated>2010-12-24T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/12/24/cpp-class-memset-fault</id>
+   <id>https://lacti.github.io/2010/12/24/cpp-class-memset-fault</id>
    <content type="html">&lt;p&gt;c++의 class보다 java의 class를 훨씬 많이 쓰는 나는 사실 c의 struct라면 모를까 c++의 class는 아직도 생소하다. struct를 쓸 때, 가장 좋은 점 중 하나는 초기화라고 생각하는데,&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;cpp language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyData&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;TCHAR&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;szName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;128&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
@@ -14870,9 +14870,9 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 &lt;strong&gt;조용히 �
  
  <entry>
    <title>debian 계열 db 덮어쓸 때 주의점</title>
-   <link href="http://lacti.me/2010/12/21/debian-db-recovery/"/>
+   <link href="https://lacti.github.io/2010/12/21/debian-db-recovery/"/>
    <updated>2010-12-21T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/12/21/debian-db-recovery</id>
+   <id>https://lacti.github.io/2010/12/21/debian-db-recovery</id>
    <content type="html">&lt;p&gt;debian-sys-maint 계정 암호가 바뀌면 안된다&lt;/p&gt;
 
 &lt;p&gt;이 암호는 &lt;code&gt;/etc/mysql/debian.cnf&lt;/code&gt;에서 볼 수 있으니 여기서 암호를 찾아서,&lt;/p&gt;
@@ -14885,9 +14885,9 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 &lt;strong&gt;조용히 �
  
  <entry>
    <title>LockWindowUpdate</title>
-   <link href="http://lacti.me/2010/12/18/LockWindowUpdate/"/>
+   <link href="https://lacti.github.io/2010/12/18/LockWindowUpdate/"/>
    <updated>2010-12-18T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/12/18/LockWindowUpdate</id>
+   <id>https://lacti.github.io/2010/12/18/LockWindowUpdate</id>
    <content type="html">&lt;p&gt;Win32 혹은 MFC를 하다보면&lt;br&gt;
 어떤 창 내에 여러 Child Window가 존재하고, 또, 해당 DC를 얻어서 그림을 그려야하는 경우가 생긴다.&lt;/p&gt;
 
@@ -14909,9 +14909,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>as you know, utf8_unicode_ci</title>
-   <link href="http://lacti.me/2010/12/03/as-you-know-utf8-unicode-ci/"/>
+   <link href="https://lacti.github.io/2010/12/03/as-you-know-utf8-unicode-ci/"/>
    <updated>2010-12-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/12/03/as-you-know-utf8-unicode-ci</id>
+   <id>https://lacti.github.io/2010/12/03/as-you-know-utf8-unicode-ci</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://www.mysqlkorea.co.kr/sub.html?mcode=manual&amp;amp;scode=01&amp;amp;m_no=21616&amp;amp;cat1=10&amp;amp;cat2=311&amp;amp;cat3=329&amp;amp;lang=k&quot;&gt;http://www.mysqlkorea.co.kr/sub.html?mcode=manual&amp;amp;scode=01&amp;amp;m_no=21616&amp;amp;cat1=10&amp;amp;cat2=311&amp;amp;cat3=329&amp;amp;lang=k&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://forums.mysql.com/read.php?103,187048,188748#msg-188748&quot;&gt;http://forums.mysql.com/read.php?103,187048,188748#msg-188748&lt;/a&gt;&lt;/li&gt;
@@ -14924,9 +14924,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>hso</title>
-   <link href="http://lacti.me/2010/10/31/http-serialize-object/"/>
+   <link href="https://lacti.github.io/2010/10/31/http-serialize-object/"/>
    <updated>2010-10-31T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/10/31/http-serialize-object</id>
+   <id>https://lacti.github.io/2010/10/31/http-serialize-object</id>
    <content type="html">&lt;p&gt;http 기반으로 object를 server와 주고 받아 database와 연동, persistence를 구현한 &lt;del&gt;대충만든&lt;/del&gt; 라이브러리이다.&lt;br&gt;
 소스 코드는 &lt;a href=&quot;https://github.com/lacti/hso&quot;&gt;https://github.com/lacti/hso&lt;/a&gt;에 올려두었다.&lt;/p&gt;
 
@@ -14939,9 +14939,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>자바 네트워크 프로그래밍 2 - Socket</title>
-   <link href="http://lacti.me/2010/05/01/java-network-programming-2-socket/"/>
+   <link href="https://lacti.github.io/2010/05/01/java-network-programming-2-socket/"/>
    <updated>2010-05-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/05/01/java-network-programming-2-socket</id>
+   <id>https://lacti.github.io/2010/05/01/java-network-programming-2-socket</id>
    <content type="html">&lt;p&gt;자바 네트워크 프로그래밍을 설명하려면 당연히 IO부터 이야기해야하는 것이 맞겠지만 이왕 저지른거 막장으로 달려보자.&lt;/p&gt;
 
 &lt;h3&gt;Socket&lt;/h3&gt;
@@ -15059,9 +15059,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>자바 네트워크 프로그래밍 1 - 기초</title>
-   <link href="http://lacti.me/2010/05/01/java-network-programming-1-basic/"/>
+   <link href="https://lacti.github.io/2010/05/01/java-network-programming-1-basic/"/>
    <updated>2010-05-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/05/01/java-network-programming-1-basic</id>
+   <id>https://lacti.github.io/2010/05/01/java-network-programming-1-basic</id>
    <content type="html">&lt;p&gt;네트워크라는 것에 대해 깊게 설명할 생각은 없다. 단지 자바 언어에서 &lt;em&gt;어떻게 네트워크 프로그래밍을 할 수 있을까&lt;/em&gt; 정도에 대해 간략하게 소개할 생각이다. 이 글을 보고 관심을 조금만 갖고 구글링해보시면 당연한 이야기이지만 훨씬 잘 설명된 좋은 글이 많을테니, 이 글에서 단순히 흥미유도 차원 글을 쓴다.&lt;/p&gt;
 
 &lt;h3&gt;기초&lt;/h3&gt;
@@ -15125,9 +15125,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>Java ObjectStream의 Input/Ouput Blocking이야기</title>
-   <link href="http://lacti.me/2010/04/29/why-java-ObjectStream-is-blocked/"/>
+   <link href="https://lacti.github.io/2010/04/29/why-java-ObjectStream-is-blocked/"/>
    <updated>2010-04-29T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/04/29/why-java-ObjectStream-is-blocked</id>
+   <id>https://lacti.github.io/2010/04/29/why-java-ObjectStream-is-blocked</id>
    <content type="html">&lt;p&gt;Java의 &lt;code&gt;ObjectInputStream&lt;/code&gt; / &lt;code&gt;ObjectOutputStream&lt;/code&gt;을 사용하여 데이터 통신을 할 때 Client와 Server 양측에서 &lt;code&gt;ObjectInputStream&lt;/code&gt;을 먼저 생성하면 프로그램이 더이상 진행되지 않는 경우가 있는데, 그 이유는 다음과 같다.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;ObjectInputStream&lt;/code&gt;의 ctor 코드를 보면 아래와 같이 &lt;code&gt;readStreamHeader();&lt;/code&gt; 함수를 호출한다.  &lt;/p&gt;
@@ -15193,9 +15193,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>HashSet과 ArrayList</title>
-   <link href="http://lacti.me/2010/03/20/HashSet-and-ArrayList/"/>
+   <link href="https://lacti.github.io/2010/03/20/HashSet-and-ArrayList/"/>
    <updated>2010-03-20T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/03/20/HashSet-and-ArrayList</id>
+   <id>https://lacti.github.io/2010/03/20/HashSet-and-ArrayList</id>
    <content type="html">&lt;p&gt;시간이 없으니 일단 짧게.&lt;/p&gt;
 
 &lt;p&gt;어떤 &lt;code&gt;equals&lt;/code&gt;, &lt;code&gt;hashCode&lt;/code&gt;가 구현된 &lt;code&gt;Entity object&lt;/code&gt;를 &lt;code&gt;HashSet&lt;/code&gt;에 추가한 뒤,
@@ -15221,9 +15221,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>java remotelib 개발</title>
-   <link href="http://lacti.me/2010/02/17/java-remotelib/"/>
+   <link href="https://lacti.github.io/2010/02/17/java-remotelib/"/>
    <updated>2010-02-17T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/02/17/java-remotelib</id>
+   <id>https://lacti.github.io/2010/02/17/java-remotelib</id>
    <content type="html">&lt;p&gt;심심한 상황에서 뭘 코딩할까 고민중에 java rmi app를 만들다가 고생한 기억이 있어서 이걸 좀 쉽게 사용할 수 있는 remote lib를 만들어보자는 생각에 시작하였다.&lt;/p&gt;
 
 &lt;h3&gt;개발 목표&lt;/h3&gt;
@@ -15339,9 +15339,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>꽤 쓸만한 Java Decompiler</title>
-   <link href="http://lacti.me/2010/02/07/recommend-java-decompiler/"/>
+   <link href="https://lacti.github.io/2010/02/07/recommend-java-decompiler/"/>
    <updated>2010-02-07T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/02/07/recommend-java-decompiler</id>
+   <id>https://lacti.github.io/2010/02/07/recommend-java-decompiler</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://jd.benow.ca/&quot;&gt;JD&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;역시 구글 검색순위 1순위는 다르다!&lt;/p&gt;
@@ -15350,9 +15350,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>개발중인 Remote Library 중간보고</title>
-   <link href="http://lacti.me/2010/02/04/developing-java-remote-library/"/>
+   <link href="https://lacti.github.io/2010/02/04/developing-java-remote-library/"/>
    <updated>2010-02-04T00:00:00+00:00</updated>
-   <id>http://lacti.me/2010/02/04/developing-java-remote-library</id>
+   <id>https://lacti.github.io/2010/02/04/developing-java-remote-library</id>
    <content type="html">&lt;p&gt;PHP의 &lt;code&gt;__call method&lt;/code&gt;는 해당 object의 member를 호출했을 때, 그 member가 not implement 상태이면 &lt;code&gt;__call method&lt;/code&gt;로 method name과 arguments를 넘겨주는 그런 신비한 method이다.&lt;br&gt;
 예외처리도 아니고 없는 method에 대해 해당 method 호출 정보를 넘겨받을 수 있는 함수라니! 이건 진정한 proxy class를 제작하기 위한 필수 method라 할 수 있겠다.&lt;/p&gt;
 
@@ -15386,9 +15386,9 @@ Child Window는 &lt;code&gt;SetWindowPos&lt;/code&gt;나 &lt;code&gt;ShowWindow&
  
  <entry>
    <title>함수 값 반환 방법[어셈블리]</title>
-   <link href="http://lacti.me/2009/10/18/how-to-function-returning-value-with-assembly/"/>
+   <link href="https://lacti.github.io/2009/10/18/how-to-function-returning-value-with-assembly/"/>
    <updated>2009-10-18T00:00:00+00:00</updated>
-   <id>http://lacti.me/2009/10/18/how-to-function-returning-value-with-assembly</id>
+   <id>https://lacti.github.io/2009/10/18/how-to-function-returning-value-with-assembly</id>
    <content type="html">&lt;p&gt;함수에서의 값 반환이 실제로 기계어 수준에서는 어떻게 이루어지는지 알아보자.&lt;/p&gt;
 
 &lt;h3&gt;참고&lt;/h3&gt;
@@ -15484,9 +15484,9 @@ vs환경에서 해보면 좀 다를 것 같다.&lt;/p&gt;
  
  <entry>
    <title>Java Graphics와 AffineTransform, 그리고 JScrollPane</title>
-   <link href="http://lacti.me/2009/01/04/Java-Graphics-AffineTransform-and-JScrollPane/"/>
+   <link href="https://lacti.github.io/2009/01/04/Java-Graphics-AffineTransform-and-JScrollPane/"/>
    <updated>2009-01-04T00:00:00+00:00</updated>
-   <id>http://lacti.me/2009/01/04/Java-Graphics-AffineTransform-and-JScrollPane</id>
+   <id>https://lacti.github.io/2009/01/04/Java-Graphics-AffineTransform-and-JScrollPane</id>
    <content type="html">&lt;p&gt;예전에 디비랩 알바를 할 때, 어떤 이미지에 대해 확대, 축소, 이동을 해야할 일이 생겼다.
 &lt;code&gt;MouseEvent&lt;/code&gt; 처리 시 좌표 계산 등, 몇 가지 계산을 해서 Image를 확대, 축소, 이동해서 볼 수 있도록 하였다.&lt;/p&gt;
 
@@ -15544,9 +15544,9 @@ vs환경에서 해보면 좀 다를 것 같다.&lt;/p&gt;
  
  <entry>
    <title>Java Swing을 한다면 1</title>
-   <link href="http://lacti.me/2009/01/03/java-swing-1/"/>
+   <link href="https://lacti.github.io/2009/01/03/java-swing-1/"/>
    <updated>2009-01-03T00:00:00+00:00</updated>
-   <id>http://lacti.me/2009/01/03/java-swing-1</id>
+   <id>https://lacti.github.io/2009/01/03/java-swing-1</id>
    <content type="html">&lt;p&gt;Java Swing에 대해 어떻게 GUI를 배워나가는 지에 대한 이야기를 해보고 싶었다.&lt;br&gt;
 물론 어느 순서가 바른 순서인지는 나도 모르고, 단지 내가 해온 순서는 이렇다는 이야기를 해보고 싶어서 글을 쓴다.&lt;/p&gt;
 
@@ -15675,9 +15675,9 @@ Java Swing에는 수많은 &lt;code&gt;JComponent&lt;/code&gt;가 존재하고, 
  
  <entry>
    <title>eclipse + subversive</title>
-   <link href="http://lacti.me/2008/12/25/eclipse-with-subversive/"/>
+   <link href="https://lacti.github.io/2008/12/25/eclipse-with-subversive/"/>
    <updated>2008-12-25T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/12/25/eclipse-with-subversive</id>
+   <id>https://lacti.github.io/2008/12/25/eclipse-with-subversive</id>
    <content type="html">&lt;p&gt;eclipse는 우연히 만나서 같이 지내오는 녀석이고,
 subversive는 알게 된지는 얼마 안됬는데 굉장히 많이 쓰게 된 녀석이다.&lt;/p&gt;
 
@@ -15750,9 +15750,9 @@ subversive는 알게 된지는 얼마 안됬는데 굉장히 많이 쓰게 된 �
  
  <entry>
    <title>django와 encoding</title>
-   <link href="http://lacti.me/2008/10/18/django-and-encoding/"/>
+   <link href="https://lacti.github.io/2008/10/18/django-and-encoding/"/>
    <updated>2008-10-18T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/10/18/django-and-encoding</id>
+   <id>https://lacti.github.io/2008/10/18/django-and-encoding</id>
    <content type="html">&lt;p&gt;mysql의 encoding은 참 여러 곳에 존재하기 때문에 종종 까먹곤 한다.&lt;br&gt;
 table 자체의 collation과 field의 collation은 늘 인식하고 있는 존재이기는 한데, database 자체도 collation이 있다는 것을 깜빡한다.&lt;/p&gt;
 
@@ -15782,9 +15782,9 @@ table 자체의 collation과 field의 collation은 늘 인식하고 있는 존�
  
  <entry>
    <title>const overloading</title>
-   <link href="http://lacti.me/2008/10/12/const-overloading/"/>
+   <link href="https://lacti.github.io/2008/10/12/const-overloading/"/>
    <updated>2008-10-12T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/10/12/const-overloading</id>
+   <id>https://lacti.github.io/2008/10/12/const-overloading</id>
    <content type="html">&lt;p&gt;c++의 overloading은 c에서 어떤 함수를 단순히 함수의 이름으로만 식별했던 것에 비해 함수의 인자의 type, 개수, 혹은 const/volatile 여부까지 고려해서 식별한다는 것이다.&lt;/p&gt;
 
 &lt;p&gt;즉 linking 시점에서 호출하는 지점과 호출 당하는 지점을 연결해줄 때 호출하는 지점에서 요구하는 함수의 정보(함수 이름, 인자 type, 개수, const/volatile 여부)를 기반으로 함수 table에서 찾아서 그 함수의 주소를 호출할 수 있도록 주소로 변환시켜 주면서 엮어준다는 것이다.&lt;/p&gt;
@@ -15863,9 +15863,9 @@ table 자체의 collation과 field의 collation은 늘 인식하고 있는 존�
  
  <entry>
    <title>Java의 equals의 세계</title>
-   <link href="http://lacti.me/2008/08/31/Java-equals/"/>
+   <link href="https://lacti.github.io/2008/08/31/Java-equals/"/>
    <updated>2008-08-31T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/08/31/Java-equals</id>
+   <id>https://lacti.github.io/2008/08/31/Java-equals</id>
    <content type="html">&lt;ul&gt;
 &lt;li&gt;boxing/unboxing이 지원되는 Java 5 이후부터 숫자형 Wrapper Class 객체에 대해 &lt;code&gt;equals&lt;/code&gt;와 == 연산자는 과연 어떻게 동작할 것인가&lt;/li&gt;
 &lt;li&gt;class 주제에 primitives라고 이야기하는 &lt;code&gt;String class&lt;/code&gt;의 &lt;code&gt;equals&lt;/code&gt;와 == 연산자는 과연 어떻게 동작할 것인가&lt;/li&gt;
@@ -15926,9 +15926,9 @@ table 자체의 collation과 field의 collation은 늘 인식하고 있는 존�
  
  <entry>
    <title>ConsoleHandler와 System.in/out/error의 closing</title>
-   <link href="http://lacti.me/2008/07/28/ConsoleHandler-System-in-out-error-closing/"/>
+   <link href="https://lacti.github.io/2008/07/28/ConsoleHandler-System-in-out-error-closing/"/>
    <updated>2008-07-28T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/07/28/ConsoleHandler-System-in-out-error-closing</id>
+   <id>https://lacti.github.io/2008/07/28/ConsoleHandler-System-in-out-error-closing</id>
    <content type="html">&lt;p&gt;&lt;code&gt;java.util.logging&lt;/code&gt;의 Logger 쓰는 맛을 들이고 있는데
 어느 순간부터 Exception이 나오지를 않는 것이다.&lt;/p&gt;
 
@@ -15966,9 +15966,9 @@ table 자체의 collation과 field의 collation은 늘 인식하고 있는 존�
  
  <entry>
    <title>pintos 기본 구조와 동작 원리</title>
-   <link href="http://lacti.me/2008/04/01/pintos-internal-structure/"/>
+   <link href="https://lacti.github.io/2008/04/01/pintos-internal-structure/"/>
    <updated>2008-04-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/04/01/pintos-internal-structure</id>
+   <id>https://lacti.github.io/2008/04/01/pintos-internal-structure</id>
    <content type="html">&lt;h3&gt;Pintos의 기본 구조&lt;/h3&gt;
 
 &lt;p&gt;Pintos는 가장 기본 기능인 threads를 중심으로 user program, virtual memory, 그리고 file system을 추가하는 구조를 갖는다. 그래서 소스 코드의 분포 역시 기본적인 것들은 threads 디렉토리에 다 있고, 그 밖의 것들은 각각의 디렉토리에 존재하면서 threads에 있는 소스 코드를 참조하는 식으로 되어있다. 그리고 Pintos를 구성하는 데는 필요하지만 과제 항목에는 포함되어있지 않은 기본 library나 device는 별도의 디렉토리에 존재한다.&lt;/p&gt;
@@ -16100,9 +16100,9 @@ table 자체의 collation과 field의 collation은 늘 인식하고 있는 존�
  
  <entry>
    <title>pintos 부팅 과정</title>
-   <link href="http://lacti.me/2008/04/01/pintos-boot/"/>
+   <link href="https://lacti.github.io/2008/04/01/pintos-boot/"/>
    <updated>2008-04-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/04/01/pintos-boot</id>
+   <id>https://lacti.github.io/2008/04/01/pintos-boot</id>
    <content type="html">&lt;p&gt;우리가 일반적으로 사용하는 컴퓨터 내에 존재하는 시스템은 하드 디스크 등의 보조 기억 공간을 갖고 그 기억 공간에 접근하여 동작을 수행하는데, Pintos를 수행하는 bochs는 Pintos를 빌드하여 얻어진 이미지 파일을 하드 디스크 등과 같은 storage로 인식하여 emulating을 수행한다. 하지만 Pintos는 단순히 커널만 존재하기 때문에 우리가 일반적으로 사용하는 storage와 달리 이미지 파일에는 단순히 부팅을 위한 부트 섹터와 커널 이미지만 존재하게 된다.&lt;/p&gt;
 
 &lt;h3&gt;부트로더&lt;/h3&gt;
@@ -16260,9 +16260,9 @@ interrupt table을 초기화했으므로 이제 각 interrupt에 대해 handler�
  
  <entry>
    <title>pintos 환경 구축</title>
-   <link href="http://lacti.me/2008/04/01/make-pintos-environment/"/>
+   <link href="https://lacti.github.io/2008/04/01/make-pintos-environment/"/>
    <updated>2008-04-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/04/01/make-pintos-environment</id>
+   <id>https://lacti.github.io/2008/04/01/make-pintos-environment</id>
    <content type="html">&lt;p&gt;Pintos를 구동시키기 위해서는 먼저 가상 에뮬레이터가 필요하다. Open source 중에 대표적으로 Bochs와 QEMU가 있는데, 설치법이 과제 문서에 기술되어있는 Bochs를 선택하여 설치하였다.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -16474,9 +16474,9 @@ Bochs is exiting with the following message:
  
  <entry>
    <title>gdb 간단 사용법 정리</title>
-   <link href="http://lacti.me/2008/04/01/gdb-simple-help/"/>
+   <link href="https://lacti.github.io/2008/04/01/gdb-simple-help/"/>
    <updated>2008-04-01T00:00:00+00:00</updated>
-   <id>http://lacti.me/2008/04/01/gdb-simple-help</id>
+   <id>https://lacti.github.io/2008/04/01/gdb-simple-help</id>
    <content type="html">&lt;p&gt;GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이므로 gdb는 gdb shell을 제공하고, 사용자는 그 shell에 명령을 입력함으로써 디버깅을 수행할 수 있다.&lt;/p&gt;
 
 &lt;p&gt;먼저 디버깅을 수행하기 위해서는 소스 코드를 컴파일할 때 디버깅 정보를 포함하도록 해야한다. gcc에서 이에 해당하는 옵션은 -g이다. 예를 들어 test.c라는 파일이 있다면 다음과 같이 수행하면 된다.&lt;/p&gt;

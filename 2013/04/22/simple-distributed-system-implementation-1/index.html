@@ -32,8 +32,8 @@
 			<div class="pure-u-1 pure-u-md-1-2 text-right">
 				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
 			</div>
@@ -87,7 +87,7 @@
 
 <p>가장 간단한 master-slave 구조를 보면 다음과 같다.</p>
 
-<p><img src="http://lacti.me/images/mdf_basic.png" alt="master-slave 구조"></p>
+<p><img src="https://lacti.github.io/images/mdf_basic.png" alt="master-slave 구조"></p>
 
 <p>master는 여러 slave들을 관리하고, 실제 작업들은 slave가 처리한다고 보면 된다.
 master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <strong>적절히 slave에게 넘겨서 처리시키고</strong>, <strong>결과를 적절히 받아서 합친다</strong></p>
@@ -108,7 +108,7 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 
 <p>이 때 slave의 상태를 master에게 보고하기 위해 connection을 유지하거나 다시 connection을 맺는 것은 귀찮은 일이므로 다음과 같은 구조를 생각해볼 수 있다.</p>
 
-<p><img src="http://lacti.me/images/mdf_sync_db.png" alt="sync-db 구조"></p>
+<p><img src="https://lacti.github.io/images/mdf_sync_db.png" alt="sync-db 구조"></p>
 
 <p>slave들은 자신의 상태를 주기적으로 state db에 기록하고, master는 state db에 기록된 정보를 참고해서 slave에게 명령을 내린다. 이 경우 master는 slave와 connection을 유지할 필요가 없게 되고 이는 master의 구현 부담을 줄일 수 있을 뿐더러 connectivity가 좋지 않은 master-slave 환경에서 보다 유연하게 동작할 수 있다.</p>
 
@@ -116,7 +116,7 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 
 <p>약간 다른 관점이지만 다음과 같은 모델도 생각해볼 수 있다.</p>
 
-<p><img src="http://lacti.me/images/mdf_stated.png" alt="stated 구조"></p>
+<p><img src="https://lacti.github.io/images/mdf_stated.png" alt="stated 구조"></p>
 
 <p>slave 프로그램이 해야할 일은 두 가지이다. master로부터 받은 job 처리와 master에게 state를 보고하는 것. 이 둘을 나눈 구조라고 생각하면 된다.</p>
 
@@ -178,8 +178,8 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
 					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
 				</div>
@@ -197,7 +197,7 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('create', 'UA-51932355-1', 'lacti.github.io');
 		ga('send', 'pageview');
 	</script>
 </body>

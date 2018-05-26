@@ -30,8 +30,8 @@
 			<div class="pure-u-1 pure-u-md-1-2 text-right">
 				<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 				<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-				<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-				<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+				<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+				<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 				<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 				<a href="/atom.xml" title="atom" rel="nofollow"><i class="fa fa-rss fa-lg"></i></a>
 			</div>
@@ -5742,7 +5742,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 						
 						
 				</p>
-				<div class="content"><p>하재승님께서 <a href="http://lacti.me/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/">던전 앤 파이터 클라이언트 로딩 속도 최적화</a>에서 언급하신 <a href="https://github.com/ipkn/dumpable">dumpable</a> 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 <code>operator =</code>를 사용하여 dumpable한 struct를 만들어준다.</p>
+				<div class="content"><p>하재승님께서 <a href="https://lacti.github.io/2014/05/29/ndc14-dungeon-and-fighter-loader-optimization/">던전 앤 파이터 클라이언트 로딩 속도 최적화</a>에서 언급하신 <a href="https://github.com/ipkn/dumpable">dumpable</a> 라이브러리에 대한 이야기를 해보자. 이 라이브러리는 serializable memory가 가능한 dynamic container와 <code>operator =</code>를 사용하여 dumpable한 struct를 만들어준다.</p>
 
 <p>다만 몇 가지 아쉬운 점이 있었다. </p>
 
@@ -15240,7 +15240,7 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 
 <p>가장 간단한 master-slave 구조를 보면 다음과 같다.</p>
 
-<p><img src="http://lacti.me/images/mdf_basic.png" alt="master-slave 구조"></p>
+<p><img src="https://lacti.github.io/images/mdf_basic.png" alt="master-slave 구조"></p>
 
 <p>master는 여러 slave들을 관리하고, 실제 작업들은 slave가 처리한다고 보면 된다.
 master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <strong>적절히 slave에게 넘겨서 처리시키고</strong>, <strong>결과를 적절히 받아서 합친다</strong></p>
@@ -15261,7 +15261,7 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 
 <p>이 때 slave의 상태를 master에게 보고하기 위해 connection을 유지하거나 다시 connection을 맺는 것은 귀찮은 일이므로 다음과 같은 구조를 생각해볼 수 있다.</p>
 
-<p><img src="http://lacti.me/images/mdf_sync_db.png" alt="sync-db 구조"></p>
+<p><img src="https://lacti.github.io/images/mdf_sync_db.png" alt="sync-db 구조"></p>
 
 <p>slave들은 자신의 상태를 주기적으로 state db에 기록하고, master는 state db에 기록된 정보를 참고해서 slave에게 명령을 내린다. 이 경우 master는 slave와 connection을 유지할 필요가 없게 되고 이는 master의 구현 부담을 줄일 수 있을 뿐더러 connectivity가 좋지 않은 master-slave 환경에서 보다 유연하게 동작할 수 있다.</p>
 
@@ -15269,7 +15269,7 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 
 <p>약간 다른 관점이지만 다음과 같은 모델도 생각해볼 수 있다.</p>
 
-<p><img src="http://lacti.me/images/mdf_stated.png" alt="stated 구조"></p>
+<p><img src="https://lacti.github.io/images/mdf_stated.png" alt="stated 구조"></p>
 
 <p>slave 프로그램이 해야할 일은 두 가지이다. master로부터 받은 job 처리와 master에게 state를 보고하는 것. 이 둘을 나눈 구조라고 생각하면 된다.</p>
 
@@ -15319,7 +15319,7 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 
 <p>일단 구현하기에 앞서 간단히 설계도를 살펴보자.</p>
 
-<p><img src="http://lacti.me/images/mdf_arch.png" alt="구현 설계도"></p>
+<p><img src="https://lacti.github.io/images/mdf_arch.png" alt="구현 설계도"></p>
 
 <p>master에는 여러 slave가 연결한다. 각 연결된 slave는 master 내에 어떤 작업을 수행하는지/했는지 info를 갖는다. master에 command가 들어오면 수행할 work를 만든다. 연결된 slave의 info를 살펴보고 적절한 slave를 선택한 후 work를 보내준다**(distribute)**. 그러면 slave는 그 작업을 처리하고 결과를 master에게 보내주던가 한다.</p>
 
@@ -24407,7 +24407,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li><strong>중간중간 무슨 소리인지 잘 이해가 안 되는 부분이 있었다.</strong>
 
 <ul>
-<li><a href="http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;forum=3026737&amp;thread=2763589449&amp;behavior=click&amp;url=http%3A%2F%2Flacti.me%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;post=1483795001&amp;type=notification.post.moderator&amp;event=email">이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.</a></li>
+<li><a href="http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;forum=3026737&amp;thread=2763589449&amp;behavior=click&amp;url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;post=1483795001&amp;type=notification.post.moderator&amp;event=email">이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.</a></li>
 </ul></li>
 <li>chat의 경우 시야 범위의 broadcasting이 아닌 전체 전달 같은 경우엔 독립적 기능이니 community server를 따로 두어 io를 분산시키는 방법이 유효할지 모르겠는데, broadcasting의 network io를 분리한다는 발상은 좀 이상해보인다. 차라리 io를 전담하는 server를 둔다면 모르겠는데 어차피 분산 서버를 설계하는 상황에서 그게 무슨 큰 의미가 있는지 모르겠다.</li>
 <li>singleton 이야기는 그냥 concurrency control의 어려움을 이야기하려는 것 같은데 multi threading에서 singleton을 쓰려면 lock을 전제로 하거나 tls를 이용한 replica를 생각해야 할텐데 뭘 생각하는 건지 자세히 이야기를 안 해줘서 잘 모르겠다.</li>
@@ -25961,15 +25961,15 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
 
 <p>.net <code>Socket</code>의 <code>BeginReceive</code>, <code>EndReceive</code> 함수를 사용하면 내부에서 pinvoke로 <code>WSARecv</code> 함수를 부르게 된다. <code>WSARecv</code> 함수는 <code>ws2_32.dll</code>에 정의된 함수로 얼핏보기에는 socket 확장 api가 담겨있는 <code>mswsock.dll</code>이 부를 필요가 없어 보인다. 이를 정확히 확인하기 위해 ms symbol server에서 clr 관련 symbol을 받고 다시 profiler를 돌려보았다.</p>
 
-<p><img src="http://lacti.me/images/mswsock_secret_functions.png" alt="functions"></p>
+<p><img src="https://lacti.github.io/images/mswsock_secret_functions.png" alt="functions"></p>
 
 <p>진범이 나온 것 같다. <code>NtDeviceIoControlFile()</code>과 <code>NtRemoveIoCompletion()</code>이 1, 2위로 나왔다. 여기서 <code>NtRemoveIoCompletion()</code> 함수는 <code>GetQueuedCompletionStatus()</code> 때문에 불리는 것으로 추측되니 <code>NtDeviceIoControlFile()</code>의 정체만 밝히면 되겠다.</p>
 
 <p>간단히 calling, called를 확인해보자.</p>
 
-<p><img src="http://lacti.me/images/mswsock_secret_ws2_32_dll.png" alt="ws2_32.dll"></p>
+<p><img src="https://lacti.github.io/images/mswsock_secret_ws2_32_dll.png" alt="ws2_32.dll"></p>
 
-<p><img src="http://lacti.me/images/mswsock_secret_mswsock_dll.png" alt="mswsock.dll"></p>
+<p><img src="https://lacti.github.io/images/mswsock_secret_mswsock_dll.png" alt="mswsock.dll"></p>
 
 <p>원인이 명확해졌다.<br>
 다량의 패킷 수신자가 <code>WSARecv</code>를 부르는 과정에서 <code>ws2_32.dll</code>의 함수가 호출된 것은 당연했다. 하지만 그 과정에서 알 수 없는 오류가 발생했고, 그 오류를 처리하기 위해 불린 <code>NtStatusToSocketError()</code> 함수가 <code>mswsock.dll</code>의 <code>NtDeviceIoControlFile()</code> 함수를 불렀던 것이다.</p>
@@ -26104,7 +26104,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 <p>binary로 serialize하기 위해 만든 파일의 구조를 간단히 보면 다음과 같다.</p>
 
-<p><img src="http://lacti.me/images/binary_xml_each.png" alt="internal structure"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_each.png" alt="internal structure"></p>
 
 <p>위 그림은 하나의 xml 파일에 해당하는 정보를 갖는다. 먼저 한 파일에 대한 <code>header 정보</code> - 파일 길이, 이름, 최종 수정 시각을 갖는다. (최종 수정 시각이 필요한 이유는 이 글 마지막 부분에 설명하겠다.) 그리고 <code>XmlData</code> 영역에 <code>Node</code>와 <code>Attribute</code>를 차례대로 기록하게 된다.</p>
 
@@ -26114,7 +26114,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 <p>궁금해할 사람은 없어보이지만 string이나 list-type은 다음과 같이 serialize했다.</p>
 
-<p><img src="http://lacti.me/images/binary_xml_string_list_type.png" alt="string, list-type"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_string_list_type.png" alt="string, list-type"></p>
 
 <p>이렇게 Serialize한 내용을 <code>BinaryXml</code>이라고 불렀다.</p>
 
@@ -26122,7 +26122,7 @@ xml parsing 시간이 오래 걸리니 이를 해결하려면 parsing을 하지 
 
 <p>이 문제를 해결하기 위해서 BinaryXml 앞 부분에다가 TypeDefine을 넣어주었다. TypeDefine 역시 xml으로 기록이 가능하기 때문에 BinaryXml로 변환이 가능하기 때문이다.</p>
 
-<p><img src="http://lacti.me/images/binary_xml_whole_file.png" alt="string, list-type"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_whole_file.png" alt="string, list-type"></p>
 
 <p>물론 TypeDefine을 BinaryXml으로 기록하기 위해서는 <code>TypeDefine에 대한 TypeDefine</code>이 필요하다. 그래야 <code>NodeIndex</code>와 <code>AttributeIndex</code>를 얻을 수 있으니까. 그 내용을 서버에서는 <code>DefineDefine.xml</code> 이라는 것으로 기술해놨는데 사실 이 부분은 그냥 코드에 박아넣어도 문제가 없었을 것이다.</p>
 
@@ -26160,7 +26160,7 @@ DataChunk를 만드는 과정에서 약간의 번거로움이 있지만 (XmlType
 <li>stack 변수로 attribute 이름이 조합되어 넘어올 수 있으니 잘 integrity를 검사해준다.</li>
 </ol>
 
-<p><img src="http://lacti.me/images/binary_xml_attribute_index_cache.png" alt="attribute index cache"></p>
+<p><img src="https://lacti.github.io/images/binary_xml_attribute_index_cache.png" alt="attribute index cache"></p>
 
 <p>BinaryXml의 각 node에 attribute 개수만큼 배열을 미리 만들어둔다. 그러면 <code>TypeDefine</code>에서 찾은 <code>AttributeIndex</code>로 바로 접근이 가능하기 때문이다. (물론 TypeDefine에서 Attribute를 찾을 때에는 string_map을 쓴다)</p>
 
@@ -32662,8 +32662,8 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 					<a href="/tags/" title="tags"><i class="fa fa-tags fa-lg"></i></a>
 					<a href="https://github.com/lacti" title="github" rel="nofollow"><i class="fa fa-github fa-lg"></i></a>
 					<a href="https://twitter.com/lacti" title="twitter" rel="nofollow"><i class="fa fa-twitter fa-lg"></i></a>
-					<a href="http://www.slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
-					<a href="http://www.linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
+					<a href="https://slideshare.net/lactrious/presentations" title="slideshare" rel="nofollow"><i class="fa fa-toggle-right fa-lg"></i></a>
+					<a href="https://linkedin.com/pub/jaeyoung-choi/99/243/861" title="linkedin" rel="nofollow"><i class="fa fa-linkedin fa-lg"></i></a>
 					<a href="https://facebook.com/lactrious" title="facebook" rel="nofollow"><i class="fa fa-facebook fa-lg"></i></a>
 					<a href="/atom.xml" title="atom"><i class="fa fa-rss fa-lg"></i></a>
 				</div>
@@ -32681,7 +32681,7 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		ga('create', 'UA-51932355-1', 'lacti.me');
+		ga('create', 'UA-51932355-1', 'lacti.github.io');
 		ga('send', 'pageview');
 	</script>
 </body>

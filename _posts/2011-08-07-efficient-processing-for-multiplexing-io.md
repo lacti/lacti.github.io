@@ -89,9 +89,9 @@ void recv_callback (char *lpBuffer) {
 ### multiplexing ###
 
 * 다중 입출력 함수라고 불리는 select 함수를 사용한다. 이 함수는 여러 Socket에 대해 감시를 수행할 수 있고, 적절히 timeout 값을 지정해서 그 시간동안 IO가 없으면 반환해버리는 구조의 함수이다. 따라서 blocking, non blocking 양 쪽으로 모두 사용할 수 있다.
-	* [http://kldp.org/node/112275](http://kldp.org/node/112275)
-	* [http://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select](http://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select)
-	* [http://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select](http://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select)
+	* [https://kldp.org/node/112275](https://kldp.org/node/112275)
+	* [https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select](https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select)
+	* [https://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select](https://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select)
 
 `select`는 이 글에서 다루기는 좀 애매하니까 넘어가자. 간략히 설명하면 여러 IO를 동시에 감시하고 그에 대해 통보 받을 수 있다는 것이다. 이는 asynchronous IO 함수를 쓰지 않고, non blocking IO들을 무의미하게 loop 돌면서 검사하지 않아도 어느정도 효율적으로 IO를 관리할 수 있고, 게다가 동기적으로(하나의 scope 내에서) 로직을 작성할 수 있으므로 코드를 작성하기도 편하다.  
 동기적으로 작성되면 scope에 의해 context(변수 등)가 공유되고 실행 흐름을 파악하기 쉽기 때문에 문제가 발생할 확률이 적기 때문이다. 예를 들어 다음의 코드를 보자.

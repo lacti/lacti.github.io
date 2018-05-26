@@ -18,7 +18,7 @@ tags: concurrency memory study -pub
 
 ### peterson's algorithm ###
 
-[Wiki: Peterson's algorithm](http://en.wikipedia.org/wiki/Peterson's_algorithm)
+[Wiki: Peterson's algorithm](https://en.wikipedia.org/wiki/Peterson's_algorithm)
 
 그냥 눈에 보이는대로 코드가 수행되면 문제가 발생하지 않는데, 비순차 실행에 의해 `flag[my_index] = true; turn = other_index;` 대입의 순서가 뒤집히면 critical section에 두 thread가 진입할 수 있는 문제가 발생한다.
 
@@ -60,9 +60,9 @@ P1: turn = 0;
 
 비순차 실행에 의해 의존성이 없다고 판단되는 연산의 순서가 뒤집히는 것을 방지하기 위해 memory consistency model을 고민해야 한다.
 
-* [WRL RR: Shared MEmory Consistency Models: A Tutorial](http://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf)
-* [Boost: Thread coordination using Boost.Atomic](http://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html)
-* [Cppref: std::memory_order](http://en.cppreference.com/w/cpp/atomic/memory_order)
+* [WRL RR: Shared MEmory Consistency Models: A Tutorial](https://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf)
+* [Boost: Thread coordination using Boost.Atomic](https://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html)
+* [Cppref: std::memory_order](https://en.cppreference.com/w/cpp/atomic/memory_order)
 
 메모리 가시성 개념도 포함되어 있음. fence를 경계로 비순차 수행 가능 범위의 경계가 생김.  
 인텔 x86-64 core를 쓰면 알아서 해주기 때문에 프로그래머가 신경 쓸 필요가 없다.
@@ -82,13 +82,13 @@ P1: turn = 0;
 * CAS, CAS2(CASW), DCAS, TSX, RTM 대충
 * aba problem이 잘 설명되어 있다. CAS를 node pointer로만 하기 때문에 그 주소값만 같으면 해당 주소가 가리키는 객체의 상태가 어떻게 변했어도 작업이 진행될 수 있는 것이 문제.  
   (즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)
-
+w
 즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.
 
 근데 InterlockedSList는 가난한 시절이라 CAS2 못 쓰고 memory alignment해서 남는 하위 4bit를 count로 쓴 것으로 알고 있다.  
 (어설픈 기억으로는 MPMC concurrency queue를 lock free algorithm으로 만들 때 CAS 뭔가 잘못써서 aba problem 발생하면 해당 node가 다른 queue로 들어간 시점에도 뭔가 오동작하여 해당 queue까지 파괴했던 시나리오가 있었는데-_-; 자세히 기억이 안 난다.)
 
-### [hazard pointer](http://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890) ###
+### [hazard pointer](https://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890) ###
 
 오늘 출력해간 논문보다 위 링크가 더 읽기 좋다. 완전 오늘 헛소리한 듯-_- 나중에 다시 자세히 읽어보고 정리하겠음
 

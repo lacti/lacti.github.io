@@ -55,11 +55,11 @@ template programming을 하는 이유가 compile time에 검사해주는 type ch
 
 일단 member data pointer가 어떤 구조를 가졌는지를 설명해야 하는데, 자세한 내용은 대충 이 pdf의 chapter 3에서 확인하고 요점만 이야기해보자.
 
-* [PDF: Inside the C++ object model](http://www.dsi.fceia.unr.edu.ar/downloads/informatica/info_II/c++../inside.the.c++.object.model.pdf)
+* [PDF: Inside the C++ object model](https://www.dsi.fceia.unr.edu.ar/downloads/informatica/info_II/c++../inside.the.c++.object.model.pdf)
 
 member function pointer를 보면, 단순히 어떤 클래스의 함수의 주소 값만 가지고 있으면 될 것 같지만 이게 vfptr를 참조해야 하는지, 그리고 그 상속 구조가 다중 상속 혹은 virtual 상속 구조인지에 따라서 내부 구성이 좀 달라진다. 그런데 이게 c++ 표준에 명세만 있고 구현이 없어서 컴파일러마다 구현체가 제각각이다. (즉 무슨 짓을 해놓는지 모름)
 
-* [Wiki: Thunk (object-oriented programming)](http://en.wikipedia.org/wiki/Thunk#Object-oriented_programming)
+* [Wiki: Thunk (object-oriented programming)](https://en.wikipedia.org/wiki/Thunk#Object-oriented_programming)
 
 위와 동일한 개념이 member data pointer에도 적용된다고 보면 된다. 때문에 member data pointer가 단순 offset_of의 개념이라고 생각하면 안된다. (사실 고백하자면, 이 예제를 이해하는데 위 내용을 다 알아야 할 필요는 없지만 그냥 기회가 되었으니 공부하는 셈 치고 보면 좋다)
 

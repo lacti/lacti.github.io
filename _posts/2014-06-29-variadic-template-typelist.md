@@ -208,5 +208,5 @@ struct visitor<null_type, Delegator> {
 
 그러면 이제 typelist를 수정하는 meta function들을 구현해야 하는데 그건 다음에 해보도록 하겠다.
 
-- [Stackoverflow: Variadic variadic template templates](http://stackoverflow.com/questions/9662632/variadic-variadic-template-templates)
-- [Stackoverflow: Merge two variadic templates in one](http://stackoverflow.com/questions/16648144/merge-two-variadic-templates-in-one)
+- [Stackoverflow: Variadic variadic template templates](https://stackoverflow.com/questions/9662632/variadic-variadic-template-templates)
+- [Stackoverflow: Merge two variadic templates in one](https://stackoverflow.com/questions/16648144/merge-two-variadic-templates-in-one)

@@ -29,7 +29,7 @@ C++ 언어를 가지고 C++스럽게 프로그래밍을 해보자! 는 어떤 �
 
 ### static storage class ###
 
-이야기를 이어가기 위해 **[번역 단위](http://en.wikipedia.org/wiki/Translation_unit_%28programming%29)**에 대한 개념을 대충 알 필요가 있다. 번역단위는 컴파일러가 하나의 obj 파일을 만들어내기 위한 단위라고 보면 된다. c/c++의 경우 include한 header 파일들을 cpp에 다 복사해서 넣어놓고, 전처리기가 macro expand해주고, template engine이 template instantiation한 결과라고 보면 되겠다.
+이야기를 이어가기 위해 **[번역 단위](https://en.wikipedia.org/wiki/Translation_unit_%28programming%29)**에 대한 개념을 대충 알 필요가 있다. 번역단위는 컴파일러가 하나의 obj 파일을 만들어내기 위한 단위라고 보면 된다. c/c++의 경우 include한 header 파일들을 cpp에 다 복사해서 넣어놓고, 전처리기가 macro expand해주고, template engine이 template instantiation한 결과라고 보면 되겠다.
 
 자, 그러면 이제 코드를 보자.
 
@@ -93,7 +93,7 @@ c++스럽게 작성해야 한다면 일단 class를 만들고 보는 경향이 �
 
 물론 더 나아가서 random access iterator에 대해서도 효율적으로 동작할 수 있도록 위 코드를 수정할 수도 있다. iterator_tag와 template의 부분 특수화를 사용하거나 함수 overloading을 사용하면 간단하게 할 수 있다. 이 부분은 EC++ 책에도 잘 나와있으니 이 글에서는 생략하도록 하겠다.
 
-당연한 이야기이지만 algorithm의 [binary_search](http://www.cplusplus.com/reference/algorithm/binary_search/)를 쓰는게 더 낫다. 이미 구현되어있는 것을 또 구현하지 않는 것이 제일 좋다! 그러므로 표준 라이브러리에 대해서는 틈틈이 알아두는게 좋다.
+당연한 이야기이지만 algorithm의 [binary_search](https://www.cplusplus.com/reference/algorithm/binary_search/)를 쓰는게 더 낫다. 이미 구현되어있는 것을 또 구현하지 않는 것이 제일 좋다! 그러므로 표준 라이브러리에 대해서는 틈틈이 알아두는게 좋다.
 
 ### 정리 ###
 

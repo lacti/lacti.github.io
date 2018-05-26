@@ -9,10 +9,10 @@ tags: c++ -pub
 
 지인의 이야기를 들어보니 x64에서 디버깅을 할 경우 Call Stack이 알 수 없게 쌓인다고 한다. 따라서 x64 용 디버깅을 위해 Call Stack Trace 를 만들어본다는 마음으로 글을 읽어보자
 
-`__FUNCSIG__`는 Visual C++ compiler가 제공하는 [Predefined Macro](http://msdn.microsoft.com/en-us/library/b0084kay.aspx)중 하나이다.
+`__FUNCSIG__`는 Visual C++ compiler가 제공하는 [Predefined Macro](https://msdn.microsoft.com/en-us/library/b0084kay.aspx)중 하나이다.
 말 그대로 Function Signature를 `const char *` 형태로 넣어주는 것이다. 컴파일러가 해당 함수를 parsing 하다가 `__FUNCSIG__`를 만나면, code generation을 할 때 그걸 그 Function Signature로 static한 `const char` 배열을 만들고 그 주소값을 넣어주는게 아닐까. 요즘은 신통하게 `_T()` 매크로랑 같이 쓰면 `wchar_t` 형태로도 준다. 만세!
 
-[`__if_exists`](http://msdn.microsoft.com/en-us/library/x7wy9xh3.aspx)는 해당 지점에서 그 symbol이 존재하는지를 확인하기 위한 것이다. 당연히 컴파일러가 컴파일 단계에서 확인하는 것이고, 런타임 용은 아니다. `else` 를 쓸 수는 없고 `__if_not_exists`를 써야 한다.  
+[`__if_exists`](https://msdn.microsoft.com/en-us/library/x7wy9xh3.aspx)는 해당 지점에서 그 symbol이 존재하는지를 확인하기 위한 것이다. 당연히 컴파일러가 컴파일 단계에서 확인하는 것이고, 런타임 용은 아니다. `else` 를 쓸 수는 없고 `__if_not_exists`를 써야 한다.  
 이 문서에서는 this symbol 여부를 확인하기 위해 쓸거다.
 
 Call Stack 을 쌓기 위해 먼저 `StackElement`부터 만들어야한다. 가볍게, 파일명, 줄 수, this 주소 정도를 받아보자.

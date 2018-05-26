@@ -6,7 +6,7 @@ tags: c# data -pub
 
 지난 글에서는 csv 데이터를 binary 파일로 serialize하여 데이터의 loading 속도를 올리는 방법에 대해 알아보았다. 해당 방법은 용량이 큰 csv 파일에 대해서도 효과가 크지만, 작게 분할된 많은 csv 파일을 다시 적절한 크기의 binary 파일로 재구성하여 작업할 때 더욱 효과를 크게 느낄 수 있다.
 
-하지만 csv 파일의 용량이 너무 크거나, 아니면 csv 파일이 너무 많을 경우에는 해당 방법을 사용하기가 어렵다. [.net vm은 x64 모드에서도 단일 객체에 대해 2GB 이상의 크기에 대한 메모리 할당 요청을 하면 `OutOfMemoryException`이 발생](http://stackoverflow.com/questions/1087982/single-objects-still-limited-to-2-gb-in-size-in-clr-4-0)하는데, 위 구조에서는 파일의 내용을 한 번에 `byte[]` 배열로 읽고, 그 결과물을 하나의 `List<T>`에 담는 구조이기 때문이다.
+하지만 csv 파일의 용량이 너무 크거나, 아니면 csv 파일이 너무 많을 경우에는 해당 방법을 사용하기가 어렵다. [.net vm은 x64 모드에서도 단일 객체에 대해 2GB 이상의 크기에 대한 메모리 할당 요청을 하면 `OutOfMemoryException`이 발생](https://stackoverflow.com/questions/1087982/single-objects-still-limited-to-2-gb-in-size-in-clr-4-0)하는데, 위 구조에서는 파일의 내용을 한 번에 `byte[]` 배열로 읽고, 그 결과물을 하나의 `List<T>`에 담는 구조이기 때문이다.
 
 또한 이렇게 loading 시간을 단축한다고 해도 원본 데이터의 크기가 아주 클 경우에는 줄어든 loading 시간도 클 수 밖에 없다. 그리고 binary로 serialize/deserialize하는 기계적인 코드를 매번 수작업으로 입력해야 하는 것도 불필요한 부담이다.
 
@@ -51,7 +51,7 @@ itemsList.SelectMany(e =>
 
 하지만 `GroupBy()`나 `OrderBy()` 연산자 등 stream에 존재하는 모든 데이터를 buffer에 담고 작업을 처리해야하는 연산자의 경우에는 위 collection에 존재하는 모든 데이터를 담기 위한 내부 buffer를 할당해야 하므로 이 크기가 제한을 넘어가 프로그램이 정상 동작하지 않을 수 있다.
 
-.NET Framework 4.5부터는 [gcAllowVeryLargeObjects](http://msdn.microsoft.com/en-us/library/hh285054.aspx) 옵션이 추가되었으므로 이 옵션을 통해 문제를 회피할 수 있다고도 한다.
+.NET Framework 4.5부터는 [gcAllowVeryLargeObjects](https://msdn.microsoft.com/en-us/library/hh285054.aspx) 옵션이 추가되었으므로 이 옵션을 통해 문제를 회피할 수 있다고도 한다.
 
 #### data server
 
@@ -159,7 +159,7 @@ var items = provider.RetrieveItems();
 - 서버는 데이터를 모두 읽어서 메모리에 올려놓는다.
 - 그리고 쿼리 수행을 위한 Service(IPC 등)를 시작한다.
 - 클라이언트는 수행할 LINQ에 대해 `ExpressionTree`를 만든다.
-- [ExpressionTree Serializer](http://expressiontree.codeplex.com/)를 사용하여 ExpressionTree를 서버로 전달한다.
+- [ExpressionTree Serializer](https://expressiontree.codeplex.com/)를 사용하여 ExpressionTree를 서버로 전달한다.
 - 서버는 전달 받은 `ExpressionTree` 객체에 대해 Query를 복원해서 읽어놓은 데이터에 대해 쿼리를 수행한다. 그리고 그 결과를 클라이언트에게 반환한다.
 - 클라이언트는 결과를 받아서 적절히 보여준다.
 
@@ -167,7 +167,7 @@ var items = provider.RetrieveItems();
 
 `ExpressionTree` 자체는 Serializable하지 않으니 외부 라이브러리의 도움을 받는다. 그 외에는 위 IPC 예제와 동일하게 쿼리에 대한 `OperationContract` 하나 만들어주고 그 수행 결과를 반환 받도록 하면 된다. 이에 대해서는 이미 다음 라이브러리들이 적절한 예제를 구현해 놓았다.
 
-- [ExpressionTree Serializer](http://expressiontree.codeplex.com/)
+- [ExpressionTree Serializer](https://expressiontree.codeplex.com/)
 - [Serialize.Linq](https://github.com/esskar/Serialize.Linq)
 
 #### binary serializer
@@ -239,9 +239,9 @@ while (offset < bytes.Length)
 
 Reflection.Emit 관련된 내용을 여기서 서술하면 너무 길어질 수 있으므로 일단 넘어가도록 하겠다.
 
-- [Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit](http://www.codeproject.com/Articles/13337/Introduction-to-Creating-Dynamic-Types-with-Reflec)
-- [Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit: Part 2](http://www.codeproject.com/Articles/13969/Introduction-to-Creating-Dynamic-Types-with-Refl)
-- [Codeproject: Fast Dynamic Property Access with C#](http://www.codeproject.com/Articles/9927/Fast-Dynamic-Property-Access-with-C)
+- [Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit](https://www.codeproject.com/Articles/13337/Introduction-to-Creating-Dynamic-Types-with-Reflec)
+- [Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit: Part 2](https://www.codeproject.com/Articles/13969/Introduction-to-Creating-Dynamic-Types-with-Refl)
+- [Codeproject: Fast Dynamic Property Access with C#](https://www.codeproject.com/Articles/9927/Fast-Dynamic-Property-Access-with-C)
 
 #### 마무리
 
@@ -253,4 +253,4 @@ Reflection.Emit 관련된 내용을 여기서 서술하면 너무 길어질 수 
 - 가공된 데이터에 대한 cache
 - 데이터베이스의 규격으로 담기 힘든 데이터
 
-등에 대해서는 위와 같은 방법으로 간단히 데이터 서버를 구축해서 사용하는 것도 괜찮지 않을까 생각한다. 일종의 [Data Virtualization](http://en.wikipedia.org/wiki/Data_virtualization) 인 셈이다.
+등에 대해서는 위와 같은 방법으로 간단히 데이터 서버를 구축해서 사용하는 것도 괜찮지 않을까 생각한다. 일종의 [Data Virtualization](https://en.wikipedia.org/wiki/Data_virtualization) 인 셈이다.

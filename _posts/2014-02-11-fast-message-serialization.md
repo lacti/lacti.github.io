@@ -4,7 +4,7 @@ title: 빠른 메시지 만들기
 tags: c++ message -pub
 ---
 
-[Cap'n Proto](http://kentonv.github.io/capnproto/)와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까?
+[Cap'n Proto](https://kentonv.github.io/capnproto/)와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까?
 
 이를 위해 잠깐 네트워크로 정보를 전달하는 과정을 생각해보자.
 

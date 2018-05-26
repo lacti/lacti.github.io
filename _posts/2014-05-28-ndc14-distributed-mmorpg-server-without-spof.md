@@ -4,9 +4,9 @@ title: 프로젝트K 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버
 tags: ndc14 python distributed -pub
 ---
 
-{% oembed http://www.slideshare.net/sublee/spof-mmorpg %}
+{% oembed https://www.slideshare.net/sublee/spof-mmorpg %}
 
-* [이흥섭](http://subl.ee/)
+* [이흥섭](https://subl.ee/)
 
 ### 요약 ###
 
@@ -18,7 +18,7 @@ tags: ndc14 python distributed -pub
 
 * 실시간 동기화되는, 영속성 있고, 심리스인, 단일 세계를 구현해보자.
 * 높은 가용성, 높은 가용률, 높은 신축성이 목표
-* **따라서 [SPOF](http://en.wikipedia.org/wiki/Single_point_of_failure)는 허용하지 않는다.**
+* **따라서 [SPOF](https://en.wikipedia.org/wiki/Single_point_of_failure)는 허용하지 않는다.**
 
 ### 구현 ###
 
@@ -30,7 +30,7 @@ tags: ndc14 python distributed -pub
 * inter-server communication
 	* broker 없이 전 서버를 그냥 다 연결했다.
 	* 하지만 어떤 서버들과 연결해야 하는지 주소록은 필요하니까 주소 교환용 broker는 하나 뒀다.
-	* [ØMQ](http://zeromq.org/)를 사용하여 서버간 통신
+	* [ØMQ](https://zeromq.org/)를 사용하여 서버간 통신
 		* round robin 방식을 사용하면 아무 node에게나 message를 전달한다.
 		* pub/sub 방식을 사용하면 해당 channel을 구독한 대상에게만 message를 전달한다.
 			* subscriber 정보가 publisher에게 동기화되어, publisher는 해당 channel을 구독한 subscriber가 있을 때에만 정보를 보내고, 없으면 정보를 보내지 않는다.

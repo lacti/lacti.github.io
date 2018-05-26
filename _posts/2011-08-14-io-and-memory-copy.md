@@ -25,7 +25,7 @@ tags: io memory -pub
 IO 의 효율을 이야기할 때는 메모리 관점 역시 빼 놓을 수가 없다.
 IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때문인데, 그 이유는 가상 메모리(virtual memory)를 사용하기 때문이다.
 
-[가상 메모리](http://en.wikipedia.org/wiki/Virtual_memory)가 무엇인가?  
+[가상 메모리](https://en.wikipedia.org/wiki/Virtual_memory)가 무엇인가?  
 간단히 말하면, 운영체제가 각 프로세스에게 가상의 메모리 주소 체계를 제공하고, 그 가상 메모리 공간이 실제 물리 메모리 공간과 마법같이 연결(mapping)되어 프로세스가 메모리에 접근할 때 주소 변환 과정을 거쳐 실제 물리 메모리에 접근 가능하게 해주는 것이다.
 
 이게 뭐가 좋은가?
@@ -113,8 +113,8 @@ Java 의 IO 가 느린 이유가 여기있다.
 그렇다고 해도 저 문제를 한 번에 해결할 수는 없다. IO 요청과 메모리 Paging 수행의 IRQL 문제로 인해서 IO 요청이 일어날 때 해당 메모리가 Swap out 되어있으면 안되기 때문이다.  
 (이건 Windows 에만 해당되는 것 같고, 사실 그마저도 아직 잘 모르겠어서 공부가 더 필요하다.)
 
-* [http://studyrespire.tistory.com/tag/IRQL](http://studyrespire.tistory.com/tag/IRQL)
-* [http://bugtruck.blogspot.com/2009/03/non-paged-memory.html](http://bugtruck.blogspot.com/2009/03/non-paged-memory.html)
+* [https://studyrespire.tistory.com/tag/IRQL](https://studyrespire.tistory.com/tag/IRQL)
+* [https://bugtruck.blogspot.com/2009/03/non-paged-memory.html](https://bugtruck.blogspot.com/2009/03/non-paged-memory.html)
 
 커널이 유저 영역의 메모리에다가 결과를 직접 넣어주고 싶어도 해당 메모리가 swap out이 되어버린다면 그 처리가 애매해진다는 것. 그 이유는 디스크로 내려간 메모리를 물리 메모리로 올려주는 작업을 처리하는 것도 interrupt에 의한 것이고, IO 요청을 처리하는 것도 interrupt이기 때문이다.  
 (물론 지연된 수행 방식에 따라 interrupt handler 에서는 최소한의 작업만 수행하고 실질적인 IO 드라이버가 동작하는건 kernel thread 에서 수행을 하겠지만)

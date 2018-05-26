@@ -13,7 +13,7 @@ tags: java -pub
 
 어떤 작업에 timeout을 걸기 위해서는 적어도 수행 thread과 timeout을 걸어주는 thread가 분리되어야 한다. 간단하게 fork-join model을 생각해보자면 수행할 task는 fork된 thread에게 맡기고, join하는 main thread에서 join을 얼마나 기다려줄지 timeout을 지정해준다고 생각하면 되겠다.
 
-java에서도 1.7부터 [fork/join pool](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ForkJoinPool.html)을 지원해주지만, 본 글에서는 안 다룬다.
+java에서도 1.7부터 [fork/join pool](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ForkJoinPool.html)을 지원해주지만, 본 글에서는 안 다룬다.
 
 일단 무엇을 작업해서 반환할지에 대한 `FutureTask`를 구현한다. `FutureTask`는 이름 그대로 Future + Task이다. 즉 Task를 수행한 결과를 Future로 받아볼 수 있는 구조로, 생성자로 `Callable` 객체를 받고 수행을 위한 `run()` 함수와 결과 값을 받기 위한 `get()` 함수를 갖는다.
 

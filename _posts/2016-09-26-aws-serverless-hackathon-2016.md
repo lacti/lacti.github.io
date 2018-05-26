@@ -7,8 +7,8 @@ published: true
 
 작년에 참가하지 못했던 [serverless gaming on aws](https://aws.amazon.com/ko/events/gaming-on-aws/seoul-02/hackathon/)을 올해는 드디어 참가할 수가 있었다. 개인적으로 행사에 대한 참가 소회를 생생하게 밝힐 자신은 없으므로 같이 참가했던 분의 글을 소개하는 것으로 넘어가려고 한다.
 
-- [2015년: Serverless 실시간 대전게임](http://hyunjong-lee.github.io/tech/2015/09/16/AWS-Lambda-Serverless-Turn-Game.html)
--  [2016년: Gaming on AWS Hackathon 참가 후기](http://hyunjong-lee.github.io/tech/2016/09/25/Gaming-on-AWS-Hackathon-2nd.html)
+- [2015년: Serverless 실시간 대전게임](https://hyunjong-lee.github.io/tech/2015/09/16/AWS-Lambda-Serverless-Turn-Game.html)
+-  [2016년: Gaming on AWS Hackathon 참가 후기](https://hyunjong-lee.github.io/tech/2016/09/25/Gaming-on-AWS-Hackathon-2nd.html)
 
 ### game-server-less
 
@@ -22,7 +22,7 @@ published: true
 
 ### aws serverless
 
-그러던 와중에 aws에서 web service에 대해서는 serverless를 쉽게 만들 수 있는 방법이 제안되었다. [api gateway](https://aws.amazon.com/lambda/)와 [lambda](https://aws.amazon.com/lambda/)로 url endpoint에 대해 어떤 동작을 처리할 지에 대해 [함수 수준으로 명시](http://martinfowler.com/articles/serverless.html)할 수 있게 되었고 이를 [놀라운 도구: chalice](https://github.com/awslabs/chalice)를 통해서 간편하게 개발할 수 있게 해주었다.
+그러던 와중에 aws에서 web service에 대해서는 serverless를 쉽게 만들 수 있는 방법이 제안되었다. [api gateway](https://aws.amazon.com/lambda/)와 [lambda](https://aws.amazon.com/lambda/)로 url endpoint에 대해 어떤 동작을 처리할 지에 대해 [함수 수준으로 명시](https://martinfowler.com/articles/serverless.html)할 수 있게 되었고 이를 [놀라운 도구: chalice](https://github.com/awslabs/chalice)를 통해서 간편하게 개발할 수 있게 해주었다.
 
 이제 restful api는 flask 기반의 서버 코드를 만들고 deploy만 해서 serverless한 service 구축이 가능해졌다.
 
@@ -60,7 +60,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
 간단한 게임이 기획되었고, 시스템은 다음과 같이 설계되었다.
 
 1. client를 시작하면 모든 client가 지정된 rabbitmq의 topic에 subscribe하고, server queue에 연결한다. (by [stomp](https://github.com/jasonrbriggs/stomp.py)) 
-2. client가 server queue에 message를 넣으면, 이 queue를 대기하고 있는 [recurring lambda](http://theburningmonk.com/2016/04/aws-lambda-use-recursive-function-to-process-sqs-messages-part-1/)가 그 message에 대응되는 handler를 수행한다.
+2. client가 server queue에 message를 넣으면, 이 queue를 대기하고 있는 [recurring lambda](https://theburningmonk.com/2016/04/aws-lambda-use-recursive-function-to-process-sqs-messages-part-1/)가 그 message에 대응되는 handler를 수행한다.
 3. 2)의 handler 결과를 client topic에 publish한다. 이제 client들은 client topic으로부터 message를 수신할 수 있다.
 
 시간상 '한 판'의 개념이 존재하는 mo 형태의 게임이 아니라 mmo 형태의 게임이 되면서 2)에서 수행되는 lambda가 사실상 server의 역할을 하였지만, 다음의 부분에서 serverless로의 의의를 갖을 수 있다고 생각했다.

@@ -79,7 +79,7 @@ void add_entry()
 결과도 굉장히 빠르게 나오고, 제대로 actual과 expect가 같게 나온다. `atomic_int::operator++ ()`은 내부에서 `atomic_fetch_add()` 함수를 부르게 된다. 여기서 memory_order를 지정할 수 있는데  windows api는 (arm을 사용하지 않을 경우) memory order가 뭐인지와 상관없이 `_InterlockedExchangeAdd()` Intrinsic 함수를 부른다. (물론 기본 memory_order 값은 `memory_order_seq_cst`이다)
 
 
-세 번째 해결책으로 넘어가기 전에 두 번째 해결책에서 배운 atomic을 사용하여 첫 번째 해결책의 성능을 개선해보자. lock을 직접 만들어서 성능을 개선하는 것이다. [Cppref: atomic_flag](http://en.cppreference.com/w/cpp/atomic/atomic_flag)
+세 번째 해결책으로 넘어가기 전에 두 번째 해결책에서 배운 atomic을 사용하여 첫 번째 해결책의 성능을 개선해보자. lock을 직접 만들어서 성능을 개선하는 것이다. [Cppref: atomic_flag](https://en.cppreference.com/w/cpp/atomic/atomic_flag)
 
 ```cpp
 volatile int counter;

@@ -4,7 +4,7 @@ title: Classical Inheritance in JavaScript
 tags: javascript
 ---
 
-[Classical Inheritance in JavaScript](http://javascript.crockford.com/inheritance.html)
+[Classical Inheritance in JavaScript](https://javascript.crockford.com/inheritance.html)
 
 JavaScript: The World's Most Misunderstood Programming Language을 쓴 Douglas Crockford란 분이 쓴 글인데 지난 번에 귀찮아서 안 읽었다가 요번에 읽어보니까 꽤 좋은 내용이다.  
 javascript에서 객체지향적 구성이 필요할까에 대해 의문이 있지만 재사용성을 고려해볼 때 생각해볼만한 주제이므로 알아두는 것도 좋겠다.

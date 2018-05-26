@@ -83,7 +83,7 @@ void request_in_client (UPDATEAREA area) {
 이걸 해결하기 위한 가장 간단한 방법은,
 1. 무한 새로고침 (동기적 해결법)
 2. Ajax polling (비동기적 해결법)
-3. long-held HTTP Request ([COMET](http://en.wikipedia.org/wiki/Comet_%28programming%29))
+3. long-held HTTP Request ([COMET](https://en.wikipedia.org/wiki/Comet_%28programming%29))
 4. Web Socket
 
 1번은 설명 안해도 알 것이고, 3, 4번은 여기서 설명할 내용은 아니다. 이 글에서는 2번에 대해서 설명하겠다.
@@ -141,4 +141,4 @@ void request_in_client (UPDATEAREA area) {
 * 웹 서버 쪽 프로그래밍이야 Server-Side Script 로 각 클라이언트간 동기화 로직만 잘 짜주면 되니까 이건 그냥 코딩이고,
 * 클라이언트 쪽 프로그래밍이라면 Ajax나 WebSocket 관련 라이브러리를 가져다 쓰는게 좋겠다.
 
-난 전통적인 [prototypejs](http://prototypejs.org) 유저라서 잘 모르겠지만, 대세가 [jQuery](http://jquery.com) 라고 하니 그 쪽을 공부해보는 것도 좋겠다.
+난 전통적인 [prototypejs](https://prototypejs.org) 유저라서 잘 모르겠지만, 대세가 [jQuery](https://jquery.com) 라고 하니 그 쪽을 공부해보는 것도 좋겠다.

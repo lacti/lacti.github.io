@@ -28,6 +28,6 @@ RMI를 사용하다가 `RemoteException`이 발생할 때 보면, stack trace에
 
 ### 참고 ###
 
-* http://java.sun.com/j2se/1.4.2/docs/guide/reflection/proxy.html
-* http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/Proxy.html
-* http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html
+* https://java.sun.com/j2se/1.4.2/docs/guide/reflection/proxy.html
+* https://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/Proxy.html
+* https://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html

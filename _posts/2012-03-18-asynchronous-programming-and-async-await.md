@@ -87,4 +87,4 @@ async call_result request_call(call_context ctx) {
 
 ### 참고 ###
 
-* [C# 5 Async, Part 1: Simplifying Asynchrony – That for which we await](http://reedcopsey.com/2010/10/28/c-5-async-part-1-simplifying-asynchrony-that-for-which-we-await)
+* [C# 5 Async, Part 1: Simplifying Asynchrony – That for which we await](https://reedcopsey.com/2010/10/28/c-5-async-part-1-simplifying-asynchrony-that-for-which-we-await)

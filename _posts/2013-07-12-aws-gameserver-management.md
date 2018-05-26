@@ -4,7 +4,7 @@ title: AWS를 이용한 서버 운영
 tags: server slide
 ---
 
-{% oembed http://www.slideshare.net/lactrious/aws-gameserver-management %}
+{% oembed https://www.slideshare.net/lactrious/aws-gameserver-management %}
 
 * [github: source code](https://github.com/lacti/Lz/tree/v0.2)
 

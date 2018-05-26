@@ -173,7 +173,7 @@ void register_all() {
 }
 ```
 
-이렇듯 template으로 최대한 일반화된 프로그래밍을 하고, 이 수행 흐름을 runtime까지 끌어올 일이 있다면 적절히 type erasure 기법을 써서 프로그래밍을 해주면 되겠다. 사실 위 구현체는 [std::function](http://en.cppreference.com/w/cpp/utility/functional/function)에 구현되어 있으니 이를 가져다 쓰는 것이 제일 좋다.
+이렇듯 template으로 최대한 일반화된 프로그래밍을 하고, 이 수행 흐름을 runtime까지 끌어올 일이 있다면 적절히 type erasure 기법을 써서 프로그래밍을 해주면 되겠다. 사실 위 구현체는 [std::function](https://en.cppreference.com/w/cpp/utility/functional/function)에 구현되어 있으니 이를 가져다 쓰는 것이 제일 좋다.
 
 ### 과제 1: dispatcher ###
 

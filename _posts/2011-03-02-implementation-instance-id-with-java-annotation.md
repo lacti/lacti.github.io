@@ -77,4 +77,4 @@ public static int generateNextIndex() {
 
 물론 `callerClassName`에서 잘못된 class 이름을 얻을 경우에 대비해서 예외처리 코드를 추가했지만 이는 `Class#forName` 함수가 반드시 예외를 처리하게 하는(명시적 예외처리) 구조이므로 try-catch 문을 작성한 것이지 위 경우에서는 예외가 발생할 가능성이 없다.
 
-본 문서에서는 [Java Annotation](http://en.wikipedia.org/wiki/Annotation#Java_annotations)의 문법에 대해 설명하는 것이 취지가 아니므로, 이 정도로 글을 마친다.
+본 문서에서는 [Java Annotation](https://en.wikipedia.org/wiki/Annotation#Java_annotations)의 문법에 대해 설명하는 것이 취지가 아니므로, 이 정도로 글을 마친다.

@@ -159,4 +159,4 @@ ea1.for_each(ints.end(), [=] (int v) {
 
 template 인자로 받게되는 것은 암시적 interface가 요구되기 때문에 컴파일 타임에서의 느슨한 결합이 요구될 때 쓰면 좋다. 그리고 상속이라는 것을 통해 기능 확장, 혹은 접근 제한 등을 적절히 혼합하여 사용하면 재미난 많은 것을 할 수 있다.
 
-더 나아가서 [CRTP](http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.
+더 나아가서 [CRTP](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.

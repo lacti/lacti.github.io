@@ -68,7 +68,7 @@ struct function_traits<R (*)(T1, T2)> {
 };
 ```
 
-위 코드는 [boost::function_traits](http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/reference/function_traits.html)에서 필요한 부분만 발췌한 코드이다. 설명을 위해서 가져온 코드이고, 그냥 [boost type_traits library](http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html)를 가져다 쓰는게 더 좋다.
+위 코드는 [boost::function_traits](https://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/reference/function_traits.html)에서 필요한 부분만 발췌한 코드이다. 설명을 위해서 가져온 코드이고, 그냥 [boost type_traits library](https://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html)를 가져다 쓰는게 더 좋다.
 
 함수 type으로부터 반환 type, 인자 type들을 얻어낼 수 있게 되었으니 이제 Adapter에 넣어주기만 하면 된다. 그 부분에 대해서도 helper class를 만들어보자.
 
@@ -124,9 +124,9 @@ template의 부분 특수화와 단위 전략(unit policy)을 공부하면 충�
 
 사실 오늘 구현한 내용들은 어느 정도 표준에 포함되었거나 boost에 있는 내역들이다. 따라서 다음의 구현체를 찾아보며 공부하는 것을 적극 추천한다.
 
-* [Cppref: std::bind](http://en.cppreference.com/w/cpp/utility/functional/bind)
-* [Cppref: type_traits](http://en.cppreference.com/w/cpp/header/type_traits)
-* [boost: type_traits library](http://www.boost.org/doc/libs/1_54_0/libs/type_traits/doc/html/index.html")
+* [Cppref: std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)
+* [Cppref: type_traits](https://en.cppreference.com/w/cpp/header/type_traits)
+* [boost: type_traits library](https://www.boost.org/doc/libs/1_54_0/libs/type_traits/doc/html/index.html")
 
 
 지금까지의 내용은 compiler time에서 일어나는 generic programming 이야기였다. 이를 runtime에서 하나의 type으로 모아서 작업하기 위한 type erasure을 오늘 다룰 것이다.

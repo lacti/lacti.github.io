@@ -15,8 +15,8 @@
 # Create a file named _references.md in your Jekyll site root,
 # then add your markdown reference-style link definitions to it.
 # For example:
-#   [google]: http://www.google.com  "Google it!"
-#   [wiki]: http://wikipedia.org  "Online Encyclopedia"
+#   [google]: https://www.google.com  "Google it!"
+#   [wiki]: https://wikipedia.org  "Online Encyclopedia"
 #   [id]: url  "tooltip"
 #
 # Lines beginning with a hash character will be ignored, so you can

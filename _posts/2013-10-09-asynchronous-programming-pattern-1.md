@@ -56,8 +56,8 @@ async_work1([] () {
 
 async/then 패턴은 task continuation을 생각하면 좋다. 비동기 작업을 추상화한 객체가 있고, 그 객체의 method chaining으로 이후 할 작업을 연결하는 형태이다.
 
-* [MSDN: Continuation Tasks](http://msdn.microsoft.com/en-us/library/vstudio/ee372288.aspx)
-* [A Standardized Representation of Asynchronous Operations](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3558.pdf)
+* [MSDN: Continuation Tasks](https://msdn.microsoft.com/en-us/library/vstudio/ee372288.aspx)
+* [A Standardized Representation of Asynchronous Operations](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3558.pdf)
 
 즉 asynchronous하게 호출된 작업 뒤에 할 일을 이어서 붙이는 것이다.
 
@@ -86,7 +86,7 @@ execute() {
 ```
 
 문제가 발생할 수 있는 부분은 _next를 대입하는 곳과 _next를 호출하는 부분이다. 이 부분만 lock으로 잘 감싸서 동시성 문제를 해결하면 되겠다. 아래 링크의 자료를 보면 vs2012 기준 future는 내부에 StateManger라는 객체가 lock으로 보호하는 구조로 작성되어 있다. 같은 방법으로 `then()`으로 연결할 함수도 보호해줄 수 있을 것이다.  
-[async, future, promise in c++](http://www.slideshare.net/lactrious/synchronizing-concurrent-threads)
+[async, future, promise in c++](https://www.slideshare.net/lactrious/synchronizing-concurrent-threads)
 
 async/then 패턴은 stateless한 일련의 비동기 작업을 서술할 때 편하다.
 

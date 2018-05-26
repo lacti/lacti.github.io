@@ -8,22 +8,22 @@ tags: async io study -pub
 
 ### async, future ###
 
-* [future, promise](http://en.cppreference.com/w/cpp/thread/future)는 비동기로 실행되는 수행 결과를 받아오기 위한 개념이다.
-* [`async`](http://en.cppreference.com/w/cpp/thread/async)는 내부적으로 `promise`를 사용하여 결과를 `set()`할 비동기 작업을 수행시키고, future를 반환한다.
-* [`packaged_task`](http://en.cppreference.com/w/cpp/thread/packaged_task)는 비동기 작업을 수행할 수 있는 task 객체를 만들어준다. task 객체로부터 future를 가져올 수 있다.
-* vs2012 기준으로 내부 구현 분석한 내용: [async, future, promise in c++](http://www.slideshare.net/lactrious/synchronizing-concurrent-threads)
+* [future, promise](https://en.cppreference.com/w/cpp/thread/future)는 비동기로 실행되는 수행 결과를 받아오기 위한 개념이다.
+* [`async`](https://en.cppreference.com/w/cpp/thread/async)는 내부적으로 `promise`를 사용하여 결과를 `set()`할 비동기 작업을 수행시키고, future를 반환한다.
+* [`packaged_task`](https://en.cppreference.com/w/cpp/thread/packaged_task)는 비동기 작업을 수행할 수 있는 task 객체를 만들어준다. task 객체로부터 future를 가져올 수 있다.
+* vs2012 기준으로 내부 구현 분석한 내용: [async, future, promise in c++](https://www.slideshare.net/lactrious/synchronizing-concurrent-threads)
 
 vs2012 쪽 문제인지 `std::async`를 수행할 때 `std::launch `enum 값을 주지 않으면 `std::launch::any`로 수행하게 되는데 이 때 `deferred`로 수행되면서 `future`를 통해 값을 가져오게 될 경우 문제가 발생하는 것 같다. 내가 개념을 잘못 이해하고 있는 것인지 모르겠는데 문제가 발생하지 않으려면 `std::launch::async`로 policy를 주고 실행해야 할 듯
 
-* [Stackoverflow: VS11 with std::future - is this a bug?](http://stackoverflow.com/questions/9389409/vs-11-with-stdfuture-is-this-a-bug)
+* [Stackoverflow: VS11 with std::future - is this a bug?](https://stackoverflow.com/questions/9389409/vs-11-with-stdfuture-is-this-a-bug)
 
 
 ### spawn ###
 
-* [Wiki: Cilk](http://en.wikipedia.org/wiki/Cilk)
+* [Wiki: Cilk](https://en.wikipedia.org/wiki/Cilk)
 * fork/join
-	* [minjang: 왜 fork, join이라는 이름일까?](http://minjang.egloos.com/834885)
-	* [Java: Fork/Join](http://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html)
+	* [minjang: 왜 fork, join이라는 이름일까?](https://minjang.egloos.com/834885)
+	* [Java: Fork/Join](https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html)
 
 상호 의존관계가 없는 작업 집합을 실행할 때, 작업 구간을 여러 개로 나누고(partitioning), 해당 작업을 수행할 작업자(thread)를 만들어서(spawn/fork) 동시에 작업이 수행되도록 한다. 그리고 모든 작업자의 작업이 완료될 때까지 기다려서(join) 그 결과를 하나로 합친다.
 
@@ -31,11 +31,11 @@ vs2012 쪽 문제인지 `std::async`를 수행할 때 `std::launch `enum 값을 
 
 비동기 작업을 위해 작업을 수행할 Task를 만든다. 해당 Task가 완료되면 다음 작업을 수행할 수 있도록 Task를 엮는다(Task Continuation)
 
-* [MSDN: Task Parallel Library](http://msdn.microsoft.com/en-us/library/dd460717.aspx)
+* [MSDN: Task Parallel Library](https://msdn.microsoft.com/en-us/library/dd460717.aspx)
 
 특정 Task의 결과를 획득할 수 있을 때까지 대기한다. 이 때 할 수 있는 다른 일이 있다면 찾아본다(await). 이는 단순히 compiler가 await하는 코드들을 하나의 state machine으로 묶어서 state를 변화시키면서 해당 함수를 계속 불러주는 방식으로 만들어주는 것이다.
 
-* [Dixin: Understanding C# async / await Compliation](http://weblogs.asp.net/dixin/archive/2012/11/02/understanding-c-async-await-1-compilation.aspx)
+* [Dixin: Understanding C# async / await Compliation](https://weblogs.asp.net/dixin/archive/2012/11/02/understanding-c-async-await-1-compilation.aspx)
 
 실제 코드가 각각 어떤 thread에서 수행될 수 있는지에 대해서는 약간 복잡할 수 있는데 이에 대해서는 다루지 않았다. 요약하면, 비동기 logic을 동기적으로 작성하기 위한 async/await는 결과적으로 state machine code로 compiler에 의해 변환되어 .net thread-pool에 들어갔다 나왔다하면서 코드가 수행된다는 것.
 
@@ -64,9 +64,9 @@ async void ProcessSocket(Socket clientSocket) {
 
 ###  coroutine ###
 
-* [Wiki: Coroutine](http://en.wikipedia.org/wiki/Coroutine)
-* [Wiki: Generator](http://en.wikipedia.org/wiki/Generator_%28computer_science%29)
-* [UnityStudy: Coroutine의 기본 개념 및 활용](http://www.unitystudy.net/bbs/board.php?bo_table=writings&wr_id=43)
+* [Wiki: Coroutine](https://en.wikipedia.org/wiki/Coroutine)
+* [Wiki: Generator](https://en.wikipedia.org/wiki/Generator_%28computer_science%29)
+* [UnityStudy: Coroutine의 기본 개념 및 활용](https://www.unitystudy.net/bbs/board.php?bo_table=writings&wr_id=43)
 
 > allow multiple entry points for suspending and resuming execution at certain locations
 
@@ -112,7 +112,7 @@ struct MyGeneratorStateMachine {
 
 `user -> kernel (kernel + device driver) -> physical -> kernel -> user`로 이어지는 장대한 여행
 
-* [Warriors of the Net](http://www.youtube.com/watch?v=PBWhzz_Gn10)
+* [Warriors of the Net](https://www.youtube.com/watch?v=PBWhzz_Gn10)
 
 약간 거리가 있지만
 
@@ -183,9 +183,9 @@ asio는 proactor pattern으로 구현된 것인데, windows에서는 iocp를 쓰
 
 asio 코딩을 통해 async request/completion의 개념을 이해하면 좋을 것 같아 넣어봤다. 자세한 내용은 asio document이 워낙 잘 되어 있으니 그 쪽을 보면 좋다.
 
-* [Boost.Asio](http://www.boost.org/doc/libs/release/doc/html/boost_asio.html)
+* [Boost.Asio](https://www.boost.org/doc/libs/release/doc/html/boost_asio.html)
 
-### [IOCP](http://msdn.microsoft.com/en-us/library/windows/desktop/aa365198.aspx): ~~Windows의 자랑~~ ###
+### [IOCP](https://msdn.microsoft.com/en-us/library/windows/desktop/aa365198.aspx): ~~Windows의 자랑~~ ###
 
 request와 completion을 분리한 비동기 io 함수와 분리된 두 문맥을 연결해주기 위해 준비되는 overlapped 구조체는 iocp 이전부터 존재했던 windows api이다(apc 포함). 다만 callback이 불리는 시점도 애매하고 흐름이 눈에 잘 띄지 않으니 completion queue를 api로 노출시켜 접근할 수 있게 만들어준 것.
 
@@ -203,7 +203,7 @@ request와 completion을 분리한 비동기 io 함수와 분리된 두 문맥�
 
 뭐, kernel이 io 작업 다 해주고 user는 completion만 처리하면 되니 다른 일에 집중할 수 있어 더 좋은건 당연한 소리
 
-### [RIO](http://www.serverframework.com/asynchronousevents/2011/10/windows-8-registered-io-networking-extensions.html) ###
+### [RIO](https://www.serverframework.com/asynchronousevents/2011/10/windows-8-registered-io-networking-extensions.html) ###
 
 iocp를 만들고 열심히 profiling을 해보니 3가지 문제가 있댄다.
 
@@ -219,8 +219,8 @@ rio는 각 문제를 다음과 같이 해결했다.
 2. request/completion queue를 user mode에 노출시켜 user mode에 존재하는 queue만 보고도 작업이 될 수 있도록 한다. 그런데 user mode로 노출된 queue는 thread-safe하게 보호해주지 않으니 알아서 잘 보호해서 써라. (그런데 이 queue들이 어떻게 kernel 자료구조와 mapping되는지는 아직 잘 모르겠음-_-)
 3. iocp는 device handle로 요청하고 completion port로 completion이 와야하기 때문에 handle lookup이 일어나는데, rio에서는 이걸 미리 queue를 각자 다 따로 만들어서 연결해두기 때문에 handle lookup 과정이 없다는 것
 
-* [MSDN: What's New for Windows Sockets](http://msdn.microsoft.com/en-us/library/windows/desktop/ms740642.aspx)
-* [Channel9: New techniques to develop low-latency network apps](http://channel9.msdn.com/Events/Build/BUILD2011/SAC-593T)
+* [MSDN: What's New for Windows Sockets](https://msdn.microsoft.com/en-us/library/windows/desktop/ms740642.aspx)
+* [Channel9: New techniques to develop low-latency network apps](https://channel9.msdn.com/Events/Build/BUILD2011/SAC-593T)
 
 사실 성능에 좀 의문이 있기는 했는데, 이걸로 실험해본 사람이 iocp보다 30~40% 성능 향상을 경험했다고 한다. 좀 미묘한 설계이기는 했는데 나중에 기회가 되면 글 쓰겠음.
 

@@ -69,7 +69,7 @@ jekyll의 기본 기능은 좀 부족해서,
 
 `source`, `master` 브랜치를 만드는 것은 어렵지 않다. 일단 첫 번째 난관은 [travis-ci]에 jekyll을 연결하는 것이다. 다행히도 [https://github.com/mfenner/jekyll-travis](https://github.com/mfenner/jekyll-travis)에 jekyll-travis용 script가 있으니 이를 참고해서 설정을 하면 되겠다.
 
-* `.travis.yml` 파일에 push를 위한 secure token을 입력해야 한다. secure token을 만들어야 하니 다음을 참고. [Sharing travis ci generated files](http://sleepycoders.blogspot.kr/2013/03/sharing-travis-ci-generated-files.html)
+* `.travis.yml` 파일에 push를 위한 secure token을 입력해야 한다. secure token을 만들어야 하니 다음을 참고. [Sharing travis ci generated files](https://sleepycoders.blogspot.kr/2013/03/sharing-travis-ci-generated-files.html)
 * secure token의 길이 제한은 128bytes이므로 암호화할 필요가 없는 변수들은 바깥으로 빼는 것이 좋다. [lacti: .travis.yml](https://github.com/lacti/lacti.github.io/blob/source/.travis.yml)
 * 추가 package가 필요할 경우 `Gemfile`에다가 package 파일을 기록해주면 된다.
 
@@ -102,14 +102,14 @@ jekyll의 기본 기능은 좀 부족해서,
 
 ### 참고
 
-* [if1live: GitHub Pages와 travis-ci를 엮은 정적 블로그 자동화](http://libsora.so/posts/static-blog-sample/)
+* [if1live: GitHub Pages와 travis-ci를 엮은 정적 블로그 자동화](https://libsora.so/posts/static-blog-sample/)
 
-[jekyll]: http://jekyllrb.com/
-[github]: http://github.com/
-[travis-ci]: http://travis-ci.org/
-[github pages]: http://pages.github.com/
-[dotname]: http://dotname.co.kr/
-[dnsever]: http://kr.dnsever.com/
+[jekyll]: https://jekyllrb.com/
+[github]: https://github.com/
+[travis-ci]: https://travis-ci.org/
+[github pages]: https://pages.github.com/
+[dotname]: https://dotname.co.kr/
+[dnsever]: https://kr.dnsever.com/
 [rebund]: https://github.com/mezis/rebund
 [keyfile]: https://github.com/mezis/keyfile
 [heroku]: https://www.heroku.com/

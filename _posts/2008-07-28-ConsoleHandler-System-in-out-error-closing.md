@@ -30,4 +30,4 @@ tags: java
 할당한 것은 해제해주어야 하고, 연 것은 반드시 닫아야한다는 신조를 갖은 나는 `Scanner`에 `System.in` 넣어서 쓰고 닫고, 다음에 또 `Scanner`에 `System.in` 객체를 만들면
 이미 닫혀져버린 `System.in`으로 입력을 받을 수 없기 때문이다.
 
-[구글에서 찾은 Java쪽 Thread](http://forums.sun.com/thread.jspa?threadID=5232911&messageID=9952697)인데, 왜 진작 찾아볼 생각을 안 했을까. 뭐라고 검색해야 할지 몰라서 키워드를 찾는데 한참 걸렸으니까.
+[구글에서 찾은 Java쪽 Thread](https://forums.sun.com/thread.jspa?threadID=5232911&messageID=9952697)인데, 왜 진작 찾아볼 생각을 안 했을까. 뭐라고 검색해야 할지 몰라서 키워드를 찾는데 한참 걸렸으니까.

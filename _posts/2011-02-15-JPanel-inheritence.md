@@ -22,11 +22,11 @@ Java에서 UI 코드를 작성할 때, 가장 많이 하는 코딩 방식이 UI 
 하지만 대부분의 UI 설계는 `JPanel`을 상속받으면서부터 시작한다. 이러한 습관이 들어버린건 다 NetBeans 때문이다-_-
 
 View와 Controller가 섞이면 coupling이 심해져 코드가 좀 더러워진다. 때문에 중간에 interface를 두고 나누는 방법도 생각해볼 수 있겠다.  
-(이걸 심하게 해주시는 분이 로버드 C. 마틴 이란 분인데 [UML 실전에서는 이것만 쓴다](http://www.yes24.com/24/goods/4492519) 책이 재밌다)
+(이걸 심하게 해주시는 분이 로버드 C. 마틴 이란 분인데 [UML 실전에서는 이것만 쓴다](https://www.yes24.com/24/goods/4492519) 책이 재밌다)
 
 최근에 운 좋게도 그래디 부치 책을 구했으니 좀 더 공부를 해봐야겠다.
 
-* http://en.wikipedia.org/wiki/Robert_Cecil_Martin
-* http://en.wikipedia.org/wiki/Grady_Booch
+* https://en.wikipedia.org/wiki/Robert_Cecil_Martin
+* https://en.wikipedia.org/wiki/Grady_Booch
 
 유명하신 분들이다.

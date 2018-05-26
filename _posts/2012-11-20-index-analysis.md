@@ -4,7 +4,7 @@ title: Index Analysis
 tags: database slide
 ---
 
-{% oembed http://www.slideshare.net/lactrious/index-analysis %}
+{% oembed https://www.slideshare.net/lactrious/index-analysis %}
 
 제목은 거창하지만, SQL Server Query Performance Tuning Distilled의 Chapter 4 이름이다. 고작 저런 발표 자료 만드는데 6시간이나 걸렸다 [...]
 

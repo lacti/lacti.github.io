@@ -40,9 +40,9 @@ while (true) {
 
 CPU 는 한 순간에 하나의 명령만 수행하기 때문에 운영체제의 코드와 응용 프로그램의 코드를 수행하는 시점에는 구분할 수가 없다. 따라서 코드가 메모리에 존재하는 영역(segment) 자체에 레벨을 설정하여 권한을 갖고(privileged) 수행할 수 있는 영역과 그렇지 않은 영역을 구분한다. 운영체제는 응용 프로그램을 실행할 때 그 코드를 권한을 갖지 못한 영역(user)에 올리기 때문에 그 코드는 하드웨어에 직접 접근하지 못하고, 운영체제에게 요청하여 원하는 값을 얻어갈 수 있도록 하는 것이다.
 
-* [http://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection](http://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection)
-* [http://en.wikipedia.org/wiki/Privilege_level](http://en.wikipedia.org/wiki/Privilege_level)
-* [http://en.wikipedia.org/wiki/Ring_(computer_security)](http://en.wikipedia.org/wiki/Ring_(computer_security))
+* [https://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection](https://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection)
+* [https://en.wikipedia.org/wiki/Privilege_level](https://en.wikipedia.org/wiki/Privilege_level)
+* [https://en.wikipedia.org/wiki/Ring_(computer_security)](https://en.wikipedia.org/wiki/Ring_(computer_security))
 
 또한 이러한 ring level이 변경되기 위해서, 즉 user 영역에서 실행되던 코드가 privileged 영역의 kernel 코드가 실행되도록 권한이 변경되어야 하는데, 그러기 위해서 kernel mode로 진입하는 switch 과정이 일어나야한다. 이 과정이 mode switching 과정인데 이 글에서 자세히 다루기에는 양이 너무 많고, 아무튼 복잡하고 부담이 큰 작업이라는 정도로만 이야기를 해보자.  
 <span style="color: #888;">이 때문에 io 함수를 작은 버퍼 단위로 자주 호출하는 것이나, 짧은 lock 을 사용하는 시점에 kernel에서 관리해주는 lock 작업인 semaphore를 쓰는 것이 효율이 좋지 않다는 이야기가 나오는 것이다. (자주 mode switching 가 발생하기 때문에 그렇다)</span>

@@ -15,7 +15,7 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 **조용히 죽는다.**
 
 `send`/`recv`를 사용해서 옵션을 주면 깔끔하게 `EPIPE`를 반환하게 할 수 있는데 `write`, `read`는 그런 옵션이 생략된 *범용적* 함수라서 `signal handler`를 설치하는 수 밖에 없다.
 
-stackoverflow에 나와있는 [how to prevent sigpipes or handle them properly](http://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly)를 보면
+stackoverflow에 나와있는 [how to prevent sigpipes or handle them properly](https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly)를 보면
 
 ```c
 int set = 1;

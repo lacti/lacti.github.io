@@ -6,20 +6,20 @@ tags: distributed concurrency study -pub
 
 Concurrency Pattern부터 Distributed System까지! 근데 대충함 [...]
 
-### [Concurrency pattern](http://en.wikipedia.org/wiki/Concurrency_pattern) ###
+### [Concurrency pattern](https://en.wikipedia.org/wiki/Concurrency_pattern) ###
 
 대충 정리해보자.
 
-* [Wiki: Active Object](http://en.wikipedia.org/wiki/Active_Object)
+* [Wiki: Active Object](https://en.wikipedia.org/wiki/Active_Object)
 	* Active Object는 Actor Model 구현하면서 써봤다. asynchronous method invocation과 request scheduling이 관건이다. 지난 글에서는 함수 요청을 functor로 만들어서 요청을 queueing하고, 처음 진입하는 thread가 해당 queue의 모든 작업을 처리하는 식으로 구현하였다.
-* [Wiki: Double checked locking pattern](http://en.wikipedia.org/wiki/Double_checked_locking_pattern)
+* [Wiki: Double checked locking pattern](https://en.wikipedia.org/wiki/Double_checked_locking_pattern)
 	* 보호해야 하는 특정 구간에 대해 단순 if 문으로 조건을 검사할 경우 여러 thread가 동시에 진입하여 concurrency problem이 발생할 수 있다. 따라서 해당 if문도 lock으로 보호해야 하는데, if 문 내의 코드가 정말 드물게 실행되는 경우 매번 lock을 걸고 if 문을 검사하는 것은 뭔가 아까워서, 일단 lock 없이 if 문으로 대충 검사해보고, lock 걸고, 다시 if 문으로 검사하여 안전하게 코드를 수행시키는 방법이다.
-		* 물론 memory order 문제가 있을 수 있다. 이와 관련해서는 [PoolC: C++ 싱글톤](http://board.poolc.org/generation03/512) 문서의 `ThreadSafe::create()` 함수를 보면 된다.
+		* 물론 memory order 문제가 있을 수 있다. 이와 관련해서는 [PoolC: C++ 싱글톤](https://board.poolc.org/generation03/512) 문서의 `ThreadSafe::create()` 함수를 보면 된다.
 	* 보통 singleton 객체의 초기화를 위해 많이 사용되는 방법이다.
 	* c++11에서는 function 내의 static variable의 초기화에 대해 하나의 thread만 초기화를 수행하도록 표준으로 정해져서 wiki 예제에서는 단순히 static 변수를 써서 singleton을 구현하는 방법을 보여주고 있다.
-* [Balking](http://en.wikipedia.org/wiki/Balking_pattern), [Guarded suspension](http://en.wikipedia.org/wiki/Guarded_suspension), Leaders/Followers, [Scheduler](http://en.wikipedia.org/wiki/Scheduler_pattern), [Threadpool](http://en.wikipedia.org/wiki/Thread_pool_pattern), [TLS](http://en.wikipedia.org/wiki/Thread-Specific_Storage) 등은 그냥 읽어보면 된다.
+* [Balking](https://en.wikipedia.org/wiki/Balking_pattern), [Guarded suspension](https://en.wikipedia.org/wiki/Guarded_suspension), Leaders/Followers, [Scheduler](https://en.wikipedia.org/wiki/Scheduler_pattern), [Threadpool](https://en.wikipedia.org/wiki/Thread_pool_pattern), [TLS](https://en.wikipedia.org/wiki/Thread-Specific_Storage) 등은 그냥 읽어보면 된다.
 
-### [Readers–writer lock](http://en.wikipedia.org/wiki/Read_write_lock_pattern) ###
+### [Readers–writer lock](https://en.wikipedia.org/wiki/Read_write_lock_pattern) ###
 
 Read Write Lock Pattern은 multiple-readers(shared), single-writer(exclusive) lock을 구현하는 것. writer starvation은 limit-read-count를 쓰던, timeout을 쓰던 잘 처리하면 된다.
 
@@ -36,8 +36,8 @@ Read Write Lock Pattern은 multiple-readers(shared), single-writer(exclusive) lo
 
 때문에 upgradable-read mode를 추가한다. 그래서 read, upgradable-read, write 간의 상관관계를 재정의하여 재진입성을 다시 고려한다. 이에 대한 개념은 데이터베이스에서 잘 확인해볼 수 있다.
 
-* [MSDN: ReaderWriterLockSlim](http://msdn.microsoft.com/en-us/library/system.threading.readerwriterlockslim.aspx)
-* [MSDN: Lock Compatibility (Database Engine)](http://technet.microsoft.com/en-us/library/ms186396.aspx)
+* [MSDN: ReaderWriterLockSlim](https://msdn.microsoft.com/en-us/library/system.threading.readerwriterlockslim.aspx)
+* [MSDN: Lock Compatibility (Database Engine)](https://technet.microsoft.com/en-us/library/ms186396.aspx)
 
 
 ### asynchronous method ###
@@ -55,7 +55,7 @@ void request_async(request_context context, async_state state, callback_t callba
 
 iocp의 경우 overlapped 구조체를 상속받아서 async_state와 async_result 역할을 하나의 구조체에서 수행하기도 한다. proactor pattern 중 이를 async token이라고 표현하기도 한다.
 
-### [MapReduce](http://en.wikipedia.org/wiki/MapReduce) ###
+### [MapReduce](https://en.wikipedia.org/wiki/MapReduce) ###
 
 map/reduce는 functional programming에 있는 그 개념을 그대로 분산시스템에 적용했다고 보면 되겠다. 다만 fault tolerant를 고려해주면 되겠다.
 
@@ -63,7 +63,7 @@ map/reduce는 functional programming에 있는 그 개념을 그대로 분산시
 
 RemoteSession은 java.rmi와 같이 stateless한 rpc에서 proxy가 내부적으로 session key를 갖고 session을 유지해주기 위해 본인이 직접 구현한 library인데 본인이 wiki에 추가해놓은 것 같다. 넘어가자.
 
-### [eincs: CAP Theorem, 오해와 진실 (PACELC)](http://eincs.net/2013/07/misleading-and-truth-of-cap-theorem) ###
+### [eincs: CAP Theorem, 오해와 진실 (PACELC)](https://eincs.net/2013/07/misleading-and-truth-of-cap-theorem) ###
 
 분산 시스템은 네트워크 시스템을 전제로 하니 P를 고려하지 않을 수 없다. 그리고 장애 발생 상황과 정상 상황에서는 고려해야 할 요소가 다르니 두 상황을 대칭적으로 비교할 수 없다.
 
@@ -73,8 +73,8 @@ RemoteSession은 java.rmi와 같이 stateless한 rpc에서 proxy가 내부적으
 
 분산 시스템을 설계할 때에는 장애 상황에 대한 복구(fault tolerant)를 고민해서 작성해야 하기 때문에 기존에 고민하지 않았던 예외 상황에 대한 고찰이 많이 필요하겠다. 그러니까 시간나면 읽어보자.
 
-* [joinc: SocketTimeout](http://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/Sockettimeout)
-* [책: 서버 인프라를 지탱하는 기술](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&linkClass=33090105&barcode=9788996241003)
+* [joinc: SocketTimeout](https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/Sockettimeout)
+* [책: 서버 인프라를 지탱하는 기술](https://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&linkClass=33090105&barcode=9788996241003)
 
 특히 각 cluster로 요청된 작업이 실패했을 경우 이 작업에 대해 다시 요청하여 결과를 얻어내도록 하는 과정은 잊지 말고 고려하도록 하자.
 

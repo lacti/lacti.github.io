@@ -6,7 +6,7 @@ tags: tool -pub
 
 시스템 프로그래밍 수업 듣는 친구들이 vim을 써서 보다 빠르게 커널 탐색을 하는데 도움이 되었으면 해서 쓰는 글이지만 본인이 직접 정리하기는 귀찮으니 다음의 링크를 참조 바람 [...]
 
-* [so_sal: 커널 분석기 Vi + ctags + cscope](http://sosal.tistory.com/11)
+* [so_sal: 커널 분석기 Vi + ctags + cscope](https://sosal.tistory.com/11)
 
 ### search script ###
 

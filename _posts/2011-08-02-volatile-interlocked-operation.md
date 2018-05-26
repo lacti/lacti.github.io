@@ -51,7 +51,7 @@ mov dword ptr [count], eax
 이게 수행의 *원자성(atomic)*과는 또 다른 이야기라서 그것까지 고려하려면 좀 다른 수를 써야한다.
 위에서 보면 ++count 연산을 수행하기 위해 3개의 assembly 명령어가 수행되는데, 만약 add eax, 1 까지 수행했지만 mov eax, dword ptr [count] 를 수행하지 않은 시점에서 다른 thread 가 count 의 값을 접근해버리면? 역시 마찬가지로 잘못된 값을 읽을 것이다.
 
-이 때문에 수행 구간의 배타성(exclusive)을 보장해주기 위해서 mutex(mutual exclusion)를 설정해주는 것이다. 공부를 대충해서 설명을 참 못해놨는데, 마침 [설명이 잘 된 링크](http://skyul.tistory.com/337)를 찾았으니 들어가서 보면 좋겠다.
+이 때문에 수행 구간의 배타성(exclusive)을 보장해주기 위해서 mutex(mutual exclusion)를 설정해주는 것이다. 공부를 대충해서 설명을 참 못해놨는데, 마침 [설명이 잘 된 링크](https://skyul.tistory.com/337)를 찾았으니 들어가서 보면 좋겠다.
 
 `volatile`을 붙이면 메모리에 값을 바로 반영해주므로 여러 thread 에서 공유되는 flag 변수를 사용할 때는 volatile keyword를 사용해야 문제가 덜 생긴다. 하지만 flag 값 역시 누군가는 대입하고, 누군가는 읽을텐데 대입의 과정 역시 assembly instruction으로 한 명령이 아니기 때문에 문제가 될 수 있다.
 즉, 대입하는 thread 가 아직 메모리에 반영을 안한 시점에 읽는 thread가 읽어버리면 잘못된 flag 값을 통해 잘못된 수행을 할 수 있다는 것이다.
@@ -119,7 +119,7 @@ void Object::Hit (void)
 
 즉 공유되는 변수, 즉 멤버 변수만 원자적인 연산을 사용하게 되면 lock 범위를 함수 전체가 아니라 한 명령 구문으로 줄일 수 있다는 것이다. (Compare And Swap 등)
 
-그래서 intel에서는 이를 위한 interlocked instruction을 제공해 주었고, MS에서는 이를 wrapping하여 [Interlocked API](http://msdn.microsoft.com/en-us/library/ms684122.aspx)으로 지원해준다.
+그래서 intel에서는 이를 위한 interlocked instruction을 제공해 주었고, MS에서는 이를 wrapping하여 [Interlocked API](https://msdn.microsoft.com/en-us/library/ms684122.aspx)으로 지원해준다.
 
 ```cpp
 void Object::Hit (void)

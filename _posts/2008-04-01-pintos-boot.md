@@ -178,6 +178,6 @@ thread.c
 
 ### 참고 ###
 
-* [OS 구조와 원리: OS 개발 30일 프로젝트](http://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-482-6)
-* [Windows 구조와 원리: OS를 관통하는 프로그래밍의 원리](http://www.hanbit.co.kr/book/look.html?isbn=89-7914-396-6)
-* [리눅스 커널 심층 분석](http://kangcom.com/sub/view.asp?sku=201207250002)
+* [OS 구조와 원리: OS 개발 30일 프로젝트](https://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-482-6)
+* [Windows 구조와 원리: OS를 관통하는 프로그래밍의 원리](https://www.hanbit.co.kr/book/look.html?isbn=89-7914-396-6)
+* [리눅스 커널 심층 분석](https://kangcom.com/sub/view.asp?sku=201207250002)

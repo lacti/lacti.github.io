@@ -6,7 +6,7 @@ tags: java game -pub
 
 본 글타래에서는 자바를 사용하여 간단한 비행기 게임을 만드는 과정을 서술해볼까 한다.
 
-원활한 자바 프로그래밍을 위해서, [JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)와 [Eclipse](http://eclipse.org/downloads/)가 설치되어있어야 한다.
+원활한 자바 프로그래밍을 위해서, [JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html)와 [Eclipse](https://eclipse.org/downloads/)가 설치되어있어야 한다.
 이에 대한 자세한 설명은 생략하고, 멋들어진 이름으로 프로젝트를 하나 만들어보자.
 
 예전에 제출했던 이름을 따와서 타티을(Tatieul)이라는 이름으로 class를 하나 만들었다.

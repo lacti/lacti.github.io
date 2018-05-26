@@ -5,7 +5,7 @@ tags: ndc14 c# server -pub
 ---
 
 * WebServiceHost를 사용한 모바일 rest web api 서버를 만들어보자.
-* msdn에 있을 법한 wcf 설명을 한참 함. [msdn 참고](http://msdn.microsoft.com/ko-kr/library/ms731190.aspx)
+* msdn에 있을 법한 wcf 설명을 한참 함. [msdn 참고](https://msdn.microsoft.com/ko-kr/library/ms731190.aspx)
 * 본인이 구현한 코드를 설명해주는 방식. 추후 발표자료와 함께 올린다고 함
 
 * Contract
@@ -31,4 +31,4 @@ tags: ndc14 c# server -pub
 * 그냥 msdn tutorial을 설명한 수준, 그나마도 기본 개념 설명에 많은 시간을 할애함.
 * 예제 설명할 때 iis 안 쓰고 직접 service host 돌린 것은 이해하겠는데 콘솔이라서 뭐가 되네 안되네 하는 부분은 이해를 못 함.
 * 예제의 worker thread 1023개, io thread 1000개인 이유를 모르겠음
-* 관심 있으면 [self-host web api](http://www.asp.net/web-api/overview/hosting-aspnet-web-api/self-host-a-web-api)를 보는 것이 나을 듯 싶음.
+* 관심 있으면 [self-host web api](https://www.asp.net/web-api/overview/hosting-aspnet-web-api/self-host-a-web-api)를 보는 것이 나을 듯 싶음.

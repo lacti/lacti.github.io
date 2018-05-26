@@ -17,7 +17,7 @@ typedef float Stat::*DataPtr;
 DataPtr ptr = &Stat::hp; // Error!
 ```
 
-이번 글에서는 형식 삭제([type erasure](http://en.wikipedia.org/wiki/Type_erasure))를 사용하여 보다 다양한 type을 지원하면서, 확장 가능한 방법에 대해 알아보도록 하겠다.
+이번 글에서는 형식 삭제([type erasure](https://en.wikipedia.org/wiki/Type_erasure))를 사용하여 보다 다양한 type을 지원하면서, 확장 가능한 방법에 대해 알아보도록 하겠다.
 
 
 형식 삭제라고 하면 뭔가 어려워 보이지만, 그 결과물을 보면 굉장히 친숙하다. C++에서 형식 삭제를 하는 방법은 가상 함수를 통한 다형성을 사용하는 것인데, 예를 들면 다음과 같다.

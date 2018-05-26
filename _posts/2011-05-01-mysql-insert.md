@@ -19,8 +19,8 @@ Memory Table이라서 그런건지 이유는 잘 모르겠는데 저 두 동작�
 
 그런데 찾아보니,
 
-* http://dev.mysql.com/doc/refman/5.5/en/insert.html
-* http://dev.mysql.com/doc/refman/5.5/en/insert-on-duplicate.html
+* https://dev.mysql.com/doc/refman/5.5/en/insert.html
+* https://dev.mysql.com/doc/refman/5.5/en/insert-on-duplicate.html
 
 `ON DUPLICATE KEY UPDATE`라는 재밌는 문법이 있다.
 

@@ -25,18 +25,18 @@ tags: java -pub
 
 통신을 한다는 건 두 HOST가 네트워크로<span style="color: #aaa;">(wired or wireless)</span> 연결되어있다는 것이다.  
 네트워크에 속한 HOST는 그 특정 주소를 갖는데, 흔히 생각하는 `IP Address`라고 보면 되겠다. 흔히 우리는 네트워크를 사용하기 위해 TCP/IP Protocol을 사용하기 때문이다.  
-[http://en.wikipedia.org/wiki/Transmission_Control_Protocol](http://en.wikipedia.org/wiki/Transmission_Control_Protocol)  
+[https://en.wikipedia.org/wiki/Transmission_Control_Protocol](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)  
 <span style="color: #aaa;">(다른 곳에 더욱 설명이 잘 있으니 자세한 설명은 생략한다)</span>  
 <span style="color: #aaa;">(기계적 주소인 MAC Address와 함께 같이 찾아보면서 공부해보는 것도 좋다. 하지만 이 글은 자바 네트워크 프로그래밍이 주라서 이 부분은 제외)</span>
 
 두 HOST가 서로의 주소를 안다고 해서 TCP/IP 통신할 수 있는 것은 아니다. TCP/IP 통신에는 `IP Address` 말고 `Port`라는 Unsigned Short Integer(16bit) 값이 하나 더 필요하기 때문이다.  
-[http://en.wikipedia.org/wiki/TCP_and_UDP_port](http://en.wikipedia.org/wiki/TCP_and_UDP_port)
+[https://en.wikipedia.org/wiki/TCP_and_UDP_port](https://en.wikipedia.org/wiki/TCP_and_UDP_port)
 
 간단히 하나의 HOST 내에 실행되고 있는 수많은 네트워크 사용 프로그램들에 대해 데이터를 빠르고 명확하게 구분하기 위한 하나의 키 값이라고 보면 되겠다. **SSH는 22번, HTTP는 80번**과 같이 사실상 고유의 값으로 지정된 것고 있다.  
-[http://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers](http://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers)
+[https://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers](https://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers)
 
 TCP/IP 프로토콜에서는 데이터를 보낼 때 **Packet**으로 쪼개어 보내는데 이 쪽을 공부해두면 장차 네트워크 프로그래밍할 때 도움되는게 많다.  
-[http://en.wikipedia.org/wiki/Packet_(information_technology)](http://en.wikipedia.org/wiki/Packet_(information_technology))
+[https://en.wikipedia.org/wiki/Packet_(information_technology)](https://en.wikipedia.org/wiki/Packet_(information_technology))
 
 ### 서버와 클라이언트 ###
 

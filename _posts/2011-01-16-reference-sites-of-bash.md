@@ -4,8 +4,8 @@ title: bash 참조 사이트
 tags: tool
 ---
 
-* http://www.faqs.org/docs/Linux-HOWTO/Bash-Prog-Intro-HOWTO.html
-* http://tldp.org/LDP/abs/html/index.html
+* https://www.faqs.org/docs/Linux-HOWTO/Bash-Prog-Intro-HOWTO.html
+* https://tldp.org/LDP/abs/html/index.html
 
 개발자라면 자기에게 어울리는 스크립트 언어 하나 쯤은 있어야 하는 것 아닌가요?  
 그렇다면 난 bash를 하겠다!

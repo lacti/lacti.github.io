@@ -6,7 +6,7 @@ tags: concurrency -pub
 
 Concurrent Data Structure는 Lock을 최소화하여 동작해야 multi thread에서 해당 자료구조에 접근할 때 발생하는 부담이 최소화되어 효율적인 프로그래밍이 가능하다.
 
-여러가지 방법이 있겠지만, 가장 간단한(?) Windows API로 제공되는 [Interlocked Singly Linked Lists](http://msdn.microsoft.com/en-us/library/ms684121.aspx)에 대해 보자. (이후 SLIST 라고 이야기하겠다)
+여러가지 방법이 있겠지만, 가장 간단한(?) Windows API로 제공되는 [Interlocked Singly Linked Lists](https://msdn.microsoft.com/en-us/library/ms684121.aspx)에 대해 보자. (이후 SLIST 라고 이야기하겠다)
 
 SLIST는 단방향(singly) Linked List로 구성된 Stack이다. MSDN 을 보면 non blocking atomic 동기화 알고리즘으로 쓰면 성능 향상에 도움이 되고 multi thread에서 사용해도 문제가 없댄다. 아무튼 이래 저래 좋다고 한다.
 
@@ -22,7 +22,7 @@ SLIST는 단방향(singly) Linked List로 구성된 Stack이다. MSDN 을 보면
 
 3. Stack으로도 충분했다. 굳이 Queue까지 API로 제공하지 않아도 Stack만으로도 Queue나 다른 자료구조를 구현해서 쓸 수는 있다. 그럼 왜 하필 Stack을 만들어놨을까? 누가 좀 알려주세요 [...]
 
-찾아보면 [SLIST 기반으로 Queue처럼 쓰는 예제](http://alexkr.com/memos/16/non-blocking-singly-linked-list/) 도 있다.
+찾아보면 [SLIST 기반으로 Queue처럼 쓰는 예제](https://alexkr.com/memos/16/non-blocking-singly-linked-list/) 도 있다.
 
 ### 왜 Memory Alignment 이야기가 나올까? ###
 
@@ -90,7 +90,7 @@ struct MyItem
 };
 ```
 
-첫 번째 멤버 변수로 넣어준다. 그리고 MyIem 을 할당할 때 내부에서 [`_aligned_malloc`](http://msdn.microsoft.com/en-us/library/8z34s9c6.aspx) 와 같은 함수로 할당해주면 MyItem 의 주소가 정렬되니까 첫 번째 멤버 변수인 ListEntry (SLIST_ENTRY) 의 주소도 정렬된다(같은 값이니까)
+첫 번째 멤버 변수로 넣어준다. 그리고 MyIem 을 할당할 때 내부에서 [`_aligned_malloc`](https://msdn.microsoft.com/en-us/library/8z34s9c6.aspx) 와 같은 함수로 할당해주면 MyItem 의 주소가 정렬되니까 첫 번째 멤버 변수인 ListEntry (SLIST_ENTRY) 의 주소도 정렬된다(같은 값이니까)
 
 같은 방법인데, 저걸 상속으로 표현하자는 사람도 있다. 상속하면 Base Type 의 멤버들이 메모리의 가장 위 쪽으로 올라가니까. 하지만 그게 모든 컴파일러에서 보장되도록 표준화되어있는 내용은 아닌 것으로 알고 있으니까 글쎄, 좋을지는 모르겠다.
 
@@ -102,7 +102,7 @@ struct MyItem
 MyItem* item = (MyItem*) InterlockedPopEntryList (listHead);
 ```
 
-궁금할 것 같은 내용은 위에서 다 풀어 써놨으니까 간략한 예제를 보자. 예제는 [MSDN: Using Singly Linked List](http://msdn.microsoft.com/en-us/library/ms686962.aspx)에 있다.
+궁금할 것 같은 내용은 위에서 다 풀어 써놨으니까 간략한 예제를 보자. 예제는 [MSDN: Using Singly Linked List](https://msdn.microsoft.com/en-us/library/ms686962.aspx)에 있다.
 
 먼저 `LIST_HEADER`를 만들어줘야한다. 이는 사용할 SLIST의 Head 포인터이다. 당연한 이야기이지만 이것도 메모리 정렬이 되어야 한다.
 

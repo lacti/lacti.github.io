@@ -4,9 +4,9 @@ title: 모바일 게임서비스를 위한 사설 클라우드 구축/운영 분
 tags: ndc14 cloud -pub
 ---
 
-{% oembed http://www.slideshare.net/reinkim/ndc14 %}
+{% oembed https://www.slideshare.net/reinkim/ndc14 %}
 
-* [김진욱](http://rein.kr/blog/)
+* [김진욱](https://rein.kr/blog/)
 
 ### 요약 ###
 

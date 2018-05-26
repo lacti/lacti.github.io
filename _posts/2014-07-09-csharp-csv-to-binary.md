@@ -229,7 +229,7 @@ items.GroupBy(e => e.TemplateId).Select(e =>
     new { TemplateId = e, SumOfAmount = e.Sum(i => i.Amount) }).Dump();
 ```
 
-위 코드는 TemplateId 별 Amount의 총량을 구해서 보여주는 LINQ 코드이다. (`Dump()` 함수는 [LINQPad](http://www.linqpad.net/)에서 지원하는 함수로 쿼리 수행 결과를 테이블로 이쁘게 보여주는 함수이다.)
+위 코드는 TemplateId 별 Amount의 총량을 구해서 보여주는 LINQ 코드이다. (`Dump()` 함수는 [LINQPad](https://www.linqpad.net/)에서 지원하는 함수로 쿼리 수행 결과를 테이블로 이쁘게 보여주는 함수이다.)
 
 물론 c++에 비해 다소 속도가 느리고 메모리가 많이 필요할 수는 있지만 데이터의 쿼리를 날리기에는 LINQ를 쓸 수 있는 c#이 c++에 비해 훨씬 작업하기가 좋다.
 

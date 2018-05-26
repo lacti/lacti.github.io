@@ -49,7 +49,7 @@ struct message_t {
 typedef handler_t<void, const message_t&> msg_handler_t;
 ```
 
-이제 모든 작업이 완료되었다. `msg_handler_t`에 대한 [unordered_map](http://en.cppreference.com/w/cpp/container/unordered_map) 객체 만들고, 적절히 불러주기만 하면 된다.
+이제 모든 작업이 완료되었다. `msg_handler_t`에 대한 [unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map) 객체 만들고, 적절히 불러주기만 하면 된다.
 
 ```cpp
 std::unordered_map<int, msg_handler_t> __handler_table;
@@ -93,7 +93,7 @@ void main() {
 * 그리고 각 msg가 추가될 때마다 `msg_id` 값을 정의해주어야 한다.
 * 마지막으로 구현한 handler를 handler_table에다가 등록해주는 코드를 작성해야 한다.
 
-일단 `msg_id` 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 [type_index](http://en.cppreference.com/w/cpp/types/type_index)를 사용하자.
+일단 `msg_id` 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 [type_index](https://en.cppreference.com/w/cpp/types/type_index)를 사용하자.
 
 ```cpp
 std::unordered_map<std::type_index, msg_handler_t> __handler_table;
@@ -124,7 +124,7 @@ static struct _table_register_t {
 일단 편하게 message를 casting하기 위한 cast 함수를 만들었다. 그냥 const reference 지키면서 static_cast를 해주는 함수이다.
 
 * dynamic_cast를 하지 않은 이유는 항상 올바른 type만 casting을 요청할 것이라는 믿음을 갖고 불필요한 검사를 피하기 위함이다
-* `_Ty`가 정말 `message_t`를 상속받았는지 보려면 [std::is_base_of](http://en.cppreference.com/w/cpp/types/is_base_of)를 쓰면 되겠다.
+* `_Ty`가 정말 `message_t`를 상속받았는지 보려면 [std::is_base_of](https://en.cppreference.com/w/cpp/types/is_base_of)를 쓰면 되겠다.
 
 실제 작업을 수행할 함수인 `int_msg_handler`를 선언한다. 그리고 전달 함수인 `_int_msg_wrapper` 함수를 작성한다. `_int_msg_wrapper` 함수에서는 `message_t`를 `int_msg_t`로 casting만 해서 `int_msg_handler` 함수로 넘겨준다. 그리고 실질적인 작업은 `int_msg_handler`에서 `int_msg_t`를 인자로 받아 처리하게 된다.
 

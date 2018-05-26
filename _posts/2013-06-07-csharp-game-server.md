@@ -4,7 +4,7 @@ title: c# 게임 서버 만들기
 tags: server c# game slide
 ---
 
-{% oembed http://www.slideshare.net/lactrious/c-game-server %}
+{% oembed https://www.slideshare.net/lactrious/c-game-server %}
 
 * [github: source code](https://github.com/lacti/Lz/tree/v0.1)
 

@@ -10,9 +10,9 @@ tags: ndc14 cloud -pub
 
 ### terminolgy ##
 
-* `DR` [Disaster Recovery](http://en.wikipedia.org/wiki/Disaster_recovery)
-* `BCP` [Business continuity planning](http://en.wikipedia.org/wiki/Business_continuity_planning)
-* `RTO` [Recovery time objective](http://en.wikipedia.org/wiki/Recovery_time_objective)
+* `DR` [Disaster Recovery](https://en.wikipedia.org/wiki/Disaster_recovery)
+* `BCP` [Business continuity planning](https://en.wikipedia.org/wiki/Business_continuity_planning)
+* `RTO` [Recovery time objective](https://en.wikipedia.org/wiki/Recovery_time_objective)
 
 ### 사례 ###
 
@@ -29,8 +29,8 @@ tags: ndc14 cloud -pub
 	* 좋은 혹은 나쁜 이웃과 자원을 공유
 	* 나쁜 이웃을 만나면 infra resource를 빼앗길 수 있다.
 	* 그래도 scale up/down이 간단하니 쓴다.
-* [SLA](http://en.wikipedia.org/wiki/Service-level_agreement)
-	* SLA uptime은 service 몇 분 down될지 정하는 것 [calculator](http://uptime.is/)
+* [SLA](https://en.wikipedia.org/wiki/Service-level_agreement)
+	* SLA uptime은 service 몇 분 down될지 정하는 것 [calculator](https://uptime.is/)
 	* 99.9%는 8시간 45분/year 장애 허용
 	* 99.995%는 1년에 26분/year 장애 허용
 		* AWS/Azure는 99.95% (22분/month)
@@ -42,7 +42,7 @@ tags: ndc14 cloud -pub
 	* **계획적 장애 구간**을 수치화한다.
 		* eg) `RTO` 1시간, `RPO` 30분
 		* 데이터베이스 이중화
-		* [hot spare](http://en.wikipedia.org/wiki/Hot_spare) *발표자료에서는 웜대기warm standby라고 함*: 교체 가용군 대기
+		* [hot spare](https://en.wikipedia.org/wiki/Hot_spare) *발표자료에서는 웜대기warm standby라고 함*: 교체 가용군 대기
 		* [pilot light](https://aws.amazon.com/disaster-recovery/): 최후의 준비
 
 ### 설계 ###

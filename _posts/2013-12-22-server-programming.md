@@ -41,7 +41,7 @@ io와 비동기 개념을 공부한다.
 ### 라이브러리 ###
 
 c++이나 java로 서버를 직접 작성하게 될 경우에는 기반 library를 사용하는 것이 좋다.
-개인적으로 c++은 [asio](http://www.boost.org/doc/libs/release/doc/html/boost_asio.html)가 괜찮고 java는 [netty](http://netty.io/)가 괜찮다고 생각한다.
+개인적으로 c++은 [asio](https://www.boost.org/doc/libs/release/doc/html/boost_asio.html)가 괜찮고 java는 [netty](https://netty.io/)가 괜찮다고 생각한다.
 
 어느 정도 비동기 프로그래밍 패턴이 익숙하다면 예제 코드 좀 보면 어떻게 써먹을 수 있을 지 대충은 이해할 수 있다. 그리고 워낙 저 두 프로젝트는 문서화가 잘 되어 있으니 문서만 읽어도 대부분은 이해된다.
 

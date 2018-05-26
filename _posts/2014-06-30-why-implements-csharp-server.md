@@ -47,7 +47,7 @@ persistence 쪽 코드나 logging 코드는 (경험상) bolierplate 코드가 �
 - async/await가 느리다. DefaultTaskScheduler가 좀 대충 만들어져서 느린데 고쳐서 쓰거나 그냥 AsyncIO를 쓰면 어느 정도 회피할 수 있기는 하다.
 - **gc가 돌면 세상이 멈춘다.**
 
-c++에서 하던 식으로 모든 객체를 메모리에 올려두는 식으로 프로그래밍하다 보면 당연히 gen2에 쌓이는 객체가 많아진다. 때문에 gen2를 탐색하는 gc가 수행될 때 서버의 전체적인 throughput이 크게 떨어지는 문제가 발생할 수도 있다. 물론 [concurrent gc](http://msdn.microsoft.com/en-us/library/ee787088.aspx#concurrent_garbage_collection)를 사용하거나, [server gc](http://msdn.microsoft.com/en-us/library/ee787088.aspx#workstation_and_server_garbage_collection)를 잘 튜닝해서 사용하면 문제를 어느 정도 회피할 수 있다고는 하지만 간단해 보이지는 않는다.
+c++에서 하던 식으로 모든 객체를 메모리에 올려두는 식으로 프로그래밍하다 보면 당연히 gen2에 쌓이는 객체가 많아진다. 때문에 gen2를 탐색하는 gc가 수행될 때 서버의 전체적인 throughput이 크게 떨어지는 문제가 발생할 수도 있다. 물론 [concurrent gc](https://msdn.microsoft.com/en-us/library/ee787088.aspx#concurrent_garbage_collection)를 사용하거나, [server gc](https://msdn.microsoft.com/en-us/library/ee787088.aspx#workstation_and_server_garbage_collection)를 잘 튜닝해서 사용하면 문제를 어느 정도 회피할 수 있다고는 하지만 간단해 보이지는 않는다.
 
 gen2로 가는 객체의 수를 줄이는 것이 관건인데 이게 또 간단하지 않다.
 

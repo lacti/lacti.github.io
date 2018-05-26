@@ -11,8 +11,8 @@ tags: network
 
 이 옵션이 왜 문제를 일으킬 수 있을까? 이에 대해 자세히 알아보자.
 
-* [Windows Forum: 랜카드 옵션 Large Send Offload 가 궁금해요](http://windowsforum.kr/index.php?category=495009&document_srl=4479149&mid=qna)
-* [TCP 체크섬 오프로드](http://myknowledge.kr/29)
+* [Windows Forum: 랜카드 옵션 Large Send Offload 가 궁금해요](https://windowsforum.kr/index.php?category=495009&document_srl=4479149&mid=qna)
+* [TCP 체크섬 오프로드](https://myknowledge.kr/29)
 
 원래 위 옵션은 cpu로 처리해야 하는 일을 nic가 대신 처리해서 전체 성능을 높여준다는 것이다. 그런데 테스트를 진행했던 네트워크에서는 서버 머신의 nic와 switch 간의 저 옵션이 제대로 동작하지 않아서 주기적으로 문제가 발생한 것이다. 서버 머신의 nic에서 해당 옵션을 끄니 더 이상 문제가 발생하지 않았다.
 

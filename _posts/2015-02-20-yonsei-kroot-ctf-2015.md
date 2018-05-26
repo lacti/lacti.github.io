@@ -4,11 +4,11 @@ title: kroot ctf 2015
 tags: c# kroot ctf
 ---
 
-연세대학교 보안 동아리 [Kroot](http://kroot.yonsei.ac.kr/)에서 주최하는 [CTF 2015](http://krootctf.yonsei.ac.kr/)에 참가했다. 보안이란 주제랑은 별로 관련이 없는 삶을 살아온지라 [...] 난이도 낮은 문제 + 힌트가 공개된 문제를 중점으로 풀었다.
+연세대학교 보안 동아리 [Kroot](https://kroot.yonsei.ac.kr/)에서 주최하는 [CTF 2015](https://krootctf.yonsei.ac.kr/)에 참가했다. 보안이란 주제랑은 별로 관련이 없는 삶을 살아온지라 [...] 난이도 낮은 문제 + 힌트가 공개된 문제를 중점으로 풀었다.
 
 웹은 아는게 없는지라 바로 스킵했다-_-;
 
-[challensges](http://krootctf.yonsei.ac.kr/challenges)에서 문제 내역을 확인할 수 있다...근데 지금 다 undefined로 나오고 있는데 이게 잠시 발생한 장애인지, 아니면 앞으로 계속 이럴지는 잘 모르겠다.
+[challensges](https://krootctf.yonsei.ac.kr/challenges)에서 문제 내역을 확인할 수 있다...근데 지금 다 undefined로 나오고 있는데 이게 잠시 발생한 장애인지, 아니면 앞으로 계속 이럴지는 잘 모르겠다.
 
 ### 문제풀이 내역
 
@@ -217,7 +217,7 @@ bitmap.Save("result.png");
 
 #### algorithm #17
 
-[Walsh Matrix](http://en.wikipedia.org/wiki/Walsh_matrix)을 구하고 지정된 row의 1인 column index의 합을 구한다. n이 굉장히 커지면 matrix를 다 구하지 않고 문제를 풀어야겠지만 *그럴 일이 없다고 가정하고 + 내 컴퓨터의 성능을 믿고* 그냥 matrix 다 구해서 풀었다.
+[Walsh Matrix](https://en.wikipedia.org/wiki/Walsh_matrix)을 구하고 지정된 row의 1인 column index의 합을 구한다. n이 굉장히 커지면 matrix를 다 구하지 않고 문제를 풀어야겠지만 *그럴 일이 없다고 가정하고 + 내 컴퓨터의 성능을 믿고* 그냥 matrix 다 구해서 풀었다.
 
 ```csharp
 Dictionary<int, BitArray> cacheMap = new Dictionary<int, BitArray>();

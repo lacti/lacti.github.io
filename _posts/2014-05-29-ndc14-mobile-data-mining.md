@@ -4,7 +4,7 @@ title: 모바일 데이터 분석
 tags: ndc14 data -pub
 ---
 
-{% oembed http://www.slideshare.net/5rocks_io/ndc-20140529 %}
+{% oembed https://www.slideshare.net/5rocks_io/ndc-20140529 %}
 
 * [서하연](https://www.5rocks.io/)
 

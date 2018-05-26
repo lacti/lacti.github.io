@@ -6,7 +6,7 @@ tags: c++ reflection -pub
 
 지난 #2에서는 `class_t`, `field_t` 자체가 가상 함수를 갖고, `class_impl_t`와 `field_impl_t`가 이 class를 상속 받아서 구현하는 방식을 사용하였다. 사실 굳이 이 `impl_t` class 들은 노출될 필요가 없으므로 이를 감추도록 해보자.
 
-그리고 다 완성된 type을 register함에 있어, 따로 `register_class`, `register_field` 함수를 직접 불러서 등록을 하였는데, 이것을 [X-Macro pattern](http://en.wikipedia.org/wiki/X_Macro)을 사용하여 개선해보도록 하자.
+그리고 다 완성된 type을 register함에 있어, 따로 `register_class`, `register_field` 함수를 직접 불러서 등록을 하였는데, 이것을 [X-Macro pattern](https://en.wikipedia.org/wiki/X_Macro)을 사용하여 개선해보도록 하자.
 
 
 **C++ Template Metaprogramming**의 형식 삭제(type erasure) 부분을 읽다보니, 굳이 `impl_t` class를 `class_t`, `field_t` 외부로 노출할 필요가 없다는 것을 깨달았다.  
@@ -173,7 +173,7 @@ REFLECTION_REGISTER_END()
 (`reflection_register_helper_t` class가 `user_t`에 대한 type 정보를 `target_type`이라고 지칭할 수 있게 해주어서, `FIELD`를 등록할 때 다시 `user_t`를 언급할 필요가 없어졌다!)
 
 
-이제 [X-Macro pattern](http://en.wikipedia.org/wiki/X_Macro) 방법을 정의한 구조체에 대한 type 정보를 등록하는 것을 자동화해볼 것이다. 이 방법의 핵심은 구조체 선언을 매크로로 하고, 선언된 header 파일을 여러 번 incldue하고, 그 때마다 선언 매크로를 다른 것으로 치환(undef/define)하여 사용하는 것이다.
+이제 [X-Macro pattern](https://en.wikipedia.org/wiki/X_Macro) 방법을 정의한 구조체에 대한 type 정보를 등록하는 것을 자동화해볼 것이다. 이 방법의 핵심은 구조체 선언을 매크로로 하고, 선언된 header 파일을 여러 번 incldue하고, 그 때마다 선언 매크로를 다른 것으로 치환(undef/define)하여 사용하는 것이다.
 
 먼저 선언을 위한 매크로를 정의해보면 다음과 같다.
 

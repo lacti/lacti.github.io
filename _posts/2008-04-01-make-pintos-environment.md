@@ -45,10 +45,10 @@ bochsrc section in the user documentation or the man page of bochsrc.
 00000000000i[CTRL ] quit_sim called with exit code 0
 ```
 
-다음으로 pintos를 실행하기 위해 pintos를 다운로드 받았다. pintos는 구글 검색을 통해 다운로드 주소가 [http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz](http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz)에 있음을 찾아내서 wget 명령으로 다운로드 받았다.
+다음으로 pintos를 실행하기 위해 pintos를 다운로드 받았다. pintos는 구글 검색을 통해 다운로드 주소가 [https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz](https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz)에 있음을 찾아내서 wget 명령으로 다운로드 받았다.
 
 ```bash
-$ wget http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz
+$ wget https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz
 ```
 
 역시 tar.gz 압축이므로 tar xvzf로 압축을 해제하였다.
@@ -64,7 +64,7 @@ $ cd pintos/src/threads
 ~/pintos/src/threads$ make
 ```
 
-make 수행이 `undefined references to '__stack_chk_fail' follow`이라는 에러에 의해 중단되었다. 이를 해결하기 위해 구글을 검색하여 [다음의 레퍼런스](http://ubuntuforums.org/showthread.php?t=303541)를 얻었다. 이 포럼에서 권고하는 대로 make 설정에서 CFLAGS의 값에 `-fno-stack-protector` 옵션을 추가해주기 위해 편집기 vi를 사용하여 Make.vars에 `CFLAGS += -fno-stack-protector`를 추가해 주었다.
+make 수행이 `undefined references to '__stack_chk_fail' follow`이라는 에러에 의해 중단되었다. 이를 해결하기 위해 구글을 검색하여 [다음의 레퍼런스](https://ubuntuforums.org/showthread.php?t=303541)를 얻었다. 이 포럼에서 권고하는 대로 make 설정에서 CFLAGS의 값에 `-fno-stack-protector` 옵션을 추가해주기 위해 편집기 vi를 사용하여 Make.vars에 `CFLAGS += -fno-stack-protector`를 추가해 주었다.
 
 ```bash
 ~/pintos/src/threads$ vi Make.vars

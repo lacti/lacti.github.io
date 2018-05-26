@@ -77,7 +77,7 @@ private:
 * 그리고 `work2()` 작업에 대한 completion이 도착하면 다시 `execute()`를 불러서 `work3()` 작업을 수행한다.
 * 이 때 `execute()`는 return을 반환하므로 더 이상 수행할 작업이 없는 것이다. 따라서 `my_async_worker` 객체를 메모리에서 제거한다.
 
-위와 같은 state machine은 기계적으로 생성이 가능하기 때문에 compiler에서 위와 같은 방법을 사용하여 구현한 c#의 async/await이 있는가 하면 [c에서는 macro으로 구현한 것](http://www.chiark.greenend.org.uk/~sgtatham/coroutines.html)도 있다.
+위와 같은 state machine은 기계적으로 생성이 가능하기 때문에 compiler에서 위와 같은 방법을 사용하여 구현한 c#의 async/await이 있는가 하면 [c에서는 macro으로 구현한 것](https://www.chiark.greenend.org.uk/~sgtatham/coroutines.html)도 있다.
 
 async를 통해 비동기 작업을 시작한 후 then으로 이어할 작업을 설정하는 async/then 패턴과, 수행할 비동기 작업과 context를 묶어서 하나의 객체로 구성하는 async_worker 패턴을 간단히 알아보았다.
 

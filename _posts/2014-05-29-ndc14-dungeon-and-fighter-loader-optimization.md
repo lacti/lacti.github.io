@@ -4,7 +4,7 @@ title: 던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아
 tags: ndc14 optimization -pub
 ---
 
-{% oembed http://www.slideshare.net/JaeseungHa/ndc-2014-35508014 %}
+{% oembed https://www.slideshare.net/JaeseungHa/ndc-2014-35508014 %}
 
 * [하재승](https://twitter.com/ipkn)
 
@@ -113,7 +113,7 @@ tags: ndc14 optimization -pub
 
 * 본 세션은 기술 세션이라기 보다는 경험 공유 세션이므로, 그 과정을 다 서술하기 위해 노력했다. (덕분에 내용이 길다)
 * 전 회사에서 서버 구동 시간 단축을 위해 [노력]({% post_url 2013-06-09-binary-xml-for-fast-loading %})을 해본 적이 있다. 그래서 드는 의문은,
-	* 보통 최적화를 할 때에는 [profiling](http://en.wikipedia.org/wiki/Profiling_%28computer_programming%29)을 먼저 한다. vs의 analysis를 쓰든 vtune을 쓰든 돌려보면 느린 함수가 순서대로 잘 나온다. 그리고 보통 그 순서대로 원인을 파악하기 위해 작업을 한다.
+	* 보통 최적화를 할 때에는 [profiling](https://en.wikipedia.org/wiki/Profiling_%28computer_programming%29)을 먼저 한다. vs의 analysis를 쓰든 vtune을 쓰든 돌려보면 느린 함수가 순서대로 잘 나온다. 그리고 보통 그 순서대로 원인을 파악하기 위해 작업을 한다.
 	* ~~만약 그랬다면 위 최적화의 적용 순서가 logging 삭제, list 미리 구성, `unordered_map`, `scalable_alloc` 적용, 분할 압축, dumpable 순일 것 같은데 그렇지 않았다~~ *특별히 어느 한 부분이 압도적으로 문제가 되는 부분이 없었다고 한다.*
 	* 그렇다는 것은 던파 코드가 analysis를 써도 결과가 제대로 안 나오는 답이 없는 상황 ~~이거나 profiling을 초반에 제대로 못 돌렸다는 것이다~~ 이었다는 것이다.  
 	  *발표 시점에 해당 내용을 놓친 것 같다. 발표자님의 댓글 도움으로 수정*

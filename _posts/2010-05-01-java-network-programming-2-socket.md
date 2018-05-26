@@ -9,7 +9,7 @@ tags: java -pub
 ### Socket ###
 
 전 글에서 네트워크 통신을 사람 간의 전화로 비유했었다.  
-네트워크 통신을 한다는 것은 [NIC(Network Interface Controller)](http://en.wikipedia.org/wiki/Network_Interface_Controller)를 사용하여 데이터를 주고 받겠다는 것이고 이는 **하드웨어를 제어해야 한다는 뜻이다.** 하드웨어는  **운영체제가 관리하고 있는 자원**이기 때문에 일반 프로그램들이 접근할 수 없다.
+네트워크 통신을 한다는 것은 [NIC(Network Interface Controller)](https://en.wikipedia.org/wiki/Network_Interface_Controller)를 사용하여 데이터를 주고 받겠다는 것이고 이는 **하드웨어를 제어해야 한다는 뜻이다.** 하드웨어는  **운영체제가 관리하고 있는 자원**이기 때문에 일반 프로그램들이 접근할 수 없다.
 
 처음 c/c++ 배울 때 사용했떤 파일 읽기/쓰기도 **하드디스크**라는 하드웨어 자원을 쓰는데 잘은 몰랐지만 프로그램이 제어를 했었다. 그 이유는 ~~모르는 사이에~~ open, read, write와 같은 **운영체제가 제공하는 API**를 사용했기 때문이다. 요약하자면, **하드웨어 자원은 운영체제가 관리하니 운영체제가 제공하는 API를 사용하여 프로그래밍을 해야 한다**는 것이다.
 

@@ -4,7 +4,7 @@ title: THE NPCM@STER - 라이브 게임에 어울리는 스토리 텔링의 접�
 tags: ndc14 design live -pub
 ---
 
-{% oembed http://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617 %}
+{% oembed https://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617 %}
 
 * [강근영](https://twitter.com/khalbora)
 
@@ -113,4 +113,4 @@ tags: ndc14 design live -pub
 * 끊임없이 변화하는 상황에 대응하는 라이브 서비스는 순발력을 단련하기 좋은 환경이다.
 	* 잦은 수정에 대처하기 위해 프로그래머는 소프트웨어 공학 기술을 발전시키며 나름 대응책을 만들어왔다. 핵심은 **작업/수정 비용을 낮추어야 한다는 것**이다.
 	* 본 세션을 통해 이것이 다른 직군에서도 동일하게 적용될 수 있다는 점을 생각할 수 있어 좋았다.
-* 속성화되어 있는 캐릭터의 생산 비용을 낮춘다는 측면에서 [storyhelper](http://www.storyhelper.co.kr/)가 떠올랐다. 같은 맥락에서 npchelper 같은 것을 만들어보면 어떨까 하는 생각이 들었다.
+* 속성화되어 있는 캐릭터의 생산 비용을 낮춘다는 측면에서 [storyhelper](https://www.storyhelper.co.kr/)가 떠올랐다. 같은 맥락에서 npchelper 같은 것을 만들어보면 어떨까 하는 생각이 들었다.

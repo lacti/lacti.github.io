@@ -6,7 +6,7 @@ tags: c++ rpc -pub
 
 generic한 rpc를 간단히 구현해보자.
 
-원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 [DSEL](http://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage)을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.
+원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 [DSEL](https://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage)을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.
 
 양이 좀 많기 때문에 개요부터 설명하겠다.
 
@@ -106,7 +106,7 @@ private:
 typedef boost::shared_ptr<session_t> session_ref;
 ```
 
-[boost asio](http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html)에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.
+[boost asio](https://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html)에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.
 
 전체 코드를 다 올리면 너무 기니까 간단하게 message를 읽는 코드만 옮겨보았다.
 
@@ -258,7 +258,7 @@ callback 내에서는 reader 객체에서 result 값을 읽어서 사용자가 �
 
 ### code generating ###
 
-이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 **rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가**이다. 나머지 byte serializer나 rpc type enum 선언 등의 [boilerplate code](http://en.wikipedia.org/wiki/Boilerplate_code)를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.
+이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 **rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가**이다. 나머지 byte serializer나 rpc type enum 선언 등의 [boilerplate code](https://en.wikipedia.org/wiki/Boilerplate_code)를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.
 
 일단 원하는 최종 형태의 코드는 다음과 같다.
 
@@ -276,9 +276,9 @@ int example::add(int a, int b, int c) { return a + b + c; }
 
 rpc interface에 대한 선언을 하고, 그에 대한 구현을 한다. 그러면 필요한 나머지 코드가 모두 만들어지는 것이다.
 
-type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 [X Macro pattern](http://en.wikipedia.org/wiki/X_Macro)이 사용될 것이다.
+type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 [X Macro pattern](https://en.wikipedia.org/wiki/X_Macro)이 사용될 것이다.
 
-일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 `RPC_METHOD3` macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 [boost pp](http://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html)를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.
+일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 `RPC_METHOD3` macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 [boost pp](https://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html)를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.
 
 설명의 편의를 위해 `RPC_METHOD2()`를 기준으로 설명할 것이다.
 

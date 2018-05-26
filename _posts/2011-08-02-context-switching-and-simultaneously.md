@@ -13,7 +13,7 @@ multi thread (or process) programming에서 가장 기초적인 개념으로 ABA
 그러다가 cpu가 발달하고 느린 작업, 빠른 작업, 사용자 반응성(interact)이 중요한 작업, 그렇지 않은 작업 들에 대해서 분리해서 한 번 같이 실행해볼까 하는 시도가 나왔다. (물론 처음에는 묶어서batch 작업을 처리했던가)  
 그래서 출력하면서 문서 편집을 할 수 있다는, ABABABABABAB를 빨리해서 A와 B가 동시에 실행되는 것 처럼 보이는 좋은 구조가 나타났다.
 
-그렇게 여러 개의 프로세스(프로그램이 실행되고 있는 것)가 짧은 간격으로 번갈아가며 수행하니 동시에 실행되는 것 같아 참으로 보기 좋았다. 그런데 문제는 메모리 공간이 모자르기 시작했다. 그래서 각 프로세스 별로 [메모리 공간을 가상화](http://en.wikipedia.org/wiki/Virtual_memory)해주고, 그것들을 실제 메모리에 연결해주는 메모리 매핑을 운영체제가 지원해주었다.
+그렇게 여러 개의 프로세스(프로그램이 실행되고 있는 것)가 짧은 간격으로 번갈아가며 수행하니 동시에 실행되는 것 같아 참으로 보기 좋았다. 그런데 문제는 메모리 공간이 모자르기 시작했다. 그래서 각 프로세스 별로 [메모리 공간을 가상화](https://en.wikipedia.org/wiki/Virtual_memory)해주고, 그것들을 실제 메모리에 연결해주는 메모리 매핑을 운영체제가 지원해주었다.
 
 이제 운영체제는 CPU를 제어하여 여러 프로세스들을 번갈아가며 빠르게 실행해주고, 메모리를 관리하여 부족한 공간은 디스크에 적당히 연결해서 사용(swap memory)할 수 있게 해주었다.
 
@@ -27,7 +27,7 @@ multi thread (or process) programming에서 가장 기초적인 개념으로 ABA
 
 각 프로세스들은 자신의 실행 흐름을 갖는다. multi thread라는 개념이 없을 때, 각 프로세스는 단 한 개의 주 실행흐름(main thread)를 가지고, 이것이 cpu에 의해서 실행되었다.
 
-cpu에서 실행하기 위해 필요한 정보들, 즉 실행 문맥(state, context)은 register 등을 생각해보면 되겠다. 어차피 현재 CPU가 수행하고 있는 정보들은 PC(IR), EA...DX, ESI, EDI, EBP, ESP 등(x86) 다 register에 저장되어있으니까 이 값만 잘 저장했다가, 나중에 복구해주면 거기서 이어서 작업을 수행할 수 있을 것이다. 즉 여러 실행 흐름을 번갈아가면서 실행한다는 것은, 각 실행 흐름(thread)의 문맥(context)을 저장해놨다가, 그걸 번갈아가며 register에 덮어쓰고 그 지점(PC)의 코드를 이어서 실행시키게 한다는 것이다. [context switch](http://en.wikipedia.org/wiki/Context_switch)
+cpu에서 실행하기 위해 필요한 정보들, 즉 실행 문맥(state, context)은 register 등을 생각해보면 되겠다. 어차피 현재 CPU가 수행하고 있는 정보들은 PC(IR), EA...DX, ESI, EDI, EBP, ESP 등(x86) 다 register에 저장되어있으니까 이 값만 잘 저장했다가, 나중에 복구해주면 거기서 이어서 작업을 수행할 수 있을 것이다. 즉 여러 실행 흐름을 번갈아가면서 실행한다는 것은, 각 실행 흐름(thread)의 문맥(context)을 저장해놨다가, 그걸 번갈아가며 register에 덮어쓰고 그 지점(PC)의 코드를 이어서 실행시키게 한다는 것이다. [context switch](https://en.wikipedia.org/wiki/Context_switch)
 
 그러면, 굳이 하나의 프로세스마다 하나의 실행 흐름만 있을 필요가 있나? 그래서 하나의 프로세스가 여러 실행 흐름(thread)을 갖는 multi thread programming이 나오게 됬다(억지다!)  
 즉, 내부에서 메모리는 공유(static, heap 영역)하지만 cpu scheduling은 따로 되어서 실행 흐름은 서로 영향을 안 주는 것이라고 볼 수 있다.
@@ -40,7 +40,7 @@ cpu에서 실행하기 위해 필요한 정보들, 즉 실행 문맥(state, cont
 왜냐하면 C++ 코드의 한 줄은 기계어가 한 번에 실행할 수 있는 하나의 명령, 즉 1:1 관계가 아니기 때문에 그 명령 내부에서 context switching이 발생하면 문제가 생길 수 있기 때문이다.
 
 물론 lock을 사용하여 배타적 구간을 만드는 방식으로 프로그램을 작성한다고 해도 이러한 thread 간에서 서로 lock을 획득하다 발생할 수 있는 dead (or live) lock 문제가 발생할 수도 있다.  
-따라서 multi thread programming 을 할 때는 이러한 문제까지 고려하여 더욱 세심하게 프로그래밍을 해야한다. [ABA Problem](http://en.wikipedia.org/wiki/ABA_problem)
+따라서 multi thread programming 을 할 때는 이러한 문제까지 고려하여 더욱 세심하게 프로그래밍을 해야한다. [ABA Problem](https://en.wikipedia.org/wiki/ABA_problem)
 
 ### simultaneously ###
 

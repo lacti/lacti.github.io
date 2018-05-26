@@ -6,7 +6,7 @@ tags: c++ -pub
 
 C++11 에서 도입된 lambda expression을 통한 RAII 구현 방식의 한 예와, 단위 전략을 통한 RAII 구현을 통해 장단점을 비교해보자.
 
-[Wiki: Resource Acquisition Is Initialization(RAII)](http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization)는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통
+[Wiki: Resource Acquisition Is Initialization(RAII)](https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization)는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통
 
 * IO (열었으면 닫아야하니까),
 * 메모리 (할당했으면 해제해야하니까, shared_ptr도 AddReference 했으면 ReleaseReference)

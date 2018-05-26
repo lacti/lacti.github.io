@@ -12,8 +12,8 @@ title: about me
 * [lactrious@gmail.com](mailto:lactrious@gmail.com)
 * [github](https://github.com/lacti)
 * [twitter](https://twitter.com/lacti)
-* [linkedin](http://www.linkedin.com/pub/jaeyoung-choi/99/243/861)
-* [slideshare](http://www.slideshare.net/lactrious/presentations)
+* [linkedin](https://www.linkedin.com/pub/jaeyoung-choi/99/243/861)
+* [slideshare](https://www.slideshare.net/lactrious/presentations)
 
 ### career
 

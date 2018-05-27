@@ -4,7 +4,7 @@ title: THE NPCM@STER - 라이브 게임에 어울리는 스토리 텔링의 접�
 tags: ndc14 design live -pub
 ---
 
-{% oembed https://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617 %}
+{% oembed http://www.slideshare.net/khalbora/the-npcmsterpublicfinal-35354617 %}
 
 * [강근영](https://twitter.com/khalbora)
 

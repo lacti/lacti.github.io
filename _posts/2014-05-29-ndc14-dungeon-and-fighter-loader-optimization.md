@@ -4,7 +4,7 @@ title: 던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아
 tags: ndc14 optimization -pub
 ---
 
-{% oembed https://www.slideshare.net/JaeseungHa/ndc-2014-35508014 %}
+{% oembed http://www.slideshare.net/JaeseungHa/ndc-2014-35508014 %}
 
 * [하재승](https://twitter.com/ipkn)
 

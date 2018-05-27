@@ -4,7 +4,7 @@ title: preprocessor programming
 tags: c++ slide
 ---
 
-{% oembed https://www.slideshare.net/lactrious/preprocessor-programming %}
+{% oembed http://www.slideshare.net/lactrious/preprocessor-programming %}
 
 * [github: MacRec](https://github.com/lacti/MacRec)
 

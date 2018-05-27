@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>c++에서 reflection 사용하기 3</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -61,7 +63,7 @@
 				<div class="content">
 				<p>지난 #2에서는 <code>class_t</code>, <code>field_t</code> 자체가 가상 함수를 갖고, <code>class_impl_t</code>와 <code>field_impl_t</code>가 이 class를 상속 받아서 구현하는 방식을 사용하였다. 사실 굳이 이 <code>impl_t</code> class 들은 노출될 필요가 없으므로 이를 감추도록 해보자.</p>
 
-<p>그리고 다 완성된 type을 register함에 있어, 따로 <code>register_class</code>, <code>register_field</code> 함수를 직접 불러서 등록을 하였는데, 이것을 <a href="http://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a>을 사용하여 개선해보도록 하자.</p>
+<p>그리고 다 완성된 type을 register함에 있어, 따로 <code>register_class</code>, <code>register_field</code> 함수를 직접 불러서 등록을 하였는데, 이것을 <a href="https://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a>을 사용하여 개선해보도록 하자.</p>
 
 <p><strong>C++ Template Metaprogramming</strong>의 형식 삭제(type erasure) 부분을 읽다보니, 굳이 <code>impl_t</code> class를 <code>class_t</code>, <code>field_t</code> 외부로 노출할 필요가 없다는 것을 깨달았다.<br>
 (물론 위 책에서 언급하는 예제는 복사 및 대입 가능한 대상이기 때문에 복사/대입/소멸 등도 고려되어 있지만, 본 글에서는 단지 <code>impl_t</code>를 숨기기 위한 용도 정도로만 사용한다.)</p>
@@ -205,7 +207,7 @@
 </code></pre></div>
 <p>(<code>reflection_register_helper_t</code> class가 <code>user_t</code>에 대한 type 정보를 <code>target_type</code>이라고 지칭할 수 있게 해주어서, <code>FIELD</code>를 등록할 때 다시 <code>user_t</code>를 언급할 필요가 없어졌다!)</p>
 
-<p>이제 <a href="http://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a> 방법을 정의한 구조체에 대한 type 정보를 등록하는 것을 자동화해볼 것이다. 이 방법의 핵심은 구조체 선언을 매크로로 하고, 선언된 header 파일을 여러 번 incldue하고, 그 때마다 선언 매크로를 다른 것으로 치환(undef/define)하여 사용하는 것이다.</p>
+<p>이제 <a href="https://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a> 방법을 정의한 구조체에 대한 type 정보를 등록하는 것을 자동화해볼 것이다. 이 방법의 핵심은 구조체 선언을 매크로로 하고, 선언된 header 파일을 여러 번 incldue하고, 그 때마다 선언 매크로를 다른 것으로 치환(undef/define)하여 사용하는 것이다.</p>
 
 <p>먼저 선언을 위한 매크로를 정의해보면 다음과 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#ifndef __DECLARE_TYPE_MACRO_DEFINED__</span>

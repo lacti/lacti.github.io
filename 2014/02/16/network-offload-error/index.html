@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>네트워크 offload 장애</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -63,8 +65,8 @@
 <p>이 옵션이 왜 문제를 일으킬 수 있을까? 이에 대해 자세히 알아보자.</p>
 
 <ul>
-<li><a href="http://windowsforum.kr/index.php?category=495009&amp;document_srl=4479149&amp;mid=qna">Windows Forum: 랜카드 옵션 Large Send Offload 가 궁금해요</a></li>
-<li><a href="http://myknowledge.kr/29">TCP 체크섬 오프로드</a></li>
+<li><a href="https://windowsforum.kr/index.php?category=495009&amp;document_srl=4479149&amp;mid=qna">Windows Forum: 랜카드 옵션 Large Send Offload 가 궁금해요</a></li>
+<li><a href="https://myknowledge.kr/29">TCP 체크섬 오프로드</a></li>
 </ul>
 
 <p>원래 위 옵션은 cpu로 처리해야 하는 일을 nic가 대신 처리해서 전체 성능을 높여준다는 것이다. 그런데 테스트를 진행했던 네트워크에서는 서버 머신의 nic와 switch 간의 저 옵션이 제대로 동작하지 않아서 주기적으로 문제가 발생한 것이다. 서버 머신의 nic에서 해당 옵션을 끄니 더 이상 문제가 발생하지 않았다.</p>

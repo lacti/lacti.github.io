@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>자바 네트워크 프로그래밍 2 - Socket</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -60,7 +62,7 @@
 <h3>Socket</h3>
 
 <p>전 글에서 네트워크 통신을 사람 간의 전화로 비유했었다.<br>
-네트워크 통신을 한다는 것은 <a href="http://en.wikipedia.org/wiki/Network_Interface_Controller">NIC(Network Interface Controller)</a>를 사용하여 데이터를 주고 받겠다는 것이고 이는 <strong>하드웨어를 제어해야 한다는 뜻이다.</strong> 하드웨어는  <strong>운영체제가 관리하고 있는 자원</strong>이기 때문에 일반 프로그램들이 접근할 수 없다.</p>
+네트워크 통신을 한다는 것은 <a href="https://en.wikipedia.org/wiki/Network_Interface_Controller">NIC(Network Interface Controller)</a>를 사용하여 데이터를 주고 받겠다는 것이고 이는 <strong>하드웨어를 제어해야 한다는 뜻이다.</strong> 하드웨어는  <strong>운영체제가 관리하고 있는 자원</strong>이기 때문에 일반 프로그램들이 접근할 수 없다.</p>
 
 <p>처음 c/c++ 배울 때 사용했떤 파일 읽기/쓰기도 <strong>하드디스크</strong>라는 하드웨어 자원을 쓰는데 잘은 몰랐지만 프로그램이 제어를 했었다. 그 이유는 <del>모르는 사이에</del> open, read, write와 같은 <strong>운영체제가 제공하는 API</strong>를 사용했기 때문이다. 요약하자면, <strong>하드웨어 자원은 운영체제가 관리하니 운영체제가 제공하는 API를 사용하여 프로그래밍을 해야 한다</strong>는 것이다.</p>
 

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>pintos 환경 구축</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -86,8 +88,8 @@ For information on Bochs configuration file arguments, see the
 bochsrc section in the user documentation or the man page of bochsrc.
 00000000000i<span class="o">[</span>CTRL <span class="o">]</span> quit_sim called with <span class="nb">exit </span>code 0
 </code></pre></div>
-<p>다음으로 pintos를 실행하기 위해 pintos를 다운로드 받았다. pintos는 구글 검색을 통해 다운로드 주소가 <a href="http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz">http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz</a>에 있음을 찾아내서 wget 명령으로 다운로드 받았다.</p>
-<div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>wget http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz
+<p>다음으로 pintos를 실행하기 위해 pintos를 다운로드 받았다. pintos는 구글 검색을 통해 다운로드 주소가 <a href="https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz">https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz</a>에 있음을 찾아내서 wget 명령으로 다운로드 받았다.</p>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>wget https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz
 </code></pre></div>
 <p>역시 tar.gz 압축이므로 tar xvzf로 압축을 해제하였다.</p>
 <div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>tar xvzf pintos.tar.gz
@@ -96,7 +98,7 @@ bochsrc section in the user documentation or the man page of bochsrc.
 <div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>pintos/src/threads
 ~/pintos/src/threads<span class="nv">$ </span>make
 </code></pre></div>
-<p>make 수행이 <code>undefined references to &#39;__stack_chk_fail&#39; follow</code>이라는 에러에 의해 중단되었다. 이를 해결하기 위해 구글을 검색하여 <a href="http://ubuntuforums.org/showthread.php?t=303541">다음의 레퍼런스</a>를 얻었다. 이 포럼에서 권고하는 대로 make 설정에서 CFLAGS의 값에 <code>-fno-stack-protector</code> 옵션을 추가해주기 위해 편집기 vi를 사용하여 Make.vars에 <code>CFLAGS += -fno-stack-protector</code>를 추가해 주었다.</p>
+<p>make 수행이 <code>undefined references to &#39;__stack_chk_fail&#39; follow</code>이라는 에러에 의해 중단되었다. 이를 해결하기 위해 구글을 검색하여 <a href="https://ubuntuforums.org/showthread.php?t=303541">다음의 레퍼런스</a>를 얻었다. 이 포럼에서 권고하는 대로 make 설정에서 CFLAGS의 값에 <code>-fno-stack-protector</code> 옵션을 추가해주기 위해 편집기 vi를 사용하여 Make.vars에 <code>CFLAGS += -fno-stack-protector</code>를 추가해 주었다.</p>
 <div class="highlight"><pre><code class="bash language-bash" data-lang="bash">~/pintos/src/threads<span class="nv">$ </span>vi Make.vars
 </code></pre></div>
 <p>기존에 컴파일한 것들을 제거하기 위해 make clean을 수행한 후 make를 수행하여 빌드를 마쳤다.</p>

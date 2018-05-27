@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>lambda와 RAII 1</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -57,7 +59,7 @@
 				<div class="content">
 				<p>C++11 에서 도입된 lambda expression을 통한 RAII 구현 방식의 한 예와, 단위 전략을 통한 RAII 구현을 통해 장단점을 비교해보자.</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization">Wiki: Resource Acquisition Is Initialization(RAII)</a>는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통</p>
+<p><a href="https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization">Wiki: Resource Acquisition Is Initialization(RAII)</a>는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통</p>
 
 <ul>
 <li>IO (열었으면 닫아야하니까),</li>

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>concurrency 스터디</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -62,8 +64,8 @@
 				<p>오늘 스터디에서 공부한 내용을 간략히 정리해보자.</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/ABA_problem">Wiki: ABA problem</a></li>
-<li><a href="http://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ABA_problem">Wiki: ABA problem</a></li>
+<li><a href="https://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms</a></li>
 <li><a href="/2011/08/02/context-switching-and-simultaneously/">context switching과 simultaneously 실행</a></li>
 <li><a href="/2012/02/23/thread-unsafety-problem-in-circular-queue/">환형큐의 thread unsafety 문제</a></li>
 </ul>
@@ -72,15 +74,15 @@
 
 <ul>
 <li><a href="/2011/08/02/volatile-interlocked-operation/">volatile 과 interlocked operation</a></li>
-<li><a href="http://summerlight-textcube.blogspot.kr/2009/11/volatile%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B0%B0%EB%A6%AC%EC%96%B4.html">summerlight: volatile과 메모리 배리어</a></li>
+<li><a href="https://summerlight-textcube.blogspot.kr/2009/11/volatile%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B0%B0%EB%A6%AC%EC%96%B4.html">summerlight: volatile과 메모리 배리어</a></li>
 </ul>
 
 <h3>intrusive/non-intrusive</h3>
 
 <ul>
-<li><a href="http://www.makelinux.net/ldd3/chp-11-sect-5">Linux kernel LinkedList</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/intrusive.html">Boost: Boost.Intrusive</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/intrusive/intrusive_vs_nontrusive.html">Boost: Intrusive and non-intrusive containers</a></li>
+<li><a href="https://www.makelinux.net/ldd3/chp-11-sect-5">Linux kernel LinkedList</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/intrusive.html">Boost: Boost.Intrusive</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/intrusive/intrusive_vs_nontrusive.html">Boost: Intrusive and non-intrusive containers</a></li>
 </ul>
 
 <h3>InterlockedSList</h3>
@@ -94,7 +96,7 @@
 <p>각 actor 객체에 접근하는 thread는 반드시 하나임을 보장함. context switching 비용을 줄이기 위해 thread 개수를 제한하지만 많은 actor를 다루기 위해 객체별 수행 동기화 기법을 사용한다.</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Actor_model">Wiki: Actor model</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Actor_model">Wiki: Actor model</a></li>
 <li><a href="/2011/08/11/synchronize-function-execution-in-each-object/">객체별 함수 수행 동기화</a></li>
 </ul>
 
@@ -105,7 +107,7 @@
 <li>비순차 실행을 통해 최대 수행 시간의 절감 효과를 얻음</li>
 <li>하드웨어적 한계로 비순차 실행 명령어 window를 유지 (reservation stations), 그 내부에서 각 operand 준비 완료가 되면 연산 수행</li>
 <li>operand 준비 완료 통지 연산량 감소를 port grouping, 결과 순서를 보장해주기 위해 rob를 사용</li>
-<li><a href="http://en.wikipedia.org/wiki/Reservation_stations">Wiki: Reservation stations</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reservation_stations">Wiki: Reservation stations</a></li>
 </ul>
 
 <h3>memory consistency model</h3>
@@ -113,25 +115,25 @@
 <p>우리가 작성한 대로 수행을 보장해준다면(Sequentially-consistent ordering) 프로그램의 흐름을 이해하기가 쉽지만 최적화 가능성이 줄어듬. 이를 완화(relaxed)해주어서 최적화가 잘 되게 해보자. 그런데 intel x86-64는 그런 것 신경 안 써줘도 빠르게 돌아감*(<a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님 수정)*</p>
 
 <ul>
-<li><a href="http://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL-RR: Shared Memory Consistency Models: A Tutorial</a></li>
+<li><a href="https://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL-RR: Shared Memory Consistency Models: A Tutorial</a></li>
 </ul>
 
 <p>c++11에 memory order로 추가됨.</p>
 
 <ul>
-<li><a href="http://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
 </ul>
 
 <h3>c++ threading facilities</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/C%2B%2B11#Threading_facilities">Wiki: c++ threading facilities</a></li>
+<li><a href="https://en.wikipedia.org/wiki/C%2B%2B11#Threading_facilities">Wiki: c++ threading facilities</a></li>
 </ul>
 
 <p>표준에서 지원하기는 하지만 표준 라이브러리가 어떻게 구현되어있는지 보고 괜찮은지를 판단한 후 사용하자.</p>
 
 <ul>
-<li><a href="http://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
+<li><a href="https://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
 </ul>
 
 <h3>sync/async programming</h3>
@@ -145,20 +147,20 @@
 <h3>c++11의 lambda</h3>
 
 <ul>
-<li><a href="http://ogoons.tistory.com/69">Visual C++10과 C++0x</a></li>
+<li><a href="https://ogoons.tistory.com/69">Visual C++10과 C++0x</a></li>
 </ul>
 
 <h3>thread safe한 singleton</h3>
 
 <ul>
-<li><a href="http://board.poolc.org/generation03/512">PoolC: C++ 싱글턴 (summerlight)</a></li>
+<li><a href="https://board.poolc.org/generation03/512">PoolC: C++ 싱글턴 (summerlight)</a></li>
 </ul>
 
 <p>근데 intel x86-64에서는 memory barrier 안 쳐줘도 문제가 없다-_-; 하지만 c++11부터는 함수 내 static 변수를 반환하는 것만으로도 대충 thread-safe한 singleton이 구현 가능해졌다.</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/8102125/is-local-static-variable-initialization-thread-safe-in-c11">Stackoverflow: Is local static variable initialization thread-safe in C++11</a></li>
-<li><a href="http://stackoverflow.com/questions/2280630/c-threadsafe-static-constructor">Stackoverflow: c++ threadsafe static constructor</a></li>
+<li><a href="https://stackoverflow.com/questions/8102125/is-local-static-variable-initialization-thread-safe-in-c11">Stackoverflow: Is local static variable initialization thread-safe in C++11</a></li>
+<li><a href="https://stackoverflow.com/questions/2280630/c-threadsafe-static-constructor">Stackoverflow: c++ threadsafe static constructor</a></li>
 </ul>
 
 <h3>기타 windows via c/c++ 내용</h3>

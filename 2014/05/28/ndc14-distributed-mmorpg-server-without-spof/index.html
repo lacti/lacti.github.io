@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>프로젝트K 서버 아키텍처 - SPOF 없는 분산 MMORPG 서버</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -68,7 +70,7 @@
 <p></div></p>
 
 <ul>
-<li><a href="http://subl.ee/">이흥섭</a></li>
+<li><a href="https://subl.ee/">이흥섭</a></li>
 </ul>
 
 <h3>요약</h3>
@@ -84,7 +86,7 @@
 <ul>
 <li>실시간 동기화되는, 영속성 있고, 심리스인, 단일 세계를 구현해보자.</li>
 <li>높은 가용성, 높은 가용률, 높은 신축성이 목표</li>
-<li><strong>따라서 <a href="http://en.wikipedia.org/wiki/Single_point_of_failure">SPOF</a>는 허용하지 않는다.</strong></li>
+<li><strong>따라서 <a href="https://en.wikipedia.org/wiki/Single_point_of_failure">SPOF</a>는 허용하지 않는다.</strong></li>
 </ul>
 
 <h3>구현</h3>
@@ -106,7 +108,7 @@
 <ul>
 <li>broker 없이 전 서버를 그냥 다 연결했다.</li>
 <li>하지만 어떤 서버들과 연결해야 하는지 주소록은 필요하니까 주소 교환용 broker는 하나 뒀다.</li>
-<li><a href="http://zeromq.org/">ØMQ</a>를 사용하여 서버간 통신
+<li><a href="https://zeromq.org/">ØMQ</a>를 사용하여 서버간 통신
 
 <ul>
 <li>round robin 방식을 사용하면 아무 node에게나 message를 전달한다.</li>

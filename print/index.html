@@ -11,8 +11,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>lacti's blog</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -140,7 +142,7 @@
 <h3>참고</h3>
 
 <ul>
-<li><a href="http://reedcopsey.com/2010/10/28/c-5-async-part-1-simplifying-asynchrony-that-for-which-we-await">C# 5 Async, Part 1: Simplifying Asynchrony – That for which we await</a></li>
+<li><a href="https://reedcopsey.com/2010/10/28/c-5-async-part-1-simplifying-asynchrony-that-for-which-we-await">C# 5 Async, Part 1: Simplifying Asynchrony – That for which we await</a></li>
 </ul>
 </div>
 				<hr />
@@ -201,27 +203,27 @@
 <h3>async, future</h3>
 
 <ul>
-<li><a href="http://en.cppreference.com/w/cpp/thread/future">future, promise</a>는 비동기로 실행되는 수행 결과를 받아오기 위한 개념이다.</li>
-<li><a href="http://en.cppreference.com/w/cpp/thread/async"><code>async</code></a>는 내부적으로 <code>promise</code>를 사용하여 결과를 <code>set()</code>할 비동기 작업을 수행시키고, future를 반환한다.</li>
-<li><a href="http://en.cppreference.com/w/cpp/thread/packaged_task"><code>packaged_task</code></a>는 비동기 작업을 수행할 수 있는 task 객체를 만들어준다. task 객체로부터 future를 가져올 수 있다.</li>
-<li>vs2012 기준으로 내부 구현 분석한 내용: <a href="http://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/thread/future">future, promise</a>는 비동기로 실행되는 수행 결과를 받아오기 위한 개념이다.</li>
+<li><a href="https://en.cppreference.com/w/cpp/thread/async"><code>async</code></a>는 내부적으로 <code>promise</code>를 사용하여 결과를 <code>set()</code>할 비동기 작업을 수행시키고, future를 반환한다.</li>
+<li><a href="https://en.cppreference.com/w/cpp/thread/packaged_task"><code>packaged_task</code></a>는 비동기 작업을 수행할 수 있는 task 객체를 만들어준다. task 객체로부터 future를 가져올 수 있다.</li>
+<li>vs2012 기준으로 내부 구현 분석한 내용: <a href="https://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
 </ul>
 
 <p>vs2012 쪽 문제인지 <code>std::async</code>를 수행할 때 <code>std::launch</code>enum 값을 주지 않으면 <code>std::launch::any</code>로 수행하게 되는데 이 때 <code>deferred</code>로 수행되면서 <code>future</code>를 통해 값을 가져오게 될 경우 문제가 발생하는 것 같다. 내가 개념을 잘못 이해하고 있는 것인지 모르겠는데 문제가 발생하지 않으려면 <code>std::launch::async</code>로 policy를 주고 실행해야 할 듯</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/9389409/vs-11-with-stdfuture-is-this-a-bug">Stackoverflow: VS11 with std::future - is this a bug?</a></li>
+<li><a href="https://stackoverflow.com/questions/9389409/vs-11-with-stdfuture-is-this-a-bug">Stackoverflow: VS11 with std::future - is this a bug?</a></li>
 </ul>
 
 <h3>spawn</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Cilk">Wiki: Cilk</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Cilk">Wiki: Cilk</a></li>
 <li>fork/join
 
 <ul>
-<li><a href="http://minjang.egloos.com/834885">minjang: 왜 fork, join이라는 이름일까?</a></li>
-<li><a href="http://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">Java: Fork/Join</a></li>
+<li><a href="https://minjang.egloos.com/834885">minjang: 왜 fork, join이라는 이름일까?</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">Java: Fork/Join</a></li>
 </ul></li>
 </ul>
 
@@ -232,13 +234,13 @@
 <p>비동기 작업을 위해 작업을 수행할 Task를 만든다. 해당 Task가 완료되면 다음 작업을 수행할 수 있도록 Task를 엮는다(Task Continuation)</p>
 
 <ul>
-<li><a href="http://msdn.microsoft.com/en-us/library/dd460717.aspx">MSDN: Task Parallel Library</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/dd460717.aspx">MSDN: Task Parallel Library</a></li>
 </ul>
 
 <p>특정 Task의 결과를 획득할 수 있을 때까지 대기한다. 이 때 할 수 있는 다른 일이 있다면 찾아본다(await). 이는 단순히 compiler가 await하는 코드들을 하나의 state machine으로 묶어서 state를 변화시키면서 해당 함수를 계속 불러주는 방식으로 만들어주는 것이다.</p>
 
 <ul>
-<li><a href="http://weblogs.asp.net/dixin/archive/2012/11/02/understanding-c-async-await-1-compilation.aspx">Dixin: Understanding C# async / await Compliation</a></li>
+<li><a href="https://weblogs.asp.net/dixin/archive/2012/11/02/understanding-c-async-await-1-compilation.aspx">Dixin: Understanding C# async / await Compliation</a></li>
 </ul>
 
 <p>실제 코드가 각각 어떤 thread에서 수행될 수 있는지에 대해서는 약간 복잡할 수 있는데 이에 대해서는 다루지 않았다. 요약하면, 비동기 logic을 동기적으로 작성하기 위한 async/await는 결과적으로 state machine code로 compiler에 의해 변환되어 .net thread-pool에 들어갔다 나왔다하면서 코드가 수행된다는 것.</p>
@@ -267,9 +269,9 @@
 <h3>coroutine</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Coroutine">Wiki: Coroutine</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Generator_%28computer_science%29">Wiki: Generator</a></li>
-<li><a href="http://www.unitystudy.net/bbs/board.php?bo_table=writings&amp;wr_id=43">UnityStudy: Coroutine의 기본 개념 및 활용</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Coroutine">Wiki: Coroutine</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Generator_%28computer_science%29">Wiki: Generator</a></li>
+<li><a href="https://www.unitystudy.net/bbs/board.php?bo_table=writings&amp;wr_id=43">UnityStudy: Coroutine의 기본 개념 및 활용</a></li>
 </ul>
 
 <blockquote>
@@ -313,7 +315,7 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 <p><code>user -&gt; kernel (kernel + device driver) -&gt; physical -&gt; kernel -&gt; user</code>로 이어지는 장대한 여행</p>
 
 <ul>
-<li><a href="http://www.youtube.com/watch?v=PBWhzz_Gn10">Warriors of the Net</a></li>
+<li><a href="https://www.youtube.com/watch?v=PBWhzz_Gn10">Warriors of the Net</a></li>
 </ul>
 
 <p>약간 거리가 있지만</p>
@@ -383,10 +385,10 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 <p>asio 코딩을 통해 async request/completion의 개념을 이해하면 좋을 것 같아 넣어봤다. 자세한 내용은 asio document이 워낙 잘 되어 있으니 그 쪽을 보면 좋다.</p>
 
 <ul>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/boost_asio.html">Boost.Asio</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/boost_asio.html">Boost.Asio</a></li>
 </ul>
 
-<h3><a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa365198.aspx">IOCP</a>: <del>Windows의 자랑</del></h3>
+<h3><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365198.aspx">IOCP</a>: <del>Windows의 자랑</del></h3>
 
 <p>request와 completion을 분리한 비동기 io 함수와 분리된 두 문맥을 연결해주기 위해 준비되는 overlapped 구조체는 iocp 이전부터 존재했던 windows api이다(apc 포함). 다만 callback이 불리는 시점도 애매하고 흐름이 눈에 잘 띄지 않으니 completion queue를 api로 노출시켜 접근할 수 있게 만들어준 것.</p>
 
@@ -406,7 +408,7 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 
 <p>뭐, kernel이 io 작업 다 해주고 user는 completion만 처리하면 되니 다른 일에 집중할 수 있어 더 좋은건 당연한 소리</p>
 
-<h3><a href="http://www.serverframework.com/asynchronousevents/2011/10/windows-8-registered-io-networking-extensions.html">RIO</a></h3>
+<h3><a href="https://www.serverframework.com/asynchronousevents/2011/10/windows-8-registered-io-networking-extensions.html">RIO</a></h3>
 
 <p>iocp를 만들고 열심히 profiling을 해보니 3가지 문제가 있댄다.</p>
 
@@ -427,8 +429,8 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 </ol>
 
 <ul>
-<li><a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms740642.aspx">MSDN: What&#39;s New for Windows Sockets</a></li>
-<li><a href="http://channel9.msdn.com/Events/Build/BUILD2011/SAC-593T">Channel9: New techniques to develop low-latency network apps</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms740642.aspx">MSDN: What&#39;s New for Windows Sockets</a></li>
+<li><a href="https://channel9.msdn.com/Events/Build/BUILD2011/SAC-593T">Channel9: New techniques to develop low-latency network apps</a></li>
 </ul>
 
 <p>사실 성능에 좀 의문이 있기는 했는데, 이걸로 실험해본 사람이 iocp보다 30~40% 성능 향상을 경험했다고 한다. 좀 미묘한 설계이기는 했는데 나중에 기회가 되면 글 쓰겠음.</p>
@@ -801,9 +803,9 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 <li>다중 입출력 함수라고 불리는 select 함수를 사용한다. 이 함수는 여러 Socket에 대해 감시를 수행할 수 있고, 적절히 timeout 값을 지정해서 그 시간동안 IO가 없으면 반환해버리는 구조의 함수이다. 따라서 blocking, non blocking 양 쪽으로 모두 사용할 수 있다.
 
 <ul>
-<li><a href="http://kldp.org/node/112275">http://kldp.org/node/112275</a></li>
-<li><a href="http://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select">http://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select</a></li>
-<li><a href="http://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select">http://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select</a></li>
+<li><a href="https://kldp.org/node/112275">https://kldp.org/node/112275</a></li>
+<li><a href="https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select">https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/select</a></li>
+<li><a href="https://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select">https://www.joinc.co.kr/modules/moniwiki/wiki.php/man/2/select</a></li>
 </ul></li>
 </ul>
 
@@ -995,9 +997,9 @@ blocking 모드는 프로그램의 수행을 멈추는 것으로 간단한 예�
 <p>CPU 는 한 순간에 하나의 명령만 수행하기 때문에 운영체제의 코드와 응용 프로그램의 코드를 수행하는 시점에는 구분할 수가 없다. 따라서 코드가 메모리에 존재하는 영역(segment) 자체에 레벨을 설정하여 권한을 갖고(privileged) 수행할 수 있는 영역과 그렇지 않은 영역을 구분한다. 운영체제는 응용 프로그램을 실행할 때 그 코드를 권한을 갖지 못한 영역(user)에 올리기 때문에 그 코드는 하드웨어에 직접 접근하지 못하고, 운영체제에게 요청하여 원하는 값을 얻어갈 수 있도록 하는 것이다.</p>
 
 <ul>
-<li><a href="http://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection">http://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Privilege_level">http://en.wikipedia.org/wiki/Privilege_level</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Ring_(computer_security">http://en.wikipedia.org/wiki/Ring_(computer_security)</a>)</li>
+<li><a href="https://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection">https://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Privilege_level">https://en.wikipedia.org/wiki/Privilege_level</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Ring_(computer_security">https://en.wikipedia.org/wiki/Ring_(computer_security)</a>)</li>
 </ul>
 
 <p>또한 이러한 ring level이 변경되기 위해서, 즉 user 영역에서 실행되던 코드가 privileged 영역의 kernel 코드가 실행되도록 권한이 변경되어야 하는데, 그러기 위해서 kernel mode로 진입하는 switch 과정이 일어나야한다. 이 과정이 mode switching 과정인데 이 글에서 자세히 다루기에는 양이 너무 많고, 아무튼 복잡하고 부담이 큰 작업이라는 정도로만 이야기를 해보자.<br>
@@ -1192,14 +1194,14 @@ IO의 효율을 위해 비동기 IO를 사용했다. 그 이유는 흐름이 막
 
 <ul>
 <li>nodejs 계열에서 코드를 작성할 때에 위와 같이 작성하는 경향이 있다. nodejs는 비동기 io 기반이므로 간단한 서버 프로그래밍을 해도 중첩 callback에 의해 금새 tab depth가 깊어지는 것을 볼 수 있다.</li>
-<li><a href="http://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 글을 보면 이를 해결하기 위한 라이브러리가 존재함을 볼 수 있다. 그 라이브러리는 아래 소개할 async/then 패턴을 nodejs에 적용한 것이라 볼 수 있겠다.</li>
+<li><a href="https://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 글을 보면 이를 해결하기 위한 라이브러리가 존재함을 볼 수 있다. 그 라이브러리는 아래 소개할 async/then 패턴을 nodejs에 적용한 것이라 볼 수 있겠다.</li>
 </ul>
 
 <p>async/then 패턴은 task continuation을 생각하면 좋다. 비동기 작업을 추상화한 객체가 있고, 그 객체의 method chaining으로 이후 할 작업을 연결하는 형태이다.</p>
 
 <ul>
-<li><a href="http://msdn.microsoft.com/en-us/library/vstudio/ee372288.aspx">MSDN: Continuation Tasks</a></li>
-<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3558.pdf">A Standardized Representation of Asynchronous Operations</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/vstudio/ee372288.aspx">MSDN: Continuation Tasks</a></li>
+<li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3558.pdf">A Standardized Representation of Asynchronous Operations</a></li>
 </ul>
 
 <p>즉 asynchronous하게 호출된 작업 뒤에 할 일을 이어서 붙이는 것이다.</p>
@@ -1209,7 +1211,7 @@ IO의 효율을 위해 비동기 IO를 사용했다. 그 이유는 흐름이 막
 <li><strong>c++</strong>의 경우 (표준이 의도한 바에 따르면) <code>std::async()</code>을 통해 비동기 요청을 수행하는데 이 때의 반환값은 <code>std::future</code>이다. 따라서 <code>future</code>에 <code>then()</code> method를 통해 다음 할 비동기 작업을 잇는다는 것이다.</li>
 </ul>
 
-<p><a href="http://doodoori2.tistory.com/" title="Doodoori2&#39;s Blog">doodoori2</a>님께서 질문해준 것과 같이 <code>async()</code>로 시작된 작업에 대해 <code>then()</code>으로 이어서 할 작업을 추가해줄 때 동시성 문제가 발생할 수 있기 때문에 이를 적절히 잘 제어해주는 것도 중요하다.
+<p><a href="https://doodoori2.tistory.com/" title="Doodoori2&#39;s Blog">doodoori2</a>님께서 질문해준 것과 같이 <code>async()</code>로 시작된 작업에 대해 <code>then()</code>으로 이어서 할 작업을 추가해줄 때 동시성 문제가 발생할 수 있기 때문에 이를 적절히 잘 제어해주는 것도 중요하다.
 <code>async()</code>로 시작된 작업에 <code>then()</code>을 추가할 때, 다음의 상태 중 하나일 수 있다.</p>
 
 <ol>
@@ -1232,7 +1234,7 @@ IO의 효율을 위해 비동기 IO를 사용했다. 그 이유는 흐름이 막
 <span class="p">}</span>
 </code></pre></div>
 <p>문제가 발생할 수 있는 부분은 _next를 대입하는 곳과 _next를 호출하는 부분이다. 이 부분만 lock으로 잘 감싸서 동시성 문제를 해결하면 되겠다. 아래 링크의 자료를 보면 vs2012 기준 future는 내부에 StateManger라는 객체가 lock으로 보호하는 구조로 작성되어 있다. 같은 방법으로 <code>then()</code>으로 연결할 함수도 보호해줄 수 있을 것이다.<br>
-<a href="http://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></p>
+<a href="https://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></p>
 
 <p>async/then 패턴은 stateless한 일련의 비동기 작업을 서술할 때 편하다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">req_async</span><span class="p">(</span><span class="n">case1</span><span class="p">).</span><span class="n">then</span><span class="p">(</span><span class="n">case1_1</span><span class="p">).</span><span class="n">then</span><span class="p">(</span><span class="n">case1_2</span><span class="p">);</span>
@@ -1336,7 +1338,7 @@ async에서 then으로 상태를 전달하는 가장 기본적인 방법은 반�
 <li>이 때 <code>execute()</code>는 return을 반환하므로 더 이상 수행할 작업이 없는 것이다. 따라서 <code>my_async_worker</code> 객체를 메모리에서 제거한다.</li>
 </ul>
 
-<p>위와 같은 state machine은 기계적으로 생성이 가능하기 때문에 compiler에서 위와 같은 방법을 사용하여 구현한 c#의 async/await이 있는가 하면 <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/coroutines.html">c에서는 macro으로 구현한 것</a>도 있다.</p>
+<p>위와 같은 state machine은 기계적으로 생성이 가능하기 때문에 compiler에서 위와 같은 방법을 사용하여 구현한 c#의 async/await이 있는가 하면 <a href="https://www.chiark.greenend.org.uk/%7Esgtatham/coroutines.html">c에서는 macro으로 구현한 것</a>도 있다.</p>
 
 <p>async를 통해 비동기 작업을 시작한 후 then으로 이어할 작업을 설정하는 async/then 패턴과, 수행할 비동기 작업과 context를 묶어서 하나의 객체로 구성하는 async_worker 패턴을 간단히 알아보았다.</p>
 
@@ -2609,7 +2611,7 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 <strong>조용히 죽는�
 
 <p><code>send</code>/<code>recv</code>를 사용해서 옵션을 주면 깔끔하게 <code>EPIPE</code>를 반환하게 할 수 있는데 <code>write</code>, <code>read</code>는 그런 옵션이 생략된 <em>범용적</em> 함수라서 <code>signal handler</code>를 설치하는 수 밖에 없다.</p>
 
-<p>stackoverflow에 나와있는 <a href="http://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly">how to prevent sigpipes or handle them properly</a>를 보면</p>
+<p>stackoverflow에 나와있는 <a href="https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly">how to prevent sigpipes or handle them properly</a>를 보면</p>
 <div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="kt">int</span> <span class="n">set</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">setsockopt</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_NOSIGPIPE</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">set</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </code></pre></div>
@@ -2791,7 +2793,7 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 <strong>조용히 죽는�
 
 <ul>
 <li><strong>텍스트 세그먼트</strong>는 실행 코드를 포함하고,</li>
-<li><strong>초기화된 데이터 세그먼트</strong>는 초기화된 데이터, 즉 <a href="http://en.wikipedia.org/wiki/Static_variable">정적 변수(static variable)</a>와 <a href="http://en.wikipedia.org/wiki/Global_variable">전역 변수(global variable)</a>의 초기 값이 지정된 경우 그 값 자체가 실행 파일에 저장되어 포함되고,</li>
+<li><strong>초기화된 데이터 세그먼트</strong>는 초기화된 데이터, 즉 <a href="https://en.wikipedia.org/wiki/Static_variable">정적 변수(static variable)</a>와 <a href="https://en.wikipedia.org/wiki/Global_variable">전역 변수(global variable)</a>의 초기 값이 지정된 경우 그 값 자체가 실행 파일에 저장되어 포함되고,</li>
 <li><strong>초기화되지 않은 데이터 세그먼트</strong>는 초기화되지 않은 데이터, 즉 초기값을 지정하지 않은 모든 전역 변수를 포함하고,</li>
 <li><strong>스택 세그먼트</strong>는 반환주소, 매개변수, 실행하는 함수의 지역 변수 등을 담은 프로그램 스택을 포함한다.</li>
 </ul>
@@ -2871,7 +2873,7 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 <strong>조용히 죽는�
       <span class="n">_local_in_function_not_initialized</span> <span class="p">(</span>  <span class="mh">0x7fffde739c3c</span> <span class="o">-&gt;</span> <span class="mi">32705</span><span class="p">)</span>
                       <span class="n">_local_in_function</span> <span class="p">(</span>  <span class="mh">0x7fffde739c38</span> <span class="o">-&gt;</span> <span class="mi">100</span><span class="p">)</span>
 </code></pre></div>
-<p>위 문제와 연결지어 정리하면 이와 같다. 위 쪽이 memory의 high address이고 아래 쪽이 low address이다. 세 개의 영역으로 구분지었는데, 위에서부터 <a href="http://en.wikipedia.org/wiki/Data_segment#Stack">스택(Stack)</a>, <a href="http://en.wikipedia.org/wiki/Data_segment#BSS">초기화되지 않은 영역(BSS)</a>, <a href="http://en.wikipedia.org/wiki/Data_segment#Data">초기화된 영역(Data)</a>이다.</p>
+<p>위 문제와 연결지어 정리하면 이와 같다. 위 쪽이 memory의 high address이고 아래 쪽이 low address이다. 세 개의 영역으로 구분지었는데, 위에서부터 <a href="https://en.wikipedia.org/wiki/Data_segment#Stack">스택(Stack)</a>, <a href="https://en.wikipedia.org/wiki/Data_segment#BSS">초기화되지 않은 영역(BSS)</a>, <a href="https://en.wikipedia.org/wiki/Data_segment#Data">초기화된 영역(Data)</a>이다.</p>
 <div class="highlight"><pre><code class="c language-c" data-lang="c">          <span class="n">_local_in_main_not_initialized</span> <span class="p">(</span>  <span class="mh">0x7fffde739c6c</span> <span class="o">-&gt;</span> <span class="mi">0</span><span class="p">)</span>
                           <span class="n">_local_in_main</span> <span class="p">(</span>  <span class="mh">0x7fffde739c68</span> <span class="o">-&gt;</span> <span class="mi">100</span><span class="p">)</span>
       <span class="n">_local_in_function_not_initialized</span> <span class="p">(</span>  <span class="mh">0x7fffde739c3c</span> <span class="o">-&gt;</span> <span class="mi">32705</span><span class="p">)</span>
@@ -2890,11 +2892,11 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 <strong>조용히 죽는�
 <p>이 결과로 볼 때 세 가지 영역으로 구분할 수 있다.</p>
 
 <ul>
-<li>첫 번째는 <strong>스택 공간</strong>으로 지역 변수, 함수 인자, 반환 주소 등이 들어가는 공간이다. 본 실험과 크게 상관없는 부분으로 <a href="http://en.wikipedia.org/wiki/Call_Stack">call stack</a>에 따라 아래(low address)로 증가하는 것을 확인할 수 있다.</li>
-<li>두 번째는 <strong>초기화되지 않은 데이터 세그먼트</strong>, 즉 저 유명한 <a href="http://en.wikipedia.org/wiki/.bss">BSS(Block Started by Symbol)</a> 영역이다. 메모리 주소의 순서를 보면 global 영역에서 선언된 변수와 static하게 함수 내에서 선언된 변수가 사이좋게 같은 영역 내에 할당된 것을 확인할 수 있다.
+<li>첫 번째는 <strong>스택 공간</strong>으로 지역 변수, 함수 인자, 반환 주소 등이 들어가는 공간이다. 본 실험과 크게 상관없는 부분으로 <a href="https://en.wikipedia.org/wiki/Call_Stack">call stack</a>에 따라 아래(low address)로 증가하는 것을 확인할 수 있다.</li>
+<li>두 번째는 <strong>초기화되지 않은 데이터 세그먼트</strong>, 즉 저 유명한 <a href="https://en.wikipedia.org/wiki/.bss">BSS(Block Started by Symbol)</a> 영역이다. 메모리 주소의 순서를 보면 global 영역에서 선언된 변수와 static하게 함수 내에서 선언된 변수가 사이좋게 같은 영역 내에 할당된 것을 확인할 수 있다.
 
 <ul>
-<li>단, 재밌는 것은 static하게 선언된 global 변수보다 그냥 global 변수가 더 메모리 상위 주소 공간에 할당된다는 것이다. 이는 단일 파일 내에서 접근되는 메모리 변수 영역과 <a href="http://en.wikipedia.org/wiki/External_variable">다른 모든 파일 내에서 접근되는 메모리 변수 영역</a>을 분리함으로써 효율성을 도모한 시도로 추측된다. <span style="color: #ccc;">(본 내용에 관해서는 추후 확인할 예정이다)</span></li>
+<li>단, 재밌는 것은 static하게 선언된 global 변수보다 그냥 global 변수가 더 메모리 상위 주소 공간에 할당된다는 것이다. 이는 단일 파일 내에서 접근되는 메모리 변수 영역과 <a href="https://en.wikipedia.org/wiki/External_variable">다른 모든 파일 내에서 접근되는 메모리 변수 영역</a>을 분리함으로써 효율성을 도모한 시도로 추측된다. <span style="color: #ccc;">(본 내용에 관해서는 추후 확인할 예정이다)</span></li>
 </ul></li>
 <li>세 번째는 <strong>초기화된 데이터 세그먼트</strong>이다. 함수 내 static 변수나 프로그램 global 변수나 static한 global 변수나 사이좋게 선형적 주소 공간을 가짐을 확인할 수 있다. 재미있는 것은 초기화된 데이터가 메모리에 쌓이는 순서는 순전히 코드 내의 순서에 의존한다는 것이다.<span style="color: #ccc;">(본 내용에 관해서도 추후 확인할 예정이다)</span></li>
 </ul>
@@ -2902,7 +2904,7 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 <strong>조용히 죽는�
 <p>파생되는 이야기가 많아졌는데, 결론을 내리자면<br>
 static 변수나 global 변수가 <strong>같은 공간</strong>에 할당된다는 것이다. 물론 <strong>초기화된 변수와 초기화되지 않은 변수</strong>는 다른 공간에 분리되어 선언된다.</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Data_segment#Data">http://en.wikipedia.org/wiki/Data_segment#Data</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Data_segment#Data">https://en.wikipedia.org/wiki/Data_segment#Data</a></p>
 
 <blockquote>
 <p>static int i = 10; will be stored in data segment and global int i = 10; will be stored in data segment</p>
@@ -3276,7 +3278,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <div class="highlight"><pre><code class="csharp language-csharp" data-lang="csharp"><span class="n">items</span><span class="p">.</span><span class="n">GroupBy</span><span class="p">(</span><span class="n">e</span> <span class="p">=&gt;</span> <span class="n">e</span><span class="p">.</span><span class="n">TemplateId</span><span class="p">).</span><span class="n">Select</span><span class="p">(</span><span class="n">e</span> <span class="p">=&gt;</span>
     <span class="k">new</span> <span class="p">{</span> <span class="n">TemplateId</span> <span class="p">=</span> <span class="n">e</span><span class="p">,</span> <span class="n">SumOfAmount</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Sum</span><span class="p">(</span><span class="n">i</span> <span class="p">=&gt;</span> <span class="n">i</span><span class="p">.</span><span class="n">Amount</span><span class="p">)</span> <span class="p">}).</span><span class="n">Dump</span><span class="p">();</span>
 </code></pre></div>
-<p>위 코드는 TemplateId 별 Amount의 총량을 구해서 보여주는 LINQ 코드이다. (<code>Dump()</code> 함수는 <a href="http://www.linqpad.net/">LINQPad</a>에서 지원하는 함수로 쿼리 수행 결과를 테이블로 이쁘게 보여주는 함수이다.)</p>
+<p>위 코드는 TemplateId 별 Amount의 총량을 구해서 보여주는 LINQ 코드이다. (<code>Dump()</code> 함수는 <a href="https://www.linqpad.net/">LINQPad</a>에서 지원하는 함수로 쿼리 수행 결과를 테이블로 이쁘게 보여주는 함수이다.)</p>
 
 <p>물론 c++에 비해 다소 속도가 느리고 메모리가 많이 필요할 수는 있지만 데이터의 쿼리를 날리기에는 LINQ를 쓸 수 있는 c#이 c++에 비해 훨씬 작업하기가 좋다.</p>
 
@@ -3358,7 +3360,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 				</p>
 				<div class="content"><p>지난 글에서는 csv 데이터를 binary 파일로 serialize하여 데이터의 loading 속도를 올리는 방법에 대해 알아보았다. 해당 방법은 용량이 큰 csv 파일에 대해서도 효과가 크지만, 작게 분할된 많은 csv 파일을 다시 적절한 크기의 binary 파일로 재구성하여 작업할 때 더욱 효과를 크게 느낄 수 있다.</p>
 
-<p>하지만 csv 파일의 용량이 너무 크거나, 아니면 csv 파일이 너무 많을 경우에는 해당 방법을 사용하기가 어렵다. <a href="http://stackoverflow.com/questions/1087982/single-objects-still-limited-to-2-gb-in-size-in-clr-4-0">.net vm은 x64 모드에서도 단일 객체에 대해 2GB 이상의 크기에 대한 메모리 할당 요청을 하면 <code>OutOfMemoryException</code>이 발생</a>하는데, 위 구조에서는 파일의 내용을 한 번에 <code>byte[]</code> 배열로 읽고, 그 결과물을 하나의 <code>List&lt;T&gt;</code>에 담는 구조이기 때문이다.</p>
+<p>하지만 csv 파일의 용량이 너무 크거나, 아니면 csv 파일이 너무 많을 경우에는 해당 방법을 사용하기가 어렵다. <a href="https://stackoverflow.com/questions/1087982/single-objects-still-limited-to-2-gb-in-size-in-clr-4-0">.net vm은 x64 모드에서도 단일 객체에 대해 2GB 이상의 크기에 대한 메모리 할당 요청을 하면 <code>OutOfMemoryException</code>이 발생</a>하는데, 위 구조에서는 파일의 내용을 한 번에 <code>byte[]</code> 배열로 읽고, 그 결과물을 하나의 <code>List&lt;T&gt;</code>에 담는 구조이기 때문이다.</p>
 
 <p>또한 이렇게 loading 시간을 단축한다고 해도 원본 데이터의 크기가 아주 클 경우에는 줄어든 loading 시간도 클 수 밖에 없다. 그리고 binary로 serialize/deserialize하는 기계적인 코드를 매번 수작업으로 입력해야 하는 것도 불필요한 부담이다.</p>
 
@@ -3397,7 +3399,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 
 <p>하지만 <code>GroupBy()</code>나 <code>OrderBy()</code> 연산자 등 stream에 존재하는 모든 데이터를 buffer에 담고 작업을 처리해야하는 연산자의 경우에는 위 collection에 존재하는 모든 데이터를 담기 위한 내부 buffer를 할당해야 하므로 이 크기가 제한을 넘어가 프로그램이 정상 동작하지 않을 수 있다.</p>
 
-<p>.NET Framework 4.5부터는 <a href="http://msdn.microsoft.com/en-us/library/hh285054.aspx">gcAllowVeryLargeObjects</a> 옵션이 추가되었으므로 이 옵션을 통해 문제를 회피할 수 있다고도 한다.</p>
+<p>.NET Framework 4.5부터는 <a href="https://msdn.microsoft.com/en-us/library/hh285054.aspx">gcAllowVeryLargeObjects</a> 옵션이 추가되었으므로 이 옵션을 통해 문제를 회피할 수 있다고도 한다.</p>
 
 <h4>data server</h4>
 
@@ -3493,7 +3495,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <li>서버는 데이터를 모두 읽어서 메모리에 올려놓는다.</li>
 <li>그리고 쿼리 수행을 위한 Service(IPC 등)를 시작한다.</li>
 <li>클라이언트는 수행할 LINQ에 대해 <code>ExpressionTree</code>를 만든다.</li>
-<li><a href="http://expressiontree.codeplex.com/">ExpressionTree Serializer</a>를 사용하여 ExpressionTree를 서버로 전달한다.</li>
+<li><a href="https://expressiontree.codeplex.com/">ExpressionTree Serializer</a>를 사용하여 ExpressionTree를 서버로 전달한다.</li>
 <li>서버는 전달 받은 <code>ExpressionTree</code> 객체에 대해 Query를 복원해서 읽어놓은 데이터에 대해 쿼리를 수행한다. 그리고 그 결과를 클라이언트에게 반환한다.</li>
 <li>클라이언트는 결과를 받아서 적절히 보여준다.</li>
 </ul>
@@ -3503,7 +3505,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <p><code>ExpressionTree</code> 자체는 Serializable하지 않으니 외부 라이브러리의 도움을 받는다. 그 외에는 위 IPC 예제와 동일하게 쿼리에 대한 <code>OperationContract</code> 하나 만들어주고 그 수행 결과를 반환 받도록 하면 된다. 이에 대해서는 이미 다음 라이브러리들이 적절한 예제를 구현해 놓았다.</p>
 
 <ul>
-<li><a href="http://expressiontree.codeplex.com/">ExpressionTree Serializer</a></li>
+<li><a href="https://expressiontree.codeplex.com/">ExpressionTree Serializer</a></li>
 <li><a href="https://github.com/esskar/Serialize.Linq">Serialize.Linq</a></li>
 </ul>
 
@@ -3573,9 +3575,9 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <p>Reflection.Emit 관련된 내용을 여기서 서술하면 너무 길어질 수 있으므로 일단 넘어가도록 하겠다.</p>
 
 <ul>
-<li><a href="http://www.codeproject.com/Articles/13337/Introduction-to-Creating-Dynamic-Types-with-Reflec">Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit</a></li>
-<li><a href="http://www.codeproject.com/Articles/13969/Introduction-to-Creating-Dynamic-Types-with-Refl">Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit: Part 2</a></li>
-<li><a href="http://www.codeproject.com/Articles/9927/Fast-Dynamic-Property-Access-with-C">Codeproject: Fast Dynamic Property Access with C#</a></li>
+<li><a href="https://www.codeproject.com/Articles/13337/Introduction-to-Creating-Dynamic-Types-with-Reflec">Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit</a></li>
+<li><a href="https://www.codeproject.com/Articles/13969/Introduction-to-Creating-Dynamic-Types-with-Refl">Codeproject: Introduction to Creating Dynamic Types with Reflection.Emit: Part 2</a></li>
+<li><a href="https://www.codeproject.com/Articles/9927/Fast-Dynamic-Property-Access-with-C">Codeproject: Fast Dynamic Property Access with C#</a></li>
 </ul>
 
 <h4>마무리</h4>
@@ -3590,7 +3592,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <li>데이터베이스의 규격으로 담기 힘든 데이터</li>
 </ul>
 
-<p>등에 대해서는 위와 같은 방법으로 간단히 데이터 서버를 구축해서 사용하는 것도 괜찮지 않을까 생각한다. 일종의 <a href="http://en.wikipedia.org/wiki/Data_virtualization">Data Virtualization</a> 인 셈이다.</p>
+<p>등에 대해서는 위와 같은 방법으로 간단히 데이터 서버를 구축해서 사용하는 것도 괜찮지 않을까 생각한다. 일종의 <a href="https://en.wikipedia.org/wiki/Data_virtualization">Data Virtualization</a> 인 셈이다.</p>
 </div>
 				<hr />
 				<div class="page-breaker"></div>
@@ -4019,7 +4021,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <li><strong>gc가 돌면 세상이 멈춘다.</strong></li>
 </ul>
 
-<p>c++에서 하던 식으로 모든 객체를 메모리에 올려두는 식으로 프로그래밍하다 보면 당연히 gen2에 쌓이는 객체가 많아진다. 때문에 gen2를 탐색하는 gc가 수행될 때 서버의 전체적인 throughput이 크게 떨어지는 문제가 발생할 수도 있다. 물론 <a href="http://msdn.microsoft.com/en-us/library/ee787088.aspx#concurrent_garbage_collection">concurrent gc</a>를 사용하거나, <a href="http://msdn.microsoft.com/en-us/library/ee787088.aspx#workstation_and_server_garbage_collection">server gc</a>를 잘 튜닝해서 사용하면 문제를 어느 정도 회피할 수 있다고는 하지만 간단해 보이지는 않는다.</p>
+<p>c++에서 하던 식으로 모든 객체를 메모리에 올려두는 식으로 프로그래밍하다 보면 당연히 gen2에 쌓이는 객체가 많아진다. 때문에 gen2를 탐색하는 gc가 수행될 때 서버의 전체적인 throughput이 크게 떨어지는 문제가 발생할 수도 있다. 물론 <a href="https://msdn.microsoft.com/en-us/library/ee787088.aspx#concurrent_garbage_collection">concurrent gc</a>를 사용하거나, <a href="https://msdn.microsoft.com/en-us/library/ee787088.aspx#workstation_and_server_garbage_collection">server gc</a>를 잘 튜닝해서 사용하면 문제를 어느 정도 회피할 수 있다고는 하지만 간단해 보이지는 않는다.</p>
 
 <p>gen2로 가는 객체의 수를 줄이는 것이 관건인데 이게 또 간단하지 않다.</p>
 
@@ -4179,7 +4181,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <span class="p">};</span>
 <span class="k">typedef</span> <span class="kt">handler_t</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;&gt;</span> <span class="kt">msg_handler_t</span><span class="p">;</span>
 </code></pre></div>
-<p>이제 모든 작업이 완료되었다. <code>msg_handler_t</code>에 대한 <a href="http://en.cppreference.com/w/cpp/container/unordered_map">unordered_map</a> 객체 만들고, 적절히 불러주기만 하면 된다.</p>
+<p>이제 모든 작업이 완료되었다. <code>msg_handler_t</code>에 대한 <a href="https://en.cppreference.com/w/cpp/container/unordered_map">unordered_map</a> 객체 만들고, 적절히 불러주기만 하면 된다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="n">__handler_table</span><span class="p">;</span>
 <span class="kt">void</span> <span class="nf">dispatch</span><span class="p">(</span><span class="kt">int</span> <span class="n">opcode</span><span class="p">,</span> <span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">__handler_table</span><span class="p">[</span><span class="n">opcode</span><span class="p">](</span><span class="n">msg</span><span class="p">);</span>
@@ -4214,7 +4216,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 <li>마지막으로 구현한 handler를 handler_table에다가 등록해주는 코드를 작성해야 한다.</li>
 </ul>
 
-<p>일단 <code>msg_id</code> 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 <a href="http://en.cppreference.com/w/cpp/types/type_index">type_index</a>를 사용하자.</p>
+<p>일단 <code>msg_id</code> 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 <a href="https://en.cppreference.com/w/cpp/types/type_index">type_index</a>를 사용하자.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="n">__handler_table</span><span class="p">;</span>
 </code></pre></div>
 <p><code>message_t</code>를 받는 함수와 원하는 type을 받는 함수를 분리하고, <code>__handler_table</code>에 함수를 프로그램 시작 시에 등록하기 위해 static 전역 변수를 사용해 코드를 정리하면 다음과 같다.</p>
@@ -4240,7 +4242,7 @@ vs환경에서 해보면 좀 다를 것 같다.</p>
 
 <ul>
 <li>dynamic_cast를 하지 않은 이유는 항상 올바른 type만 casting을 요청할 것이라는 믿음을 갖고 불필요한 검사를 피하기 위함이다</li>
-<li><code>_Ty</code>가 정말 <code>message_t</code>를 상속받았는지 보려면 <a href="http://en.cppreference.com/w/cpp/types/is_base_of">std::is_base_of</a>를 쓰면 되겠다.</li>
+<li><code>_Ty</code>가 정말 <code>message_t</code>를 상속받았는지 보려면 <a href="https://en.cppreference.com/w/cpp/types/is_base_of">std::is_base_of</a>를 쓰면 되겠다.</li>
 </ul>
 
 <p>실제 작업을 수행할 함수인 <code>int_msg_handler</code>를 선언한다. 그리고 전달 함수인 <code>_int_msg_wrapper</code> 함수를 작성한다. <code>_int_msg_wrapper</code> 함수에서는 <code>message_t</code>를 <code>int_msg_t</code>로 casting만 해서 <code>int_msg_handler</code> 함수로 넘겨준다. 그리고 실질적인 작업은 <code>int_msg_handler</code>에서 <code>int_msg_t</code>를 인자로 받아 처리하게 된다.</p>
@@ -4454,7 +4456,7 @@ C, C++ 은 당연히 지원 안한다. 실행 중에 뭔가 정보를 더 남긴
 <h3>DSEL</h3>
 
 <p>이제 구조체를 정의하는 매크로를 만들어야 한다.
-이게 약간 문제가 있는데, 본 문제를 출제한 <a href="http://libsora.so/" title="libsora.so">if1live</a>님의 요구 사항은 아래와 같다.</p>
+이게 약간 문제가 있는데, 본 문제를 출제한 <a href="https://libsora.so/" title="libsora.so">if1live</a>님의 요구 사항은 아래와 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">STRUCT_BEGIN</span><span class="p">(</span><span class="n">SampleStruct</span><span class="p">)</span>
     <span class="n">STRUCT_VAR_FLOAT</span><span class="p">(</span><span class="n">SampleStruct</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="n">STRUCT_VAR_INT</span><span class="p">(</span><span class="n">SampleStruct</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
@@ -4515,7 +4517,7 @@ C, C++ 은 당연히 지원 안한다. 실행 중에 뭔가 정보를 더 남긴
 <p>구조체를 등록하는 매크로는 전역 <code>rtti_map</code> 객체에 <code>struct_info</code>를 넣어준다.
 구조체의 변수를 등록하는 매크로는 자신이 속한 구조체 rtti 내의 <code>varmap</code> 객체에 <code>var_info</code>를 넣어준다.</p>
 
-<p>구조체의 변수를 등록하려면, 결국 자기가 어느 struct에 속한지를 알아야, 전역 rtti에서 자신이 속한 <code>struct_info</code>를 얻어와서 거기에 변수 정보(<code>var_info</code>)를 등록할 수 있다는 것이다. 이 때문에 <a href="http://libsora.so/" title="libsora.so">if1live</a>님의 매크로의 변수 선언부를 보면, <code>STRUCT_VAR_FLOAT(SampleStruct, a)</code>와 같이 구조체의 이름과 변수의 이름이 같이 들어가는 것이다.</p>
+<p>구조체의 변수를 등록하려면, 결국 자기가 어느 struct에 속한지를 알아야, 전역 rtti에서 자신이 속한 <code>struct_info</code>를 얻어와서 거기에 변수 정보(<code>var_info</code>)를 등록할 수 있다는 것이다. 이 때문에 <a href="https://libsora.so/" title="libsora.so">if1live</a>님의 매크로의 변수 선언부를 보면, <code>STRUCT_VAR_FLOAT(SampleStruct, a)</code>와 같이 구조체의 이름과 변수의 이름이 같이 들어가는 것이다.</p>
 
 <h3>declaration DSEL</h3>
 
@@ -5024,7 +5026,7 @@ xml에 어떤 순서로 기록될지는 모르지만, 어쨌든 구조체 내 �
 </code></pre></div>
 <p><code>user_t</code>에 대해 reflection을 등록한다.<br>
 (이 부분은 딱히 답이 없는데, 편하게 하려면 code generator를 사용한다던가 하는 수 밖에 없어보인다.
-아니면 <a href="http://libsora.so/" title="libsora.so">if1live</a>님이 했던 것처럼 매크로로 구조체를 만들도록 하든가.)</p>
+아니면 <a href="https://libsora.so/" title="libsora.so">if1live</a>님이 했던 것처럼 매크로로 구조체를 만들도록 하든가.)</p>
 
 <p><code>class_t::from_name()</code> 함수를 사용해 이름으로 <code>class_t</code> 객체를 가져왔다. 그리고 <code>enumerate_fields()</code> 함수(본 문에서는 생략됨)를 사용하여 <code>class_t</code>가 가지고 있는 모든 field에 대한 이름을 출력해볼 수 있다.</p>
 
@@ -5056,7 +5058,7 @@ xml에 어떤 순서로 기록될지는 모르지만, 어쨌든 구조체 내 �
 				</p>
 				<div class="content"><p>지난 #2에서는 <code>class_t</code>, <code>field_t</code> 자체가 가상 함수를 갖고, <code>class_impl_t</code>와 <code>field_impl_t</code>가 이 class를 상속 받아서 구현하는 방식을 사용하였다. 사실 굳이 이 <code>impl_t</code> class 들은 노출될 필요가 없으므로 이를 감추도록 해보자.</p>
 
-<p>그리고 다 완성된 type을 register함에 있어, 따로 <code>register_class</code>, <code>register_field</code> 함수를 직접 불러서 등록을 하였는데, 이것을 <a href="http://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a>을 사용하여 개선해보도록 하자.</p>
+<p>그리고 다 완성된 type을 register함에 있어, 따로 <code>register_class</code>, <code>register_field</code> 함수를 직접 불러서 등록을 하였는데, 이것을 <a href="https://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a>을 사용하여 개선해보도록 하자.</p>
 
 <p><strong>C++ Template Metaprogramming</strong>의 형식 삭제(type erasure) 부분을 읽다보니, 굳이 <code>impl_t</code> class를 <code>class_t</code>, <code>field_t</code> 외부로 노출할 필요가 없다는 것을 깨달았다.<br>
 (물론 위 책에서 언급하는 예제는 복사 및 대입 가능한 대상이기 때문에 복사/대입/소멸 등도 고려되어 있지만, 본 글에서는 단지 <code>impl_t</code>를 숨기기 위한 용도 정도로만 사용한다.)</p>
@@ -5200,7 +5202,7 @@ xml에 어떤 순서로 기록될지는 모르지만, 어쨌든 구조체 내 �
 </code></pre></div>
 <p>(<code>reflection_register_helper_t</code> class가 <code>user_t</code>에 대한 type 정보를 <code>target_type</code>이라고 지칭할 수 있게 해주어서, <code>FIELD</code>를 등록할 때 다시 <code>user_t</code>를 언급할 필요가 없어졌다!)</p>
 
-<p>이제 <a href="http://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a> 방법을 정의한 구조체에 대한 type 정보를 등록하는 것을 자동화해볼 것이다. 이 방법의 핵심은 구조체 선언을 매크로로 하고, 선언된 header 파일을 여러 번 incldue하고, 그 때마다 선언 매크로를 다른 것으로 치환(undef/define)하여 사용하는 것이다.</p>
+<p>이제 <a href="https://en.wikipedia.org/wiki/X_Macro">X-Macro pattern</a> 방법을 정의한 구조체에 대한 type 정보를 등록하는 것을 자동화해볼 것이다. 이 방법의 핵심은 구조체 선언을 매크로로 하고, 선언된 header 파일을 여러 번 incldue하고, 그 때마다 선언 매크로를 다른 것으로 치환(undef/define)하여 사용하는 것이다.</p>
 
 <p>먼저 선언을 위한 매크로를 정의해보면 다음과 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#ifndef __DECLARE_TYPE_MACRO_DEFINED__</span>
@@ -5874,7 +5876,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 </code></pre></div>
 <p>이름 잘 지어주는 것도 물론 중요하지만 이정도 코드에서는 저정도 글자만 써줘도 이해할 것 같으니 과감히 생략.</p>
 
-<p>개인적으로 풀이 중 가장 마음에 드는 것은 <a href="https://twitter.com/Omniavinco" title="Omniavinco on Twitter">Omniavinco</a>가 <a href="http://libsora.so/" title="libsora.so">if1live</a> 글에 댓글로 단 binder1st 상속을 통한 구현. (있는 것 가져다가 쓰는게 제일)</p>
+<p>개인적으로 풀이 중 가장 마음에 드는 것은 <a href="https://twitter.com/Omniavinco" title="Omniavinco on Twitter">Omniavinco</a>가 <a href="https://libsora.so/" title="libsora.so">if1live</a> 글에 댓글로 단 binder1st 상속을 통한 구현. (있는 것 가져다가 쓰는게 제일)</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#include &lt;functional&gt;</span>
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T2</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T3</span><span class="o">&gt;</span>
 <span class="k">class</span> <span class="nc">Adapter</span><span class="o">:</span><span class="k">public</span> <span class="n">std</span><span class="o">::</span><span class="n">binder1st</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">pointer_to_binary_function</span><span class="o">&lt;</span> <span class="n">T2</span><span class="p">,</span> <span class="n">T3</span><span class="p">,</span> <span class="n">T1</span> <span class="o">&gt;</span> <span class="o">&gt;</span> <span class="p">{</span>
@@ -5899,7 +5901,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
     <span class="k">typedef</span> <span class="n">T2</span> <span class="n">T2</span><span class="p">;</span>
 <span class="p">};</span>
 </code></pre></div>
-<p>위 코드는 <a href="http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/reference/function_traits.html">boost::function_traits</a>에서 필요한 부분만 발췌한 코드이다. 설명을 위해서 가져온 코드이고, 그냥 <a href="http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html">boost type_traits library</a>를 가져다 쓰는게 더 좋다.</p>
+<p>위 코드는 <a href="https://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/reference/function_traits.html">boost::function_traits</a>에서 필요한 부분만 발췌한 코드이다. 설명을 위해서 가져온 코드이고, 그냥 <a href="https://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html">boost type_traits library</a>를 가져다 쓰는게 더 좋다.</p>
 
 <p>함수 type으로부터 반환 type, 인자 type들을 얻어낼 수 있게 되었으니 이제 Adapter에 넣어주기만 하면 된다. 그 부분에 대해서도 helper class를 만들어보자.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">F</span><span class="o">&gt;</span>
@@ -5944,9 +5946,9 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 <p>사실 오늘 구현한 내용들은 어느 정도 표준에 포함되었거나 boost에 있는 내역들이다. 따라서 다음의 구현체를 찾아보며 공부하는 것을 적극 추천한다.</p>
 
 <ul>
-<li><a href="http://en.cppreference.com/w/cpp/utility/functional/bind">Cppref: std::bind</a></li>
-<li><a href="http://en.cppreference.com/w/cpp/header/type_traits">Cppref: type_traits</a></li>
-<li><a href="http://www.boost.org/doc/libs/1_54_0/libs/type_traits/doc/html/index.html%22">boost: type_traits library</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/utility/functional/bind">Cppref: std::bind</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/header/type_traits">Cppref: type_traits</a></li>
+<li><a href="https://www.boost.org/doc/libs/1_54_0/libs/type_traits/doc/html/index.html%22">boost: type_traits library</a></li>
 </ul>
 
 <p>지금까지의 내용은 compiler time에서 일어나는 generic programming 이야기였다. 이를 runtime에서 하나의 type으로 모아서 작업하기 위한 type erasure을 오늘 다룰 것이다.</p>
@@ -5980,7 +5982,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 				</p>
 				<div class="content"><p>generic한 rpc를 간단히 구현해보자.</p>
 
-<p>원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 <a href="http://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage">DSEL</a>을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.</p>
+<p>원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 <a href="https://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage">DSEL</a>을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.</p>
 
 <p>양이 좀 많기 때문에 개요부터 설명하겠다.</p>
 
@@ -6070,7 +6072,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 <span class="p">};</span>
 <span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">session_t</span><span class="o">&gt;</span> <span class="n">session_ref</span><span class="p">;</span>
 </code></pre></div>
-<p><a href="http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html">boost asio</a>에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.</p>
+<p><a href="https://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html">boost asio</a>에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.</p>
 
 <p>전체 코드를 다 올리면 너무 기니까 간단하게 message를 읽는 코드만 옮겨보았다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="kt">session_t</span><span class="o">::</span><span class="n">request_read_msg_size</span><span class="p">()</span> <span class="p">{</span>
@@ -6209,7 +6211,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 
 <h3>code generating</h3>
 
-<p>이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 <strong>rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가</strong>이다. 나머지 byte serializer나 rpc type enum 선언 등의 <a href="http://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.</p>
+<p>이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 <strong>rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가</strong>이다. 나머지 byte serializer나 rpc type enum 선언 등의 <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.</p>
 
 <p>일단 원하는 최종 형태의 코드는 다음과 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">RPC_BEGIN</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
@@ -6224,9 +6226,9 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 </code></pre></div>
 <p>rpc interface에 대한 선언을 하고, 그에 대한 구현을 한다. 그러면 필요한 나머지 코드가 모두 만들어지는 것이다.</p>
 
-<p>type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 <a href="http://en.wikipedia.org/wiki/X_Macro">X Macro pattern</a>이 사용될 것이다.</p>
+<p>type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 <a href="https://en.wikipedia.org/wiki/X_Macro">X Macro pattern</a>이 사용될 것이다.</p>
 
-<p>일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 <code>RPC_METHOD3</code> macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 <a href="http://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html">boost pp</a>를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.</p>
+<p>일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 <code>RPC_METHOD3</code> macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 <a href="https://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html">boost pp</a>를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.</p>
 
 <p>설명의 편의를 위해 <code>RPC_METHOD2()</code>를 기준으로 설명할 것이다.</p>
 
@@ -6504,7 +6506,7 @@ java의 package나 c#의 internal 같은 나름 우아한 방법으로 묶어주
 				</p>
 				<div class="content"><p>C++11 에서 도입된 lambda expression을 통한 RAII 구현 방식의 한 예와, 단위 전략을 통한 RAII 구현을 통해 장단점을 비교해보자.</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization">Wiki: Resource Acquisition Is Initialization(RAII)</a>는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통</p>
+<p><a href="https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization">Wiki: Resource Acquisition Is Initialization(RAII)</a>는 scope 내의 정적으로 할당되는 객체의 생존 주기로 생성자와 소멸자가 쌍으로 호출되는 것을 사용하는 자원 관리 기법이다. 보통</p>
 
 <ul>
 <li>IO (열었으면 닫아야하니까),</li>
@@ -6833,10 +6835,10 @@ Child Window는 <code>SetWindowPos</code>나 <code>ShowWindow</code>함수가 �
 
 <p>지인의 이야기를 들어보니 x64에서 디버깅을 할 경우 Call Stack이 알 수 없게 쌓인다고 한다. 따라서 x64 용 디버깅을 위해 Call Stack Trace 를 만들어본다는 마음으로 글을 읽어보자</p>
 
-<p><code>__FUNCSIG__</code>는 Visual C++ compiler가 제공하는 <a href="http://msdn.microsoft.com/en-us/library/b0084kay.aspx">Predefined Macro</a>중 하나이다.
+<p><code>__FUNCSIG__</code>는 Visual C++ compiler가 제공하는 <a href="https://msdn.microsoft.com/en-us/library/b0084kay.aspx">Predefined Macro</a>중 하나이다.
 말 그대로 Function Signature를 <code>const char *</code> 형태로 넣어주는 것이다. 컴파일러가 해당 함수를 parsing 하다가 <code>__FUNCSIG__</code>를 만나면, code generation을 할 때 그걸 그 Function Signature로 static한 <code>const char</code> 배열을 만들고 그 주소값을 넣어주는게 아닐까. 요즘은 신통하게 <code>_T()</code> 매크로랑 같이 쓰면 <code>wchar_t</code> 형태로도 준다. 만세!</p>
 
-<p><a href="http://msdn.microsoft.com/en-us/library/x7wy9xh3.aspx"><code>__if_exists</code></a>는 해당 지점에서 그 symbol이 존재하는지를 확인하기 위한 것이다. 당연히 컴파일러가 컴파일 단계에서 확인하는 것이고, 런타임 용은 아니다. <code>else</code> 를 쓸 수는 없고 <code>__if_not_exists</code>를 써야 한다.<br>
+<p><a href="https://msdn.microsoft.com/en-us/library/x7wy9xh3.aspx"><code>__if_exists</code></a>는 해당 지점에서 그 symbol이 존재하는지를 확인하기 위한 것이다. 당연히 컴파일러가 컴파일 단계에서 확인하는 것이고, 런타임 용은 아니다. <code>else</code> 를 쓸 수는 없고 <code>__if_not_exists</code>를 써야 한다.<br>
 이 문서에서는 this symbol 여부를 확인하기 위해 쓸거다.</p>
 
 <p>Call Stack 을 쌓기 위해 먼저 <code>StackElement</code>부터 만들어야한다. 가볍게, 파일명, 줄 수, this 주소 정도를 받아보자.</p>
@@ -7204,7 +7206,7 @@ Child Window는 <code>SetWindowPos</code>나 <code>ShowWindow</code>함수가 �
 
 <p>template 인자로 받게되는 것은 암시적 interface가 요구되기 때문에 컴파일 타임에서의 느슨한 결합이 요구될 때 쓰면 좋다. 그리고 상속이라는 것을 통해 기능 확장, 혹은 접근 제한 등을 적절히 혼합하여 사용하면 재미난 많은 것을 할 수 있다.</p>
 
-<p>더 나아가서 <a href="http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">CRTP</a>라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.</p>
+<p>더 나아가서 <a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">CRTP</a>라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.</p>
 </div>
 				<hr />
 				<div class="page-breaker"></div>
@@ -7368,7 +7370,7 @@ Child Window는 <code>SetWindowPos</code>나 <code>ShowWindow</code>함수가 �
     <span class="c1">// 생략</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>이렇듯 template으로 최대한 일반화된 프로그래밍을 하고, 이 수행 흐름을 runtime까지 끌어올 일이 있다면 적절히 type erasure 기법을 써서 프로그래밍을 해주면 되겠다. 사실 위 구현체는 <a href="http://en.cppreference.com/w/cpp/utility/functional/function">std::function</a>에 구현되어 있으니 이를 가져다 쓰는 것이 제일 좋다.</p>
+<p>이렇듯 template으로 최대한 일반화된 프로그래밍을 하고, 이 수행 흐름을 runtime까지 끌어올 일이 있다면 적절히 type erasure 기법을 써서 프로그래밍을 해주면 되겠다. 사실 위 구현체는 <a href="https://en.cppreference.com/w/cpp/utility/functional/function">std::function</a>에 구현되어 있으니 이를 가져다 쓰는 것이 제일 좋다.</p>
 
 <h3>과제 1: dispatcher</h3>
 
@@ -7576,7 +7578,7 @@ script 언어가 실행 중에 코드를 동적으로 해석하여 실행하는 
 
 <h3>static storage class</h3>
 
-<p>이야기를 이어가기 위해 <strong><a href="http://en.wikipedia.org/wiki/Translation_unit_%28programming%29">번역 단위</a></strong>에 대한 개념을 대충 알 필요가 있다. 번역단위는 컴파일러가 하나의 obj 파일을 만들어내기 위한 단위라고 보면 된다. c/c++의 경우 include한 header 파일들을 cpp에 다 복사해서 넣어놓고, 전처리기가 macro expand해주고, template engine이 template instantiation한 결과라고 보면 되겠다.</p>
+<p>이야기를 이어가기 위해 <strong><a href="https://en.wikipedia.org/wiki/Translation_unit_%28programming%29">번역 단위</a></strong>에 대한 개념을 대충 알 필요가 있다. 번역단위는 컴파일러가 하나의 obj 파일을 만들어내기 위한 단위라고 보면 된다. c/c++의 경우 include한 header 파일들을 cpp에 다 복사해서 넣어놓고, 전처리기가 macro expand해주고, template engine이 template instantiation한 결과라고 보면 되겠다.</p>
 
 <p>자, 그러면 이제 코드를 보자.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="c1">// 전역공간</span>
@@ -7639,13 +7641,13 @@ script 언어가 실행 중에 코드를 동적으로 해석하여 실행하는 
 
 <p>물론 더 나아가서 random access iterator에 대해서도 효율적으로 동작할 수 있도록 위 코드를 수정할 수도 있다. iterator_tag와 template의 부분 특수화를 사용하거나 함수 overloading을 사용하면 간단하게 할 수 있다. 이 부분은 EC++ 책에도 잘 나와있으니 이 글에서는 생략하도록 하겠다.</p>
 
-<p>당연한 이야기이지만 algorithm의 <a href="http://www.cplusplus.com/reference/algorithm/binary_search/">binary_search</a>를 쓰는게 더 낫다. 이미 구현되어있는 것을 또 구현하지 않는 것이 제일 좋다! 그러므로 표준 라이브러리에 대해서는 틈틈이 알아두는게 좋다.</p>
+<p>당연한 이야기이지만 algorithm의 <a href="https://www.cplusplus.com/reference/algorithm/binary_search/">binary_search</a>를 쓰는게 더 낫다. 이미 구현되어있는 것을 또 구현하지 않는 것이 제일 좋다! 그러므로 표준 라이브러리에 대해서는 틈틈이 알아두는게 좋다.</p>
 
 <h3>정리</h3>
 
 <p>코드를 간결하게, 그리고 명확하게 작성하기 위해 가작 적합한 c++ 기능을 사용하는 것은 너무나 당연한 이야기다. 앞으로 남은 한 번 혹은 두 번의 기회 동안 그 이야기를 더 진행하면서 스터디를 진행하는 친구를 세뇌시킬 생각이다.</p>
 
-<p><a href="http://libsora.so/" title="libsora.so">if1live</a>님 방식으로 이야기하면 많이 짜고 많이 읽으면 된다. 그런데 <a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님처럼 표준 문서를 읽으라고는 못하겠다(나도 귀찮아서 안 읽으니까!)</p>
+<p><a href="https://libsora.so/" title="libsora.so">if1live</a>님 방식으로 이야기하면 많이 짜고 많이 읽으면 된다. 그런데 <a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님처럼 표준 문서를 읽으라고는 못하겠다(나도 귀찮아서 안 읽으니까!)</p>
 
 <h3>과제</h3>
 
@@ -8366,8 +8368,8 @@ iterating하면서 <code>update</code> 함수를 불러준다. 이 때 type은 <
 <p>그러면 이제 typelist를 수정하는 meta function들을 구현해야 하는데 그건 다음에 해보도록 하겠다.</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/9662632/variadic-variadic-template-templates">Stackoverflow: Variadic variadic template templates</a></li>
-<li><a href="http://stackoverflow.com/questions/16648144/merge-two-variadic-templates-in-one">Stackoverflow: Merge two variadic templates in one</a></li>
+<li><a href="https://stackoverflow.com/questions/9662632/variadic-variadic-template-templates">Stackoverflow: Variadic variadic template templates</a></li>
+<li><a href="https://stackoverflow.com/questions/16648144/merge-two-variadic-templates-in-one">Stackoverflow: Merge two variadic templates in one</a></li>
 </ul>
 </div>
 				<hr />
@@ -8940,7 +8942,7 @@ Object 예제로 확인해보자.</p>
 <span class="k">typedef</span> <span class="kt">float</span> <span class="n">Stat</span><span class="o">::*</span><span class="n">DataPtr</span><span class="p">;</span>
 <span class="n">DataPtr</span> <span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">hp</span><span class="p">;</span> <span class="c1">// Error!</span>
 </code></pre></div>
-<p>이번 글에서는 형식 삭제(<a href="http://en.wikipedia.org/wiki/Type_erasure">type erasure</a>)를 사용하여 보다 다양한 type을 지원하면서, 확장 가능한 방법에 대해 알아보도록 하겠다.</p>
+<p>이번 글에서는 형식 삭제(<a href="https://en.wikipedia.org/wiki/Type_erasure">type erasure</a>)를 사용하여 보다 다양한 type을 지원하면서, 확장 가능한 방법에 대해 알아보도록 하겠다.</p>
 
 <p>형식 삭제라고 하면 뭔가 어려워 보이지만, 그 결과물을 보면 굉장히 친숙하다. C++에서 형식 삭제를 하는 방법은 가상 함수를 통한 다형성을 사용하는 것인데, 예를 들면 다음과 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">ValueHolder</span> <span class="p">{</span>
@@ -9181,13 +9183,13 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
 <p>일단 member data pointer가 어떤 구조를 가졌는지를 설명해야 하는데, 자세한 내용은 대충 이 pdf의 chapter 3에서 확인하고 요점만 이야기해보자.</p>
 
 <ul>
-<li><a href="http://www.dsi.fceia.unr.edu.ar/downloads/informatica/info_II/c++../inside.the.c++.object.model.pdf">PDF: Inside the C++ object model</a></li>
+<li><a href="https://www.dsi.fceia.unr.edu.ar/downloads/informatica/info_II/c++../inside.the.c++.object.model.pdf">PDF: Inside the C++ object model</a></li>
 </ul>
 
 <p>member function pointer를 보면, 단순히 어떤 클래스의 함수의 주소 값만 가지고 있으면 될 것 같지만 이게 vfptr를 참조해야 하는지, 그리고 그 상속 구조가 다중 상속 혹은 virtual 상속 구조인지에 따라서 내부 구성이 좀 달라진다. 그런데 이게 c++ 표준에 명세만 있고 구현이 없어서 컴파일러마다 구현체가 제각각이다. (즉 무슨 짓을 해놓는지 모름)</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Thunk#Object-oriented_programming">Wiki: Thunk (object-oriented programming)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Thunk#Object-oriented_programming">Wiki: Thunk (object-oriented programming)</a></li>
 </ul>
 
 <p>위와 동일한 개념이 member data pointer에도 적용된다고 보면 된다. 때문에 member data pointer가 단순 offset_of의 개념이라고 생각하면 안된다. (사실 고백하자면, 이 예제를 이해하는데 위 내용을 다 알아야 할 필요는 없지만 그냥 기회가 되었으니 공부하는 셈 치고 보면 좋다)</p>
@@ -9352,7 +9354,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 						
 						
 				</p>
-				<div class="content"><p><a href="http://kentonv.github.io/capnproto/">Cap&#39;n Proto</a>와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까?</p>
+				<div class="content"><p><a href="https://kentonv.github.io/capnproto/">Cap&#39;n Proto</a>와 같은 무한대(?)로 빠른 메시지를 설계한다고 생각해보자. 그렇다면 우리는 어떤 점을 고민해야 할까?</p>
 
 <p>이를 위해 잠깐 네트워크로 정보를 전달하는 과정을 생각해보자.</p>
 
@@ -10162,8 +10164,8 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 				<div class="content"><p>오늘 스터디에서 공부한 내용을 간략히 정리해보자.</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/ABA_problem">Wiki: ABA problem</a></li>
-<li><a href="http://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ABA_problem">Wiki: ABA problem</a></li>
+<li><a href="https://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms</a></li>
 <li><a href="/2011/08/02/context-switching-and-simultaneously/">context switching과 simultaneously 실행</a></li>
 <li><a href="/2012/02/23/thread-unsafety-problem-in-circular-queue/">환형큐의 thread unsafety 문제</a></li>
 </ul>
@@ -10172,15 +10174,15 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 
 <ul>
 <li><a href="/2011/08/02/volatile-interlocked-operation/">volatile 과 interlocked operation</a></li>
-<li><a href="http://summerlight-textcube.blogspot.kr/2009/11/volatile%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B0%B0%EB%A6%AC%EC%96%B4.html">summerlight: volatile과 메모리 배리어</a></li>
+<li><a href="https://summerlight-textcube.blogspot.kr/2009/11/volatile%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B0%B0%EB%A6%AC%EC%96%B4.html">summerlight: volatile과 메모리 배리어</a></li>
 </ul>
 
 <h3>intrusive/non-intrusive</h3>
 
 <ul>
-<li><a href="http://www.makelinux.net/ldd3/chp-11-sect-5">Linux kernel LinkedList</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/intrusive.html">Boost: Boost.Intrusive</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/intrusive/intrusive_vs_nontrusive.html">Boost: Intrusive and non-intrusive containers</a></li>
+<li><a href="https://www.makelinux.net/ldd3/chp-11-sect-5">Linux kernel LinkedList</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/intrusive.html">Boost: Boost.Intrusive</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/intrusive/intrusive_vs_nontrusive.html">Boost: Intrusive and non-intrusive containers</a></li>
 </ul>
 
 <h3>InterlockedSList</h3>
@@ -10194,7 +10196,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <p>각 actor 객체에 접근하는 thread는 반드시 하나임을 보장함. context switching 비용을 줄이기 위해 thread 개수를 제한하지만 많은 actor를 다루기 위해 객체별 수행 동기화 기법을 사용한다.</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Actor_model">Wiki: Actor model</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Actor_model">Wiki: Actor model</a></li>
 <li><a href="/2011/08/11/synchronize-function-execution-in-each-object/">객체별 함수 수행 동기화</a></li>
 </ul>
 
@@ -10205,7 +10207,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <li>비순차 실행을 통해 최대 수행 시간의 절감 효과를 얻음</li>
 <li>하드웨어적 한계로 비순차 실행 명령어 window를 유지 (reservation stations), 그 내부에서 각 operand 준비 완료가 되면 연산 수행</li>
 <li>operand 준비 완료 통지 연산량 감소를 port grouping, 결과 순서를 보장해주기 위해 rob를 사용</li>
-<li><a href="http://en.wikipedia.org/wiki/Reservation_stations">Wiki: Reservation stations</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reservation_stations">Wiki: Reservation stations</a></li>
 </ul>
 
 <h3>memory consistency model</h3>
@@ -10213,25 +10215,25 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <p>우리가 작성한 대로 수행을 보장해준다면(Sequentially-consistent ordering) 프로그램의 흐름을 이해하기가 쉽지만 최적화 가능성이 줄어듬. 이를 완화(relaxed)해주어서 최적화가 잘 되게 해보자. 그런데 intel x86-64는 그런 것 신경 안 써줘도 빠르게 돌아감*(<a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님 수정)*</p>
 
 <ul>
-<li><a href="http://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL-RR: Shared Memory Consistency Models: A Tutorial</a></li>
+<li><a href="https://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL-RR: Shared Memory Consistency Models: A Tutorial</a></li>
 </ul>
 
 <p>c++11에 memory order로 추가됨.</p>
 
 <ul>
-<li><a href="http://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
 </ul>
 
 <h3>c++ threading facilities</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/C%2B%2B11#Threading_facilities">Wiki: c++ threading facilities</a></li>
+<li><a href="https://en.wikipedia.org/wiki/C%2B%2B11#Threading_facilities">Wiki: c++ threading facilities</a></li>
 </ul>
 
 <p>표준에서 지원하기는 하지만 표준 라이브러리가 어떻게 구현되어있는지 보고 괜찮은지를 판단한 후 사용하자.</p>
 
 <ul>
-<li><a href="http://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
+<li><a href="https://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
 </ul>
 
 <h3>sync/async programming</h3>
@@ -10245,20 +10247,20 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <h3>c++11의 lambda</h3>
 
 <ul>
-<li><a href="http://ogoons.tistory.com/69">Visual C++10과 C++0x</a></li>
+<li><a href="https://ogoons.tistory.com/69">Visual C++10과 C++0x</a></li>
 </ul>
 
 <h3>thread safe한 singleton</h3>
 
 <ul>
-<li><a href="http://board.poolc.org/generation03/512">PoolC: C++ 싱글턴 (summerlight)</a></li>
+<li><a href="https://board.poolc.org/generation03/512">PoolC: C++ 싱글턴 (summerlight)</a></li>
 </ul>
 
 <p>근데 intel x86-64에서는 memory barrier 안 쳐줘도 문제가 없다-_-; 하지만 c++11부터는 함수 내 static 변수를 반환하는 것만으로도 대충 thread-safe한 singleton이 구현 가능해졌다.</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/8102125/is-local-static-variable-initialization-thread-safe-in-c11">Stackoverflow: Is local static variable initialization thread-safe in C++11</a></li>
-<li><a href="http://stackoverflow.com/questions/2280630/c-threadsafe-static-constructor">Stackoverflow: c++ threadsafe static constructor</a></li>
+<li><a href="https://stackoverflow.com/questions/8102125/is-local-static-variable-initialization-thread-safe-in-c11">Stackoverflow: Is local static variable initialization thread-safe in C++11</a></li>
+<li><a href="https://stackoverflow.com/questions/2280630/c-threadsafe-static-constructor">Stackoverflow: c++ threadsafe static constructor</a></li>
 </ul>
 
 <h3>기타 windows via c/c++ 내용</h3>
@@ -10323,7 +10325,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 
 <h3>peterson&#39;s algorithm</h3>
 
-<p><a href="http://en.wikipedia.org/wiki/Peterson&#x27;s_algorithm">Wiki: Peterson&#39;s algorithm</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Peterson&#x27;s_algorithm">Wiki: Peterson&#39;s algorithm</a></p>
 
 <p>그냥 눈에 보이는대로 코드가 수행되면 문제가 발생하지 않는데, 비순차 실행에 의해 <code>flag[my_index] = true; turn = other_index;</code> 대입의 순서가 뒤집히면 critical section에 두 thread가 진입할 수 있는 문제가 발생한다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="nl">P0:</span> <span class="n">turn</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -10395,9 +10397,9 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <p>비순차 실행에 의해 의존성이 없다고 판단되는 연산의 순서가 뒤집히는 것을 방지하기 위해 memory consistency model을 고민해야 한다.</p>
 
 <ul>
-<li><a href="http://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL RR: Shared MEmory Consistency Models: A Tutorial</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html">Boost: Thread coordination using Boost.Atomic</a></li>
-<li><a href="http://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
+<li><a href="https://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL RR: Shared MEmory Consistency Models: A Tutorial</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html">Boost: Thread coordination using Boost.Atomic</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
 </ul>
 
 <p>메모리 가시성 개념도 포함되어 있음. fence를 경계로 비순차 수행 가능 범위의 경계가 생김.<br>
@@ -10419,15 +10421,15 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <li>obstruction-free, lock-free, wait-free 개념 구분</li>
 <li>CAS, CAS2(CASW), DCAS, TSX, RTM 대충</li>
 <li>aba problem이 잘 설명되어 있다. CAS를 node pointer로만 하기 때문에 그 주소값만 같으면 해당 주소가 가리키는 객체의 상태가 어떻게 변했어도 작업이 진행될 수 있는 것이 문제.<br>
-(즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)</li>
+(즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)
+w
+즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.</li>
 </ul>
-
-<p>즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.</p>
 
 <p>근데 InterlockedSList는 가난한 시절이라 CAS2 못 쓰고 memory alignment해서 남는 하위 4bit를 count로 쓴 것으로 알고 있다.<br>
 (어설픈 기억으로는 MPMC concurrency queue를 lock free algorithm으로 만들 때 CAS 뭔가 잘못써서 aba problem 발생하면 해당 node가 다른 queue로 들어간 시점에도 뭔가 오동작하여 해당 queue까지 파괴했던 시나리오가 있었는데-_-; 자세히 기억이 안 난다.)</p>
 
-<h3><a href="http://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890">hazard pointer</a></h3>
+<h3><a href="https://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890">hazard pointer</a></h3>
 
 <p>오늘 출력해간 논문보다 위 링크가 더 읽기 좋다. 완전 오늘 헛소리한 듯-_- 나중에 다시 자세히 읽어보고 정리하겠음</p>
 
@@ -10441,7 +10443,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 
 <h3><a href="/2011/08/11/synchronize-function-execution-in-each-object/">객체별 수행 동기화</a> 글 코드의 문제</h3>
 
-<p><a href="http://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 문제 해결법</p>
+<p><a href="https://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 문제 해결법</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">mJobQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">RequestJobPtr</span><span class="p">(</span><span class="k">new</span> <span class="n">_RequestJobImpl</span><span class="p">(</span><span class="n">functor</span><span class="p">)));</span>
 <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">mJobQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">InterlockedExchange</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mExclusiveFlag</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">RequestJobPtr</span> <span class="n">job</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span> <span class="n">mJobQueue</span><span class="p">.</span><span class="n">try_pop</span><span class="p">(</span><span class="n">job</span><span class="p">);</span> <span class="p">)</span> <span class="p">{</span>
@@ -10606,7 +10608,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <p>그러다가 cpu가 발달하고 느린 작업, 빠른 작업, 사용자 반응성(interact)이 중요한 작업, 그렇지 않은 작업 들에 대해서 분리해서 한 번 같이 실행해볼까 하는 시도가 나왔다. (물론 처음에는 묶어서batch 작업을 처리했던가)<br>
 그래서 출력하면서 문서 편집을 할 수 있다는, ABABABABABAB를 빨리해서 A와 B가 동시에 실행되는 것 처럼 보이는 좋은 구조가 나타났다.</p>
 
-<p>그렇게 여러 개의 프로세스(프로그램이 실행되고 있는 것)가 짧은 간격으로 번갈아가며 수행하니 동시에 실행되는 것 같아 참으로 보기 좋았다. 그런데 문제는 메모리 공간이 모자르기 시작했다. 그래서 각 프로세스 별로 <a href="http://en.wikipedia.org/wiki/Virtual_memory">메모리 공간을 가상화</a>해주고, 그것들을 실제 메모리에 연결해주는 메모리 매핑을 운영체제가 지원해주었다.</p>
+<p>그렇게 여러 개의 프로세스(프로그램이 실행되고 있는 것)가 짧은 간격으로 번갈아가며 수행하니 동시에 실행되는 것 같아 참으로 보기 좋았다. 그런데 문제는 메모리 공간이 모자르기 시작했다. 그래서 각 프로세스 별로 <a href="https://en.wikipedia.org/wiki/Virtual_memory">메모리 공간을 가상화</a>해주고, 그것들을 실제 메모리에 연결해주는 메모리 매핑을 운영체제가 지원해주었다.</p>
 
 <p>이제 운영체제는 CPU를 제어하여 여러 프로세스들을 번갈아가며 빠르게 실행해주고, 메모리를 관리하여 부족한 공간은 디스크에 적당히 연결해서 사용(swap memory)할 수 있게 해주었다.</p>
 
@@ -10620,7 +10622,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 
 <p>각 프로세스들은 자신의 실행 흐름을 갖는다. multi thread라는 개념이 없을 때, 각 프로세스는 단 한 개의 주 실행흐름(main thread)를 가지고, 이것이 cpu에 의해서 실행되었다.</p>
 
-<p>cpu에서 실행하기 위해 필요한 정보들, 즉 실행 문맥(state, context)은 register 등을 생각해보면 되겠다. 어차피 현재 CPU가 수행하고 있는 정보들은 PC(IR), EA...DX, ESI, EDI, EBP, ESP 등(x86) 다 register에 저장되어있으니까 이 값만 잘 저장했다가, 나중에 복구해주면 거기서 이어서 작업을 수행할 수 있을 것이다. 즉 여러 실행 흐름을 번갈아가면서 실행한다는 것은, 각 실행 흐름(thread)의 문맥(context)을 저장해놨다가, 그걸 번갈아가며 register에 덮어쓰고 그 지점(PC)의 코드를 이어서 실행시키게 한다는 것이다. <a href="http://en.wikipedia.org/wiki/Context_switch">context switch</a></p>
+<p>cpu에서 실행하기 위해 필요한 정보들, 즉 실행 문맥(state, context)은 register 등을 생각해보면 되겠다. 어차피 현재 CPU가 수행하고 있는 정보들은 PC(IR), EA...DX, ESI, EDI, EBP, ESP 등(x86) 다 register에 저장되어있으니까 이 값만 잘 저장했다가, 나중에 복구해주면 거기서 이어서 작업을 수행할 수 있을 것이다. 즉 여러 실행 흐름을 번갈아가면서 실행한다는 것은, 각 실행 흐름(thread)의 문맥(context)을 저장해놨다가, 그걸 번갈아가며 register에 덮어쓰고 그 지점(PC)의 코드를 이어서 실행시키게 한다는 것이다. <a href="https://en.wikipedia.org/wiki/Context_switch">context switch</a></p>
 
 <p>그러면, 굳이 하나의 프로세스마다 하나의 실행 흐름만 있을 필요가 있나? 그래서 하나의 프로세스가 여러 실행 흐름(thread)을 갖는 multi thread programming이 나오게 됬다(억지다!)<br>
 즉, 내부에서 메모리는 공유(static, heap 영역)하지만 cpu scheduling은 따로 되어서 실행 흐름은 서로 영향을 안 주는 것이라고 볼 수 있다.</p>
@@ -10633,7 +10635,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <p>왜냐하면 C++ 코드의 한 줄은 기계어가 한 번에 실행할 수 있는 하나의 명령, 즉 1:1 관계가 아니기 때문에 그 명령 내부에서 context switching이 발생하면 문제가 생길 수 있기 때문이다.</p>
 
 <p>물론 lock을 사용하여 배타적 구간을 만드는 방식으로 프로그램을 작성한다고 해도 이러한 thread 간에서 서로 lock을 획득하다 발생할 수 있는 dead (or live) lock 문제가 발생할 수도 있다.<br>
-따라서 multi thread programming 을 할 때는 이러한 문제까지 고려하여 더욱 세심하게 프로그래밍을 해야한다. <a href="http://en.wikipedia.org/wiki/ABA_problem">ABA Problem</a></p>
+따라서 multi thread programming 을 할 때는 이러한 문제까지 고려하여 더욱 세심하게 프로그래밍을 해야한다. <a href="https://en.wikipedia.org/wiki/ABA_problem">ABA Problem</a></p>
 
 <h3>simultaneously</h3>
 
@@ -10735,7 +10737,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 				</p>
 				<div class="content"><p>Concurrent Data Structure는 Lock을 최소화하여 동작해야 multi thread에서 해당 자료구조에 접근할 때 발생하는 부담이 최소화되어 효율적인 프로그래밍이 가능하다.</p>
 
-<p>여러가지 방법이 있겠지만, 가장 간단한(?) Windows API로 제공되는 <a href="http://msdn.microsoft.com/en-us/library/ms684121.aspx">Interlocked Singly Linked Lists</a>에 대해 보자. (이후 SLIST 라고 이야기하겠다)</p>
+<p>여러가지 방법이 있겠지만, 가장 간단한(?) Windows API로 제공되는 <a href="https://msdn.microsoft.com/en-us/library/ms684121.aspx">Interlocked Singly Linked Lists</a>에 대해 보자. (이후 SLIST 라고 이야기하겠다)</p>
 
 <p>SLIST는 단방향(singly) Linked List로 구성된 Stack이다. MSDN 을 보면 non blocking atomic 동기화 알고리즘으로 쓰면 성능 향상에 도움이 되고 multi thread에서 사용해도 문제가 없댄다. 아무튼 이래 저래 좋다고 한다.</p>
 
@@ -10751,7 +10753,7 @@ for 문에서 int 변수를 <code>i++</code> 하나 <code>++i</code> 하나 컴�
 <li><p>Stack으로도 충분했다. 굳이 Queue까지 API로 제공하지 않아도 Stack만으로도 Queue나 다른 자료구조를 구현해서 쓸 수는 있다. 그럼 왜 하필 Stack을 만들어놨을까? 누가 좀 알려주세요 [...]</p></li>
 </ol>
 
-<p>찾아보면 <a href="http://alexkr.com/memos/16/non-blocking-singly-linked-list/">SLIST 기반으로 Queue처럼 쓰는 예제</a> 도 있다.</p>
+<p>찾아보면 <a href="https://alexkr.com/memos/16/non-blocking-singly-linked-list/">SLIST 기반으로 Queue처럼 쓰는 예제</a> 도 있다.</p>
 
 <h3>왜 Memory Alignment 이야기가 나올까?</h3>
 
@@ -10814,7 +10816,7 @@ WinNT.h 파일에 보면 SLIST_ENTRY type 은 아래와 같이 정의되어 있�
     <span class="c1">// Other Variables</span>
 <span class="p">};</span>
 </code></pre></div>
-<p>첫 번째 멤버 변수로 넣어준다. 그리고 MyIem 을 할당할 때 내부에서 <a href="http://msdn.microsoft.com/en-us/library/8z34s9c6.aspx"><code>_aligned_malloc</code></a> 와 같은 함수로 할당해주면 MyItem 의 주소가 정렬되니까 첫 번째 멤버 변수인 ListEntry (SLIST_ENTRY) 의 주소도 정렬된다(같은 값이니까)</p>
+<p>첫 번째 멤버 변수로 넣어준다. 그리고 MyIem 을 할당할 때 내부에서 <a href="https://msdn.microsoft.com/en-us/library/8z34s9c6.aspx"><code>_aligned_malloc</code></a> 와 같은 함수로 할당해주면 MyItem 의 주소가 정렬되니까 첫 번째 멤버 변수인 ListEntry (SLIST_ENTRY) 의 주소도 정렬된다(같은 값이니까)</p>
 
 <p>같은 방법인데, 저걸 상속으로 표현하자는 사람도 있다. 상속하면 Base Type 의 멤버들이 메모리의 가장 위 쪽으로 올라가니까. 하지만 그게 모든 컴파일러에서 보장되도록 표준화되어있는 내용은 아닌 것으로 알고 있으니까 글쎄, 좋을지는 모르겠다.</p>
 
@@ -10823,7 +10825,7 @@ WinNT.h 파일에 보면 SLIST_ENTRY type 은 아래와 같이 정의되어 있�
 <p>아무튼 저렇게 만들어놓고 꺼내서 쓸 때는 단순히 casting 만 해서 쓰면 되니까 편하다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">MyItem</span><span class="o">*</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MyItem</span><span class="o">*</span><span class="p">)</span> <span class="n">InterlockedPopEntryList</span> <span class="p">(</span><span class="n">listHead</span><span class="p">);</span>
 </code></pre></div>
-<p>궁금할 것 같은 내용은 위에서 다 풀어 써놨으니까 간략한 예제를 보자. 예제는 <a href="http://msdn.microsoft.com/en-us/library/ms686962.aspx">MSDN: Using Singly Linked List</a>에 있다.</p>
+<p>궁금할 것 같은 내용은 위에서 다 풀어 써놨으니까 간략한 예제를 보자. 예제는 <a href="https://msdn.microsoft.com/en-us/library/ms686962.aspx">MSDN: Using Singly Linked List</a>에 있다.</p>
 
 <p>먼저 <code>LIST_HEADER</code>를 만들어줘야한다. 이는 사용할 SLIST의 Head 포인터이다. 당연한 이야기이지만 이것도 메모리 정렬이 되어야 한다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">pListHead</span> <span class="o">=</span> <span class="p">(</span><span class="n">PSLIST_HEADER</span><span class="p">)</span><span class="n">_aligned_malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">SLIST_HEADER</span><span class="p">),</span>
@@ -11384,7 +11386,7 @@ WinNT.h 파일에 보면 SLIST_ENTRY type 은 아래와 같이 정의되어 있�
 </code></pre></div>
 <p>결과도 굉장히 빠르게 나오고, 제대로 actual과 expect가 같게 나온다. <code>atomic_int::operator++ ()</code>은 내부에서 <code>atomic_fetch_add()</code> 함수를 부르게 된다. 여기서 memory_order를 지정할 수 있는데  windows api는 (arm을 사용하지 않을 경우) memory order가 뭐인지와 상관없이 <code>_InterlockedExchangeAdd()</code> Intrinsic 함수를 부른다. (물론 기본 memory_order 값은 <code>memory_order_seq_cst</code>이다)</p>
 
-<p>세 번째 해결책으로 넘어가기 전에 두 번째 해결책에서 배운 atomic을 사용하여 첫 번째 해결책의 성능을 개선해보자. lock을 직접 만들어서 성능을 개선하는 것이다. <a href="http://en.cppreference.com/w/cpp/atomic/atomic_flag">Cppref: atomic_flag</a></p>
+<p>세 번째 해결책으로 넘어가기 전에 두 번째 해결책에서 배운 atomic을 사용하여 첫 번째 해결책의 성능을 개선해보자. lock을 직접 만들어서 성능을 개선하는 것이다. <a href="https://en.cppreference.com/w/cpp/atomic/atomic_flag">Cppref: atomic_flag</a></p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">volatile</span> <span class="kt">int</span> <span class="n">counter</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">atomic_flag</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">ATOMIC_FLAG_INIT</span><span class="p">;</span>
 
@@ -11531,7 +11533,7 @@ WinNT.h 파일에 보면 SLIST_ENTRY type 은 아래와 같이 정의되어 있�
 <p>이게 수행의 <em>원자성(atomic)</em>과는 또 다른 이야기라서 그것까지 고려하려면 좀 다른 수를 써야한다.
 위에서 보면 ++count 연산을 수행하기 위해 3개의 assembly 명령어가 수행되는데, 만약 add eax, 1 까지 수행했지만 mov eax, dword ptr [count] 를 수행하지 않은 시점에서 다른 thread 가 count 의 값을 접근해버리면? 역시 마찬가지로 잘못된 값을 읽을 것이다.</p>
 
-<p>이 때문에 수행 구간의 배타성(exclusive)을 보장해주기 위해서 mutex(mutual exclusion)를 설정해주는 것이다. 공부를 대충해서 설명을 참 못해놨는데, 마침 <a href="http://skyul.tistory.com/337">설명이 잘 된 링크</a>를 찾았으니 들어가서 보면 좋겠다.</p>
+<p>이 때문에 수행 구간의 배타성(exclusive)을 보장해주기 위해서 mutex(mutual exclusion)를 설정해주는 것이다. 공부를 대충해서 설명을 참 못해놨는데, 마침 <a href="https://skyul.tistory.com/337">설명이 잘 된 링크</a>를 찾았으니 들어가서 보면 좋겠다.</p>
 
 <p><code>volatile</code>을 붙이면 메모리에 값을 바로 반영해주므로 여러 thread 에서 공유되는 flag 변수를 사용할 때는 volatile keyword를 사용해야 문제가 덜 생긴다. 하지만 flag 값 역시 누군가는 대입하고, 누군가는 읽을텐데 대입의 과정 역시 assembly instruction으로 한 명령이 아니기 때문에 문제가 될 수 있다.
 즉, 대입하는 thread 가 아직 메모리에 반영을 안한 시점에 읽는 thread가 읽어버리면 잘못된 flag 값을 통해 잘못된 수행을 할 수 있다는 것이다.</p>
@@ -11594,7 +11596,7 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 
 <p>즉 공유되는 변수, 즉 멤버 변수만 원자적인 연산을 사용하게 되면 lock 범위를 함수 전체가 아니라 한 명령 구문으로 줄일 수 있다는 것이다. (Compare And Swap 등)</p>
 
-<p>그래서 intel에서는 이를 위한 interlocked instruction을 제공해 주었고, MS에서는 이를 wrapping하여 <a href="http://msdn.microsoft.com/en-us/library/ms684122.aspx">Interlocked API</a>으로 지원해준다.</p>
+<p>그래서 intel에서는 이를 위한 interlocked instruction을 제공해 주었고, MS에서는 이를 wrapping하여 <a href="https://msdn.microsoft.com/en-us/library/ms684122.aspx">Interlocked API</a>으로 지원해준다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="n">Object</span><span class="o">::</span><span class="n">Hit</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// 함수 인자 type 맞춰주기 위해 mCount 는 LONG type 이 되어야한다.</span>
@@ -14069,7 +14071,7 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 <h3>라이브러리</h3>
 
 <p>c++이나 java로 서버를 직접 작성하게 될 경우에는 기반 library를 사용하는 것이 좋다.
-개인적으로 c++은 <a href="http://www.boost.org/doc/libs/release/doc/html/boost_asio.html">asio</a>가 괜찮고 java는 <a href="http://netty.io/">netty</a>가 괜찮다고 생각한다.</p>
+개인적으로 c++은 <a href="https://www.boost.org/doc/libs/release/doc/html/boost_asio.html">asio</a>가 괜찮고 java는 <a href="https://netty.io/">netty</a>가 괜찮다고 생각한다.</p>
 
 <p>어느 정도 비동기 프로그래밍 패턴이 익숙하다면 예제 코드 좀 보면 어떻게 써먹을 수 있을 지 대충은 이해할 수 있다. 그리고 워낙 저 두 프로젝트는 문서화가 잘 되어 있으니 문서만 읽어도 대부분은 이해된다.</p>
 
@@ -14684,31 +14686,31 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 				</p>
 				<div class="content"><p>Concurrency Pattern부터 Distributed System까지! 근데 대충함 [...]</p>
 
-<h3><a href="http://en.wikipedia.org/wiki/Concurrency_pattern">Concurrency pattern</a></h3>
+<h3><a href="https://en.wikipedia.org/wiki/Concurrency_pattern">Concurrency pattern</a></h3>
 
 <p>대충 정리해보자.</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Active_Object">Wiki: Active Object</a>
+<li><a href="https://en.wikipedia.org/wiki/Active_Object">Wiki: Active Object</a>
 
 <ul>
 <li>Active Object는 Actor Model 구현하면서 써봤다. asynchronous method invocation과 request scheduling이 관건이다. 지난 글에서는 함수 요청을 functor로 만들어서 요청을 queueing하고, 처음 진입하는 thread가 해당 queue의 모든 작업을 처리하는 식으로 구현하였다.</li>
 </ul></li>
-<li><a href="http://en.wikipedia.org/wiki/Double_checked_locking_pattern">Wiki: Double checked locking pattern</a>
+<li><a href="https://en.wikipedia.org/wiki/Double_checked_locking_pattern">Wiki: Double checked locking pattern</a>
 
 <ul>
 <li>보호해야 하는 특정 구간에 대해 단순 if 문으로 조건을 검사할 경우 여러 thread가 동시에 진입하여 concurrency problem이 발생할 수 있다. 따라서 해당 if문도 lock으로 보호해야 하는데, if 문 내의 코드가 정말 드물게 실행되는 경우 매번 lock을 걸고 if 문을 검사하는 것은 뭔가 아까워서, 일단 lock 없이 if 문으로 대충 검사해보고, lock 걸고, 다시 if 문으로 검사하여 안전하게 코드를 수행시키는 방법이다.
 
 <ul>
-<li>물론 memory order 문제가 있을 수 있다. 이와 관련해서는 <a href="http://board.poolc.org/generation03/512">PoolC: C++ 싱글톤</a> 문서의 <code>ThreadSafe::create()</code> 함수를 보면 된다.</li>
+<li>물론 memory order 문제가 있을 수 있다. 이와 관련해서는 <a href="https://board.poolc.org/generation03/512">PoolC: C++ 싱글톤</a> 문서의 <code>ThreadSafe::create()</code> 함수를 보면 된다.</li>
 </ul></li>
 <li>보통 singleton 객체의 초기화를 위해 많이 사용되는 방법이다.</li>
 <li>c++11에서는 function 내의 static variable의 초기화에 대해 하나의 thread만 초기화를 수행하도록 표준으로 정해져서 wiki 예제에서는 단순히 static 변수를 써서 singleton을 구현하는 방법을 보여주고 있다.</li>
 </ul></li>
-<li><a href="http://en.wikipedia.org/wiki/Balking_pattern">Balking</a>, <a href="http://en.wikipedia.org/wiki/Guarded_suspension">Guarded suspension</a>, Leaders/Followers, <a href="http://en.wikipedia.org/wiki/Scheduler_pattern">Scheduler</a>, <a href="http://en.wikipedia.org/wiki/Thread_pool_pattern">Threadpool</a>, <a href="http://en.wikipedia.org/wiki/Thread-Specific_Storage">TLS</a> 등은 그냥 읽어보면 된다.</li>
+<li><a href="https://en.wikipedia.org/wiki/Balking_pattern">Balking</a>, <a href="https://en.wikipedia.org/wiki/Guarded_suspension">Guarded suspension</a>, Leaders/Followers, <a href="https://en.wikipedia.org/wiki/Scheduler_pattern">Scheduler</a>, <a href="https://en.wikipedia.org/wiki/Thread_pool_pattern">Threadpool</a>, <a href="https://en.wikipedia.org/wiki/Thread-Specific_Storage">TLS</a> 등은 그냥 읽어보면 된다.</li>
 </ul>
 
-<h3><a href="http://en.wikipedia.org/wiki/Read_write_lock_pattern">Readers–writer lock</a></h3>
+<h3><a href="https://en.wikipedia.org/wiki/Read_write_lock_pattern">Readers–writer lock</a></h3>
 
 <p>Read Write Lock Pattern은 multiple-readers(shared), single-writer(exclusive) lock을 구현하는 것. writer starvation은 limit-read-count를 쓰던, timeout을 쓰던 잘 처리하면 된다.</p>
 
@@ -14730,8 +14732,8 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 <p>때문에 upgradable-read mode를 추가한다. 그래서 read, upgradable-read, write 간의 상관관계를 재정의하여 재진입성을 다시 고려한다. 이에 대한 개념은 데이터베이스에서 잘 확인해볼 수 있다.</p>
 
 <ul>
-<li><a href="http://msdn.microsoft.com/en-us/library/system.threading.readerwriterlockslim.aspx">MSDN: ReaderWriterLockSlim</a></li>
-<li><a href="http://technet.microsoft.com/en-us/library/ms186396.aspx">MSDN: Lock Compatibility (Database Engine)</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/system.threading.readerwriterlockslim.aspx">MSDN: ReaderWriterLockSlim</a></li>
+<li><a href="https://technet.microsoft.com/en-us/library/ms186396.aspx">MSDN: Lock Compatibility (Database Engine)</a></li>
 </ul>
 
 <h3>asynchronous method</h3>
@@ -14746,7 +14748,7 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 
 <p>iocp의 경우 overlapped 구조체를 상속받아서 async_state와 async_result 역할을 하나의 구조체에서 수행하기도 한다. proactor pattern 중 이를 async token이라고 표현하기도 한다.</p>
 
-<h3><a href="http://en.wikipedia.org/wiki/MapReduce">MapReduce</a></h3>
+<h3><a href="https://en.wikipedia.org/wiki/MapReduce">MapReduce</a></h3>
 
 <p>map/reduce는 functional programming에 있는 그 개념을 그대로 분산시스템에 적용했다고 보면 되겠다. 다만 fault tolerant를 고려해주면 되겠다.</p>
 
@@ -14754,7 +14756,7 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 
 <p>RemoteSession은 java.rmi와 같이 stateless한 rpc에서 proxy가 내부적으로 session key를 갖고 session을 유지해주기 위해 본인이 직접 구현한 library인데 본인이 wiki에 추가해놓은 것 같다. 넘어가자.</p>
 
-<h3><a href="http://eincs.net/2013/07/misleading-and-truth-of-cap-theorem">eincs: CAP Theorem, 오해와 진실 (PACELC)</a></h3>
+<h3><a href="https://eincs.net/2013/07/misleading-and-truth-of-cap-theorem">eincs: CAP Theorem, 오해와 진실 (PACELC)</a></h3>
 
 <p>분산 시스템은 네트워크 시스템을 전제로 하니 P를 고려하지 않을 수 없다. 그리고 장애 발생 상황과 정상 상황에서는 고려해야 할 요소가 다르니 두 상황을 대칭적으로 비교할 수 없다.</p>
 
@@ -14765,8 +14767,8 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 <p>분산 시스템을 설계할 때에는 장애 상황에 대한 복구(fault tolerant)를 고민해서 작성해야 하기 때문에 기존에 고민하지 않았던 예외 상황에 대한 고찰이 많이 필요하겠다. 그러니까 시간나면 읽어보자.</p>
 
 <ul>
-<li><a href="http://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/Sockettimeout">joinc: SocketTimeout</a></li>
-<li><a href="http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&amp;linkClass=33090105&amp;barcode=9788996241003">책: 서버 인프라를 지탱하는 기술</a></li>
+<li><a href="https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Programing/Documents/Sockettimeout">joinc: SocketTimeout</a></li>
+<li><a href="https://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&amp;linkClass=33090105&amp;barcode=9788996241003">책: 서버 인프라를 지탱하는 기술</a></li>
 </ul>
 
 <p>특히 각 cluster로 요청된 작업이 실패했을 경우 이 작업에 대해 다시 요청하여 결과를 얻어내도록 하는 과정은 잊지 말고 고려하도록 하자.</p>
@@ -15136,7 +15138,7 @@ Thread 2가 처음에 0을 가져와서(아직 Thread 1의 연산 결과가 반�
 				<div class="content"><p>뭐라도 좋으니 간단한 분산 시스템을 구현해보자!<br>
 단일 시스템과 비교하여 성능 혹은 가용성을 높이기 위해 분산 시스템을 설계해야 하는 것이니 일단 네트워크 프로그래밍은 필수이다. 효율을 높이기 위해 얼마나 작업을 잘 쪼개고 합치는가도 고민해야 하고, 장애가 발생했을 때 얼마나 복구될 수 있는지도 고민해야 한다.</p>
 
-<h3><a href="http://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 시스템</h3>
+<h3><a href="https://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 시스템</h3>
 
 <ul>
 <li>풀씨 프로그래밍 대회 채점 서버를 nodejs/c++로 구현했다. aws 위에 서비스를 올렸으며 elb, ec2를 통해 서비스를 구성하였다.</li>
@@ -16441,7 +16443,7 @@ Master에서 Slave에게 수행시키고 싶은 함수가 있는데 Slave에게�
 <p>IO 의 효율을 이야기할 때는 메모리 관점 역시 빼 놓을 수가 없다.
 IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때문인데, 그 이유는 가상 메모리(virtual memory)를 사용하기 때문이다.</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Virtual_memory">가상 메모리</a>가 무엇인가?<br>
+<p><a href="https://en.wikipedia.org/wiki/Virtual_memory">가상 메모리</a>가 무엇인가?<br>
 간단히 말하면, 운영체제가 각 프로세스에게 가상의 메모리 주소 체계를 제공하고, 그 가상 메모리 공간이 실제 물리 메모리 공간과 마법같이 연결(mapping)되어 프로세스가 메모리에 접근할 때 주소 변환 과정을 거쳐 실제 물리 메모리에 접근 가능하게 해주는 것이다.</p>
 
 <p>이게 뭐가 좋은가?
@@ -16529,8 +16531,8 @@ IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때�
 (이건 Windows 에만 해당되는 것 같고, 사실 그마저도 아직 잘 모르겠어서 공부가 더 필요하다.)</p>
 
 <ul>
-<li><a href="http://studyrespire.tistory.com/tag/IRQL">http://studyrespire.tistory.com/tag/IRQL</a></li>
-<li><a href="http://bugtruck.blogspot.com/2009/03/non-paged-memory.html">http://bugtruck.blogspot.com/2009/03/non-paged-memory.html</a></li>
+<li><a href="https://studyrespire.tistory.com/tag/IRQL">https://studyrespire.tistory.com/tag/IRQL</a></li>
+<li><a href="https://bugtruck.blogspot.com/2009/03/non-paged-memory.html">https://bugtruck.blogspot.com/2009/03/non-paged-memory.html</a></li>
 </ul>
 
 <p>커널이 유저 영역의 메모리에다가 결과를 직접 넣어주고 싶어도 해당 메모리가 swap out이 되어버린다면 그 처리가 애매해진다는 것. 그 이유는 디스크로 내려간 메모리를 물리 메모리로 올려주는 작업을 처리하는 것도 interrupt에 의한 것이고, IO 요청을 처리하는 것도 interrupt이기 때문이다.<br>
@@ -16978,7 +16980,7 @@ IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때�
 이러한 객체를 다루는 프로그래밍을 할 때는, 관찰자(observer)가 객체의 상태 변화(property change)를 감지하여 어떠한 동작(action)을 수행하는 경우가 많이 있다.</p>
 
 <p>이러한 코드를 작성할 경우, 관찰 당하는 객체(subject)와 관찰자(observer)의 관계를 어떻게 정의하냐에 따라서, 확장성, 결합성 등이 많이 달라지게 된다. 이 글에서는 간단한 EventHandler와 Message Passing에 대해서 다루어보려고 한다.<br>
-<a href="http://en.wikipedia.org/wiki/Observer_pattern">http://en.wikipedia.org/wiki/Observer_pattern</a></p>
+<a href="https://en.wikipedia.org/wiki/Observer_pattern">https://en.wikipedia.org/wiki/Observer_pattern</a></p>
 
 <h3>hard binding</h3>
 
@@ -17581,7 +17583,7 @@ Event와 Message는 정보를 담은 객체이면서, 송신/수신 객체의 �
 
 <p>물론 <code>callerClassName</code>에서 잘못된 class 이름을 얻을 경우에 대비해서 예외처리 코드를 추가했지만 이는 <code>Class#forName</code> 함수가 반드시 예외를 처리하게 하는(명시적 예외처리) 구조이므로 try-catch 문을 작성한 것이지 위 경우에서는 예외가 발생할 가능성이 없다.</p>
 
-<p>본 문서에서는 <a href="http://en.wikipedia.org/wiki/Annotation#Java_annotations">Java Annotation</a>의 문법에 대해 설명하는 것이 취지가 아니므로, 이 정도로 글을 마친다.</p>
+<p>본 문서에서는 <a href="https://en.wikipedia.org/wiki/Annotation#Java_annotations">Java Annotation</a>의 문법에 대해 설명하는 것이 취지가 아니므로, 이 정도로 글을 마친다.</p>
 </div>
 				<hr />
 				<div class="page-breaker"></div>
@@ -18258,7 +18260,7 @@ GridLayout을 상속받은 <code>CustomLayout</code>을 하나 만들고, layout
 
 <p>어떤 작업에 timeout을 걸기 위해서는 적어도 수행 thread과 timeout을 걸어주는 thread가 분리되어야 한다. 간단하게 fork-join model을 생각해보자면 수행할 task는 fork된 thread에게 맡기고, join하는 main thread에서 join을 얼마나 기다려줄지 timeout을 지정해준다고 생각하면 되겠다.</p>
 
-<p>java에서도 1.7부터 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ForkJoinPool.html">fork/join pool</a>을 지원해주지만, 본 글에서는 안 다룬다.</p>
+<p>java에서도 1.7부터 <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ForkJoinPool.html">fork/join pool</a>을 지원해주지만, 본 글에서는 안 다룬다.</p>
 
 <p>일단 무엇을 작업해서 반환할지에 대한 <code>FutureTask</code>를 구현한다. <code>FutureTask</code>는 이름 그대로 Future + Task이다. 즉 Task를 수행한 결과를 Future로 받아볼 수 있는 구조로, 생성자로 <code>Callable</code> 객체를 받고 수행을 위한 <code>run()</code> 함수와 결과 값을 받기 위한 <code>get()</code> 함수를 갖는다.</p>
 <div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="n">FutureTask</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FutureTask</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span>
@@ -18324,13 +18326,13 @@ GridLayout을 상속받은 <code>CustomLayout</code>을 하나 만들고, layout
 <p>하지만 대부분의 UI 설계는 <code>JPanel</code>을 상속받으면서부터 시작한다. 이러한 습관이 들어버린건 다 NetBeans 때문이다-_-</p>
 
 <p>View와 Controller가 섞이면 coupling이 심해져 코드가 좀 더러워진다. 때문에 중간에 interface를 두고 나누는 방법도 생각해볼 수 있겠다.<br>
-(이걸 심하게 해주시는 분이 로버드 C. 마틴 이란 분인데 <a href="http://www.yes24.com/24/goods/4492519">UML 실전에서는 이것만 쓴다</a> 책이 재밌다)</p>
+(이걸 심하게 해주시는 분이 로버드 C. 마틴 이란 분인데 <a href="https://www.yes24.com/24/goods/4492519">UML 실전에서는 이것만 쓴다</a> 책이 재밌다)</p>
 
 <p>최근에 운 좋게도 그래디 부치 책을 구했으니 좀 더 공부를 해봐야겠다.</p>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Robert_Cecil_Martin">http://en.wikipedia.org/wiki/Robert_Cecil_Martin</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Grady_Booch">http://en.wikipedia.org/wiki/Grady_Booch</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">https://en.wikipedia.org/wiki/Robert_Cecil_Martin</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Grady_Booch">https://en.wikipedia.org/wiki/Grady_Booch</a></li>
 </ul>
 
 <p>유명하신 분들이다.</p>
@@ -18767,18 +18769,18 @@ GridLayout을 상속받은 <code>CustomLayout</code>을 하나 만들고, layout
 
 <p>통신을 한다는 건 두 HOST가 네트워크로<span style="color: #aaa;">(wired or wireless)</span> 연결되어있다는 것이다.<br>
 네트워크에 속한 HOST는 그 특정 주소를 갖는데, 흔히 생각하는 <code>IP Address</code>라고 보면 되겠다. 흔히 우리는 네트워크를 사용하기 위해 TCP/IP Protocol을 사용하기 때문이다.<br>
-<a href="http://en.wikipedia.org/wiki/Transmission_Control_Protocol">http://en.wikipedia.org/wiki/Transmission_Control_Protocol</a><br>
+<a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">https://en.wikipedia.org/wiki/Transmission_Control_Protocol</a><br>
 <span style="color: #aaa;">(다른 곳에 더욱 설명이 잘 있으니 자세한 설명은 생략한다)</span><br>
 <span style="color: #aaa;">(기계적 주소인 MAC Address와 함께 같이 찾아보면서 공부해보는 것도 좋다. 하지만 이 글은 자바 네트워크 프로그래밍이 주라서 이 부분은 제외)</span></p>
 
 <p>두 HOST가 서로의 주소를 안다고 해서 TCP/IP 통신할 수 있는 것은 아니다. TCP/IP 통신에는 <code>IP Address</code> 말고 <code>Port</code>라는 Unsigned Short Integer(16bit) 값이 하나 더 필요하기 때문이다.<br>
-<a href="http://en.wikipedia.org/wiki/TCP_and_UDP_port">http://en.wikipedia.org/wiki/TCP_and_UDP_port</a></p>
+<a href="https://en.wikipedia.org/wiki/TCP_and_UDP_port">https://en.wikipedia.org/wiki/TCP_and_UDP_port</a></p>
 
 <p>간단히 하나의 HOST 내에 실행되고 있는 수많은 네트워크 사용 프로그램들에 대해 데이터를 빠르고 명확하게 구분하기 위한 하나의 키 값이라고 보면 되겠다. <strong>SSH는 22번, HTTP는 80번</strong>과 같이 사실상 고유의 값으로 지정된 것고 있다.<br>
-<a href="http://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers">http://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers</a></p>
+<a href="https://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers">https://en.wikipedia.org/wiki/TCP_and_UDP_port_numbers</a></p>
 
 <p>TCP/IP 프로토콜에서는 데이터를 보낼 때 <strong>Packet</strong>으로 쪼개어 보내는데 이 쪽을 공부해두면 장차 네트워크 프로그래밍할 때 도움되는게 많다.<br>
-<a href="http://en.wikipedia.org/wiki/Packet_(information_technology">http://en.wikipedia.org/wiki/Packet_(information_technology)</a>)</p>
+<a href="https://en.wikipedia.org/wiki/Packet_(information_technology">https://en.wikipedia.org/wiki/Packet_(information_technology)</a>)</p>
 
 <h3>서버와 클라이언트</h3>
 
@@ -18824,7 +18826,7 @@ GridLayout을 상속받은 <code>CustomLayout</code>을 하나 만들고, layout
 <h3>Socket</h3>
 
 <p>전 글에서 네트워크 통신을 사람 간의 전화로 비유했었다.<br>
-네트워크 통신을 한다는 것은 <a href="http://en.wikipedia.org/wiki/Network_Interface_Controller">NIC(Network Interface Controller)</a>를 사용하여 데이터를 주고 받겠다는 것이고 이는 <strong>하드웨어를 제어해야 한다는 뜻이다.</strong> 하드웨어는  <strong>운영체제가 관리하고 있는 자원</strong>이기 때문에 일반 프로그램들이 접근할 수 없다.</p>
+네트워크 통신을 한다는 것은 <a href="https://en.wikipedia.org/wiki/Network_Interface_Controller">NIC(Network Interface Controller)</a>를 사용하여 데이터를 주고 받겠다는 것이고 이는 <strong>하드웨어를 제어해야 한다는 뜻이다.</strong> 하드웨어는  <strong>운영체제가 관리하고 있는 자원</strong>이기 때문에 일반 프로그램들이 접근할 수 없다.</p>
 
 <p>처음 c/c++ 배울 때 사용했떤 파일 읽기/쓰기도 <strong>하드디스크</strong>라는 하드웨어 자원을 쓰는데 잘은 몰랐지만 프로그램이 제어를 했었다. 그 이유는 <del>모르는 사이에</del> open, read, write와 같은 <strong>운영체제가 제공하는 API</strong>를 사용했기 때문이다. 요약하자면, <strong>하드웨어 자원은 운영체제가 관리하니 운영체제가 제공하는 API를 사용하여 프로그래밍을 해야 한다</strong>는 것이다.</p>
 
@@ -18956,7 +18958,7 @@ GridLayout을 상속받은 <code>CustomLayout</code>을 하나 만들고, layout
 				</p>
 				<div class="content"><p>본 글타래에서는 자바를 사용하여 간단한 비행기 게임을 만드는 과정을 서술해볼까 한다.</p>
 
-<p>원활한 자바 프로그래밍을 위해서, <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>와 <a href="http://eclipse.org/downloads/">Eclipse</a>가 설치되어있어야 한다.
+<p>원활한 자바 프로그래밍을 위해서, <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>와 <a href="https://eclipse.org/downloads/">Eclipse</a>가 설치되어있어야 한다.
 이에 대한 자세한 설명은 생략하고, 멋들어진 이름으로 프로젝트를 하나 만들어보자.</p>
 
 <p>예전에 제출했던 이름을 따와서 타티을(Tatieul)이라는 이름으로 class를 하나 만들었다.</p>
@@ -22640,7 +22642,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <p></div></p>
 
 <ul>
-<li><a href="http://jongwook.kim/home">김종욱</a></li>
+<li><a href="https://jongwook.kim/home">김종욱</a></li>
 </ul>
 
 <h3>요약</h3>
@@ -22753,9 +22755,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li>기타
 
 <ul>
-<li><a href="http://reactive-streams.org">http://reactive-streams.org</a></li>
+<li><a href="https://reactive-streams.org">https://reactive-streams.org</a></li>
 <li>java: play, akka, reactor</li>
-<li><a href="http://reactconf.org">http://reactconf.org</a></li>
+<li><a href="https://reactconf.org">https://reactconf.org</a></li>
 <li>coursera principles of Reactive programming</li>
 </ul></li>
 <li>debugging
@@ -23037,7 +23039,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li>잦은 수정에 대처하기 위해 프로그래머는 소프트웨어 공학 기술을 발전시키며 나름 대응책을 만들어왔다. 핵심은 <strong>작업/수정 비용을 낮추어야 한다는 것</strong>이다.</li>
 <li>본 세션을 통해 이것이 다른 직군에서도 동일하게 적용될 수 있다는 점을 생각할 수 있어 좋았다.</li>
 </ul></li>
-<li>속성화되어 있는 캐릭터의 생산 비용을 낮춘다는 측면에서 <a href="http://www.storyhelper.co.kr/">storyhelper</a>가 떠올랐다. 같은 맥락에서 npchelper 같은 것을 만들어보면 어떨까 하는 생각이 들었다.</li>
+<li>속성화되어 있는 캐릭터의 생산 비용을 낮춘다는 측면에서 <a href="https://www.storyhelper.co.kr/">storyhelper</a>가 떠올랐다. 같은 맥락에서 npchelper 같은 것을 만들어보면 어떨까 하는 생각이 들었다.</li>
 </ul>
 </div>
 				<hr />
@@ -23086,7 +23088,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 				</p>
 				<div class="content"><ul>
 <li>WebServiceHost를 사용한 모바일 rest web api 서버를 만들어보자.</li>
-<li>msdn에 있을 법한 wcf 설명을 한참 함. <a href="http://msdn.microsoft.com/ko-kr/library/ms731190.aspx">msdn 참고</a></li>
+<li>msdn에 있을 법한 wcf 설명을 한참 함. <a href="https://msdn.microsoft.com/ko-kr/library/ms731190.aspx">msdn 참고</a></li>
 <li><p>본인이 구현한 코드를 설명해주는 방식. 추후 발표자료와 함께 올린다고 함</p></li>
 <li><p>Contract</p>
 
@@ -23136,7 +23138,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li>그냥 msdn tutorial을 설명한 수준, 그나마도 기본 개념 설명에 많은 시간을 할애함.</li>
 <li>예제 설명할 때 iis 안 쓰고 직접 service host 돌린 것은 이해하겠는데 콘솔이라서 뭐가 되네 안되네 하는 부분은 이해를 못 함.</li>
 <li>예제의 worker thread 1023개, io thread 1000개인 이유를 모르겠음</li>
-<li>관심 있으면 <a href="http://www.asp.net/web-api/overview/hosting-aspnet-web-api/self-host-a-web-api">self-host web api</a>를 보는 것이 나을 듯 싶음.</li>
+<li>관심 있으면 <a href="https://www.asp.net/web-api/overview/hosting-aspnet-web-api/self-host-a-web-api">self-host web api</a>를 보는 것이 나을 듯 싶음.</li>
 </ul>
 </div>
 				<hr />
@@ -23197,9 +23199,9 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <h3>terminolgy</h3>
 
 <ul>
-<li><code>DR</code> <a href="http://en.wikipedia.org/wiki/Disaster_recovery">Disaster Recovery</a></li>
-<li><code>BCP</code> <a href="http://en.wikipedia.org/wiki/Business_continuity_planning">Business continuity planning</a></li>
-<li><code>RTO</code> <a href="http://en.wikipedia.org/wiki/Recovery_time_objective">Recovery time objective</a></li>
+<li><code>DR</code> <a href="https://en.wikipedia.org/wiki/Disaster_recovery">Disaster Recovery</a></li>
+<li><code>BCP</code> <a href="https://en.wikipedia.org/wiki/Business_continuity_planning">Business continuity planning</a></li>
+<li><code>RTO</code> <a href="https://en.wikipedia.org/wiki/Recovery_time_objective">Recovery time objective</a></li>
 </ul>
 
 <h3>사례</h3>
@@ -23230,10 +23232,10 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li>나쁜 이웃을 만나면 infra resource를 빼앗길 수 있다.</li>
 <li>그래도 scale up/down이 간단하니 쓴다.</li>
 </ul></li>
-<li><a href="http://en.wikipedia.org/wiki/Service-level_agreement">SLA</a>
+<li><a href="https://en.wikipedia.org/wiki/Service-level_agreement">SLA</a>
 
 <ul>
-<li>SLA uptime은 service 몇 분 down될지 정하는 것 <a href="http://uptime.is/">calculator</a></li>
+<li>SLA uptime은 service 몇 분 down될지 정하는 것 <a href="https://uptime.is/">calculator</a></li>
 <li>99.9%는 8시간 45분/year 장애 허용</li>
 <li>99.995%는 1년에 26분/year 장애 허용
 
@@ -23253,7 +23255,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <ul>
 <li>eg) <code>RTO</code> 1시간, <code>RPO</code> 30분</li>
 <li>데이터베이스 이중화</li>
-<li><a href="http://en.wikipedia.org/wiki/Hot_spare">hot spare</a> <em>발표자료에서는 웜대기warm standby라고 함</em>: 교체 가용군 대기</li>
+<li><a href="https://en.wikipedia.org/wiki/Hot_spare">hot spare</a> <em>발표자료에서는 웜대기warm standby라고 함</em>: 교체 가용군 대기</li>
 <li><a href="https://aws.amazon.com/disaster-recovery/">pilot light</a>: 최후의 준비</li>
 </ul></li>
 </ul></li>
@@ -23564,7 +23566,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li>전 회사에서 서버 구동 시간 단축을 위해 <a href="/2013/06/09/binary-xml-for-fast-loading/">노력</a>을 해본 적이 있다. 그래서 드는 의문은,
 
 <ul>
-<li>보통 최적화를 할 때에는 <a href="http://en.wikipedia.org/wiki/Profiling_%28computer_programming%29">profiling</a>을 먼저 한다. vs의 analysis를 쓰든 vtune을 쓰든 돌려보면 느린 함수가 순서대로 잘 나온다. 그리고 보통 그 순서대로 원인을 파악하기 위해 작업을 한다.</li>
+<li>보통 최적화를 할 때에는 <a href="https://en.wikipedia.org/wiki/Profiling_%28computer_programming%29">profiling</a>을 먼저 한다. vs의 analysis를 쓰든 vtune을 쓰든 돌려보면 느린 함수가 순서대로 잘 나온다. 그리고 보통 그 순서대로 원인을 파악하기 위해 작업을 한다.</li>
 <li><del>만약 그랬다면 위 최적화의 적용 순서가 logging 삭제, list 미리 구성, <code>unordered_map</code>, <code>scalable_alloc</code> 적용, 분할 압축, dumpable 순일 것 같은데 그렇지 않았다</del> <em>특별히 어느 한 부분이 압도적으로 문제가 되는 부분이 없었다고 한다.</em></li>
 <li>그렇다는 것은 던파 코드가 analysis를 써도 결과가 제대로 안 나오는 답이 없는 상황 <del>이거나 profiling을 초반에 제대로 못 돌렸다는 것이다</del> 이었다는 것이다.<br>
 <em>발표 시점에 해당 내용을 놓친 것 같다. 발표자님의 댓글 도움으로 수정</em></li>
@@ -23710,7 +23712,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <p></div></p>
 
 <ul>
-<li><a href="http://rein.kr/blog/">김진욱</a></li>
+<li><a href="https://rein.kr/blog/">김진욱</a></li>
 </ul>
 
 <h3>요약</h3>
@@ -24050,7 +24052,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <p></div></p>
 
 <ul>
-<li><a href="http://ifunfactory.com/">문대경</a></li>
+<li><a href="https://ifunfactory.com/">문대경</a></li>
 </ul>
 
 <h3>요약</h3>
@@ -24226,7 +24228,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 						
 				</p>
 				<div class="content"><ul>
-<li><a href="https://twitter.com/hoblue">이호규</a> / <a href="http://www.slideshare.net/HoGyuLee/ndc14-abc">발표자료</a></li>
+<li><a href="https://twitter.com/hoblue">이호규</a> / <a href="https://www.slideshare.net/HoGyuLee/ndc14-abc">발표자료</a></li>
 </ul>
 
 <h3>왜?</h3>
@@ -24407,7 +24409,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <li><strong>중간중간 무슨 소리인지 잘 이해가 안 되는 부분이 있었다.</strong>
 
 <ul>
-<li><a href="http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;forum=3026737&amp;thread=2763589449&amp;behavior=click&amp;url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;post=1483795001&amp;type=notification.post.moderator&amp;event=email">이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.</a></li>
+<li><a href="https://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;forum=3026737&amp;thread=2763589449&amp;behavior=click&amp;url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;post=1483795001&amp;type=notification.post.moderator&amp;event=email">이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.</a></li>
 </ul></li>
 <li>chat의 경우 시야 범위의 broadcasting이 아닌 전체 전달 같은 경우엔 독립적 기능이니 community server를 따로 두어 io를 분산시키는 방법이 유효할지 모르겠는데, broadcasting의 network io를 분리한다는 발상은 좀 이상해보인다. 차라리 io를 전담하는 server를 둔다면 모르겠는데 어차피 분산 서버를 설계하는 상황에서 그게 무슨 큰 의미가 있는지 모르겠다.</li>
 <li>singleton 이야기는 그냥 concurrency control의 어려움을 이야기하려는 것 같은데 multi threading에서 singleton을 쓰려면 lock을 전제로 하거나 tls를 이용한 replica를 생각해야 할텐데 뭘 생각하는 건지 자세히 이야기를 안 해줘서 잘 모르겠다.</li>
@@ -24766,7 +24768,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 						
 						
 				</p>
-				<div class="content"><p><a href="http://kyungjaepark.com/">박경재</a></p>
+				<div class="content"><p><a href="https://kyungjaepark.com/">박경재</a></p>
 
 <h3>요약</h3>
 
@@ -25150,7 +25152,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <p></div></p>
 
 <ul>
-<li><a href="http://subl.ee/">이흥섭</a></li>
+<li><a href="https://subl.ee/">이흥섭</a></li>
 </ul>
 
 <h3>요약</h3>
@@ -25166,7 +25168,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <ul>
 <li>실시간 동기화되는, 영속성 있고, 심리스인, 단일 세계를 구현해보자.</li>
 <li>높은 가용성, 높은 가용률, 높은 신축성이 목표</li>
-<li><strong>따라서 <a href="http://en.wikipedia.org/wiki/Single_point_of_failure">SPOF</a>는 허용하지 않는다.</strong></li>
+<li><strong>따라서 <a href="https://en.wikipedia.org/wiki/Single_point_of_failure">SPOF</a>는 허용하지 않는다.</strong></li>
 </ul>
 
 <h3>구현</h3>
@@ -25188,7 +25190,7 @@ Space키를 누르면서 방향 키를 누르면, 분명 총알도 나가면서 
 <ul>
 <li>broker 없이 전 서버를 그냥 다 연결했다.</li>
 <li>하지만 어떤 서버들과 연결해야 하는지 주소록은 필요하니까 주소 교환용 broker는 하나 뒀다.</li>
-<li><a href="http://zeromq.org/">ØMQ</a>를 사용하여 서버간 통신
+<li><a href="https://zeromq.org/">ØMQ</a>를 사용하여 서버간 통신
 
 <ul>
 <li>round robin 방식을 사용하면 아무 node에게나 message를 전달한다.</li>
@@ -26875,9 +26877,9 @@ interrupt table을 초기화했으므로 이제 각 interrupt에 대해 handler�
 <h3>참고</h3>
 
 <ul>
-<li><a href="http://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-482-6">OS 구조와 원리: OS 개발 30일 프로젝트</a></li>
-<li><a href="http://www.hanbit.co.kr/book/look.html?isbn=89-7914-396-6">Windows 구조와 원리: OS를 관통하는 프로그래밍의 원리</a></li>
-<li><a href="http://kangcom.com/sub/view.asp?sku=201207250002">리눅스 커널 심층 분석</a></li>
+<li><a href="https://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-482-6">OS 구조와 원리: OS 개발 30일 프로젝트</a></li>
+<li><a href="https://www.hanbit.co.kr/book/look.html?isbn=89-7914-396-6">Windows 구조와 원리: OS를 관통하는 프로그래밍의 원리</a></li>
+<li><a href="https://kangcom.com/sub/view.asp?sku=201207250002">리눅스 커널 심층 분석</a></li>
 </ul>
 </div>
 				<hr />
@@ -26929,8 +26931,8 @@ For information on Bochs configuration file arguments, see the
 bochsrc section in the user documentation or the man page of bochsrc.
 00000000000i<span class="o">[</span>CTRL <span class="o">]</span> quit_sim called with <span class="nb">exit </span>code 0
 </code></pre></div>
-<p>다음으로 pintos를 실행하기 위해 pintos를 다운로드 받았다. pintos는 구글 검색을 통해 다운로드 주소가 <a href="http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz">http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz</a>에 있음을 찾아내서 wget 명령으로 다운로드 받았다.</p>
-<div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>wget http://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz
+<p>다음으로 pintos를 실행하기 위해 pintos를 다운로드 받았다. pintos는 구글 검색을 통해 다운로드 주소가 <a href="https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz">https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz</a>에 있음을 찾아내서 wget 명령으로 다운로드 받았다.</p>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>wget https://www.stanford.edu/class/cs140/projects/pintos/pintos.tar.gz
 </code></pre></div>
 <p>역시 tar.gz 압축이므로 tar xvzf로 압축을 해제하였다.</p>
 <div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>tar xvzf pintos.tar.gz
@@ -26939,7 +26941,7 @@ bochsrc section in the user documentation or the man page of bochsrc.
 <div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>pintos/src/threads
 ~/pintos/src/threads<span class="nv">$ </span>make
 </code></pre></div>
-<p>make 수행이 <code>undefined references to &#39;__stack_chk_fail&#39; follow</code>이라는 에러에 의해 중단되었다. 이를 해결하기 위해 구글을 검색하여 <a href="http://ubuntuforums.org/showthread.php?t=303541">다음의 레퍼런스</a>를 얻었다. 이 포럼에서 권고하는 대로 make 설정에서 CFLAGS의 값에 <code>-fno-stack-protector</code> 옵션을 추가해주기 위해 편집기 vi를 사용하여 Make.vars에 <code>CFLAGS += -fno-stack-protector</code>를 추가해 주었다.</p>
+<p>make 수행이 <code>undefined references to &#39;__stack_chk_fail&#39; follow</code>이라는 에러에 의해 중단되었다. 이를 해결하기 위해 구글을 검색하여 <a href="https://ubuntuforums.org/showthread.php?t=303541">다음의 레퍼런스</a>를 얻었다. 이 포럼에서 권고하는 대로 make 설정에서 CFLAGS의 값에 <code>-fno-stack-protector</code> 옵션을 추가해주기 위해 편집기 vi를 사용하여 Make.vars에 <code>CFLAGS += -fno-stack-protector</code>를 추가해 주었다.</p>
 <div class="highlight"><pre><code class="bash language-bash" data-lang="bash">~/pintos/src/threads<span class="nv">$ </span>vi Make.vars
 </code></pre></div>
 <p>기존에 컴파일한 것들을 제거하기 위해 make clean을 수행한 후 make를 수행하여 빌드를 마쳤다.</p>
@@ -31312,7 +31314,7 @@ Bochs is exiting with the following message:
 				<div class="content"><p>시스템 프로그래밍 수업 듣는 친구들이 vim을 써서 보다 빠르게 커널 탐색을 하는데 도움이 되었으면 해서 쓰는 글이지만 본인이 직접 정리하기는 귀찮으니 다음의 링크를 참조 바람 [...]</p>
 
 <ul>
-<li><a href="http://sosal.tistory.com/11">so_sal: 커널 분석기 Vi + ctags + cscope</a></li>
+<li><a href="https://sosal.tistory.com/11">so_sal: 커널 분석기 Vi + ctags + cscope</a></li>
 </ul>
 
 <h3>search script</h3>
@@ -32055,9 +32057,9 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 						
 						
 				</p>
-				<div class="content"><p>본 글에서는 <a href="http://jekyllrb.com/">jekyll</a>과 <a href="http://travis-ci.org/">travis-ci</a>를 사용하여 <a href="http://pages.github.com/">github pages</a>에 publish하고, 이를 custom domain에 연결하여 blog를 구축하는 방법에 대해 서술한다.</p>
+				<div class="content"><p>본 글에서는 <a href="https://jekyllrb.com/">jekyll</a>과 <a href="https://travis-ci.org/">travis-ci</a>를 사용하여 <a href="https://pages.github.com/">github pages</a>에 publish하고, 이를 custom domain에 연결하여 blog를 구축하는 방법에 대해 서술한다.</p>
 
-<p><a href="http://pages.github.com/">github pages</a>는 <a href="http://github.com/">github</a>에서 제공하는 cdn으로 static page를 서비스해주는 공간이다. github pages에 자세한 설명이 나와있지만 간단히 요약하면,</p>
+<p><a href="https://pages.github.com/">github pages</a>는 <a href="https://github.com/">github</a>에서 제공하는 cdn으로 static page를 서비스해주는 공간이다. github pages에 자세한 설명이 나와있지만 간단히 요약하면,</p>
 
 <ul>
 <li><em>{본인 id 혹은 그룹 id}.github.io</em> 라는 repository를 만들거나,</li>
@@ -32069,10 +32071,10 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 
 <h3>static site generator</h3>
 
-<p>글을 쓸 때마다 하나씩 html을 작성하는 것은 매우 번거로운 일이므로, site generator를 사용해보자. 본 글에서는 github pages에서 기본으로 제공해주는 <a href="http://jekyllrb.com/">jekyll</a>을 사용할 것이다.</p>
+<p>글을 쓸 때마다 하나씩 html을 작성하는 것은 매우 번거로운 일이므로, site generator를 사용해보자. 본 글에서는 github pages에서 기본으로 제공해주는 <a href="https://jekyllrb.com/">jekyll</a>을 사용할 것이다.</p>
 
 <ul>
-<li><a href="http://jekyllrb.com/">jekyll</a> 페이지의 안내에 따라 설치한 후, <code>jekyll new my-blog</code> 명령을 사용하여 기본 골격을 만들어보자.</li>
+<li><a href="https://jekyllrb.com/">jekyll</a> 페이지의 안내에 따라 설치한 후, <code>jekyll new my-blog</code> 명령을 사용하여 기본 골격을 만들어보자.</li>
 <li>이제 <code>_posts</code> 디렉토리에 적절한 형태(markdown, textile, text, ...)로 글을 작성한 후</li>
 <li><code>jekyll serve</code> 명령으로 서버를 띄우고 작성한 글이 제대로 나오는지 보면 된다.</li>
 </ul>
@@ -32095,8 +32097,8 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 <p><code>lacti.me</code>처럼 subdomain이 아니라 apex domain일 경우에는 <em>A 레코드 설정</em>을 해준다.</p>
 
 <ul>
-<li><a href="http://dotname.co.kr/">dotname</a>일 경우에는 <code>도메인 레코드 관리</code>에 들어가 <code>A 레코드 설정</code>에 ip를 추가해주면 된다.</li>
-<li><a href="http://kr.dnsever.com/">dnsever</a>일 경우에는 <code>호스트 IP(A) 관리</code>에 들어가 ip를 추가해주면 된다.</li>
+<li><a href="https://dotname.co.kr/">dotname</a>일 경우에는 <code>도메인 레코드 관리</code>에 들어가 <code>A 레코드 설정</code>에 ip를 추가해주면 된다.</li>
+<li><a href="https://kr.dnsever.com/">dnsever</a>일 경우에는 <code>호스트 IP(A) 관리</code>에 들어가 ip를 추가해주면 된다.</li>
 <li>이 때 www는 github pages에서 redirect를 해주므로 subdomain 입력 없이 ip만 입력하고 추가를 해주면 된다.</li>
 <li>추가할 ip 주소는 현재 <code>192.30.252.153</code>, <code>192.30.252.154</code> 인데 이는 추후 변경될 수 있으므로 <a href="https://help.github.com/articles/tips-for-configuring-an-a-record-with-your-dns-provider">Tips for configuring an a record with your dns provider</a> 페이지를 참고하는 것이 좋다.</li>
 </ul>
@@ -32104,8 +32106,8 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 <p><code>blog.lacti.me</code>처럼 subdomain일 경우에는 <em>CNAME 레코드 설정</em>을 해준다.</p>
 
 <ul>
-<li><a href="http://dotname.co.kr/">dotname</a>일 경우에는 <code>도메인 레코드 관리</code>에 들어가 <code>CNAME 레코드 설정</code>에 연결 주소를 추가해주면 된다.</li>
-<li><a href="http://kr.dnsever.com/">dnsever</a>일 경우에는 <code>도메인 별명(CNAME) 관리</code>에 들어가 목적지 도메인을 추가해주면 된다.</li>
+<li><a href="https://dotname.co.kr/">dotname</a>일 경우에는 <code>도메인 레코드 관리</code>에 들어가 <code>CNAME 레코드 설정</code>에 연결 주소를 추가해주면 된다.</li>
+<li><a href="https://kr.dnsever.com/">dnsever</a>일 경우에는 <code>도메인 별명(CNAME) 관리</code>에 들어가 목적지 도메인을 추가해주면 된다.</li>
 <li>추가할 주소는 <code>username.github.io</code>이다. 작업 후 dig 명령을 사용하여 제대로 연결되었는지 확인해볼 수 있다. 추후 변경될 수 있으므로 <a href="https://help.github.com/articles/tips-for-configuring-a-cname-record-with-your-dns-provider">Tips for configuring a cname record with your dns provider</a> 페이지를 참고하는 것이 좋다.</li>
 </ul>
 
@@ -32123,26 +32125,26 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 <li>pandoc converter 등을 사용한다던가,</li>
 </ul>
 
-<p>하는 이슈가 발생하게 된다. 이 부분을 개선하려면 plugin을 사용해야 하므로 github pages의 내장 jekyll 대신 <a href="http://travis-ci.org/">travis-ci</a>를 통한 <code>_sites</code>를 deploy하는 방법을 사용할 것이다.</p>
+<p>하는 이슈가 발생하게 된다. 이 부분을 개선하려면 plugin을 사용해야 하므로 github pages의 내장 jekyll 대신 <a href="https://travis-ci.org/">travis-ci</a>를 통한 <code>_sites</code>를 deploy하는 방법을 사용할 것이다.</p>
 
 <p>방법은 다음과 같다.</p>
 
 <ul>
 <li><em>{...}.github.io</em> repo에서 글을 올릴 브랜치를 만든다. 이 글에서는 이를 <code>source</code> 브랜치라고 칭하겠다. 따라서 해당 repo의 <code>master</code> 브랜치에는 jekyll이 생성한 결과물이 push될 것이다.</li>
-<li><a href="http://travis-ci.org/">travis-ci</a>를 사용하여 repo의 <code>source</code> 브랜치가 변경되었을 때 이를 <code>jekyll build</code>하여 그 결과물을 <code>master</code> 브랜치에 push할 것이다.</li>
+<li><a href="https://travis-ci.org/">travis-ci</a>를 사용하여 repo의 <code>source</code> 브랜치가 변경되었을 때 이를 <code>jekyll build</code>하여 그 결과물을 <code>master</code> 브랜치에 push할 것이다.</li>
 </ul>
 
-<p><code>source</code>, <code>master</code> 브랜치를 만드는 것은 어렵지 않다. 일단 첫 번째 난관은 <a href="http://travis-ci.org/">travis-ci</a>에 jekyll을 연결하는 것이다. 다행히도 <a href="https://github.com/mfenner/jekyll-travis">https://github.com/mfenner/jekyll-travis</a>에 jekyll-travis용 script가 있으니 이를 참고해서 설정을 하면 되겠다.</p>
+<p><code>source</code>, <code>master</code> 브랜치를 만드는 것은 어렵지 않다. 일단 첫 번째 난관은 <a href="https://travis-ci.org/">travis-ci</a>에 jekyll을 연결하는 것이다. 다행히도 <a href="https://github.com/mfenner/jekyll-travis">https://github.com/mfenner/jekyll-travis</a>에 jekyll-travis용 script가 있으니 이를 참고해서 설정을 하면 되겠다.</p>
 
 <ul>
-<li><code>.travis.yml</code> 파일에 push를 위한 secure token을 입력해야 한다. secure token을 만들어야 하니 다음을 참고. <a href="http://sleepycoders.blogspot.kr/2013/03/sharing-travis-ci-generated-files.html">Sharing travis ci generated files</a></li>
+<li><code>.travis.yml</code> 파일에 push를 위한 secure token을 입력해야 한다. secure token을 만들어야 하니 다음을 참고. <a href="https://sleepycoders.blogspot.kr/2013/03/sharing-travis-ci-generated-files.html">Sharing travis ci generated files</a></li>
 <li>secure token의 길이 제한은 128bytes이므로 암호화할 필요가 없는 변수들은 바깥으로 빼는 것이 좋다. <a href="https://github.com/lacti/lacti.github.io/blob/source/.travis.yml">lacti: .travis.yml</a></li>
 <li>추가 package가 필요할 경우 <code>Gemfile</code>에다가 package 파일을 기록해주면 된다.</li>
 </ul>
 
-<p>필요한 설정을 다 했으니 <a href="http://travis-ci.org/">travis-ci</a>에 가서 위 repo를 연결해주면 되겠다. <code>master</code> 브랜치에 대한 작업은 할 필요가 없으니 <em>Build only if .travis.yml is present</em>을 켜주면 된다.</p>
+<p>필요한 설정을 다 했으니 <a href="https://travis-ci.org/">travis-ci</a>에 가서 위 repo를 연결해주면 되겠다. <code>master</code> 브랜치에 대한 작업은 할 필요가 없으니 <em>Build only if .travis.yml is present</em>을 켜주면 된다.</p>
 
-<p>이제 <code>source</code> 브랜치의 <code>_posts</code>에 글을 commit하면 <a href="http://travis-ci.org/">travis-ci</a>가 이를 감지하여 <a href="http://jekyllrb.com/">jekyll</a>을 실행하고, 그 결과물을 <code>master</code> 브랜치로 push해줄 것이다.</p>
+<p>이제 <code>source</code> 브랜치의 <code>_posts</code>에 글을 commit하면 <a href="https://travis-ci.org/">travis-ci</a>가 이를 감지하여 <a href="https://jekyllrb.com/">jekyll</a>을 실행하고, 그 결과물을 <code>master</code> 브랜치로 push해줄 것이다.</p>
 
 <h3>gem cache</h3>
 
@@ -32167,16 +32169,16 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 <h3>정리</h3>
 
 <ul>
-<li><a href="http://pages.github.com/">github pages</a>를 사용하여 작성한 글을 배포할 수 있다.</li>
-<li><a href="http://jekyllrb.com/">jekyll</a>을 사용하면 보다 쉽게 사이트를 만들 수 있다.</li>
-<li>jekyll 플러그인을 사용할 경우 <a href="http://travis-ci.org/">travis-ci</a>을 사용하자.</li>
+<li><a href="https://pages.github.com/">github pages</a>를 사용하여 작성한 글을 배포할 수 있다.</li>
+<li><a href="https://jekyllrb.com/">jekyll</a>을 사용하면 보다 쉽게 사이트를 만들 수 있다.</li>
+<li>jekyll 플러그인을 사용할 경우 <a href="https://travis-ci.org/">travis-ci</a>을 사용하자.</li>
 <li>이 때 gem이 너무 느리다면 <a href="https://github.com/mezis/rebund">rebund</a>를 사용하자.</li>
 </ul>
 
 <h3>참고</h3>
 
 <ul>
-<li><a href="http://libsora.so/posts/static-blog-sample/">if1live: GitHub Pages와 travis-ci를 엮은 정적 블로그 자동화</a></li>
+<li><a href="https://libsora.so/posts/static-blog-sample/">if1live: GitHub Pages와 travis-ci를 엮은 정적 블로그 자동화</a></li>
 </ul>
 </div>
 				<hr />
@@ -32540,7 +32542,7 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 <p>이걸 해결하기 위한 가장 간단한 방법은,
 1. 무한 새로고침 (동기적 해결법)
 2. Ajax polling (비동기적 해결법)
-3. long-held HTTP Request (<a href="http://en.wikipedia.org/wiki/Comet_%28programming%29">COMET</a>)
+3. long-held HTTP Request (<a href="https://en.wikipedia.org/wiki/Comet_%28programming%29">COMET</a>)
 4. Web Socket</p>
 
 <p>1번은 설명 안해도 알 것이고, 3, 4번은 여기서 설명할 내용은 아니다. 이 글에서는 2번에 대해서 설명하겠다.</p>
@@ -32583,7 +32585,7 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 당연히 WebSocket으로 개발하는게 맞겠지만 일부 브라우저 (특히 군대) 에서는 WebSocket 이 지원되지 않을 수 있기 때문에 WebSocket과 Ajax 방식 둘 다 유지해야한다는 이야기가 있어서 귀찮아서 그만 두었다.</p>
 
 <p>게다가 WebSocket으로 작성하려면 WebSocket 서버와 웹 서버간의 SESSION 공유도 해주어야 하잖아?<br>
-<a href="http://doodoori2.tistory.com/" title="Doodoori2&#39;s Blog">doodoori2</a>님의 이야기로는 데이터베이스에 SESSION을 넣어두고 WebSocket 서버에게 DB 접근 권한을 주어서 공유하라고 하는데, 그렇게되면 SESSION의 갱신에 대해 WebSocket이 능동적으로 알아챌 수 있는 방법이 없기 때문에 결국 DB Polling을 해야하는 사태가 벌어질 수도 있을 것 같다.</p>
+<a href="https://doodoori2.tistory.com/" title="Doodoori2&#39;s Blog">doodoori2</a>님의 이야기로는 데이터베이스에 SESSION을 넣어두고 WebSocket 서버에게 DB 접근 권한을 주어서 공유하라고 하는데, 그렇게되면 SESSION의 갱신에 대해 WebSocket이 능동적으로 알아챌 수 있는 방법이 없기 때문에 결국 DB Polling을 해야하는 사태가 벌어질 수도 있을 것 같다.</p>
 
 <p>여러가지 해결책이 있겠지만 귀찮다는 핑계로 고민 중이다.</p>
 
@@ -32597,7 +32599,7 @@ nmap J :call SearchKeyword<span class="o">()</span>&lt;cr&gt;
 <li>클라이언트 쪽 프로그래밍이라면 Ajax나 WebSocket 관련 라이브러리를 가져다 쓰는게 좋겠다.</li>
 </ul>
 
-<p>난 전통적인 <a href="http://prototypejs.org">prototypejs</a> 유저라서 잘 모르겠지만, 대세가 <a href="http://jquery.com">jQuery</a> 라고 하니 그 쪽을 공부해보는 것도 좋겠다.</p>
+<p>난 전통적인 <a href="https://prototypejs.org">prototypejs</a> 유저라서 잘 모르겠지만, 대세가 <a href="https://jquery.com">jQuery</a> 라고 하니 그 쪽을 공부해보는 것도 좋겠다.</p>
 </div>
 				<hr />
 				<div class="page-breaker"></div>

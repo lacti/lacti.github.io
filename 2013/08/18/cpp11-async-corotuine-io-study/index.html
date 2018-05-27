@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>c++11 async, corotuine, io 스터디</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -68,27 +70,27 @@
 <h3>async, future</h3>
 
 <ul>
-<li><a href="http://en.cppreference.com/w/cpp/thread/future">future, promise</a>는 비동기로 실행되는 수행 결과를 받아오기 위한 개념이다.</li>
-<li><a href="http://en.cppreference.com/w/cpp/thread/async"><code>async</code></a>는 내부적으로 <code>promise</code>를 사용하여 결과를 <code>set()</code>할 비동기 작업을 수행시키고, future를 반환한다.</li>
-<li><a href="http://en.cppreference.com/w/cpp/thread/packaged_task"><code>packaged_task</code></a>는 비동기 작업을 수행할 수 있는 task 객체를 만들어준다. task 객체로부터 future를 가져올 수 있다.</li>
-<li>vs2012 기준으로 내부 구현 분석한 내용: <a href="http://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/thread/future">future, promise</a>는 비동기로 실행되는 수행 결과를 받아오기 위한 개념이다.</li>
+<li><a href="https://en.cppreference.com/w/cpp/thread/async"><code>async</code></a>는 내부적으로 <code>promise</code>를 사용하여 결과를 <code>set()</code>할 비동기 작업을 수행시키고, future를 반환한다.</li>
+<li><a href="https://en.cppreference.com/w/cpp/thread/packaged_task"><code>packaged_task</code></a>는 비동기 작업을 수행할 수 있는 task 객체를 만들어준다. task 객체로부터 future를 가져올 수 있다.</li>
+<li>vs2012 기준으로 내부 구현 분석한 내용: <a href="https://www.slideshare.net/lactrious/synchronizing-concurrent-threads">async, future, promise in c++</a></li>
 </ul>
 
 <p>vs2012 쪽 문제인지 <code>std::async</code>를 수행할 때 <code>std::launch</code>enum 값을 주지 않으면 <code>std::launch::any</code>로 수행하게 되는데 이 때 <code>deferred</code>로 수행되면서 <code>future</code>를 통해 값을 가져오게 될 경우 문제가 발생하는 것 같다. 내가 개념을 잘못 이해하고 있는 것인지 모르겠는데 문제가 발생하지 않으려면 <code>std::launch::async</code>로 policy를 주고 실행해야 할 듯</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/9389409/vs-11-with-stdfuture-is-this-a-bug">Stackoverflow: VS11 with std::future - is this a bug?</a></li>
+<li><a href="https://stackoverflow.com/questions/9389409/vs-11-with-stdfuture-is-this-a-bug">Stackoverflow: VS11 with std::future - is this a bug?</a></li>
 </ul>
 
 <h3>spawn</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Cilk">Wiki: Cilk</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Cilk">Wiki: Cilk</a></li>
 <li>fork/join
 
 <ul>
-<li><a href="http://minjang.egloos.com/834885">minjang: 왜 fork, join이라는 이름일까?</a></li>
-<li><a href="http://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">Java: Fork/Join</a></li>
+<li><a href="https://minjang.egloos.com/834885">minjang: 왜 fork, join이라는 이름일까?</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">Java: Fork/Join</a></li>
 </ul></li>
 </ul>
 
@@ -99,13 +101,13 @@
 <p>비동기 작업을 위해 작업을 수행할 Task를 만든다. 해당 Task가 완료되면 다음 작업을 수행할 수 있도록 Task를 엮는다(Task Continuation)</p>
 
 <ul>
-<li><a href="http://msdn.microsoft.com/en-us/library/dd460717.aspx">MSDN: Task Parallel Library</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/dd460717.aspx">MSDN: Task Parallel Library</a></li>
 </ul>
 
 <p>특정 Task의 결과를 획득할 수 있을 때까지 대기한다. 이 때 할 수 있는 다른 일이 있다면 찾아본다(await). 이는 단순히 compiler가 await하는 코드들을 하나의 state machine으로 묶어서 state를 변화시키면서 해당 함수를 계속 불러주는 방식으로 만들어주는 것이다.</p>
 
 <ul>
-<li><a href="http://weblogs.asp.net/dixin/archive/2012/11/02/understanding-c-async-await-1-compilation.aspx">Dixin: Understanding C# async / await Compliation</a></li>
+<li><a href="https://weblogs.asp.net/dixin/archive/2012/11/02/understanding-c-async-await-1-compilation.aspx">Dixin: Understanding C# async / await Compliation</a></li>
 </ul>
 
 <p>실제 코드가 각각 어떤 thread에서 수행될 수 있는지에 대해서는 약간 복잡할 수 있는데 이에 대해서는 다루지 않았다. 요약하면, 비동기 logic을 동기적으로 작성하기 위한 async/await는 결과적으로 state machine code로 compiler에 의해 변환되어 .net thread-pool에 들어갔다 나왔다하면서 코드가 수행된다는 것.</p>
@@ -134,9 +136,9 @@
 <h3>coroutine</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Coroutine">Wiki: Coroutine</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Generator_%28computer_science%29">Wiki: Generator</a></li>
-<li><a href="http://www.unitystudy.net/bbs/board.php?bo_table=writings&amp;wr_id=43">UnityStudy: Coroutine의 기본 개념 및 활용</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Coroutine">Wiki: Coroutine</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Generator_%28computer_science%29">Wiki: Generator</a></li>
+<li><a href="https://www.unitystudy.net/bbs/board.php?bo_table=writings&amp;wr_id=43">UnityStudy: Coroutine의 기본 개념 및 활용</a></li>
 </ul>
 
 <blockquote>
@@ -180,7 +182,7 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 <p><code>user -&gt; kernel (kernel + device driver) -&gt; physical -&gt; kernel -&gt; user</code>로 이어지는 장대한 여행</p>
 
 <ul>
-<li><a href="http://www.youtube.com/watch?v=PBWhzz_Gn10">Warriors of the Net</a></li>
+<li><a href="https://www.youtube.com/watch?v=PBWhzz_Gn10">Warriors of the Net</a></li>
 </ul>
 
 <p>약간 거리가 있지만</p>
@@ -250,10 +252,10 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 <p>asio 코딩을 통해 async request/completion의 개념을 이해하면 좋을 것 같아 넣어봤다. 자세한 내용은 asio document이 워낙 잘 되어 있으니 그 쪽을 보면 좋다.</p>
 
 <ul>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/boost_asio.html">Boost.Asio</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/boost_asio.html">Boost.Asio</a></li>
 </ul>
 
-<h3><a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa365198.aspx">IOCP</a>: <del>Windows의 자랑</del></h3>
+<h3><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365198.aspx">IOCP</a>: <del>Windows의 자랑</del></h3>
 
 <p>request와 completion을 분리한 비동기 io 함수와 분리된 두 문맥을 연결해주기 위해 준비되는 overlapped 구조체는 iocp 이전부터 존재했던 windows api이다(apc 포함). 다만 callback이 불리는 시점도 애매하고 흐름이 눈에 잘 띄지 않으니 completion queue를 api로 노출시켜 접근할 수 있게 만들어준 것.</p>
 
@@ -273,7 +275,7 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 
 <p>뭐, kernel이 io 작업 다 해주고 user는 completion만 처리하면 되니 다른 일에 집중할 수 있어 더 좋은건 당연한 소리</p>
 
-<h3><a href="http://www.serverframework.com/asynchronousevents/2011/10/windows-8-registered-io-networking-extensions.html">RIO</a></h3>
+<h3><a href="https://www.serverframework.com/asynchronousevents/2011/10/windows-8-registered-io-networking-extensions.html">RIO</a></h3>
 
 <p>iocp를 만들고 열심히 profiling을 해보니 3가지 문제가 있댄다.</p>
 
@@ -294,8 +296,8 @@ boost는 boost context를 먼저 만들어서 cpu context를 capture할 수 있�
 </ol>
 
 <ul>
-<li><a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms740642.aspx">MSDN: What&#39;s New for Windows Sockets</a></li>
-<li><a href="http://channel9.msdn.com/Events/Build/BUILD2011/SAC-593T">Channel9: New techniques to develop low-latency network apps</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms740642.aspx">MSDN: What&#39;s New for Windows Sockets</a></li>
+<li><a href="https://channel9.msdn.com/Events/Build/BUILD2011/SAC-593T">Channel9: New techniques to develop low-latency network apps</a></li>
 </ul>
 
 <p>사실 성능에 좀 의문이 있기는 했는데, 이걸로 실험해본 사람이 iocp보다 30~40% 성능 향상을 경험했다고 한다. 좀 미묘한 설계이기는 했는데 나중에 기회가 되면 글 쓰겠음.</p>

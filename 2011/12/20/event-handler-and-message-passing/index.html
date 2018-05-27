@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="author" content="lacti">
 
-	<meta name="description" content="EventHandler와 Message Passing 20 Dec 2011 java message 객체(object)는 상태(state)를 갖고 외부의 조작(mutator)에 의해서 변경될 수 있다. 이러한 객체를 다루는 프로그래밍을 할 때는, 관찰자(observer)가 객체의 상태 변화(property change)를 감지하여 어떠한 동작(action)을 수행하는 경우가 많이 있다. 이러한 코드를 작성할 경우, 관찰 당하는 객체(subject)와 관찰자(observer)의 관계를 어떻게 정의하냐에 따라서, 확장성, 결합성 등이 많이 달라지게 된다. 이 글에서는 간단한 EventHandler와 Message Passing에 대해서 다루어보려고 한다. http://en.wikipedia.org/wiki/Observer_pattern hard binding 명부(List)는 내부에 사람(Person)을 포함한다. 사람은 이름(name)이라는 속성(property)을 갖고, 이 값은 외부에서 변경될 수 있다(mutator method). 명부는 사람의 이름이 변경되는 것을 감지해야한다. 이를 위한 가장 간단한 방법은 아래와 같다. class Person { private List observer; private String name; public Person() {} public String setName(String name) { observer.nameChanged(this.name, name); this.name = name; } public void attach(List observer)..." />
+	<meta name="description" content="EventHandler와 Message Passing 20 Dec 2011 java message 객체(object)는 상태(state)를 갖고 외부의 조작(mutator)에 의해서 변경될 수 있다. 이러한 객체를 다루는 프로그래밍을 할 때는, 관찰자(observer)가 객체의 상태 변화(property change)를 감지하여 어떠한 동작(action)을 수행하는 경우가 많이 있다. 이러한 코드를 작성할 경우, 관찰 당하는 객체(subject)와 관찰자(observer)의 관계를 어떻게 정의하냐에 따라서, 확장성, 결합성 등이 많이 달라지게 된다. 이 글에서는 간단한 EventHandler와 Message Passing에 대해서 다루어보려고 한다. https://en.wikipedia.org/wiki/Observer_pattern hard binding 명부(List)는 내부에 사람(Person)을 포함한다. 사람은 이름(name)이라는 속성(property)을 갖고, 이 값은 외부에서 변경될 수 있다(mutator method). 명부는 사람의 이름이 변경되는 것을 감지해야한다. 이를 위한 가장 간단한 방법은 아래와 같다. class Person { private List observer; private String name; public Person() {} public String setName(String name) { observer.nameChanged(this.name, name); this.name = name; } public void attach(List observer)..." />
 
 	<meta http-equiv="date" content="Tuesday, 20  2011 00:00:00 GMT" />
 
@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>EventHandler와 Message Passing</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -63,7 +65,7 @@
 이러한 객체를 다루는 프로그래밍을 할 때는, 관찰자(observer)가 객체의 상태 변화(property change)를 감지하여 어떠한 동작(action)을 수행하는 경우가 많이 있다.</p>
 
 <p>이러한 코드를 작성할 경우, 관찰 당하는 객체(subject)와 관찰자(observer)의 관계를 어떻게 정의하냐에 따라서, 확장성, 결합성 등이 많이 달라지게 된다. 이 글에서는 간단한 EventHandler와 Message Passing에 대해서 다루어보려고 한다.<br>
-<a href="http://en.wikipedia.org/wiki/Observer_pattern">http://en.wikipedia.org/wiki/Observer_pattern</a></p>
+<a href="https://en.wikipedia.org/wiki/Observer_pattern">https://en.wikipedia.org/wiki/Observer_pattern</a></p>
 
 <h3>hard binding</h3>
 

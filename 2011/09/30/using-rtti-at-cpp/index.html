@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>c++ 에서 구조체 RTTI 정보 남기기</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -131,7 +133,7 @@ C, C++ 은 당연히 지원 안한다. 실행 중에 뭔가 정보를 더 남긴
 <h3>DSEL</h3>
 
 <p>이제 구조체를 정의하는 매크로를 만들어야 한다.
-이게 약간 문제가 있는데, 본 문제를 출제한 <a href="http://libsora.so/" title="libsora.so">if1live</a>님의 요구 사항은 아래와 같다.</p>
+이게 약간 문제가 있는데, 본 문제를 출제한 <a href="https://libsora.so/" title="libsora.so">if1live</a>님의 요구 사항은 아래와 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">STRUCT_BEGIN</span><span class="p">(</span><span class="n">SampleStruct</span><span class="p">)</span>
     <span class="n">STRUCT_VAR_FLOAT</span><span class="p">(</span><span class="n">SampleStruct</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="n">STRUCT_VAR_INT</span><span class="p">(</span><span class="n">SampleStruct</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
@@ -192,7 +194,7 @@ C, C++ 은 당연히 지원 안한다. 실행 중에 뭔가 정보를 더 남긴
 <p>구조체를 등록하는 매크로는 전역 <code>rtti_map</code> 객체에 <code>struct_info</code>를 넣어준다.
 구조체의 변수를 등록하는 매크로는 자신이 속한 구조체 rtti 내의 <code>varmap</code> 객체에 <code>var_info</code>를 넣어준다.</p>
 
-<p>구조체의 변수를 등록하려면, 결국 자기가 어느 struct에 속한지를 알아야, 전역 rtti에서 자신이 속한 <code>struct_info</code>를 얻어와서 거기에 변수 정보(<code>var_info</code>)를 등록할 수 있다는 것이다. 이 때문에 <a href="http://libsora.so/" title="libsora.so">if1live</a>님의 매크로의 변수 선언부를 보면, <code>STRUCT_VAR_FLOAT(SampleStruct, a)</code>와 같이 구조체의 이름과 변수의 이름이 같이 들어가는 것이다.</p>
+<p>구조체의 변수를 등록하려면, 결국 자기가 어느 struct에 속한지를 알아야, 전역 rtti에서 자신이 속한 <code>struct_info</code>를 얻어와서 거기에 변수 정보(<code>var_info</code>)를 등록할 수 있다는 것이다. 이 때문에 <a href="https://libsora.so/" title="libsora.so">if1live</a>님의 매크로의 변수 선언부를 보면, <code>STRUCT_VAR_FLOAT(SampleStruct, a)</code>와 같이 구조체의 이름과 변수의 이름이 같이 들어가는 것이다.</p>
 
 <h3>declaration DSEL</h3>
 

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>왜 c#으로 서버를 작성하려 하나?</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -113,7 +115,7 @@
 <li><strong>gc가 돌면 세상이 멈춘다.</strong></li>
 </ul>
 
-<p>c++에서 하던 식으로 모든 객체를 메모리에 올려두는 식으로 프로그래밍하다 보면 당연히 gen2에 쌓이는 객체가 많아진다. 때문에 gen2를 탐색하는 gc가 수행될 때 서버의 전체적인 throughput이 크게 떨어지는 문제가 발생할 수도 있다. 물론 <a href="http://msdn.microsoft.com/en-us/library/ee787088.aspx#concurrent_garbage_collection">concurrent gc</a>를 사용하거나, <a href="http://msdn.microsoft.com/en-us/library/ee787088.aspx#workstation_and_server_garbage_collection">server gc</a>를 잘 튜닝해서 사용하면 문제를 어느 정도 회피할 수 있다고는 하지만 간단해 보이지는 않는다.</p>
+<p>c++에서 하던 식으로 모든 객체를 메모리에 올려두는 식으로 프로그래밍하다 보면 당연히 gen2에 쌓이는 객체가 많아진다. 때문에 gen2를 탐색하는 gc가 수행될 때 서버의 전체적인 throughput이 크게 떨어지는 문제가 발생할 수도 있다. 물론 <a href="https://msdn.microsoft.com/en-us/library/ee787088.aspx#concurrent_garbage_collection">concurrent gc</a>를 사용하거나, <a href="https://msdn.microsoft.com/en-us/library/ee787088.aspx#workstation_and_server_garbage_collection">server gc</a>를 잘 튜닝해서 사용하면 문제를 어느 정도 회피할 수 있다고는 하지만 간단해 보이지는 않는다.</p>
 
 <p>gen2로 가는 객체의 수를 줄이는 것이 관건인데 이게 또 간단하지 않다.</p>
 

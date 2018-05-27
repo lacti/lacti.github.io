@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>concurrency 알고리즘과 memory model</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -79,7 +81,7 @@
 
 <h3>peterson&#39;s algorithm</h3>
 
-<p><a href="http://en.wikipedia.org/wiki/Peterson&#x27;s_algorithm">Wiki: Peterson&#39;s algorithm</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Peterson&#x27;s_algorithm">Wiki: Peterson&#39;s algorithm</a></p>
 
 <p>그냥 눈에 보이는대로 코드가 수행되면 문제가 발생하지 않는데, 비순차 실행에 의해 <code>flag[my_index] = true; turn = other_index;</code> 대입의 순서가 뒤집히면 critical section에 두 thread가 진입할 수 있는 문제가 발생한다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="nl">P0:</span> <span class="n">turn</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -151,9 +153,9 @@
 <p>비순차 실행에 의해 의존성이 없다고 판단되는 연산의 순서가 뒤집히는 것을 방지하기 위해 memory consistency model을 고민해야 한다.</p>
 
 <ul>
-<li><a href="http://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL RR: Shared MEmory Consistency Models: A Tutorial</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html">Boost: Thread coordination using Boost.Atomic</a></li>
-<li><a href="http://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
+<li><a href="https://www.hpl.hp.com/techreports/Compaq-DEC/WRL-95-7.pdf">WRL RR: Shared MEmory Consistency Models: A Tutorial</a></li>
+<li><a href="https://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html">Boost: Thread coordination using Boost.Atomic</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
 </ul>
 
 <p>메모리 가시성 개념도 포함되어 있음. fence를 경계로 비순차 수행 가능 범위의 경계가 생김.<br>
@@ -175,15 +177,15 @@
 <li>obstruction-free, lock-free, wait-free 개념 구분</li>
 <li>CAS, CAS2(CASW), DCAS, TSX, RTM 대충</li>
 <li>aba problem이 잘 설명되어 있다. CAS를 node pointer로만 하기 때문에 그 주소값만 같으면 해당 주소가 가리키는 객체의 상태가 어떻게 변했어도 작업이 진행될 수 있는 것이 문제.<br>
-(즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)</li>
+(즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)
+w
+즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.</li>
 </ul>
-
-<p>즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.</p>
 
 <p>근데 InterlockedSList는 가난한 시절이라 CAS2 못 쓰고 memory alignment해서 남는 하위 4bit를 count로 쓴 것으로 알고 있다.<br>
 (어설픈 기억으로는 MPMC concurrency queue를 lock free algorithm으로 만들 때 CAS 뭔가 잘못써서 aba problem 발생하면 해당 node가 다른 queue로 들어간 시점에도 뭔가 오동작하여 해당 queue까지 파괴했던 시나리오가 있었는데-_-; 자세히 기억이 안 난다.)</p>
 
-<h3><a href="http://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890">hazard pointer</a></h3>
+<h3><a href="https://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890">hazard pointer</a></h3>
 
 <p>오늘 출력해간 논문보다 위 링크가 더 읽기 좋다. 완전 오늘 헛소리한 듯-_- 나중에 다시 자세히 읽어보고 정리하겠음</p>
 
@@ -197,7 +199,7 @@
 
 <h3><a href="/2011/08/11/synchronize-function-execution-in-each-object/">객체별 수행 동기화</a> 글 코드의 문제</h3>
 
-<p><a href="http://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 문제 해결법</p>
+<p><a href="https://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 문제 해결법</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">mJobQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">RequestJobPtr</span><span class="p">(</span><span class="k">new</span> <span class="n">_RequestJobImpl</span><span class="p">(</span><span class="n">functor</span><span class="p">)));</span>
 <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">mJobQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">InterlockedExchange</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mExclusiveFlag</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">RequestJobPtr</span> <span class="n">job</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span> <span class="n">mJobQueue</span><span class="p">.</span><span class="n">try_pop</span><span class="p">(</span><span class="n">job</span><span class="p">);</span> <span class="p">)</span> <span class="p">{</span>

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>분산 시스템 구현 과제 정리</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -62,7 +64,7 @@
 				<p>뭐라도 좋으니 간단한 분산 시스템을 구현해보자!<br>
 단일 시스템과 비교하여 성능 혹은 가용성을 높이기 위해 분산 시스템을 설계해야 하는 것이니 일단 네트워크 프로그래밍은 필수이다. 효율을 높이기 위해 얼마나 작업을 잘 쪼개고 합치는가도 고민해야 하고, 장애가 발생했을 때 얼마나 복구될 수 있는지도 고민해야 한다.</p>
 
-<h3><a href="http://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 시스템</h3>
+<h3><a href="https://blog.fegs.kr/" title="blog.fegs.kr">angdev</a>님의 시스템</h3>
 
 <ul>
 <li>풀씨 프로그래밍 대회 채점 서버를 nodejs/c++로 구현했다. aws 위에 서비스를 올렸으며 elb, ec2를 통해 서비스를 구성하였다.</li>

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>template 인자를 상속 받기</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -193,7 +195,7 @@
 
 <p>template 인자로 받게되는 것은 암시적 interface가 요구되기 때문에 컴파일 타임에서의 느슨한 결합이 요구될 때 쓰면 좋다. 그리고 상속이라는 것을 통해 기능 확장, 혹은 접근 제한 등을 적절히 혼합하여 사용하면 재미난 많은 것을 할 수 있다.</p>
 
-<p>더 나아가서 <a href="http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">CRTP</a>라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.</p>
+<p>더 나아가서 <a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">CRTP</a>라는 재귀 상속의 개념도 있는데, 이건 다음 글에서 알아보도록 하자.</p>
 
 				</div>
 

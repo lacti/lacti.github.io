@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>분산서버 구축의 ABC - 대규모 분산 시스템을 구축하기 위한 실용적 예와 그 원칙들</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -60,7 +62,7 @@
 				
 				<div class="content">
 				<ul>
-<li><a href="https://twitter.com/hoblue">이호규</a> / <a href="http://www.slideshare.net/HoGyuLee/ndc14-abc">발표자료</a></li>
+<li><a href="https://twitter.com/hoblue">이호규</a> / <a href="https://www.slideshare.net/HoGyuLee/ndc14-abc">발표자료</a></li>
 </ul>
 
 <h3>왜?</h3>
@@ -241,7 +243,7 @@
 <li><strong>중간중간 무슨 소리인지 잘 이해가 안 되는 부분이 있었다.</strong>
 
 <ul>
-<li><a href="http://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;forum=3026737&amp;thread=2763589449&amp;behavior=click&amp;url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;post=1483795001&amp;type=notification.post.moderator&amp;event=email">이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.</a></li>
+<li><a href="https://redirect.disqus.com/url?impression=e0a616e0-0aff-11e4-ae27-003048db5eee&amp;forum=3026737&amp;thread=2763589449&amp;behavior=click&amp;url=https%3A%2F%2Flacti.github.io%2F2014%2F05%2F28%2Fndc14-build-distributed-system%2F%23comment-1483795001%3AmwG_lKpQhTAuKYl4yhK6XJkCV2Y&amp;post=1483795001&amp;type=notification.post.moderator&amp;event=email">이해가 안 되는 부분에 대해서는 발표자님께서 댓글로 친절히 설명을 해주셨다.</a></li>
 </ul></li>
 <li>chat의 경우 시야 범위의 broadcasting이 아닌 전체 전달 같은 경우엔 독립적 기능이니 community server를 따로 두어 io를 분산시키는 방법이 유효할지 모르겠는데, broadcasting의 network io를 분리한다는 발상은 좀 이상해보인다. 차라리 io를 전담하는 server를 둔다면 모르겠는데 어차피 분산 서버를 설계하는 상황에서 그게 무슨 큰 의미가 있는지 모르겠다.</li>
 <li>singleton 이야기는 그냥 concurrency control의 어려움을 이야기하려는 것 같은데 multi threading에서 singleton을 쓰려면 lock을 전제로 하거나 tls를 이용한 replica를 생각해야 할텐데 뭘 생각하는 건지 자세히 이야기를 안 해줘서 잘 모르겠다.</li>

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>c++ message dispatcher</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -102,7 +104,7 @@
 <span class="p">};</span>
 <span class="k">typedef</span> <span class="kt">handler_t</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;&gt;</span> <span class="kt">msg_handler_t</span><span class="p">;</span>
 </code></pre></div>
-<p>이제 모든 작업이 완료되었다. <code>msg_handler_t</code>에 대한 <a href="http://en.cppreference.com/w/cpp/container/unordered_map">unordered_map</a> 객체 만들고, 적절히 불러주기만 하면 된다.</p>
+<p>이제 모든 작업이 완료되었다. <code>msg_handler_t</code>에 대한 <a href="https://en.cppreference.com/w/cpp/container/unordered_map">unordered_map</a> 객체 만들고, 적절히 불러주기만 하면 된다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="n">__handler_table</span><span class="p">;</span>
 <span class="kt">void</span> <span class="nf">dispatch</span><span class="p">(</span><span class="kt">int</span> <span class="n">opcode</span><span class="p">,</span> <span class="k">const</span> <span class="kt">message_t</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">__handler_table</span><span class="p">[</span><span class="n">opcode</span><span class="p">](</span><span class="n">msg</span><span class="p">);</span>
@@ -137,7 +139,7 @@
 <li>마지막으로 구현한 handler를 handler_table에다가 등록해주는 코드를 작성해야 한다.</li>
 </ul>
 
-<p>일단 <code>msg_id</code> 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 <a href="http://en.cppreference.com/w/cpp/types/type_index">type_index</a>를 사용하자.</p>
+<p>일단 <code>msg_id</code> 문제를 해결해보자. 여러가지 방법이 있겠지만 귀찮으니 <a href="https://en.cppreference.com/w/cpp/types/type_index">type_index</a>를 사용하자.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span> <span class="kt">msg_handler_t</span><span class="o">&gt;</span> <span class="n">__handler_table</span><span class="p">;</span>
 </code></pre></div>
 <p><code>message_t</code>를 받는 함수와 원하는 type을 받는 함수를 분리하고, <code>__handler_table</code>에 함수를 프로그램 시작 시에 등록하기 위해 static 전역 변수를 사용해 코드를 정리하면 다음과 같다.</p>
@@ -163,7 +165,7 @@
 
 <ul>
 <li>dynamic_cast를 하지 않은 이유는 항상 올바른 type만 casting을 요청할 것이라는 믿음을 갖고 불필요한 검사를 피하기 위함이다</li>
-<li><code>_Ty</code>가 정말 <code>message_t</code>를 상속받았는지 보려면 <a href="http://en.cppreference.com/w/cpp/types/is_base_of">std::is_base_of</a>를 쓰면 되겠다.</li>
+<li><code>_Ty</code>가 정말 <code>message_t</code>를 상속받았는지 보려면 <a href="https://en.cppreference.com/w/cpp/types/is_base_of">std::is_base_of</a>를 쓰면 되겠다.</li>
 </ul>
 
 <p>실제 작업을 수행할 함수인 <code>int_msg_handler</code>를 선언한다. 그리고 전달 함수인 <code>_int_msg_wrapper</code> 함수를 작성한다. <code>_int_msg_wrapper</code> 함수에서는 <code>message_t</code>를 <code>int_msg_t</code>로 casting만 해서 <code>int_msg_handler</code> 함수로 넘겨준다. 그리고 실질적인 작업은 <code>int_msg_handler</code>에서 <code>int_msg_t</code>를 인자로 받아 처리하게 된다.</p>

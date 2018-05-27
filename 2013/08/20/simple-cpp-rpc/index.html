@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>generic한 c++ rpc 구현</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -61,7 +63,7 @@
 				<div class="content">
 				<p>generic한 rpc를 간단히 구현해보자.</p>
 
-<p>원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 <a href="http://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage">DSEL</a>을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.</p>
+<p>원래 의도는 asio를 사용하여 가벼운 덧셈 rpc 정도를 구현해보자는 것이었는데 왠지 모르게 스터디 친구들이 spec을 안드로메다로 보내버려서 <a href="https://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage">DSEL</a>을 통한 rpc stub, skeleton 생성 코드를 구현해보도록 하겠다.</p>
 
 <p>양이 좀 많기 때문에 개요부터 설명하겠다.</p>
 
@@ -151,7 +153,7 @@
 <span class="p">};</span>
 <span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">session_t</span><span class="o">&gt;</span> <span class="n">session_ref</span><span class="p">;</span>
 </code></pre></div>
-<p><a href="http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html">boost asio</a>에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.</p>
+<p><a href="https://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio.html">boost asio</a>에 대해 자세한 설명은 하지 않겠다. 어쨌든 중요한건 요청을 수행하는 request 함수와 완료를 처리하는 handle 함수가 분리되어있다는 것이다.</p>
 
 <p>전체 코드를 다 올리면 너무 기니까 간단하게 message를 읽는 코드만 옮겨보았다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="kt">session_t</span><span class="o">::</span><span class="n">request_read_msg_size</span><span class="p">()</span> <span class="p">{</span>
@@ -290,7 +292,7 @@
 
 <h3>code generating</h3>
 
-<p>이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 <strong>rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가</strong>이다. 나머지 byte serializer나 rpc type enum 선언 등의 <a href="http://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.</p>
+<p>이제 기반 class 구현이 끝났으니 기반 class를 상속받아 우리가 원하는 rpc class를 작성하면 되겠다. 하지만 우리의 관심사는 <strong>rpc 함수의 interface가 어떻게 선언되고, 그것에 대한 코드가 어떻게 정의되는가</strong>이다. 나머지 byte serializer나 rpc type enum 선언 등의 <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>를 매번 작성해주는 것은 매우 귀찮은 일이니 직접하지 말고 컴파일러를 시키는 것이 여러모로 좋겠다.</p>
 
 <p>일단 원하는 최종 형태의 코드는 다음과 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="n">RPC_BEGIN</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
@@ -305,9 +307,9 @@
 </code></pre></div>
 <p>rpc interface에 대한 선언을 하고, 그에 대한 구현을 한다. 그러면 필요한 나머지 코드가 모두 만들어지는 것이다.</p>
 
-<p>type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 <a href="http://en.wikipedia.org/wiki/X_Macro">X Macro pattern</a>이 사용될 것이다.</p>
+<p>type_enum, server 측의 rpc 수행 함수의 prototype, rpc_server, rpc_client 총 4개의 코드를 찍어내야 한다. 여기에는 <a href="https://en.wikipedia.org/wiki/X_Macro">X Macro pattern</a>이 사용될 것이다.</p>
 
-<p>일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 <code>RPC_METHOD3</code> macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 <a href="http://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html">boost pp</a>를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.</p>
+<p>일단 본 예제에서는 총 3개의 인자까지 받을 수 있는 <code>RPC_METHOD3</code> macro까지 구현하였다. 결국 인자 개수만큼 macro를 다 만들어주어야 한다는 것인데 이러한 반복 코드는 <a href="https://www.boost.org/doc/libs/release/libs/preprocessor/doc/index.html">boost pp</a>를 사용해서 줄일 수 있다. 그렇지만 이 글에서 해당 내용까지 다루면 너무 길어지므로 일단 그냥 중복된 코드를 포함한 채로 macro를 선언하였다.</p>
 
 <p>설명의 편의를 위해 <code>RPC_METHOD2()</code>를 기준으로 설명할 것이다.</p>
 

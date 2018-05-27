@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>MSVC call stacktrace 구현</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -60,10 +62,10 @@
 
 <p>지인의 이야기를 들어보니 x64에서 디버깅을 할 경우 Call Stack이 알 수 없게 쌓인다고 한다. 따라서 x64 용 디버깅을 위해 Call Stack Trace 를 만들어본다는 마음으로 글을 읽어보자</p>
 
-<p><code>__FUNCSIG__</code>는 Visual C++ compiler가 제공하는 <a href="http://msdn.microsoft.com/en-us/library/b0084kay.aspx">Predefined Macro</a>중 하나이다.
+<p><code>__FUNCSIG__</code>는 Visual C++ compiler가 제공하는 <a href="https://msdn.microsoft.com/en-us/library/b0084kay.aspx">Predefined Macro</a>중 하나이다.
 말 그대로 Function Signature를 <code>const char *</code> 형태로 넣어주는 것이다. 컴파일러가 해당 함수를 parsing 하다가 <code>__FUNCSIG__</code>를 만나면, code generation을 할 때 그걸 그 Function Signature로 static한 <code>const char</code> 배열을 만들고 그 주소값을 넣어주는게 아닐까. 요즘은 신통하게 <code>_T()</code> 매크로랑 같이 쓰면 <code>wchar_t</code> 형태로도 준다. 만세!</p>
 
-<p><a href="http://msdn.microsoft.com/en-us/library/x7wy9xh3.aspx"><code>__if_exists</code></a>는 해당 지점에서 그 symbol이 존재하는지를 확인하기 위한 것이다. 당연히 컴파일러가 컴파일 단계에서 확인하는 것이고, 런타임 용은 아니다. <code>else</code> 를 쓸 수는 없고 <code>__if_not_exists</code>를 써야 한다.<br>
+<p><a href="https://msdn.microsoft.com/en-us/library/x7wy9xh3.aspx"><code>__if_exists</code></a>는 해당 지점에서 그 symbol이 존재하는지를 확인하기 위한 것이다. 당연히 컴파일러가 컴파일 단계에서 확인하는 것이고, 런타임 용은 아니다. <code>else</code> 를 쓸 수는 없고 <code>__if_not_exists</code>를 써야 한다.<br>
 이 문서에서는 this symbol 여부를 확인하기 위해 쓸거다.</p>
 
 <p>Call Stack 을 쌓기 위해 먼저 <code>StackElement</code>부터 만들어야한다. 가볍게, 파일명, 줄 수, this 주소 정도를 받아보자.</p>

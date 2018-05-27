@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>멤버 데이터 포인터를 사용하여 연산식 묶어내기 3</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -69,7 +71,7 @@
 <span class="k">typedef</span> <span class="kt">float</span> <span class="n">Stat</span><span class="o">::*</span><span class="n">DataPtr</span><span class="p">;</span>
 <span class="n">DataPtr</span> <span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Stat</span><span class="o">::</span><span class="n">hp</span><span class="p">;</span> <span class="c1">// Error!</span>
 </code></pre></div>
-<p>이번 글에서는 형식 삭제(<a href="http://en.wikipedia.org/wiki/Type_erasure">type erasure</a>)를 사용하여 보다 다양한 type을 지원하면서, 확장 가능한 방법에 대해 알아보도록 하겠다.</p>
+<p>이번 글에서는 형식 삭제(<a href="https://en.wikipedia.org/wiki/Type_erasure">type erasure</a>)를 사용하여 보다 다양한 type을 지원하면서, 확장 가능한 방법에 대해 알아보도록 하겠다.</p>
 
 <p>형식 삭제라고 하면 뭔가 어려워 보이지만, 그 결과물을 보면 굉장히 친숙하다. C++에서 형식 삭제를 하는 방법은 가상 함수를 통한 다형성을 사용하는 것인데, 예를 들면 다음과 같다.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">ValueHolder</span> <span class="p">{</span>

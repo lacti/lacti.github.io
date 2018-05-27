@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>WCF를 이용하여 쉽게 만드는 모바일 게임서버</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -65,7 +67,7 @@
 				<div class="content">
 				<ul>
 <li>WebServiceHost를 사용한 모바일 rest web api 서버를 만들어보자.</li>
-<li>msdn에 있을 법한 wcf 설명을 한참 함. <a href="http://msdn.microsoft.com/ko-kr/library/ms731190.aspx">msdn 참고</a></li>
+<li>msdn에 있을 법한 wcf 설명을 한참 함. <a href="https://msdn.microsoft.com/ko-kr/library/ms731190.aspx">msdn 참고</a></li>
 <li><p>본인이 구현한 코드를 설명해주는 방식. 추후 발표자료와 함께 올린다고 함</p></li>
 <li><p>Contract</p>
 
@@ -115,7 +117,7 @@
 <li>그냥 msdn tutorial을 설명한 수준, 그나마도 기본 개념 설명에 많은 시간을 할애함.</li>
 <li>예제 설명할 때 iis 안 쓰고 직접 service host 돌린 것은 이해하겠는데 콘솔이라서 뭐가 되네 안되네 하는 부분은 이해를 못 함.</li>
 <li>예제의 worker thread 1023개, io thread 1000개인 이유를 모르겠음</li>
-<li>관심 있으면 <a href="http://www.asp.net/web-api/overview/hosting-aspnet-web-api/self-host-a-web-api">self-host web api</a>를 보는 것이 나을 듯 싶음.</li>
+<li>관심 있으면 <a href="https://www.asp.net/web-api/overview/hosting-aspnet-web-api/self-host-a-web-api">self-host web api</a>를 보는 것이 나을 듯 싶음.</li>
 </ul>
 
 				</div>

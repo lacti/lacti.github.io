@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>ConsoleHandler와 System.in/out/error의 closing</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -84,7 +86,7 @@
 <p>할당한 것은 해제해주어야 하고, 연 것은 반드시 닫아야한다는 신조를 갖은 나는 <code>Scanner</code>에 <code>System.in</code> 넣어서 쓰고 닫고, 다음에 또 <code>Scanner</code>에 <code>System.in</code> 객체를 만들면
 이미 닫혀져버린 <code>System.in</code>으로 입력을 받을 수 없기 때문이다.</p>
 
-<p><a href="http://forums.sun.com/thread.jspa?threadID=5232911&amp;messageID=9952697">구글에서 찾은 Java쪽 Thread</a>인데, 왜 진작 찾아볼 생각을 안 했을까. 뭐라고 검색해야 할지 몰라서 키워드를 찾는데 한참 걸렸으니까.</p>
+<p><a href="https://forums.sun.com/thread.jspa?threadID=5232911&amp;messageID=9952697">구글에서 찾은 Java쪽 Thread</a>인데, 왜 진작 찾아볼 생각을 안 했을까. 뭐라고 검색해야 할지 몰라서 키워드를 찾는데 한참 걸렸으니까.</p>
 
 				</div>
 

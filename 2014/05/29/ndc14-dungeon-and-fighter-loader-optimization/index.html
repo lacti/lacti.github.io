@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>던전 앤 파이터 클라이언트 로딩 속도 최적화 - 우리 아이가 세배 빨라졌어요!</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -254,7 +256,7 @@
 <li>전 회사에서 서버 구동 시간 단축을 위해 <a href="/2013/06/09/binary-xml-for-fast-loading/">노력</a>을 해본 적이 있다. 그래서 드는 의문은,
 
 <ul>
-<li>보통 최적화를 할 때에는 <a href="http://en.wikipedia.org/wiki/Profiling_%28computer_programming%29">profiling</a>을 먼저 한다. vs의 analysis를 쓰든 vtune을 쓰든 돌려보면 느린 함수가 순서대로 잘 나온다. 그리고 보통 그 순서대로 원인을 파악하기 위해 작업을 한다.</li>
+<li>보통 최적화를 할 때에는 <a href="https://en.wikipedia.org/wiki/Profiling_%28computer_programming%29">profiling</a>을 먼저 한다. vs의 analysis를 쓰든 vtune을 쓰든 돌려보면 느린 함수가 순서대로 잘 나온다. 그리고 보통 그 순서대로 원인을 파악하기 위해 작업을 한다.</li>
 <li><del>만약 그랬다면 위 최적화의 적용 순서가 logging 삭제, list 미리 구성, <code>unordered_map</code>, <code>scalable_alloc</code> 적용, 분할 압축, dumpable 순일 것 같은데 그렇지 않았다</del> <em>특별히 어느 한 부분이 압도적으로 문제가 되는 부분이 없었다고 한다.</em></li>
 <li>그렇다는 것은 던파 코드가 analysis를 써도 결과가 제대로 안 나오는 답이 없는 상황 <del>이거나 profiling을 초반에 제대로 못 돌렸다는 것이다</del> 이었다는 것이다.<br>
 <em>발표 시점에 해당 내용을 놓친 것 같다. 발표자님의 댓글 도움으로 수정</em></li>

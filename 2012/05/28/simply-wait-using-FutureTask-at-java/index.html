@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>java의 FutureTask를 사용한 간단한 수행 대기</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -66,7 +68,7 @@
 
 <p>어떤 작업에 timeout을 걸기 위해서는 적어도 수행 thread과 timeout을 걸어주는 thread가 분리되어야 한다. 간단하게 fork-join model을 생각해보자면 수행할 task는 fork된 thread에게 맡기고, join하는 main thread에서 join을 얼마나 기다려줄지 timeout을 지정해준다고 생각하면 되겠다.</p>
 
-<p>java에서도 1.7부터 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ForkJoinPool.html">fork/join pool</a>을 지원해주지만, 본 글에서는 안 다룬다.</p>
+<p>java에서도 1.7부터 <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ForkJoinPool.html">fork/join pool</a>을 지원해주지만, 본 글에서는 안 다룬다.</p>
 
 <p>일단 무엇을 작업해서 반환할지에 대한 <code>FutureTask</code>를 구현한다. <code>FutureTask</code>는 이름 그대로 Future + Task이다. 즉 Task를 수행한 결과를 Future로 받아볼 수 있는 구조로, 생성자로 <code>Callable</code> 객체를 받고 수행을 위한 <code>run()</code> 함수와 결과 값을 받기 위한 <code>get()</code> 함수를 갖는다.</p>
 <div class="highlight"><pre><code class="java language-java" data-lang="java"><span class="n">FutureTask</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FutureTask</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span>

@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>IO와 메모리 복사</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -81,7 +83,7 @@
 <p>IO 의 효율을 이야기할 때는 메모리 관점 역시 빼 놓을 수가 없다.
 IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때문인데, 그 이유는 가상 메모리(virtual memory)를 사용하기 때문이다.</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Virtual_memory">가상 메모리</a>가 무엇인가?<br>
+<p><a href="https://en.wikipedia.org/wiki/Virtual_memory">가상 메모리</a>가 무엇인가?<br>
 간단히 말하면, 운영체제가 각 프로세스에게 가상의 메모리 주소 체계를 제공하고, 그 가상 메모리 공간이 실제 물리 메모리 공간과 마법같이 연결(mapping)되어 프로세스가 메모리에 접근할 때 주소 변환 과정을 거쳐 실제 물리 메모리에 접근 가능하게 해주는 것이다.</p>
 
 <p>이게 뭐가 좋은가?
@@ -169,8 +171,8 @@ IO 작업을 처리함에 있어서 꽤나 메모리 복사가 일어나기 때�
 (이건 Windows 에만 해당되는 것 같고, 사실 그마저도 아직 잘 모르겠어서 공부가 더 필요하다.)</p>
 
 <ul>
-<li><a href="http://studyrespire.tistory.com/tag/IRQL">http://studyrespire.tistory.com/tag/IRQL</a></li>
-<li><a href="http://bugtruck.blogspot.com/2009/03/non-paged-memory.html">http://bugtruck.blogspot.com/2009/03/non-paged-memory.html</a></li>
+<li><a href="https://studyrespire.tistory.com/tag/IRQL">https://studyrespire.tistory.com/tag/IRQL</a></li>
+<li><a href="https://bugtruck.blogspot.com/2009/03/non-paged-memory.html">https://bugtruck.blogspot.com/2009/03/non-paged-memory.html</a></li>
 </ul>
 
 <p>커널이 유저 영역의 메모리에다가 결과를 직접 넣어주고 싶어도 해당 메모리가 swap out이 되어버린다면 그 처리가 애매해진다는 것. 그 이유는 디스크로 내려간 메모리를 물리 메모리로 올려주는 작업을 처리하는 것도 interrupt에 의한 것이고, IO 요청을 처리하는 것도 interrupt이기 때문이다.<br>

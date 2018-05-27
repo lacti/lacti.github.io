@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>닫힌 descriptor와 write, SIGPIPE</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -72,7 +74,7 @@ SIGTERM이나 SIGQUIT를 받은게 아니기 때문에 <strong>조용히 죽는�
 
 <p><code>send</code>/<code>recv</code>를 사용해서 옵션을 주면 깔끔하게 <code>EPIPE</code>를 반환하게 할 수 있는데 <code>write</code>, <code>read</code>는 그런 옵션이 생략된 <em>범용적</em> 함수라서 <code>signal handler</code>를 설치하는 수 밖에 없다.</p>
 
-<p>stackoverflow에 나와있는 <a href="http://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly">how to prevent sigpipes or handle them properly</a>를 보면</p>
+<p>stackoverflow에 나와있는 <a href="https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly">how to prevent sigpipes or handle them properly</a>를 보면</p>
 <div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="kt">int</span> <span class="n">set</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">setsockopt</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_NOSIGPIPE</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">set</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </code></pre></div>

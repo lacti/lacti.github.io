@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>function adapter와 type inference</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -87,7 +89,7 @@
 </code></pre></div>
 <p>이름 잘 지어주는 것도 물론 중요하지만 이정도 코드에서는 저정도 글자만 써줘도 이해할 것 같으니 과감히 생략.</p>
 
-<p>개인적으로 풀이 중 가장 마음에 드는 것은 <a href="https://twitter.com/Omniavinco" title="Omniavinco on Twitter">Omniavinco</a>가 <a href="http://libsora.so/" title="libsora.so">if1live</a> 글에 댓글로 단 binder1st 상속을 통한 구현. (있는 것 가져다가 쓰는게 제일)</p>
+<p>개인적으로 풀이 중 가장 마음에 드는 것은 <a href="https://twitter.com/Omniavinco" title="Omniavinco on Twitter">Omniavinco</a>가 <a href="https://libsora.so/" title="libsora.so">if1live</a> 글에 댓글로 단 binder1st 상속을 통한 구현. (있는 것 가져다가 쓰는게 제일)</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="cp">#include &lt;functional&gt;</span>
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T2</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T3</span><span class="o">&gt;</span>
 <span class="k">class</span> <span class="nc">Adapter</span><span class="o">:</span><span class="k">public</span> <span class="n">std</span><span class="o">::</span><span class="n">binder1st</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">pointer_to_binary_function</span><span class="o">&lt;</span> <span class="n">T2</span><span class="p">,</span> <span class="n">T3</span><span class="p">,</span> <span class="n">T1</span> <span class="o">&gt;</span> <span class="o">&gt;</span> <span class="p">{</span>
@@ -112,7 +114,7 @@
     <span class="k">typedef</span> <span class="n">T2</span> <span class="n">T2</span><span class="p">;</span>
 <span class="p">};</span>
 </code></pre></div>
-<p>위 코드는 <a href="http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/reference/function_traits.html">boost::function_traits</a>에서 필요한 부분만 발췌한 코드이다. 설명을 위해서 가져온 코드이고, 그냥 <a href="http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html">boost type_traits library</a>를 가져다 쓰는게 더 좋다.</p>
+<p>위 코드는 <a href="https://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/reference/function_traits.html">boost::function_traits</a>에서 필요한 부분만 발췌한 코드이다. 설명을 위해서 가져온 코드이고, 그냥 <a href="https://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html">boost type_traits library</a>를 가져다 쓰는게 더 좋다.</p>
 
 <p>함수 type으로부터 반환 type, 인자 type들을 얻어낼 수 있게 되었으니 이제 Adapter에 넣어주기만 하면 된다. 그 부분에 대해서도 helper class를 만들어보자.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">F</span><span class="o">&gt;</span>
@@ -157,9 +159,9 @@
 <p>사실 오늘 구현한 내용들은 어느 정도 표준에 포함되었거나 boost에 있는 내역들이다. 따라서 다음의 구현체를 찾아보며 공부하는 것을 적극 추천한다.</p>
 
 <ul>
-<li><a href="http://en.cppreference.com/w/cpp/utility/functional/bind">Cppref: std::bind</a></li>
-<li><a href="http://en.cppreference.com/w/cpp/header/type_traits">Cppref: type_traits</a></li>
-<li><a href="http://www.boost.org/doc/libs/1_54_0/libs/type_traits/doc/html/index.html%22">boost: type_traits library</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/utility/functional/bind">Cppref: std::bind</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/header/type_traits">Cppref: type_traits</a></li>
+<li><a href="https://www.boost.org/doc/libs/1_54_0/libs/type_traits/doc/html/index.html%22">boost: type_traits library</a></li>
 </ul>
 
 <p>지금까지의 내용은 compiler time에서 일어나는 generic programming 이야기였다. 이를 runtime에서 하나의 type으로 모아서 작업하기 위한 type erasure을 오늘 다룰 것이다.</p>

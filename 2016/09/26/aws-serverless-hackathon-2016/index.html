@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>aws serverless hackathon 2016</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -60,8 +62,8 @@
 				<p>작년에 참가하지 못했던 <a href="https://aws.amazon.com/ko/events/gaming-on-aws/seoul-02/hackathon/">serverless gaming on aws</a>을 올해는 드디어 참가할 수가 있었다. 개인적으로 행사에 대한 참가 소회를 생생하게 밝힐 자신은 없으므로 같이 참가했던 분의 글을 소개하는 것으로 넘어가려고 한다.</p>
 
 <ul>
-<li><a href="http://hyunjong-lee.github.io/tech/2015/09/16/AWS-Lambda-Serverless-Turn-Game.html">2015년: Serverless 실시간 대전게임</a></li>
-<li> <a href="http://hyunjong-lee.github.io/tech/2016/09/25/Gaming-on-AWS-Hackathon-2nd.html">2016년: Gaming on AWS Hackathon 참가 후기</a></li>
+<li><a href="https://hyunjong-lee.github.io/tech/2015/09/16/AWS-Lambda-Serverless-Turn-Game.html">2015년: Serverless 실시간 대전게임</a></li>
+<li> <a href="https://hyunjong-lee.github.io/tech/2016/09/25/Gaming-on-AWS-Hackathon-2nd.html">2016년: Gaming on AWS Hackathon 참가 후기</a></li>
 </ul>
 
 <h3>game-server-less</h3>
@@ -76,7 +78,7 @@
 
 <h3>aws serverless</h3>
 
-<p>그러던 와중에 aws에서 web service에 대해서는 serverless를 쉽게 만들 수 있는 방법이 제안되었다. <a href="https://aws.amazon.com/lambda/">api gateway</a>와 <a href="https://aws.amazon.com/lambda/">lambda</a>로 url endpoint에 대해 어떤 동작을 처리할 지에 대해 <a href="http://martinfowler.com/articles/serverless.html">함수 수준으로 명시</a>할 수 있게 되었고 이를 <a href="https://github.com/awslabs/chalice">놀라운 도구: chalice</a>를 통해서 간편하게 개발할 수 있게 해주었다.</p>
+<p>그러던 와중에 aws에서 web service에 대해서는 serverless를 쉽게 만들 수 있는 방법이 제안되었다. <a href="https://aws.amazon.com/lambda/">api gateway</a>와 <a href="https://aws.amazon.com/lambda/">lambda</a>로 url endpoint에 대해 어떤 동작을 처리할 지에 대해 <a href="https://martinfowler.com/articles/serverless.html">함수 수준으로 명시</a>할 수 있게 되었고 이를 <a href="https://github.com/awslabs/chalice">놀라운 도구: chalice</a>를 통해서 간편하게 개발할 수 있게 해주었다.</p>
 
 <p>이제 restful api는 flask 기반의 서버 코드를 만들고 deploy만 해서 serverless한 service 구축이 가능해졌다.</p>
 
@@ -119,7 +121,7 @@ rabbitmq의 websocket 예제인데 ec2의 nano instance에서 돌려봐도 messa
 
 <ol>
 <li>client를 시작하면 모든 client가 지정된 rabbitmq의 topic에 subscribe하고, server queue에 연결한다. (by <a href="https://github.com/jasonrbriggs/stomp.py">stomp</a>) </li>
-<li>client가 server queue에 message를 넣으면, 이 queue를 대기하고 있는 <a href="http://theburningmonk.com/2016/04/aws-lambda-use-recursive-function-to-process-sqs-messages-part-1/">recurring lambda</a>가 그 message에 대응되는 handler를 수행한다.</li>
+<li>client가 server queue에 message를 넣으면, 이 queue를 대기하고 있는 <a href="https://theburningmonk.com/2016/04/aws-lambda-use-recursive-function-to-process-sqs-messages-part-1/">recurring lambda</a>가 그 message에 대응되는 handler를 수행한다.</li>
 <li>2)의 handler 결과를 client topic에 publish한다. 이제 client들은 client topic으로부터 message를 수신할 수 있다.</li>
 </ol>
 

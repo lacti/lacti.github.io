@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>template을 사용한 generic 프로그래밍</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -88,7 +90,7 @@
 
 <h3>static storage class</h3>
 
-<p>이야기를 이어가기 위해 <strong><a href="http://en.wikipedia.org/wiki/Translation_unit_%28programming%29">번역 단위</a></strong>에 대한 개념을 대충 알 필요가 있다. 번역단위는 컴파일러가 하나의 obj 파일을 만들어내기 위한 단위라고 보면 된다. c/c++의 경우 include한 header 파일들을 cpp에 다 복사해서 넣어놓고, 전처리기가 macro expand해주고, template engine이 template instantiation한 결과라고 보면 되겠다.</p>
+<p>이야기를 이어가기 위해 <strong><a href="https://en.wikipedia.org/wiki/Translation_unit_%28programming%29">번역 단위</a></strong>에 대한 개념을 대충 알 필요가 있다. 번역단위는 컴파일러가 하나의 obj 파일을 만들어내기 위한 단위라고 보면 된다. c/c++의 경우 include한 header 파일들을 cpp에 다 복사해서 넣어놓고, 전처리기가 macro expand해주고, template engine이 template instantiation한 결과라고 보면 되겠다.</p>
 
 <p>자, 그러면 이제 코드를 보자.</p>
 <div class="highlight"><pre><code class="cpp language-cpp" data-lang="cpp"><span class="c1">// 전역공간</span>
@@ -151,13 +153,13 @@
 
 <p>물론 더 나아가서 random access iterator에 대해서도 효율적으로 동작할 수 있도록 위 코드를 수정할 수도 있다. iterator_tag와 template의 부분 특수화를 사용하거나 함수 overloading을 사용하면 간단하게 할 수 있다. 이 부분은 EC++ 책에도 잘 나와있으니 이 글에서는 생략하도록 하겠다.</p>
 
-<p>당연한 이야기이지만 algorithm의 <a href="http://www.cplusplus.com/reference/algorithm/binary_search/">binary_search</a>를 쓰는게 더 낫다. 이미 구현되어있는 것을 또 구현하지 않는 것이 제일 좋다! 그러므로 표준 라이브러리에 대해서는 틈틈이 알아두는게 좋다.</p>
+<p>당연한 이야기이지만 algorithm의 <a href="https://www.cplusplus.com/reference/algorithm/binary_search/">binary_search</a>를 쓰는게 더 낫다. 이미 구현되어있는 것을 또 구현하지 않는 것이 제일 좋다! 그러므로 표준 라이브러리에 대해서는 틈틈이 알아두는게 좋다.</p>
 
 <h3>정리</h3>
 
 <p>코드를 간결하게, 그리고 명확하게 작성하기 위해 가작 적합한 c++ 기능을 사용하는 것은 너무나 당연한 이야기다. 앞으로 남은 한 번 혹은 두 번의 기회 동안 그 이야기를 더 진행하면서 스터디를 진행하는 친구를 세뇌시킬 생각이다.</p>
 
-<p><a href="http://libsora.so/" title="libsora.so">if1live</a>님 방식으로 이야기하면 많이 짜고 많이 읽으면 된다. 그런데 <a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님처럼 표준 문서를 읽으라고는 못하겠다(나도 귀찮아서 안 읽으니까!)</p>
+<p><a href="https://libsora.so/" title="libsora.so">if1live</a>님 방식으로 이야기하면 많이 짜고 많이 읽으면 된다. 그런데 <a href="https://twitter.com/summerlight00" title="summerlight00">summerlight</a>님처럼 표준 문서를 읽으라고는 못하겠다(나도 귀찮아서 안 읽으니까!)</p>
 
 <h3>과제</h3>
 

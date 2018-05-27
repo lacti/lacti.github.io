@@ -13,8 +13,10 @@
 
 	<meta name="robots" content="INDEX,FOLLOW" />
 	<title>웹 기반 채팅방</title>
-	<link href="https://yui.yahooapis.com/pure/0.5.0/pure-min.css" rel="stylesheet">
-	<link href="https://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link href="/css/markdownpad-github.css" rel="stylesheet">
 	<link href="/css/syntax.css" rel="stylesheet">
 	<link href="/css/blog-post.css" rel="stylesheet">
@@ -131,7 +133,7 @@
 <p>이걸 해결하기 위한 가장 간단한 방법은,
 1. 무한 새로고침 (동기적 해결법)
 2. Ajax polling (비동기적 해결법)
-3. long-held HTTP Request (<a href="http://en.wikipedia.org/wiki/Comet_%28programming%29">COMET</a>)
+3. long-held HTTP Request (<a href="https://en.wikipedia.org/wiki/Comet_%28programming%29">COMET</a>)
 4. Web Socket</p>
 
 <p>1번은 설명 안해도 알 것이고, 3, 4번은 여기서 설명할 내용은 아니다. 이 글에서는 2번에 대해서 설명하겠다.</p>
@@ -174,7 +176,7 @@
 당연히 WebSocket으로 개발하는게 맞겠지만 일부 브라우저 (특히 군대) 에서는 WebSocket 이 지원되지 않을 수 있기 때문에 WebSocket과 Ajax 방식 둘 다 유지해야한다는 이야기가 있어서 귀찮아서 그만 두었다.</p>
 
 <p>게다가 WebSocket으로 작성하려면 WebSocket 서버와 웹 서버간의 SESSION 공유도 해주어야 하잖아?<br>
-<a href="http://doodoori2.tistory.com/" title="Doodoori2&#39;s Blog">doodoori2</a>님의 이야기로는 데이터베이스에 SESSION을 넣어두고 WebSocket 서버에게 DB 접근 권한을 주어서 공유하라고 하는데, 그렇게되면 SESSION의 갱신에 대해 WebSocket이 능동적으로 알아챌 수 있는 방법이 없기 때문에 결국 DB Polling을 해야하는 사태가 벌어질 수도 있을 것 같다.</p>
+<a href="https://doodoori2.tistory.com/" title="Doodoori2&#39;s Blog">doodoori2</a>님의 이야기로는 데이터베이스에 SESSION을 넣어두고 WebSocket 서버에게 DB 접근 권한을 주어서 공유하라고 하는데, 그렇게되면 SESSION의 갱신에 대해 WebSocket이 능동적으로 알아챌 수 있는 방법이 없기 때문에 결국 DB Polling을 해야하는 사태가 벌어질 수도 있을 것 같다.</p>
 
 <p>여러가지 해결책이 있겠지만 귀찮다는 핑계로 고민 중이다.</p>
 
@@ -188,7 +190,7 @@
 <li>클라이언트 쪽 프로그래밍이라면 Ajax나 WebSocket 관련 라이브러리를 가져다 쓰는게 좋겠다.</li>
 </ul>
 
-<p>난 전통적인 <a href="http://prototypejs.org">prototypejs</a> 유저라서 잘 모르겠지만, 대세가 <a href="http://jquery.com">jQuery</a> 라고 하니 그 쪽을 공부해보는 것도 좋겠다.</p>
+<p>난 전통적인 <a href="https://prototypejs.org">prototypejs</a> 유저라서 잘 모르겠지만, 대세가 <a href="https://jquery.com">jQuery</a> 라고 하니 그 쪽을 공부해보는 것도 좋겠다.</p>
 
 				</div>
 

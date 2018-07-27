@@ -1,0 +1,6 @@
+title: Lacti's archive
+theme: minima
+exclude:
+  - README.md
+plugins:
+  - jekyll-feed

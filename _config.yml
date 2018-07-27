@@ -24,3 +24,7 @@ exclude:
   - Gemfile.lock
   - .travis.yml
   - vendor
+
+plugins:
+  - jekyll-feed
+

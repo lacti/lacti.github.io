@@ -4,11 +4,11 @@
 <p><strong>정말 대충 짰더니 정말 성능이 대충 나온다(...)</strong><br>
 vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분이 mswsock.dll에 소속되어 있다고 나온다. 이 글은 대체 왜 mswsock.dll인가에 대한 고찰을 담은 글이다.</p>
 <p>.net <code>Socket</code>의 <code>BeginReceive</code>, <code>EndReceive</code> 함수를 사용하면 내부에서 pinvoke로 <code>WSARecv</code> 함수를 부르게 된다. <code>WSARecv</code> 함수는 <code>ws2_32.dll</code>에 정의된 함수로 얼핏보기에는 socket 확장 api가 담겨있는 <code>mswsock.dll</code>이 부를 필요가 없어 보인다. 이를 정확히 확인하기 위해 ms symbol server에서 clr 관련 symbol을 받고 다시 profiler를 돌려보았다.</p>
-<p><img src="/_images/mswsock_secret_functions.png" alt="functions"></p>
+<p><img src="/images/mswsock_secret_functions.png" alt="functions"></p>
 <p>진범이 나온 것 같다. <code>NtDeviceIoControlFile()</code>과 <code>NtRemoveIoCompletion()</code>이 1, 2위로 나왔다. 여기서 <code>NtRemoveIoCompletion()</code> 함수는 <code>GetQueuedCompletionStatus()</code> 때문에 불리는 것으로 추측되니 <code>NtDeviceIoControlFile()</code>의 정체만 밝히면 되겠다.</p>
 <p>간단히 calling, called를 확인해보자.</p>
-<p><img src="/_images/mswsock_secret_ws2_32_dll.png" alt="ws2_32.dll"></p>
-<p><img src="/_images/mswsock_secret_mswsock_dll.png" alt="mswsock.dll"></p>
+<p><img src="/images/mswsock_secret_ws2_32_dll.png" alt="ws2_32.dll"></p>
+<p><img src="/images/mswsock_secret_mswsock_dll.png" alt="mswsock.dll"></p>
 <p>원인이 명확해졌다.<br>
 다량의 패킷 수신자가 <code>WSARecv</code>를 부르는 과정에서 <code>ws2_32.dll</code>의 함수가 호출된 것은 당연했다. 하지만 그 과정에서 알 수 없는 오류가 발생했고, 그 오류를 처리하기 위해 불린 <code>NtStatusToSocketError()</code> 함수가 <code>mswsock.dll</code>의 <code>NtDeviceIoControlFile()</code> 함수를 불렀던 것이다.</p>
 <p>그렇다면 <code>NtDeviceIoControlFile()</code> 함수는 대체 무엇일까, 그리고 왜 그렇게 느릴까?<br>

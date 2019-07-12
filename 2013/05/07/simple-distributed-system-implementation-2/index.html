@@ -4,7 +4,7 @@
 <p>지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다.</p>
 <p>가장 간단해보이는 M-S 모델 (master-slave)을 C#으로 구현해보자.</p>
 <p>일단 구현하기에 앞서 간단히 설계도를 살펴보자.</p>
-<p><img src="/_images/mdf_arch.png" alt="구현 설계도"></p>
+<p><img src="/images/mdf_arch.png" alt="구현 설계도"></p>
 <p>master에는 여러 slave가 연결한다. 각 연결된 slave는 master 내에 어떤 작업을 수행하는지/했는지 info를 갖는다. master에 command가 들어오면 수행할 work를 만든다. 연결된 slave의 info를 살펴보고 적절한 slave를 선택한 후 work를 보내준다<strong>(distribute)</strong>. 그러면 slave는 그 작업을 처리하고 결과를 master에게 보내주던가 한다.</p>
 <p>위 구현을 위해서는,</p>
 <ul>

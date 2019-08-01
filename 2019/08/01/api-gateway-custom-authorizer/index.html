@@ -53,7 +53,7 @@
 <p>만들어보도록 하겠다. <a href="https://github.com/lacti/serverless-custom-authorizer-example">전체 예제는 이 쪽에서 확인해볼 수 있다.</a></p>
 <h3>Login API</h3>
 <p><a href="https://tools.ietf.org/html/rfc7617">HTTP Basic authentication</a>을 사용한다고 하면 인증 요청은 다음과 같이 HTTP Header로 전달된다.</p>
-<pre class="default-dark vscode-highlight" data-language="text"><code class="vscode-highlight-code"><span class="vscode-highlight-line">Authorization: Basic BASE64(&quot;id:password&quot;)</span></code></pre>
+<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">Authorization</span><span class="mtk1">: </span><span class="mtk8">Basic BASE64(&quot;id:password&quot;)</span></span></code></pre>
 <p>이를 위해 <code>delimiter</code>를 기준으로 앞뒤를 나누는 함수와 base64를 decode하는 함수를 먼저 만들어둔다.</p>
 <pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">splitByDelimiter</span><span class="mtk1"> = (</span><span class="mtk12">data</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">delim</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
 <span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">pos</span><span class="mtk1"> = </span><span class="mtk12">data</span><span class="mtk1"> ? </span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">indexOf</span><span class="mtk1">(</span><span class="mtk12">delim</span><span class="mtk1">) : -</span><span class="mtk7">1</span><span class="mtk1">;</span></span>
@@ -216,4 +216,25 @@
 .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
-}</style></div></div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/01/api-gateway-custom-authorizer/";window.webpackCompilationHash="3b8c3c3cfcb69a320067";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-305c0dca471e2e4339a7.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-b0cdcd02aa32beb6663a.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-998b5dea2e1b2a7fb748.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-d8b22472f66f1cdf279d.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-56118f167fc72c8abf5f.js"]};/*]]>*/</script><script src="/webpack-runtime-6047549a34a3fa1ba96e.js" async=""></script><script src="/styles-f1c640b39bb148ddd616.js" async=""></script><script src="/app-305c0dca471e2e4339a7.js" async=""></script><script src="/component---src-templates-page-tsx-b0cdcd02aa32beb6663a.js" async=""></script><script src="/1-f4127a5e56ac74b79df7.js" async=""></script></body></html>
+}
+
+.default-dark .mtk1 { color: #D4D4D4; }
+.default-dark .mtk2 { color: #1E1E1E; }
+.default-dark .mtk3 { color: #6A9955; }
+.default-dark .mtk4 { color: #569CD6; }
+.default-dark .mtk5 { color: #D16969; }
+.default-dark .mtk6 { color: #D7BA7D; }
+.default-dark .mtk7 { color: #B5CEA8; }
+.default-dark .mtk8 { color: #CE9178; }
+.default-dark .mtk9 { color: #646695; }
+.default-dark .mtk10 { color: #4EC9B0; }
+.default-dark .mtk11 { color: #DCDCAA; }
+.default-dark .mtk12 { color: #9CDCFE; }
+.default-dark .mtk13 { color: #000080; }
+.default-dark .mtk14 { color: #F44747; }
+.default-dark .mtk15 { color: #C586C0; }
+.default-dark .mtk16 { color: #6796E6; }
+.default-dark .mtk17 { color: #808080; }
+.default-dark .mtki { font-style: italic; }
+.default-dark .mtkb { font-weight: bold; }
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style></div></div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/01/api-gateway-custom-authorizer/";window.webpackCompilationHash="3b8c3c3cfcb69a320067";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-305c0dca471e2e4339a7.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-b0cdcd02aa32beb6663a.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-998b5dea2e1b2a7fb748.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-d8b22472f66f1cdf279d.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-56118f167fc72c8abf5f.js"]};/*]]>*/</script><script src="/webpack-runtime-6047549a34a3fa1ba96e.js" async=""></script><script src="/styles-f1c640b39bb148ddd616.js" async=""></script><script src="/app-305c0dca471e2e4339a7.js" async=""></script><script src="/component---src-templates-page-tsx-b0cdcd02aa32beb6663a.js" async=""></script><script src="/1-f4127a5e56ac74b79df7.js" async=""></script></body></html>

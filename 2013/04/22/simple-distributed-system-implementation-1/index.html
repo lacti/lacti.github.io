@@ -16,25 +16,7 @@
 <p>본 글에서는 <strong>귀찮으니 windows, c#, master-slave로 작성하자.</strong></p>
 <h2>master-slave 구조</h2>
 <p>가장 간단한 master-slave 구조를 보면 다음과 같다.</p>
-<p><span
-    class="gatsby-resp-image-wrapper"
-    style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 370px;"
-  >
-    <span
-      class="gatsby-resp-image-background-image"
-      style="padding-bottom: 41.891891891891895%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAA7DAAAOwwHHb6hkAAABgUlEQVQY042Q7S9CcRTH71/nYRpesLEZxoxmtBaN8lBiXpgZ95LbaunBim5XXZWe7kVxfyJPjYo8bSwN7yJN98ZvbOadPjv7bmc7353zPcjnfxSLPNTHlxQRGnWCCceuysGqbKGhwws3kv/gsm/vr7n8T2Vz+QLHQ8cvHM9B89XD/gxVtgpEZERq3+ub85R7o7OIwXtWJXc1TATqVT6otSOuaDINp3m++Hfzw1NyOdhPhEftYQW5M2YOiiPna4iaitUoaSEGulAgREG1IujdjZM2i37JYDQaTSaTTqdds1PX90caT6uZ6TXRPWZGhHuatk8NCEqeVA4HujHQibJClK0Y8lNbp0a9Vq1exHFco9Fg8xhJOBO37Oy6wLojJoGMBANzboEviiErTKJx3NcxzbRN0e3Tm82TvpPLDLyzAKN/w3EF2KafU9ag3MrILfSghZYt+6UH8XWkxG/fpI8WNupsQEIAKQEkuL+OPsZLNd9lYlpvq52VOfaUVESp87fAzF/E1negZY9nFgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
-    ></span>
-    <img
-        class="gatsby-resp-image-image"
-        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;box-shadow:inset 0px 0px 0px 400px white;"
-        alt="master-slave 구조"
-        title=""
-        src="/static/74c6e12b4b6d90729666b8f301414885/7c627/mdf_basic.png"
-        srcset="/static/74c6e12b4b6d90729666b8f301414885/9856e/mdf_basic.png 285w,
-/static/74c6e12b4b6d90729666b8f301414885/7c627/mdf_basic.png 370w"
-        sizes="(max-width: 370px) 100vw, 370px"
-      />
-  </span></p>
+<p><img src="images/mdf_basic.png" alt="master-slave 구조"></p>
 <p>master는 여러 slave들을 관리하고, 실제 작업들은 slave가 처리한다고 보면 된다.
 master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <strong>적절히 slave에게 넘겨서 처리시키고</strong>, <strong>결과를 적절히 받아서 합친다</strong></p>
 <p>즉, master는 job을 쪼개고(<strong>map</strong>), slave들을 잘 scheduling해서 처리시킨 결과를 받고, 그 결과를 취합한다(<strong>reduce</strong>). 분산 framework의 성능을 결정하는건 결국 얼마나 잘 쪼개고, 잘 스케쥴링 해주냐에 달렸다는 것이다.
@@ -46,47 +28,11 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 (분산 웹 크롤러를 예로 들 수 있다. master는 slave에게 수집할 url만 넘기고 slave는 master에게 결과를 전달하기 않고 db에 직접 저장할 수 있다.)</p>
 <h2>sync with db 구조</h2>
 <p>이 때 slave의 상태를 master에게 보고하기 위해 connection을 유지하거나 다시 connection을 맺는 것은 귀찮은 일이므로 다음과 같은 구조를 생각해볼 수 있다.</p>
-<p><span
-    class="gatsby-resp-image-wrapper"
-    style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 376px;"
-  >
-    <span
-      class="gatsby-resp-image-background-image"
-      style="padding-bottom: 82.97872340425533%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACl0lEQVQ4y41T/U8ScRi//6rl1ttqNrd+MCtnFmP+0pqbhYhb0aKyF39w5dyaOBG0Dg5KTQwFQo6XAxTE0Z1AaG9gaLqZHCjHHXAvfYEyZZl99uyz5+65z3Of5/sCCXvB84DoTGbjfWjV60li7u/+ufS3FeEAQPu0LAuY0KjtLWJvh8QjlWBtrZhMSpFkuTN/uBjv6313+pS76ZK7scFxrs4las6mtv5XTPT1+sSi8ONHhOLOQlurp0WcTaUOEVdqS/FE4GmPueaIo64WxMzJY66rzaFAgCkUDpy5okwmk4jBQG9ufp6Y+KBRR4cGY1qYjEYwDNNqtSzL8mVUizmOA4wgSCKRqHJYyYPBoFqtYhga5CxX5Hj2l7iixHHcaDSWauAPYHjwkuP4clQ+WI59ejGsY5j8bkeoyIK6kC8UVKohkkz/dT9Ztvh1DV9Px1yBicCiJb4RSqyHOY6FeL7UNRom/LPeXRdVnjM7PwatoufT9a/nbmqx6/2WhkGLmKK3IeUkrrFEVFPES1us34gHomt7Z64kOxSpd0oRTDI1/wSEwdOOOGU5JgvVtJtq5bYzt61n5daj0mnlJCEIRYrK0X/AbGdJ0+wzg0OuR+UIeguwydfL5HPQ5W6nAsbvwaHuV2FRjwdYcMxYh4dHdDod2B7AIF/6GIHd14bQK8Z5+bi/c8QpUttaSraPy0z1XfbzXfYLD9ETneaBt0Rp8v22qVxm1HUXcXS88T4AoXfKRt0KOk9B9oW4M7SChhKAZ4LxL6tbv29XWSyUsmwuPYYpYPQGkGlRCWxvG8Pu0wwFCf/E7moPmBsHbBfH5zpHZztU9kaluYnKbUMsOCx7gqs+/aVHsDb+6Bi2CPsiel8E8SzC/uh4ocj8BHEVYDKhtOwdAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
-    ></span>
-    <img
-        class="gatsby-resp-image-image"
-        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;box-shadow:inset 0px 0px 0px 400px white;"
-        alt="sync-db 구조"
-        title=""
-        src="/static/529023efb9db78e37e23618e15bed346/b8dfe/mdf_sync_db.png"
-        srcset="/static/529023efb9db78e37e23618e15bed346/9856e/mdf_sync_db.png 285w,
-/static/529023efb9db78e37e23618e15bed346/b8dfe/mdf_sync_db.png 376w"
-        sizes="(max-width: 376px) 100vw, 376px"
-      />
-  </span></p>
+<p><img src="images/mdf_sync_db.png" alt="sync-db 구조"></p>
 <p>slave들은 자신의 상태를 주기적으로 state db에 기록하고, master는 state db에 기록된 정보를 참고해서 slave에게 명령을 내린다. 이 경우 master는 slave와 connection을 유지할 필요가 없게 되고 이는 master의 구현 부담을 줄일 수 있을 뿐더러 connectivity가 좋지 않은 master-slave 환경에서 보다 유연하게 동작할 수 있다.</p>
 <h2>slave + state-d 구조</h2>
 <p>약간 다른 관점이지만 다음과 같은 모델도 생각해볼 수 있다.</p>
-<p><span
-    class="gatsby-resp-image-wrapper"
-    style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 429px;"
-  >
-    <span
-      class="gatsby-resp-image-background-image"
-      style="padding-bottom: 46.853146853146846%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAIAAAC9o5sfAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABt0lEQVQoz22R20sCQRTG9x8Leo8eiiDQLIhINIiuoBUhJmWRuRVphV2ki90xcjGpbaUt0mLVtbIeAjUr03LX1F3ztjZKWVQ/DsOcM+c7w3wD5Tgum/sOkOZLFPcplr2e17mnJlywymsxF8rZLJcDjRyU/0P2i0wmA9Tx8MsJT0AIxXZ+vUMmLw0FQP5gFCV8uDtwTAaOHP67QKR4ypXWRDy6OS9cnebpJ6sw0xjz8hr1e2mfl6UoSG/xlHWaquRo9QBa3o2MbzvDT/dX157bIh7PzUPQZ7jo3HRKDa52Iz5wJmqzNQtxHp8cVQHxTY0C61l0SBYc/JFjeMu5vb4Cj09oNBqtVqtWq8EE8grBT/Wn9mWSQA6koiOZeL+DZ5tSQhvYbUUvIhhG65RoZb951uRm4/Tj49MzIBgMhcN0KOSS9Lm6pGRrNwGrlqxtekvjjKnWbB+Dku/pyBtDxdhCvDFMMv3D7OKbI5HDlgasoxFrEVgHJcaLoV27fA3vwkjdP27nvgCGgzSWoJbN4iWkSWestZzBqXQqwVAJhk6lk/+If90cZ+gdW/8eodg577VezhXq+c+v+gD+lLeGPOkSSgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
-    ></span>
-    <img
-        class="gatsby-resp-image-image"
-        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;box-shadow:inset 0px 0px 0px 400px white;"
-        alt="stated 구조"
-        title=""
-        src="/static/5002851f49c174c0b5c6142b7a99f3f5/19501/mdf_stated.png"
-        srcset="/static/5002851f49c174c0b5c6142b7a99f3f5/9856e/mdf_stated.png 285w,
-/static/5002851f49c174c0b5c6142b7a99f3f5/19501/mdf_stated.png 429w"
-        sizes="(max-width: 429px) 100vw, 429px"
-      />
-  </span></p>
+<p><img src="images/mdf_stated.png" alt="stated 구조"></p>
 <p>slave 프로그램이 해야할 일은 두 가지이다. master로부터 받은 job 처리와 master에게 state를 보고하는 것. 이 둘을 나눈 구조라고 생각하면 된다.</p>
 <p>이 때 얻는 장점은 (간단한 구조에서는) 데이터의 방향성이 정해져서 프로그램 구현이 쉬워진다는 것이다.</p>
 <ul>

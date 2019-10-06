@@ -6,7 +6,25 @@ Github: DistWork - simplest지난 번 글에서는 분산 처리 환경에 대�
 <p>지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다.</p>
 <p>가장 간단해보이는 M-S 모델 (master-slave)을 C#으로 구현해보자.</p>
 <p>일단 구현하기에 앞서 간단히 설계도를 살펴보자.</p>
-<p><img src="images/mdf_arch.png" alt="구현 설계도"></p>
+<p><span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 552px;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 47.644927536231876%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAB70lEQVQoz42QXU/TUBjH+xHkEj+EfAVjdBfGkAzCzZz4QowkXnhjwh0QL9yiwRhNNBEItuteLDIgY3MCO1vL6Mtcu6ote6F7KdjRLQhZjGzZ1s7DDCZEEv3l5MlzTs4////zIJ1/YZomrE6n02q1ToyPw8tRswWPYZrI3//0Q0UshDK70b3a/rpaCRU07Wf9/ujohb6+kWE7vVO9GeCuL9JS5RAxT4Ayw2zDSqfdT5cuocAGpGT/6w3LSzATERZ8nreYy+dCpwE7sCJc9lKftP1Tzr/FiRzxIngNJ+8Iua9ThPQISzBSGb63jWMDRtVvLzPD/vgWdGZZNtmlVqu1jdaxODv/Kjzope4lS9IElR4DqaiyW1ZLSqFQVotBSRla4vqJDXHvAIGc7+3t6TnncDjm5mbDoXU+vzizZvczD8gvvO1ZfOAJQD+m/IQXw93vcGw2loCxr/i6sVdX10iSBCCi63qjUe8YHS5LPF+5ioJb8k4aZ4pvYrKsff8Tm/9WvRtgR5ZpWT84Y2Ym45kKWLDoDSot2DzcoCuOUeK8B8fc0Nm1wIn2kGB9T2+qFcQ4obtyA4rlUsRHPQzzj8Xt7CSaGptmAF9UcluC+LmYywTlvIXYvOiORfJlpPN/NJvNeqNutFvVH0dhRfuwrcHmF8mB4IGL4yQHAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    ></span>
+    <img
+        class="gatsby-resp-image-image"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;box-shadow:inset 0px 0px 0px 400px white;"
+        alt="구현 설계도"
+        title=""
+        src="/static/8d733ae206d55208c14acb573e1fb624/fc87f/mdf_arch.png"
+        srcset="/static/8d733ae206d55208c14acb573e1fb624/9856e/mdf_arch.png 285w,
+/static/8d733ae206d55208c14acb573e1fb624/fc87f/mdf_arch.png 552w"
+        sizes="(max-width: 552px) 100vw, 552px"
+      />
+  </span></p>
 <p>master에는 여러 slave가 연결한다. 각 연결된 slave는 master 내에 어떤 작업을 수행하는지/했는지 info를 갖는다. master에 command가 들어오면 수행할 work를 만든다. 연결된 slave의 info를 살펴보고 적절한 slave를 선택한 후 work를 보내준다<strong>(distribute)</strong>. 그러면 slave는 그 작업을 처리하고 결과를 master에게 보내주던가 한다.</p>
 <p>위 구현을 위해서는,</p>
 <ul>

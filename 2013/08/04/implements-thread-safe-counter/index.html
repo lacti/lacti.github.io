@@ -30,7 +30,7 @@
 <span class="vscode-highlight-line"><span class="mtk1">    std::cout &lt;&lt; </span><span class="mtk8">&quot;actual: &quot;</span><span class="mtk1"> &lt;&lt; counter &lt;&lt; std::endl;</span></span>
 <span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk7">0</span><span class="mtk1">;</span></span>
 <span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
-<p>c++ code 한 줄이 원자적(atomic)으로 실행된다는 보장은 없다. assembly의 한 줄도 원자적으로 실행된다는 보장은 없다(smp, micro-operation)<br>
+<p>c++ code 한 줄이 원자적(atomic)으로 실행된다는 보장은 없다. assembly의 한 줄도 원자적으로 실행된다는 보장은 없다(smp, micro-operation)
 위 코드를 release로 빌드해보면 <code>++counter</code> 부분에 대한 코드가 assembly로 한 줄이 나오는데, 어쨌든 expect와 actual 값이 다르게 나온다는 것은 해당 연산이 원자적으로 수행되지 않는다는 것이다.</p>
 <p>재밌는 것은 volatile keyword를 제거한 후 release로 build하면 제법 문제없는 결과가 나오는 것처럼 보인다는 것이다. 그 이유를 생성된 assembly code를 통해 확인하면 알 수 있는데, <code>for (loop_counter) ++counter</code> 부분이 <code>counter += loop_counter</code> 코드로 최적화되어 버리기 때문이다. <code>counter += loop_counter</code> 명령은 원자적이지 않지만, 다음 thread가 생성되어 간섭하기 전에 완료될 수 있을만큼 명령이 단순하므로 thread간 간섭이 없어 문제가 발생하지 않는 것처럼 보이는 것이다. (직접 위 코드를 release로 빌드하여 assembly를 확인해보면 더욱 명확하다)</p>
 <p>위 문제를 해결하기 위한 적어도 3가지 방법을 하나씩 알아보자.</p>
@@ -48,7 +48,7 @@
 <span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
 <p>간단하게 전역 변수로 mutex를 추가하고, <code>++counter</code> 수행 전후의 단일 thread 진입을 보장해주기 위해 lock을 걸었다. 수행시간이 굉장히(!) 오래 걸리고 cpu도 엄청 소모하지만 한참 기다리면 어쨌든 actual과 expect가 동일하게 나오는 것을 볼 수 있다.</p>
 <h2>atomic_int</h2>
-<p>두 번째 해결책은 <code>atomic_int</code>를 사용하는 것이다. <a href="%7B%25%20post_url%202011-08-02-volatile-interlocked-operation%20%25%7D">volatile과 interlocked operation</a></p>
+<p>두 번째 해결책은 <code>atomic_int</code>를 사용하는 것이다. <a href="/2011/08/02/volatile-interlocked-operation/">volatile과 interlocked operation</a></p>
 <pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">std::atomic_int counter;</span></span>
 <span class="vscode-highlight-line"><span class="mtk1"></span></span>
 <span class="vscode-highlight-line"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">add_entry</span><span class="mtk1">()</span></span>

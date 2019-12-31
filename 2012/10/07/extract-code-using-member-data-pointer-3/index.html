@@ -20,7 +20,7 @@
 <span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">int</span><span class="mtk1"> value;</span></span></code></pre>
 <p><code>ValueHolder</code>는 concrete class가 어떤 값을 들고 있던, <code>GetValue()</code> 함수를 통해 float type의 변수를 반환하도록 하거나, <code>SetValue()</code> 함수를 통해 float 값을 받아서 자신의 값을 변경하도록 할 수 있는 interface이다.</p>
 <p>이전 글과 이어서 생각해 볼때, 위와 같은 방법을 사용하여 int, float, 혹은 그에 대한 배열 멤버 변수들을 Get, Set 할 수 있도록 구조를 잡으면 이 문제를 해결할 수 있다는 이야기이다.</p>
-<p>그런데 왜 형식 삭제라는 골치 아픈 용어를 사용할까?<br>
+<p>그런데 왜 형식 삭제라는 골치 아픈 용어를 사용할까?
 char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolder concrete class를 작성하는 것은 매우 귀찮은 일이다. 그렇다면 template을 사용하여 그 귀찮음을 해결해보자.</p>
 <pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">template</span><span class="mtk1"> &lt;</span><span class="mtk4">typename </span><span class="mtk10">_Ty</span><span class="mtk1">&gt;</span></span>
 <span class="vscode-highlight-line"><span class="mtk4">struct</span><span class="mtk1"> </span><span class="mtk10">ValueHolderImpl</span><span class="mtk1"> : </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">ValueHolder</span><span class="mtk1"> {</span></span>
@@ -150,7 +150,7 @@ char, short, int, long, float, double에 대한 모든 type에 대해 ValueHolde
 <p>그렇다면 이것이 지난 번 방법에 비해 왜 더 느릴까?
 지난 글에서 서술한 방법들은 멤버 데이터 포인터나 멤버 함수 포인터를 사용하여 객체의 지정된 값을 가져오거나 지정하는 방법이었다. 만약 <code>Stat</code> 구조체가 POD 형태라면, 이들은 offset에 의한 데이터 접근을 하게 되거나 function-call 1번 수행(그나마도 inline 화 될 수 있는)하면 끝나는 형태이다.</p>
 <p>그렇지만 이번 글에 소개된 방법은 <code>IAccessor</code>라는 interface를 통해 concrete의 동작을 위해 vfptr을 사용하는 방식으로 가상 함수 호출을 위한 부담을 추가로 가지게 되는 것이다. 이 호출 부담 때문에 더 느릴 수 밖에 없는 것이다.</p>
-<p>다 쓰고 보니 <code>AccessorManager</code>가 굳이 map을 사용하지 않고, <code>BUFF_MAX</code>를 받아 배열로 <code>IAccessor</code>를 관리하는 것이 더 낫겠다 싶다. 하지만 굳이 위와 같이 냅둔 이유는 <a href="%7B%25%20post_url%202012-06-09-using-reflection-at-cpp-3%20%25%7D">c++에서 reflection 사용하기 3</a>와 형식이 유사해지기 때문에 코드 읽기가 좀 더 나을지도 모르겠다는 생각과, <code>AccessorManager</code>에서 배열의 크기를 template parameter로 받아서 배열을 생성해주기 약간 귀찮았기 때문이다-_-a</p>
+<p>다 쓰고 보니 <code>AccessorManager</code>가 굳이 map을 사용하지 않고, <code>BUFF_MAX</code>를 받아 배열로 <code>IAccessor</code>를 관리하는 것이 더 낫겠다 싶다. 하지만 굳이 위와 같이 냅둔 이유는 <a href="/2012/06/09/using-reflection-at-cpp-3/">c++에서 reflection 사용하기 3</a>와 형식이 유사해지기 때문에 코드 읽기가 좀 더 나을지도 모르겠다는 생각과, <code>AccessorManager</code>에서 배열의 크기를 template parameter로 받아서 배열을 생성해주기 약간 귀찮았기 때문이다-_-a</p>
 <style class="vscode-highlight-styles">:root {
   --vscode-highlight-padding-v: 1rem;
   --vscode-highlight-padding-h: 1.5rem;

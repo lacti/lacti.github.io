@@ -84,7 +84,7 @@
 <li><a href="https://www.boost.org/doc/libs/release/doc/html/atomic/thread_coordination.html">Boost: Thread coordination using Boost.Atomic</a></li>
 <li><a href="https://en.cppreference.com/w/cpp/atomic/memory_order">Cppref: std::memory_order</a></li>
 </ul>
-<p>메모리 가시성 개념도 포함되어 있음. fence를 경계로 비순차 수행 가능 범위의 경계가 생김.<br>
+<p>메모리 가시성 개념도 포함되어 있음. fence를 경계로 비순차 수행 가능 범위의 경계가 생김.
 인텔 x86-64 core를 쓰면 알아서 해주기 때문에 프로그래머가 신경 쓸 필요가 없다.</p>
 <p>표준에서 설명하는 <code>memory_order_consume</code>, <code>memory_order_acquire</code>의 차이를 잘 모르겠음.
 그리고 boost thread_coordination 문서의 마지막 예제 내용을 잘 모르겠음.</p>
@@ -97,21 +97,21 @@
 <li>lock free algorithm과 aba problem: <a href="https://sites.google.com/site/doc4code/Non-Blocking%20Algorithm.pdf">Non<em>Blocking</em>Algorithm.pdf</a></li>
 <li>obstruction-free, lock-free, wait-free 개념 구분</li>
 <li>CAS, CAS2(CASW), DCAS, TSX, RTM 대충</li>
-<li>aba problem이 잘 설명되어 있다. CAS를 node pointer로만 하기 때문에 그 주소값만 같으면 해당 주소가 가리키는 객체의 상태가 어떻게 변했어도 작업이 진행될 수 있는 것이 문제.<br>
+<li>aba problem이 잘 설명되어 있다. CAS를 node pointer로만 하기 때문에 그 주소값만 같으면 해당 주소가 가리키는 객체의 상태가 어떻게 변했어도 작업이 진행될 수 있는 것이 문제.
 (즉 stack/queue를 나갔다가 다시 들어왔을 때, 해제되었다가 다시 할당되었는데 그 주소가 같을 때)
 w
 즉, 객체의 pointer 비교만으로는 객체의 상태 비교가 안되므로 count를 넣어서 객체의 버전관리(?)를 한다. CAS할 때마다 count를 증가시켜 이전과는 다른 객체라고 기록해주는 것. 여기서 CAS2가 쓰인다.</li>
 </ul>
-<p>근데 InterlockedSList는 가난한 시절이라 CAS2 못 쓰고 memory alignment해서 남는 하위 4bit를 count로 쓴 것으로 알고 있다.<br>
+<p>근데 InterlockedSList는 가난한 시절이라 CAS2 못 쓰고 memory alignment해서 남는 하위 4bit를 count로 쓴 것으로 알고 있다.
 (어설픈 기억으로는 MPMC concurrency queue를 lock free algorithm으로 만들 때 CAS 뭔가 잘못써서 aba problem 발생하면 해당 node가 다른 queue로 들어간 시점에도 뭔가 오동작하여 해당 queue까지 파괴했던 시나리오가 있었는데(…) 자세히 기억이 안 난다.)</p>
 <h2><a href="https://www.drdobbs.com/lock-free-data-structures-with-hazard-po/184401890">hazard pointer</a></h2>
 <p>오늘 출력해간 논문보다 위 링크가 더 읽기 좋다. 완전 오늘 헛소리한 듯-_- 나중에 다시 자세히 읽어보고 정리하겠음</p>
 <p>어쨌든 위 lock free algorithm 설명할 때 node를 언제 해제할 지는 굉장히 골치아픈 문제이다. 아직 어떤 thread가 그 node를 접근하고 있을 수 있는데 마음대로 delete했다가는 access violation이 발생하기 때문. 따라서 이를 안전하게 지울 수 있도록(safe memory reclamation) 여러 방법이 고안되었는데 그 중 하나가 hazard pointer이다.</p>
 <h2>환형큐의 concurrency 문제</h2>
 <ul>
-<li><a href="%7B%25%20post_url%202012-02-23-thread-unsafety-problem-in-circular-queue%20%25%7D">환형큐의 thread unsafety 문제</a></li>
+<li><a href="/2012/02/23/thread-unsafety-problem-in-circular-queue/">환형큐의 thread unsafety 문제</a></li>
 </ul>
-<h2><a href="%7B%25%20post_url%202011-08-11-synchronize-function-execution-in-each-object%20%25%7D">객체별 수행 동기화</a> 글 코드의 문제</h2>
+<h2><a href="/2011/08/11/synchronize-function-execution-in-each-object/">객체별 수행 동기화</a> 글 코드의 문제</h2>
 <p>[angdev]님의 문제 해결법</p>
 <pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">mJobQueue.</span><span class="mtk11">push</span><span class="mtk1">(</span><span class="mtk11">RequestJobPtr</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk11">_RequestJobImpl</span><span class="mtk1">(functor)));</span></span>
 <span class="vscode-highlight-line"><span class="mtk15">while</span><span class="mtk1"> (!mJobQueue.</span><span class="mtk11">empty</span><span class="mtk1">() &amp;&amp; </span><span class="mtk11">InterlockedExchange</span><span class="mtk1">(&amp;</span><span class="mtk12">mExclusiveFlag</span><span class="mtk1">, </span><span class="mtk7">1</span><span class="mtk1">) == </span><span class="mtk7">0</span><span class="mtk1">) {</span></span>

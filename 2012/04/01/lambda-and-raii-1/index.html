@@ -37,7 +37,7 @@ C++11 에서 도입된 lambda expression을 통한 RAII 구현 방식의 한 예
 <span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
 <p>inventory가 가지고 있는 item에 대한 정보는 item의 <code>vector</code>로 관리하고 있다. 저 inventory 객체를 여러 Thread에서 접근한다고 하면, <code>std::find()</code>에 의해 <code>vector</code>를 순회하다가 접근 위반이 발생할 가능성이 있다. (한 thread 는 순회하고, 한 thread 는 vector 에 삽입/삭제할 경우)
 따라서 lock을 사용하여 해당 container 를 보호해준다.</p>
-<p>하지만 위 코드는 문제가 있다.<br>
+<p>하지만 위 코드는 문제가 있다.
 <code>lock</code>을 사용하여 <code>items</code>로의 접근을 보호하지만, 실제 item을 찾은 다음 return 문을 수행하기 전에 <code>unlock</code>을 수행하지 않았기 때문이다. 이러한 문제는 <code>find</code> 함수가 좀만 길어지면, 혹은 조금만 신경을 쓰지 않게 되면 흔히 발생할 수 있는 문제이다.</p>
 <p>따라서 이러한 문제를 해결하기 위해 정적 객체의 생존 주기를 활용한다.</p>
 <pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">scope_lock_t</span><span class="mtk1"> {</span></span>
@@ -57,7 +57,7 @@ C++11 에서 도입된 lambda expression을 통한 RAII 구현 방식의 한 예
 <span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
 <p><code>scope_lock_t</code> 객체가 멤버 변수인 <code>lock</code>을 가지고 생성된다. 생성될 때 <code>scope_lock_t</code>의 생성자에서 <code>lock()</code> 함수가 불린다. 그리고 실제 로직이 아래에서 수행되고 <code>inventory_t::find()</code> 함수가 종료되는 시점, 즉 <code>scope_lock_t</code> 객체가 소멸되는 시점에 <code>unlock()</code> 함수가 불린다.</p>
 <p>생성자와 소멸자는 해당 객체의 생성/소멸 시점에 컴파일러가 알아서 불러주므로, 위와 같이 <code>scope_lock_t</code>를 만들어 쓰면 중간에 return을 해도, goto를 해도, 1년 뒤에 코드를 고쳐도! lock-unlock쌍이 잘 맞게 된다.
-<a href="%7B%25%20post_url%202011-07-20-object-ctor-dtor-with-goto%20%25%7D">(객체 생성/소멸자와 goto 에 대한 이야기)</a></p>
+<a href="/2011/07/20/object-ctor-dtor-with-goto/">(객체 생성/소멸자와 goto 에 대한 이야기)</a></p>
 <style class="vscode-highlight-styles">:root {
   --vscode-highlight-padding-v: 1rem;
   --vscode-highlight-padding-h: 1.5rem;

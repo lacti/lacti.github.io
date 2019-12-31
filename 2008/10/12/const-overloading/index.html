@@ -51,9 +51,9 @@ c++의 overloading은 c에서 어떤 함수를 단순히 함수의 이름으로�
 <p>간단히 말해서 예를 들어보면,</p>
 <pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">odarray </span><span class="mtk11">oa1</span><span class="mtk1">(</span><span class="mtk7">10</span><span class="mtk1">);</span></span>
 <span class="vscode-highlight-line"><span class="mtk12">oa1</span><span class="mtk1">[</span><span class="mtk7">4</span><span class="mtk1">] = </span><span class="mtk7">10</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">std::cout &lt;&lt; oa1 &lt;&lt; std::endl;[/code]</span></span></code></pre>
+<span class="vscode-highlight-line"><span class="mtk1">std::cout &lt;&lt; oa1 &lt;&lt; std::endl;</span></span></code></pre>
 <p><code>oa1[4] = 10;</code> 구문에서는 값의 변경이 필요하기 때문에 당연히 int&#x26;를 반환하는 non-constness 함수를 호출할 것이다.</p>
-<p>하지만 <code>std::cout &#x3C;&#x3C; oa1 &#x3C;&#x3C; std::endl;</code> 구문에서는 <code>oa1</code>을 <code>ostream</code>으로 출력하는 함수의 원형을 봐야한다. <code>std::ostream&#x26; operator &#x3C;&#x3C; (std::ostream&#x26; out, const odarray&#x26; array)</code><br>
+<p>하지만 <code>std::cout &#x3C;&#x3C; oa1 &#x3C;&#x3C; std::endl;</code> 구문에서는 <code>oa1</code>을 <code>ostream</code>으로 출력하는 함수의 원형을 봐야한다. <code>std::ostream&#x26; operator &#x3C;&#x3C; (std::ostream&#x26; out, const odarray&#x26; array)</code>
 즉 이 함수는 인자로 <code>const odarray</code>를 받기 때문에 <code>odarray</code> 객체의 const를 보장하기 위해서 이 함수 내에서 호출되는 <code>odarray</code>의 멤버 함수는 모두 const 함수가 되는 것이다. 따라서 위 구문에서는 int를 반환하는 const 함수가 호출된다.</p>
 <h2>결론</h2>
 <p>c++ compiler는 const를 보장해주기 위해서 const 객체의 멤버 함수를 호출할 때는 const 멤버 함수를 호출한다.</p>

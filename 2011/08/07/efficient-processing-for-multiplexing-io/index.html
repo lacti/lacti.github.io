@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2011/08/07/efficient-processing-for-multiplexing-io/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">다중 입출력에 대한 효율적 처리</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2011/08/07/efficient-processing-for-multiplexing-io/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">다중 입출력에 대한 효율적 처리</title><meta data-react-helmet="true" name="description" content="
 다중 입출력 함수는 POSIX의 select 함수를 공부하면서 가장 많이 보게 되는 함수이다. 다중 입출력 함수라는 것은 영어로 바꿔보면 multiplex io function인데 말 그대로 여러 개의 io…"/><meta data-react-helmet="true" name="keywords" content="async, io"/><meta data-react-helmet="true" name="og:title" content="다중 입출력에 대한 효율적 처리"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-다중 입출력 함수는 POSIX의 select 함수를 공부하면서 가장 많이 보게 되는 함수이다. 다중 입출력 함수라는 것은 영어로 바꿔보면 multiplex io function인데 말 그대로 여러 개의 io…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2011/08/07/efficient-processing-for-multiplexing-io/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>다중 입출력에 대한 효율적 처리</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">August 07, 2011</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/async/">async</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/io/">io</a></div></div><div><p>다중 입출력 함수는 POSIX의 select 함수를 공부하면서 가장 많이 보게 되는 함수이다. 다중 입출력 함수라는 것은 영어로 바꿔보면 multiplex io function인데 말 그대로 여러 개의 io 를 하나의 함수로 처리한다는 것이다.</p>
+다중 입출력 함수는 POSIX의 select 함수를 공부하면서 가장 많이 보게 되는 함수이다. 다중 입출력 함수라는 것은 영어로 바꿔보면 multiplex io function인데 말 그대로 여러 개의 io…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2011/08/07/efficient-processing-for-multiplexing-io/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>다중 입출력에 대한 효율적 처리</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">August 07, 2011</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/async/">async</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/io/">io</a></div></div><div><p>다중 입출력 함수는 POSIX의 select 함수를 공부하면서 가장 많이 보게 되는 함수이다. 다중 입출력 함수라는 것은 영어로 바꿔보면 multiplex io function인데 말 그대로 여러 개의 io 를 하나의 함수로 처리한다는 것이다.</p>
 <p>지난 글의 동기와 비동기에 이어서 여러 개의 io를 어떻게 처리하는 것이 효율적인지 알아보자.
 <a href="/2011/08/07/asynchronous-io/">비동기 IO 함수</a></p>
 <p>지난 번에 봤던 함수들은 하나의 IO에 대해서만 사용 가능한 함수들이었다.
@@ -10,53 +10,53 @@
 <ul>
 <li>각 Socket 마다 처리하는 Thread를 따로 만든다. 왜냐하면 <code>Recv</code> 함수가 blocking이기 때문에, 이걸 단일 thread에서 처리할 경우 하나의 socket에서 데이터가 안 들어오면 다른 socket은 데이터가 들어오건 말건 읽을 수가 없기 때문이다.</li>
 </ul>
-<pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk11">recv</span><span class="mtk1">(hSocket1, lpBuffer, ...)</span><span class="mtk3"> // block !</span></span>
-<span class="vscode-highlight-line"><span class="mtk11">recv</span><span class="mtk1">(hSocket2, lpBuffer, ...)</span></span>
-<span class="vscode-highlight-line"><span class="mtk11">recv</span><span class="mtk1">(hSocket3, lpBuffer, ...)</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="cpp" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk11">recv</span><span class="mtk1">(hSocket1, lpBuffer, ...)</span><span class="mtk3"> // block !</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk11">recv</span><span class="mtk1">(hSocket2, lpBuffer, ...)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk11">recv</span><span class="mtk1">(hSocket3, lpBuffer, ...)</span></span></span></code></pre>
 <p>따라서 각각의 Recv 수행은 다른 Recv 에 의해 방해받으면 안되기 때문에 여러 개의 thread 를 사용한다.</p>
 <h2>non-blocking + single-threading</h2>
 <ul>
 <li><code>Recv</code> 함수를 non blocking으로 만든다. 그러면 하나의 thread로도 처리가 가능하다.</li>
 </ul>
-<pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk4">int</span><span class="mtk1"> i = </span><span class="mtk7">0</span><span class="mtk1">; i &lt; socketCount; ++i) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">if</span><span class="mtk1"> (</span><span class="mtk11">nb_recv</span><span class="mtk1">(</span><span class="mtk12">hSocket</span><span class="mtk1">[i], lpBuffer, ...) != -</span><span class="mtk7">1</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">        // 데이터 처리</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="cpp" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk4">int</span><span class="mtk1"> i = </span><span class="mtk7">0</span><span class="mtk1">; i &lt; socketCount; ++i) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">if</span><span class="mtk1"> (</span><span class="mtk11">nb_recv</span><span class="mtk1">(</span><span class="mtk12">hSocket</span><span class="mtk1">[i], lpBuffer, ...) != -</span><span class="mtk7">1</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">        // 데이터 처리</span></span></span></code></pre>
 <p>동기적으로 처리되지만 함수 수행은 non blocking이다. 코드 작성하기는 편하겠지만 매번 데이터가 있나없나 물어보는게 꽤나 고역이 될 것 같다. 특히 채팅 서버처럼 모든 사람이 대화를 하지 않을 때 아무 일도 하지 않아도 되는 서버라면 계속 입력이 있는지 검사하는 것은 쓸데없는 작업이 될 것이다.
 <em>(그나마 게임 서버는 남는 시간에 AI 를 돌리는 등 로직이라도 수행하는데 말이다)</em></p>
 <h2>non-blocking + asynchronous</h2>
 <ul>
 <li>non blocking에 asynchronous한 <code>Recv</code>를 사용해본다. 로직 작성하기는 어려워지지만 효율은 괜찮아진다.</li>
 </ul>
-<pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3">// 클라이언트 연결을 수락하는 함수</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">accept_client</span><span class="mtk1"> () {</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">    // 클라이언트의 연결을 수락함.</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">    // 이로써 클라이언트와 통신 가능한 Socket 을 얻을 수 있다.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    HANDLE hSocket = </span><span class="mtk11">Accept</span><span class="mtk1"> (...);</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">    // 연결 수락시 딱 한 번의 Recv 요청을 해둔다.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">async_recv</span><span class="mtk1">(hSocket, lpBuffer, recv_callback);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">// 클라이언트 데이터를 처리하는 callback</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">recv_callback</span><span class="mtk1"> (</span><span class="mtk4">char</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk12">lpBuffer</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">    // 받은 데이터 처리 코드 (생략)</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">    // 다시 Recv 요청, 이 때 hSocket 객체는 잘 관리해서 접근 가능해야한다.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">async_recv</span><span class="mtk1">(hSocket, lpBuffer, recv_callback);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="cpp" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// 클라이언트 연결을 수락하는 함수</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">accept_client</span><span class="mtk1"> () {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">    // 클라이언트의 연결을 수락함.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">    // 이로써 클라이언트와 통신 가능한 Socket 을 얻을 수 있다.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    HANDLE hSocket = </span><span class="mtk11">Accept</span><span class="mtk1"> (...);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">    // 연결 수락시 딱 한 번의 Recv 요청을 해둔다.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">async_recv</span><span class="mtk1">(hSocket, lpBuffer, recv_callback);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// 클라이언트 데이터를 처리하는 callback</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">recv_callback</span><span class="mtk1"> (</span><span class="mtk4">char</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk12">lpBuffer</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">    // 받은 데이터 처리 코드 (생략)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">    // 다시 Recv 요청, 이 때 hSocket 객체는 잘 관리해서 접근 가능해야한다.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">async_recv</span><span class="mtk1">(hSocket, lpBuffer, recv_callback);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>실제 thread가 어떻게 돌아가는지 상관 없이 깔끔하게 코드가 작성된다. 물론 비동기적으로 돌아가기 때문에 데이터 처리하는 코드 작성이 좀 더러워진다. 채팅프로그램을 가정할 경우 어떤 클라이언트로부터 받은 데이터를 다른 클라이언트들에게 보내주어야 하므로, 클라이언트 연결 목록이라는 공유 자원이 생긴다.</p>
-<pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3">// 클라이언트 연결을 수락하는 함수</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">accept_client</span><span class="mtk1"> () {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    HANDLE hSocket = </span><span class="mtk11">Accept</span><span class="mtk1"> (...);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">lock</span><span class="mtk1">(&amp;gClients);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">gClients</span><span class="mtk1">.</span><span class="mtk11">push_back</span><span class="mtk1">(hSocket);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">unlock</span><span class="mtk1">(&amp;gClients);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">recv_callback</span><span class="mtk1"> (</span><span class="mtk4">char</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk12">lpBuffer</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">    // 받은 데이터 처리 코드</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">lock</span><span class="mtk1">(&amp;gClients);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk10">std</span><span class="mtk1">::</span><span class="mtk10">vector</span><span class="mtk1">&lt;</span><span class="mtk10">SOCKET</span><span class="mtk1">&gt;::iterator it = </span><span class="mtk12">gClients</span><span class="mtk1">.</span><span class="mtk11">begin</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        it != </span><span class="mtk12">gClients</span><span class="mtk1">.</span><span class="mtk11">end</span><span class="mtk1">(); ++it) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk11">async_send</span><span class="mtk1">(*it, lpBuffer, ...);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">unlock</span><span class="mtk1">(&amp;gClients);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="cpp" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// 클라이언트 연결을 수락하는 함수</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">accept_client</span><span class="mtk1"> () {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    HANDLE hSocket = </span><span class="mtk11">Accept</span><span class="mtk1"> (...);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">lock</span><span class="mtk1">(&amp;gClients);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">gClients</span><span class="mtk1">.</span><span class="mtk11">push_back</span><span class="mtk1">(hSocket);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">unlock</span><span class="mtk1">(&amp;gClients);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">recv_callback</span><span class="mtk1"> (</span><span class="mtk4">char</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk12">lpBuffer</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">    // 받은 데이터 처리 코드</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">lock</span><span class="mtk1">(&amp;gClients);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk10">std</span><span class="mtk1">::</span><span class="mtk10">vector</span><span class="mtk1">&lt;</span><span class="mtk10">SOCKET</span><span class="mtk1">&gt;::iterator it = </span><span class="mtk12">gClients</span><span class="mtk1">.</span><span class="mtk11">begin</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        it != </span><span class="mtk12">gClients</span><span class="mtk1">.</span><span class="mtk11">end</span><span class="mtk1">(); ++it) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk11">async_send</span><span class="mtk1">(*it, lpBuffer, ...);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">unlock</span><span class="mtk1">(&amp;gClients);</span></span></span></code></pre>
 <p>따라서 위의 코드를 보면 공유 자원인 <code>gClients</code>란 변수에 접근하기 위해 lock을 걸고 사용하는 것을 알 수 있다. 별로 효율상 좋아보이지 않는데 저 자료구조를 lock free하게 작성하는 것 말고는 딱히 좋은 방법도 떠오르지 않는다. (이 문제는 thread를 쓰던 non blocking io를 쓰던 모두 발생하는 문제다)</p>
 <p>아무튼 저렇게 non blocking이면서 asynchronous로 작성할 경우 모든 연결에 대해 thread를 만드는 것보다, 그리고 모든 non blocking 연결에 대해 일일히 확인하는 것보다 효율은 좋을 것이다.
 (당연한 이야기이지만 asynchronous 로 작성하는 경우 non blocking 일 수밖에 없다.)</p>
@@ -68,15 +68,15 @@ _ <a href="https://www.joinc.co.kr/modules/moniwiki/wiki.php/Site/Network_Progra
 </ul>
 <p><code>select</code>는 이 글에서 다루기는 좀 애매하니까 넘어가자. 간략히 설명하면 여러 IO를 동시에 감시하고 그에 대해 통보 받을 수 있다는 것이다. 이는 asynchronous IO 함수를 쓰지 않고, non blocking IO들을 무의미하게 loop 돌면서 검사하지 않아도 어느정도 효율적으로 IO를 관리할 수 있고, 게다가 동기적으로(하나의 scope 내에서) 로직을 작성할 수 있으므로 코드를 작성하기도 편하다.
 동기적으로 작성되면 scope에 의해 context(변수 등)가 공유되고 실행 흐름을 파악하기 쉽기 때문에 문제가 발생할 확률이 적기 때문이다. 예를 들어 다음의 코드를 보자.</p>
-<pre class="default-dark vscode-highlight" data-language="cpp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk11">select</span><span class="mtk1"> (...) != -</span><span class="mtk7">1</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">switch</span><span class="mtk1"> (ret) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">case</span><span class="mtk1"> ACCEPT: </span><span class="mtk12">clients</span><span class="mtk1">.</span><span class="mtk11">push_back</span><span class="mtk1"> (socket); </span><span class="mtk15">break</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">case</span><span class="mtk1"> RECV:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk10">std</span><span class="mtk1">::</span><span class="mtk10">vector</span><span class="mtk1">&lt;</span><span class="mtk10">SOCKET</span><span class="mtk1">&gt;::iterator it = </span><span class="mtk12">clients</span><span class="mtk1">.</span><span class="mtk11">begin</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            it != </span><span class="mtk12">clients</span><span class="mtk1">.</span><span class="mtk11">end</span><span class="mtk1">(); ++it) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">            // 모종의 작업</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">break</span><span class="mtk1">;</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="cpp" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk11">select</span><span class="mtk1"> (...) != -</span><span class="mtk7">1</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">switch</span><span class="mtk1"> (ret) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">case</span><span class="mtk1"> ACCEPT: </span><span class="mtk12">clients</span><span class="mtk1">.</span><span class="mtk11">push_back</span><span class="mtk1"> (socket); </span><span class="mtk15">break</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">case</span><span class="mtk1"> RECV:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk10">std</span><span class="mtk1">::</span><span class="mtk10">vector</span><span class="mtk1">&lt;</span><span class="mtk10">SOCKET</span><span class="mtk1">&gt;::iterator it = </span><span class="mtk12">clients</span><span class="mtk1">.</span><span class="mtk11">begin</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            it != </span><span class="mtk12">clients</span><span class="mtk1">.</span><span class="mtk11">end</span><span class="mtk1">(); ++it) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">            // 모종의 작업</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">break</span><span class="mtk1">;</span></span></span></code></pre>
 <p>의사코드 수준이지만 위의 코드를 보면 accept를 수행하는 부분과 recv를 수행하는 부분이 하나의 흐름이다. 따라서 저 로직에서는 굳이 client들의 socket을 저장하는 자료구조가 전역일 필요도 없고 lock 또한 필요하지 않다. 게다가 파악하기도 힘든 thread수행 흐름에 의한 문제가 발생할 일도 없다.</p>
 <h2>어떤 것을 써야 할까</h2>
 <p>IO 요청의 빈번성과 프로그램의 특성에 따라 위 서술한 것들 중 효율적인 것을 골라서 사용하면 된다.</p>
@@ -119,76 +119,109 @@ multi core가 있는 환경에서 어떤 프로그램이 가장 빠르게 수행
 <h2>마무리</h2>
 <p>글 자체에서 IOCP 와 select 에 대해 거의 다루지 않고, 요청과 완료 통지의 분리에 대해서만 급하게 설명하다보니 제대로 그 의도가 전달되었는가 모르겠다. 최근에 봤던 어떤 글에서 IO 함수의 blocking과 non blocking, 그리고 그것을 처리하는 방식의 synchronous, asynchronous에 대해서 혼동하고 있기에 이전 글과 이번 글로 그 개념을 구분하는데 어느 정도 도움이 되었기를 바라면서 썼는데, 쓰다보니 내용이 별로인 것 같다 […]</p>
 <p>빠른 서버를 구성함에 있어 각 서버의 특성상 알맞는 모델을 채택하는 경우가 있으니까 IOCP까지는 공부를 해두면 좋다. 그래야 apache나 다른 웹 서버가 어떤 차이에 의해서 왜 빠른지 이해하는데 도움이 될 수 있다고 생각하기 때문이다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2011/08/03/interlocked-singly-linked-lists/">&lt; Interlocked Singly Linked Lists</a><a style="float:right" href="/2011/08/07/asynchronous-io/">비동기 IO 함수 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2011/08/07/efficient-processing-for-multiplexing-io/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2011/08/03/interlocked-singly-linked-lists/">&lt; Interlocked Singly Linked Lists</a><a style="float:right" href="/2011/08/07/asynchronous-io/">비동기 IO 함수 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2011/08/07/efficient-processing-for-multiplexing-io/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

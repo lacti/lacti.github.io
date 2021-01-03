@@ -1,81 +1,81 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2008/04/01/pintos-boot/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">pintos 부팅 과정</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2008/04/01/pintos-boot/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">pintos 부팅 과정</title><meta data-react-helmet="true" name="description" content="
 우리가 일반적으로 사용하는 컴퓨터 내에 존재하는 시스템은 하드 디스크 등의 보조 기억 공간을 갖고 그 기억 공간에 접근하여 동작을 수행하는데, Pintos를 수행하는 bochs는 Pintos…"/><meta data-react-helmet="true" name="keywords" content="os"/><meta data-react-helmet="true" name="og:title" content="pintos 부팅 과정"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-우리가 일반적으로 사용하는 컴퓨터 내에 존재하는 시스템은 하드 디스크 등의 보조 기억 공간을 갖고 그 기억 공간에 접근하여 동작을 수행하는데, Pintos를 수행하는 bochs는 Pintos…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2008/04/01/pintos-boot/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>pintos 부팅 과정</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">April 01, 2008</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/os/">os</a></div></div><div><p>우리가 일반적으로 사용하는 컴퓨터 내에 존재하는 시스템은 하드 디스크 등의 보조 기억 공간을 갖고 그 기억 공간에 접근하여 동작을 수행하는데, Pintos를 수행하는 bochs는 Pintos를 빌드하여 얻어진 이미지 파일을 하드 디스크 등과 같은 storage로 인식하여 emulating을 수행한다. 하지만 Pintos는 단순히 커널만 존재하기 때문에 우리가 일반적으로 사용하는 storage와 달리 이미지 파일에는 단순히 부팅을 위한 부트 섹터와 커널 이미지만 존재하게 된다.</p>
+우리가 일반적으로 사용하는 컴퓨터 내에 존재하는 시스템은 하드 디스크 등의 보조 기억 공간을 갖고 그 기억 공간에 접근하여 동작을 수행하는데, Pintos를 수행하는 bochs는 Pintos…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2008/04/01/pintos-boot/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>pintos 부팅 과정</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">April 01, 2008</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/os/">os</a></div></div><div><p>우리가 일반적으로 사용하는 컴퓨터 내에 존재하는 시스템은 하드 디스크 등의 보조 기억 공간을 갖고 그 기억 공간에 접근하여 동작을 수행하는데, Pintos를 수행하는 bochs는 Pintos를 빌드하여 얻어진 이미지 파일을 하드 디스크 등과 같은 storage로 인식하여 emulating을 수행한다. 하지만 Pintos는 단순히 커널만 존재하기 때문에 우리가 일반적으로 사용하는 storage와 달리 이미지 파일에는 단순히 부팅을 위한 부트 섹터와 커널 이미지만 존재하게 된다.</p>
 <h2>부트로더</h2>
 <p>부팅이란 컴퓨터가 구동하여 기초적인 초기화 작업을 수행하고 운영 체제를 읽어오는 일련의 작업을 말한다. 그리고 부트 섹터는 방금 언급한 기초적인 초기화 작업과 운영 체제를 읽어서 메모리에 올리고 수행시키는 작업에 대한 코드가 작성된 프로그램이 기록된 섹터로 장치의 첫 번째 트랙의 첫 번째 섹터를 지칭한다. 어떤 보조 기억 창치(storage)에 이러한 정보가 기술되어 있으면 BIOS는 컴퓨터가 구동된 후 연결된 storage들을 탐색하면서 해당 장치가 부팅 가능한 정보를 갖고 있는지 검사한다. 한 섹터의 크기는 512bytes이므로 정확히 말하자면 부트 섹터인 가장 첫 번째 섹터의 511번째 바이트와 512번째 바이트가 각각 <code>0x55</code> <code>0xAA</code>이어야 한다.</p>
 <p>이러한 구조는 <code>loader.S</code>에 기술되어있다.</p>
-<pre class="default-dark vscode-highlight" data-language="ignore"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">346 #### Boot-sector signature.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">347 #### The BIOS checks that this is set properly.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">348     .org LOADER_SIG - LOADER_BASE</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">349     .word 0xaa55</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="ignore" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">346 #### Boot-sector signature.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">347 #### The BIOS checks that this is set properly.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">348     .org LOADER_SIG - LOADER_BASE</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">349     .word 0xaa55</span></span></span></code></pre>
 <p>따라서 부팅을 수행하려면 일단 부팅을 수행하기 위한 일련의 작업들을 코드로 기술하고, 511byte와 512byte를 <code>0x55</code> <code>0xAA</code>로 끝내는 512bytes 짜리 기계어를 작성한 후에 가장 첫 번째 섹터에 기록하면 되는 것이다.</p>
 <p>이런 방법을 사용하는 이유는 Pintos의 크기가 512bytes를 넘어가기 때문에 첫 번째 섹터에 그 기계어를 다 기록할 수 없기 때문이다. 따라서 부트 섹터에 기술된 기계어는 기초적인 초기화를 한 후 크기가 512bytes보다 큰 커널을 메모리에 올려놓고 그 지점으로 jump하여 운영 체제가 동작할 수 있게 해주는 것이다.</p>
 <p>이제 BIOS를 emulate하는 bochs는 Pintos 이미지가 부팅 가능하다는 것을 알게 되었기 때문에 부팅을 수행한다. BIOS는 첫 번째 섹터를 읽어 메모리의 <code>0x7C00</code>에 올려놓고 작업을 시작한다. 지금부터 설명할 부팅 시 수행하는 작업들은 loader.S에 기술되어있다.</p>
 <p>먼저 부팅이 시작되면 BIOS를 사용할 수 있는 16bit 모드로 작업을 수행한다. 추후에 다시 기술할 내용이지만 Pintos는 32bit 모드로 변환한 후에도 한참 뒤에나 장치의 interrupt를 handling하기 때문에 일단은 interrupt에 의해 부팅이 방해되는 것을 막기 위해 모든 interrupt를 막는다.</p>
 <p>그리고 segment 레지스터를 초기화하고 loader의 코드가 올라간 메모리의 <code>0x7C00</code> 주소에 맞추어 origin을 설정한다. 그리고 기본적으로 설정되어있는 메모리 한계인 1MB를 풀기 위해 A20 회로를 활성화시킨다. 그 다음에 메모리의 크기를 얻는 작업을 수행한다. 여기서 BIOS를 사용한다.</p>
 <p>BIOS는 Basic Input/Output System의 약자로 시스템의 기초적인 입출력을 담당하고, 또한 관련 함수를 제공해준다. BIOS에서 제공하는 함수를 호출하려면 interrupt를 사용해야 한다. 각 장치 별로 interrupt 번호가 존재하고 각 장치 내에서 수행할 함수는 보통 AH로 정한다. 유명한 BIOS interrupt로 디스크 관련 인터럽트인 INT 13과 화면 관련 인터럽트인 INT 10이 존재한다.</p>
-<pre class="default-dark vscode-highlight" data-language="ignore"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">316 panic:  .code16         # We only panic in real mode.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">317     movw $panic_message, %si</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">318     movb $0xe, %ah</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">319     subb %bh, %bh</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">320 1:  lodsb</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">321     test %al, %al</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">322 2:  jz 2b           # Spin.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">323     int $0x10</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">324     jmp 1b</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="ignore" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">316 panic:  .code16         # We only panic in real mode.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">317     movw $panic_message, %si</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">318     movb $0xe, %ah</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">319     subb %bh, %bh</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">320 1:  lodsb</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">321     test %al, %al</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">322 2:  jz 2b           # Spin.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">323     int $0x10</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">324     jmp 1b</span></span></span></code></pre>
 <p>실제로 <code>INT 10</code>은 부팅 도중 PANIC이 일어났을 때 PANIC 문자열을 출력하기 위해 사용된다. 이 때 호출되는 함수는 <code>0x0E</code>번 함수인데 이는 <code>TELETYPE_OUTPUT</code> 함수이다.</p>
 <h2>메모리 초기화</h2>
 <p>지금은 메모리의 크기를 얻기 위해서 인터럽트를 사용한다. 이 때 인터럽트 번호는 <code>0x15</code>번이고 함수 번호는 <code>0x88</code>번이다. 이 때 반환되는 값은 실제 물리 메모리의 크기에서 1024를 뺀 값으로 단위는 kB이다. loader에서는 여기에 1024를 더해서 실제 물리 메모리의 크기를 얻는다. 하지만 Pintos는 이미 64MB 메모리 용으로 4kB의 page를 갖는 page table를 작성해두었기 때문에 메모리의 64MB만을 사용하도록 설정한다.</p>
 <p>그리고 Page Table Entries와 Page Directory Entries를 초기화 하여 기초적인 page table를 구성한다. 이는 기본적인 virtual memory를 위한 page table를 구성하고, 32bit로 전환한 뒤에 loader를 메모리의 커널 영역인 <code>0xC0007C00</code>으로 취급해서 수행하게 하기 위함이다. 32bit 모드에서는 메모리 주소를 가리킬 수 있는 레지스터의 크기도 32bit가 되므로 실제로 사상될 수 있는 메모리의 크기는 최대 2^32인 4GB이다. 보통 운영 체제는 이 중에서 0xC0000000 ~ 0xFFFFFFFF인 1GB를 커널 영역으로 사용한다.</p>
-<pre class="default-dark vscode-highlight" data-language="c"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">loader.h</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> </span><span class="mtk7">11</span><span class="mtk1"> </span><span class="mtk3">/* Kernel virtual address at which all physical memory is mapped.</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"> 12</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"> 13    The loader maps the 4 MB at the bottom of physical memory to</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"> 14    this virtual base address.  Later, paging_init() adds the rest</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"> 15    of physical memory to the mapping.</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"> 16</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"> 17    This must be aligned on a 4 MB boundary. */</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> </span><span class="mtk7">18</span><span class="mtk4"> </span><span class="mtk15">#define</span><span class="mtk4"> </span><span class="mtk11">LOADER_PHYS_BASE</span><span class="mtk4"> </span><span class="mtk7">0xc0000000</span><span class="mtk4">     </span><span class="mtk3">/* 3 GB. */</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="c" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">loader.h</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> </span><span class="mtk7">11</span><span class="mtk1"> </span><span class="mtk3">/* Kernel virtual address at which all physical memory is mapped.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"> 12</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"> 13    The loader maps the 4 MB at the bottom of physical memory to</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"> 14    this virtual base address.  Later, paging_init() adds the rest</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"> 15    of physical memory to the mapping.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"> 16</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"> 17    This must be aligned on a 4 MB boundary. */</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> </span><span class="mtk7">18</span><span class="mtk4"> </span><span class="mtk15">#define</span><span class="mtk4"> </span><span class="mtk11">LOADER_PHYS_BASE</span><span class="mtk4"> </span><span class="mtk7">0xc0000000</span><span class="mtk4">     </span><span class="mtk3">/* 3 GB. */</span></span></span></code></pre>
 <p>위의 주석에서 언급되어 있듯이 물론 page의 초기화는 kernel에서 이루어져야 하지만 16bit에서 32bit로 전환되면서 보호 모드로 바뀌었기 때문에 일단은 기초적인 page 테이블이라도 구성해서 loader를 0x7C00으로 바로 접근하는게 아니라 <code>LOADER_PHYS_BASE</code>를 더한 <code>0xC000007C00</code>의 가상 주소로 접근한다는 것이다.</p>
 <p>수행 bit 모드가 바뀌었으니 다시 segment를 초기화한다. 그리고 이제부터 이미지 내에 존재하는 KELNEL 코드를 메모리의 <code>LOADER_PHYS_BASE + LOADER_KERN_BASE (0x00100000)</code>에 적재한다.</p>
 <p><code>loader.S</code>의 코드를 보면 약 245줄부터 IDE Controller를 이용하여 <code>$KERNEL_LOAD_PAGES * 8 + 1</code> 개수만큼 읽는 것으로 추정되지만 <code>$KERNEL_LOAD_PAGE</code>의 값과 읽기 시작하는 섹터의 정보를 정확히 찾지 못했다. 아무튼 커널을 다 읽어서 메모리에 올려놓으면 커널 코드를 수행하기 위해 jump를 한다.</p>
-<pre class="default-dark vscode-highlight" data-language="ignore"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">loader.S</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">296 #### Jump to kernel entry point.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">297</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">298     movl $LOADER_PHYS_BASE + LOADER_KERN_BASE, %eax</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">299     call *%eax</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">300     jmp panic</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="ignore" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">loader.S</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">296 #### Jump to kernel entry point.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">297</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">298     movl $LOADER_PHYS_BASE + LOADER_KERN_BASE, %eax</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">299     call *%eax</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">300     jmp panic</span></span></span></code></pre>
 <p>만약 무슨 이유에서든지 커널이 메모리에 제대로 올라가지 않았거나하여 call 문이 실패하게 될 경우에는 바로 커널 패닉을 맛 볼 수 있도록 panic으로 jump를 한다.</p>
 <h2>진입점 이동</h2>
 <p>jump로 <code>init.c</code>의 main로 바로 이동하는 것은 아니다. 이 main함수는 gcc에 의해 컴파일되면서 그 함수의 entry가 어디에 존재할지는 디어셈블리한 후에 여러 복잡한 계산을 해보기 전에는 모르기 때문에 일단 loader의 call에 의해 호출되는 지점의 코드는 어셈블리로 한 번 더 짜고(<code>start.S</code>) 그 내부에서 main을 호출하는 구조를 이루고 있다.</p>
 <p><code>loader.S</code>에서는 main을 호출할 수 없는데 <code>start.S</code>에서는 main을 그 symbol로 호출할 수 있는 이유는 빌드 과정에 있다. <code>loader.S</code>는 부트 섹터, 즉 첫 번째 기록되는 코드로써 혼자 따로 어셈블되어 0 ~ 511bytes의 위치에 기록되고, 나머지는 모두 커널 이미지라는 것으로 묶이는데 이 때 linker script인 <code>kernel.lds.S</code>에 의해 <code>init.c</code>의 <code>main()</code> 함수의 위치를 <code>start.S</code>가 알 수 있게 하여 <code>start.S</code>에서는 main으로 함수를 호출할 수 있게 되는 것이다.</p>
-<pre class="default-dark vscode-highlight" data-language="ignore"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">start.S</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  9 .globl start</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 10 .func start</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 11     # Call main.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 12 start:  call main</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 13</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 14     # main() should not return, but if it does, spin.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 15 1:  jmp 1b</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> 16 .endfunc</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="ignore" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">start.S</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  9 .globl start</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 10 .func start</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 11     # Call main.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 12 start:  call main</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 13</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 14     # main() should not return, but if it does, spin.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 15 1:  jmp 1b</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> 16 .endfunc</span></span></span></code></pre>
 <p>코드에서 볼 수 있듯이 12번 행에서 <code>call main</code>을 수행하고 있다. 그리고 어떤 이유에서든지 <code>main()</code> 함수가 종료된다면 15번 행의 무한 반복이 실행되어 절대 다른 지점으로 넘어갈 수 없도록 한다. 왜냐하면 <code>start.S</code> 뒤에 있는 것은 커널 이미지 빌드 과정에서 합쳐지는 어딘가의 소스 코드이거나 데이터 코드일 것이며, 만약 여기서 멈추지 않는다면 그 알 수 없는 코드들을 CPU는 모두 읽어서 처리하게 될 것이기 때문이다.</p>
 <p>이제 <code>main()</code> 함수가 수행된다. <code>main()</code> 함수부터는 너무 깊게 들어가지 않고 가볍게 설명할 것이다.</p>
 <h2>커널 초기화</h2>
 <p>c 코드로 구성된 <code>init.c</code>의 <code>main()</code> 함수가 실제 커널의 초기화와 수행을 맡는 코드이다. 일단 <code>ram_init()</code> 함수를 호출하여 BSS segment를 초기화 하고 page의 개수를 <code>ram_pages</code> 변수에 넣는다. page의 개수는 <code>loader.S</code>에서 페이지 테이블을 구성하기 위해 열심히 계산했었다.</p>
 <p>그 다음에 <code>read_command_line()</code> 함수를 사용하여 kernel 실행 인자를 받는다. 일단 pintos 구동 시 입력 받는 인자를 부트 섹터의 <code>arg_cnt:</code>와 <code>args:</code>에 넣어둔 뒤에 kernel에서 이 위치에 있는 인자를 가져오는 방식이다.</p>
-<pre class="default-dark vscode-highlight" data-language="ignore"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">loader.S</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">336 #### Command-line arguments and their count.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">337 #### This is written by the &#96;pintos&#39; utility and read by the kernel.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">338 #### The loader itself does not do anything with the command line.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">339     .org LOADER_ARG_CNT - LOADER_BASE</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">340 arg_cnt:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">341     .long 0</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">342     .org LOADER_ARGS - LOADER_BASE</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">343 args:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">344     .fill 0x80, 1, 0</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="ignore" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">loader.S</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">336 #### Command-line arguments and their count.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">337 #### This is written by the `pintos&#39; utility and read by the kernel.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">338 #### The loader itself does not do anything with the command line.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">339     .org LOADER_ARG_CNT - LOADER_BASE</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">340 arg_cnt:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">341     .long 0</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">342     .org LOADER_ARGS - LOADER_BASE</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">343 args:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">344     .fill 0x80, 1, 0</span></span></span></code></pre>
 <p>예를 들어 <code>pintos -v -- run alarm-multiple</code>을 수행할 경우 run과 alarm-multiple이 실행 인자가 되어 메모리의 저 영역에 올라가게 되고 <code>init.c</code>의 <code>main()</code>에서 이 값을 읽어서 처리하게 된다는 것이다.</p>
 <p>그 다음에 <code>parse_options()</code> 함수에서 옵션을 분석한다. 이 커널은 몇 가지 옵션을 갖고 있는데 <code>-h</code> 옵션으로 해당 옵션에 대한 설명을 볼 수 있다(<code>init.c</code>의 334줄). 대표적인 옵션으로 <code>-q</code>를 주면 지정된 동작이 끝난 후 바로 커널의 수행을 종료(power off)한다.</p>
-<pre class="default-dark vscode-highlight" data-language="sh"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ pintos -v -- -q run alarm-multiple</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="sh" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ pintos -v -- -q run alarm-multiple</span></span></span></code></pre>
 <p>그 다음에 <code>thread_init()</code> 함수를 호출하여 lock를 활성화시키고 대기 큐(ready<em>list)를 초기화한다. 그리고 현재 작동하고 있는 <code>ESP</code>를 기준으로 가장 근처에 있는 page를 찾아서 그 주소를 기준으로 thread 정보를 설정한다. 이 thread의 이름은 main으로 `initial</em>thread<code>가 된다. 그 후에</code>console_init()<code>를 통해 console에 lock을 초기화한다. 이제부터 console를 사용할 수 있으므로</code>printf` 함수를 사용할 수 있다.</p>
 <p><code>printf</code>로 메모리의 크기를 출력한 후에 <code>palloc_init()</code>, <code>malloc_init()</code>, <code>paging_init()</code> 함수를 차례로 수행하여 메모리를 초기화한다. <code>palloc_init</code>는 이름 그대로 page를 allocate하는 작업을 수행할 수 있도록 초기화하는 것이고, <code>malloc_init</code>는 <code>malloc</code>을 통한 메모리 할당을 수행하기 위해 초기화를 수행하는 것이다.</p>
 <p><code>paging_init()</code> 함수에서는 <code>loader.S</code>에서 구성했던 page table을 다시 구성하는 것이다. page table이란 메모리를 page로 관리하게 되면서 생긴 각 page에 대한 index를 갖고 있는 table인데 관리할 메모리가 커져감에 따라 page table도 같이 커져서 이 table을 관리할 또 다른 table이 필요했는데 그것이 page directory이다. 이 함수에서는 PD와 PE를 다시 구성한다.</p>
@@ -84,16 +84,16 @@
 <p>그 다음에 interrupt를 초기화한다. <code>먼저 intr_init()</code> 함수를 호출해서 PIC(programmable interrupt controller)를 초기화한다. 이 PIC는 interrupt 장치에 연결되어 CPU에게 interrupt 신호를 보내주는 장치이다. 그리고 interrupt descriptor table인 idt를 초기화한다. 이 table에는 interrupt를 handling하는 handler 함수들이 연결되는데 지금은 일단 깨끗이 초기화한다. 그리고 덤으로 0번부터 19번까지의 interrupt 이름을 초기화하는데 이는 CPU가 운영 체제, 즉 커널에게 전달하는 interrupt이다.</p>
 <p>PIC에 의해 전달되는 interrupt도 0번부터 시작하지만 <code>0x00</code>부터 <code>0x19</code>까지는 CPU가 커널에게 전달하기 위한 interrupt로 사용하고 그 이후부터가 PIC에 의한 interrupt가 된다. 대표적인 예로 조금 있다 보게 될 keyboard의 interrupt 번호는 <code>0x21</code>이다.<br>
 interrupt table을 초기화했으므로 이제 각 interrupt에 대해 handler를 연결한다. 먼저 이번 과제의 예제로 주어진 thread에서도 사용되는 timer를 먼저 초기화한다. timer는 PIC <code>0x00</code>번으로 <code>timer_init()</code>에서 초기화를 한다. 함수 내부에서 보면 <code>intr_register_ext()</code> 함수를 이용하여 <code>0x20</code>에 <code>timer_interrupt()</code> 함수를 연결하는 것을 확인할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="c"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">timer.c</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">46</span><span class="mtk1">   </span><span class="mtk11">intr_register_ext</span><span class="mtk1"> (</span><span class="mtk7">0x20</span><span class="mtk1">, timer_interrupt, </span><span class="mtk8">&quot;8254 Timer&quot;</span><span class="mtk1">);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="c" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">timer.c</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">46</span><span class="mtk1">   </span><span class="mtk11">intr_register_ext</span><span class="mtk1"> (</span><span class="mtk7">0x20</span><span class="mtk1">, timer_interrupt, </span><span class="mtk8">&quot;8254 Timer&quot;</span><span class="mtk1">);</span></span></span></code></pre>
 <p>그리고 동일한 방법으로 <code>kbd_init()</code>에서는 keyboard의 interrupt를 초기화한다. 아직은 사용하지 않지만 keyboard로부터 입력받은 interrupt는 interrupt queue에 넣어졌다가 interrupt를 처리하는 thread에 의해 처리되는데 이러한 동작을 수행하는 모듈이 input이다. 일단 <code>input_init()</code> 함수를 호출하여 초기화한다.</p>
 <p>그리고 <code>exception_init()</code> 함수를 수행하여 아까 <code>intr_init()</code>에서 작성해두었던 <code>0x00</code> ~ <code>0x13</code>까지의 interrupt를 연결한다. 연결되는 handler를 살펴보면 <code>exception.c</code>의 72번째 줄에 존재하는 <code>kill</code> 함수인데 친절하게도 왜 죽는지에 대해 설명해주고 죽는다. 주석을 보면 user program에 의해 process가 잘못된 수행을 했을 경우에 이 handler이 호출된다고 한다.</p>
 <p>그 다음에 <code>syscall_init()</code> 함수를 통해 system call interrupt를 handling한다. 현재 handling하는 system call은 <code>0x30</code>번 interrupt인데 단순히 “system call!”을 출력하고 끝나는 system call이다.</p>
 <p>이상으로 software interrupt(exception), hardware interrupt, system call에 대한 interrupt handler 초기화 및 설정을 마쳤다.</p>
 <p>이제 설정한 interrupt를 동작시켜야 한다. interrupt를 받지 않으려는 노력은 <code>loader.S</code>의 맨 처음에서부터 시작하여 중간에 메모리 크기를 측정하고 커널 이미지를 메모리에 올리면서도 행해져 왔다. 이제 interrupt를 받도록 설정하기 위해서 일단 threads를 시작한다.</p>
 <p><code>thread_start()</code> 함수는 가장 실행 우선 순위가 낮은 idle이라는 thread를 생성하여 동작시킨다. 그리고나서 <code>intr_enable()</code> 함수를 호출하여 interrupt를 활성화시키는데 그 이유는 idle에 있다. idle 함수는 일단 interrupt를 다시 disable시키고 thread를 block하여 다른 thread가 먼저 수행될 수 있도록 한다. 그 뒤에 다시 활동하게 되면 바로 inline assembly인 <code>sti; hlt</code>를 수행하게 되는데 이는 interrupt를 다시 enable하고 바로 정지하겠다는 것이다. hlt instruction은 CPU가 interrupt를 받을 때까지 대기시키는 instruction이다.</p>
-<pre class="default-dark vscode-highlight" data-language="c"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">thread.c</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">383</span><span class="mtk1">       </span><span class="mtk4">asm</span><span class="mtk1"> </span><span class="mtk4">volatile</span><span class="mtk1"> (</span><span class="mtk8">&quot;</span><span class="mtk1">sti; hlt</span><span class="mtk8">&quot;</span><span class="mtk1"> : : : </span><span class="mtk8">&quot;</span><span class="mtk1">memory</span><span class="mtk8">&quot;</span><span class="mtk1">);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="c" data-index="8"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">thread.c</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">383</span><span class="mtk1">       </span><span class="mtk4">asm</span><span class="mtk1"> </span><span class="mtk4">volatile</span><span class="mtk1"> (</span><span class="mtk8">&quot;</span><span class="mtk1">sti; hlt</span><span class="mtk8">&quot;</span><span class="mtk1"> : : : </span><span class="mtk8">&quot;</span><span class="mtk1">memory</span><span class="mtk8">&quot;</span><span class="mtk1">);</span></span></span></code></pre>
 <h2>기타</h2>
 <p>그 이후에 <code>serial_init_queue()</code> 함수를 통해 serial로부터 interrupt를 받아 커널을 제어할 수 있도록 한다. 이는 커널이 올라가 있는 장치에 keyboard로 바로 console를 통해 접속하는 것이 아니라 tty등의 serial interface로 접근했을 때도 커널이 반응할 수 있도록 하기 위함이다.</p>
 <p>그 다음에 <code>timer_calibrate()</code> 함수에서 아까 설정한 timer interrupt에 의한 한 tick에 몇 번의 loop를 돌 수 있나 계산해서 전역 변수인 <code>loops_per_tick</code>에 넣어두고 이 값은 여러 <code>sleep()</code> 함수들의 동작을 실제로 수행하는 <code>real_time_sleep()</code> 함수에서 사용한다. 이 값을 사용하여 멈추기를 요구하는 시간을 근사한 loop 회수로 변환하여 <code>busy_wait()</code> 함수에서 지정된 회수만큼 반복문을 돌면서 대기한다.</p>
@@ -105,76 +105,108 @@ interrupt table을 초기화했으므로 이제 각 interrupt에 대해 handler�
 <li><a href="https://www.hanbit.co.kr/book/look.html?isbn=89-7914-396-6">Windows 구조와 원리: OS를 관통하는 프로그래밍의 원리</a></li>
 <li><a href="https://kangcom.com/sub/view.asp?sku=201207250002">리눅스 커널 심층 분석</a></li>
 </ul>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2008/04/01/pintos-internal-structure/">&lt; pintos 기본 구조와 동작 원리</a><a style="float:right" href="/2008/04/01/make-pintos-environment/">pintos 환경 구축 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2008/04/01/pintos-boot/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:right" href="/2008/04/01/make-pintos-environment/">pintos 환경 구축 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2008/04/01/pintos-boot/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

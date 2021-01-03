@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2013/05/07/simple-distributed-system-implementation-2/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">분산 처리 환경 구현 2</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2013/05/07/simple-distributed-system-implementation-2/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">분산 처리 환경 구현 2</title><meta data-react-helmet="true" name="description" content="
 Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다. 가장 간단해보이는 M-S 모델 (master-slave…"/><meta data-react-helmet="true" name="keywords" content="distributed, c#"/><meta data-react-helmet="true" name="og:title" content="분산 처리 환경 구현 2"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다. 가장 간단해보이는 M-S 모델 (master-slave…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2013/05/07/simple-distributed-system-implementation-2/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>분산 처리 환경 구현 2</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">May 07, 2013</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/distributed/">distributed</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/csharp/">c#</a></div></div><div><ul>
+Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다. 가장 간단해보이는 M-S 모델 (master-slave…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2013/05/07/simple-distributed-system-implementation-2/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>분산 처리 환경 구현 2</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">May 07, 2013</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/distributed/">distributed</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/csharp/">c#</a></div></div><div><ul>
 <li><a href="https://github.com/lacti/DistWork/tree/simplest">Github: DistWork - simplest</a></li>
 </ul>
 <p>지난 번 글에서는 분산 처리 환경에 대한 구조를 대충 알아봤다. 이번 글에서는 대충 알아본 것 중 하나를 선택해서 C#으로 구현을 해볼 것이다.</p>
@@ -8,19 +8,19 @@ Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대�
 <p>일단 구현하기에 앞서 간단히 설계도를 살펴보자.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 552px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 552px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 47.644927536231876%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAB70lEQVQoz42QXU/TUBjH+xHkEj+EfAVjdBfGkAzCzZz4QowkXnhjwh0QL9yiwRhNNBEItuteLDIgY3MCO1vL6Mtcu6ote6F7KdjRLQhZjGzZ1s7DDCZEEv3l5MlzTs4////zIJ1/YZomrE6n02q1ToyPw8tRswWPYZrI3//0Q0UshDK70b3a/rpaCRU07Wf9/ujohb6+kWE7vVO9GeCuL9JS5RAxT4Ayw2zDSqfdT5cuocAGpGT/6w3LSzATERZ8nreYy+dCpwE7sCJc9lKftP1Tzr/FiRzxIngNJ+8Iua9ThPQISzBSGb63jWMDRtVvLzPD/vgWdGZZNtmlVqu1jdaxODv/Kjzope4lS9IElR4DqaiyW1ZLSqFQVotBSRla4vqJDXHvAIGc7+3t6TnncDjm5mbDoXU+vzizZvczD8gvvO1ZfOAJQD+m/IQXw93vcGw2loCxr/i6sVdX10iSBCCi63qjUe8YHS5LPF+5ioJb8k4aZ4pvYrKsff8Tm/9WvRtgR5ZpWT84Y2Ym45kKWLDoDSot2DzcoCuOUeK8B8fc0Nm1wIn2kGB9T2+qFcQ4obtyA4rlUsRHPQzzj8Xt7CSaGptmAF9UcluC+LmYywTlvIXYvOiORfJlpPN/NJvNeqNutFvVH0dhRfuwrcHmF8mB4IGL4yQHAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    style="padding-bottom: 47.719298245614034%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACCElEQVQoz4VSXW/SABTtAz+AzD/Ag9kvWEx8MsYZNVEXIyYLPrAHM7OIzxinvmtMZhSji27AvqCh0ppaPoRujhZoN7NCCysWGIVRRjZx3UccDNpanHtYTPQ83NyHe3LOufcC2j+hamq709Ybm81mNBrP9PVJDTm0Vof5yvrOPnBiVFX1ur23sVpZEKrk992tZK0REaV6W3lot5/u7b1ysf+rKI2EVixwghDrgHoMnaaoHb2ypdBzpH88fCPOx25NJM+/jLz4zKB+n8s9Ned2TeOkGWPOzS6iQvWE8hE5W8YdgYFJ3MLkqTHf6hMnHaRKmnJ40Gqp7UNO2rz7ibZARFc5nU5zHMeyrCzLqqYckd8Eze55a6pEP0vk7fhKIFdu1Dcq1epmTUoUyrfRpatgLLpWAwwGg8lkOtXTMzr6yOOdQ/xYRoxORK1ecoTi40MO6vrT6GuUQSDQ6XJPOydncHIwkLrgiWF5CYAgCMMwBIYFQdjb320dqNly9BV27X1kMFNe9lKVt3iGLtR1Rx2lu5f8lnwvQFvhOKnb/jszJ4bH0EvvImZKIIf9zM0ZYpzgAh9h0Ad9AL1BmrkTTg1AcfTbOqAc4/fKu5kLNWp24T6cfMAWmccuxuYgoC9CPpehlpZ5Nr3IFy/7Emen5j1cCdD+gz9X1F+l2WoqnfaPn00kVwGzYrGx8wsQZNwG1UMBKgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="구현 설계도"
         title="구현 설계도"
-        src="/static/8d733ae206d55208c14acb573e1fb624/55258/mdf_arch.png"
-        srcset="/static/8d733ae206d55208c14acb573e1fb624/72d8f/mdf_arch.png 285w,
-/static/8d733ae206d55208c14acb573e1fb624/55258/mdf_arch.png 552w"
+        src="/static/8d733ae206d55208c14acb573e1fb624/94ab4/mdf_arch.png"
+        srcset="/static/8d733ae206d55208c14acb573e1fb624/5459c/mdf_arch.png 285w,
+/static/8d733ae206d55208c14acb573e1fb624/94ab4/mdf_arch.png 552w"
         sizes="(max-width: 552px) 100vw, 552px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -36,113 +36,113 @@ Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대�
 <p>하지만 본 글에서 위 내용을 설명하는 것은 매우 무의미하기 때문에 이 부분에 대해서는 설명하지 않는다. 자세한 내용은 <a href="https://github.com/lacti/DistWork/tree/simplest">소스 코드</a>의 <a href="https://github.com/lacti/DistWork/blob/simplest/DistWork/Util/AsyncSocketExtension.cs">AsyncSocketExtension.cs</a>와 <a href="https://github.com/lacti/DistWork/blob/simplest/DistWork/Core/WorkSocketHelper.cs">WorkSocketHelper.cs</a> 파일을 보면 된다.</p>
 <h2>구현</h2>
 <p>먼저 master와 slave가 주고 받을 작업의 추상 형태인 IWork interface부터 살펴보면 다음과 같다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">interface</span><span class="mtk1"> </span><span class="mtk10">IWork</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">endPoint</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">interface</span><span class="mtk1"> </span><span class="mtk10">IWork</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">endPoint</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>이 interface를 구현한 class가 Serializable하면 Master와 Slave간에 serialize/deserialize되어 전달될 수 있고, 전달된 후에 <code>Execute</code>를 호출해주면 되므로 사실상 RPC와 같은 형태가 된다. 이 때 <code>endPoint</code>의 Socket을 받는 이유는 수행한 결과에 대해 상대측으로 다시 결과를 전달하기 위함이다. (이는 마지막 예제에서 볼 수 있다.)</p>
 <p><code>Master</code> class는 <code>Slave</code>의 통신을 위한 <code>Socket</code>과, 각 <code>Slave</code>의 상태에 대한 Information을 갖는다. 그리고 작업 분산이 요청될 경우(<code>DistributeWork</code>) 적절한 <code>Slave</code>의 <code>Socket</code>을 고르기 위한 알고리즘 함수를 갖는다. Java같은 언어라면 interface로 해당 알고리즘을 분리하겠지만, C#이니 그냥 delegate로 빼서 관리한다.</p>
 <p>위 구현 사항을 분할해서 살펴보자. 먼저 Slave와 연결을 맺고 Slave가 전달하는 Work를 처리하기 위한 함수이다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3">// Master class</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Start</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">listener</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1">(</span><span class="mtk12">AddressFamily</span><span class="mtk1">.</span><span class="mtk12">InterNetwork</span><span class="mtk1">, </span><span class="mtk12">SocketType</span><span class="mtk1">.</span><span class="mtk12">Stream</span><span class="mtk1">, </span><span class="mtk12">ProtocolType</span><span class="mtk1">.</span><span class="mtk12">Tcp</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">localEndPoint</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">IPEndPoint</span><span class="mtk1">(</span><span class="mtk12">IPAddress</span><span class="mtk1">.</span><span class="mtk12">Any</span><span class="mtk1">, </span><span class="mtk12">_port</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">try</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">listener</span><span class="mtk1">.</span><span class="mtk11">Bind</span><span class="mtk1">(</span><span class="mtk12">localEndPoint</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">listener</span><span class="mtk1">.</span><span class="mtk11">Listen</span><span class="mtk1">(</span><span class="mtk7">100</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">clientSocket</span><span class="mtk1"> = </span><span class="mtk4">await</span><span class="mtk1"> </span><span class="mtk12">listener</span><span class="mtk1">.</span><span class="mtk11">AcceptAsync</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk11">ProcessSocket</span><span class="mtk1">(</span><span class="mtk12">clientSocket</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) { </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk12">e</span><span class="mtk1">); }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">ProcessSocket</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">_container</span><span class="mtk1">.</span><span class="mtk11">AddSocket</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk8">&quot;Connected from: &quot;</span><span class="mtk1"> + </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk12">RemoteEndPoint</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">try</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">work</span><span class="mtk1"> = </span><span class="mtk4">await</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">ReceiveWork</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">work</span><span class="mtk1">.</span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) { </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk12">e</span><span class="mtk1">); }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> { </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">Shutdown</span><span class="mtk1">(</span><span class="mtk12">SocketShutdown</span><span class="mtk1">.</span><span class="mtk12">Both</span><span class="mtk1">); }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">catch</span><span class="mtk1"> { }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">_container</span><span class="mtk1">.</span><span class="mtk11">RemoveSocket</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// Master class</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Start</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">listener</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1">(</span><span class="mtk12">AddressFamily</span><span class="mtk1">.</span><span class="mtk12">InterNetwork</span><span class="mtk1">, </span><span class="mtk12">SocketType</span><span class="mtk1">.</span><span class="mtk12">Stream</span><span class="mtk1">, </span><span class="mtk12">ProtocolType</span><span class="mtk1">.</span><span class="mtk12">Tcp</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">localEndPoint</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">IPEndPoint</span><span class="mtk1">(</span><span class="mtk12">IPAddress</span><span class="mtk1">.</span><span class="mtk12">Any</span><span class="mtk1">, </span><span class="mtk12">_port</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">listener</span><span class="mtk1">.</span><span class="mtk11">Bind</span><span class="mtk1">(</span><span class="mtk12">localEndPoint</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">listener</span><span class="mtk1">.</span><span class="mtk11">Listen</span><span class="mtk1">(</span><span class="mtk7">100</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">clientSocket</span><span class="mtk1"> = </span><span class="mtk4">await</span><span class="mtk1"> </span><span class="mtk12">listener</span><span class="mtk1">.</span><span class="mtk11">AcceptAsync</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk11">ProcessSocket</span><span class="mtk1">(</span><span class="mtk12">clientSocket</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) { </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk12">e</span><span class="mtk1">); }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">ProcessSocket</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">_container</span><span class="mtk1">.</span><span class="mtk11">AddSocket</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk8">&quot;Connected from: &quot;</span><span class="mtk1"> + </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk12">RemoteEndPoint</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">work</span><span class="mtk1"> = </span><span class="mtk4">await</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">ReceiveWork</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">work</span><span class="mtk1">.</span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) { </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk12">e</span><span class="mtk1">); }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> { </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">Shutdown</span><span class="mtk1">(</span><span class="mtk12">SocketShutdown</span><span class="mtk1">.</span><span class="mtk12">Both</span><span class="mtk1">); }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">catch</span><span class="mtk1"> { }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">_container</span><span class="mtk1">.</span><span class="mtk11">RemoveSocket</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>지정된 port에 bind된 socket이 <code>Slave</code>와 연결되면 그 <code>Socket</code>으로부터 <code>Work</code>를 하나씩 받아서(deserialize) 처리하는 형태이다. awaitable한 프로그램을 작성했기 때문에 managed thread pool이 적절히 잘 운영해준다.</p>
 <p><code>_container</code>는 <code>SocketContainer</code> 객체로 slave의 socket을 관리해준다. <code>SocketContainer</code>에서 관리하는 Socket 집합은 추후 작업을 분산시키기 위해 특정 slave를 선택할 때 사용된다.</p>
 <p><code>Slave</code>는 <code>Master</code>에 연결한 뒤, 역시 동일하게 <code>Master</code>로부터 <code>Work</code>를 받아서 처리하는 구조로 작성하면 된다. 때문에 이 부분은 <code>Master</code>의 코드와 크게 차이가 없다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Slave</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Start</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">try</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1">(</span><span class="mtk12">AddressFamily</span><span class="mtk1">.</span><span class="mtk12">InterNetwork</span><span class="mtk1">, </span><span class="mtk12">SocketType</span><span class="mtk1">.</span><span class="mtk12">Stream</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">                    </span><span class="mtk12">ProtocolType</span><span class="mtk1">.</span><span class="mtk12">Tcp</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">Connect</span><span class="mtk1">(</span><span class="mtk12">_host</span><span class="mtk1">, </span><span class="mtk12">_port</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">                </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">work</span><span class="mtk1"> = </span><span class="mtk4">await</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">ReceiveWork</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">                </span><span class="mtk12">work</span><span class="mtk1">.</span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) { </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk12">e</span><span class="mtk1">); }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Slave</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Start</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">try</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1">(</span><span class="mtk12">AddressFamily</span><span class="mtk1">.</span><span class="mtk12">InterNetwork</span><span class="mtk1">, </span><span class="mtk12">SocketType</span><span class="mtk1">.</span><span class="mtk12">Stream</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">                    </span><span class="mtk12">ProtocolType</span><span class="mtk1">.</span><span class="mtk12">Tcp</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">Connect</span><span class="mtk1">(</span><span class="mtk12">_host</span><span class="mtk1">, </span><span class="mtk12">_port</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">                </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">work</span><span class="mtk1"> = </span><span class="mtk4">await</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">ReceiveWork</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">                </span><span class="mtk12">work</span><span class="mtk1">.</span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) { </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk12">e</span><span class="mtk1">); }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p><code>Slave</code>의 <code>Socket</code>을 관리하는 <code>SocketContainer</code>는 <code>Slave</code>의 연결이 동시 다발적으로 일어나므로 내부에 Lock을 가지고 Container를 관리하는 객체이다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3">// SocketContainer class</span></span>
-<span class="vscode-highlight-line"><span class="mtk10">ReaderWriterLockSlim</span><span class="mtk1"> </span><span class="mtk12">_lock</span><span class="mtk1"> =</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">ReaderWriterLockSlim</span><span class="mtk1">(</span><span class="mtk12">LockRecursionPolicy</span><span class="mtk1">.</span><span class="mtk12">SupportsRecursion</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">Dictionary</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt; </span><span class="mtk12">_sockets</span><span class="mtk1"> =</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Dictionary</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt;();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">AddSocket</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">_lock</span><span class="mtk1">.</span><span class="mtk11">DoWriteLock</span><span class="mtk1">(() =&gt; </span><span class="mtk12">_sockets</span><span class="mtk1">.</span><span class="mtk11">Add</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">, </span><span class="mtk12">SocketInformation</span><span class="mtk1">.</span><span class="mtk12">Invalid</span><span class="mtk1">));</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">RemoveSocket</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">_lock</span><span class="mtk1">.</span><span class="mtk11">DoWriteLock</span><span class="mtk1">(() =&gt; </span><span class="mtk12">_sockets</span><span class="mtk1">.</span><span class="mtk11">Remove</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">));</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk11">SelectSocket</span><span class="mtk1">(</span><span class="mtk10">Func</span><span class="mtk1">&lt;</span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">KeyValuePair</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt;&gt;, </span><span class="mtk10">Socket</span><span class="mtk1">&gt; </span><span class="mtk12">selector</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk12">_lock</span><span class="mtk1">.</span><span class="mtk11">DoReadLock</span><span class="mtk1">(() =&gt; </span><span class="mtk11">selector</span><span class="mtk1">(</span><span class="mtk12">_sockets</span><span class="mtk1">.</span><span class="mtk11">ToList</span><span class="mtk1">()));</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// SocketContainer class</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk10">ReaderWriterLockSlim</span><span class="mtk1"> </span><span class="mtk12">_lock</span><span class="mtk1"> =</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">ReaderWriterLockSlim</span><span class="mtk1">(</span><span class="mtk12">LockRecursionPolicy</span><span class="mtk1">.</span><span class="mtk12">SupportsRecursion</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">Dictionary</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt; </span><span class="mtk12">_sockets</span><span class="mtk1"> =</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Dictionary</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt;();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">AddSocket</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">_lock</span><span class="mtk1">.</span><span class="mtk11">DoWriteLock</span><span class="mtk1">(() =&gt; </span><span class="mtk12">_sockets</span><span class="mtk1">.</span><span class="mtk11">Add</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">, </span><span class="mtk12">SocketInformation</span><span class="mtk1">.</span><span class="mtk12">Invalid</span><span class="mtk1">));</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">RemoveSocket</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">_lock</span><span class="mtk1">.</span><span class="mtk11">DoWriteLock</span><span class="mtk1">(() =&gt; </span><span class="mtk12">_sockets</span><span class="mtk1">.</span><span class="mtk11">Remove</span><span class="mtk1">(</span><span class="mtk12">socket</span><span class="mtk1">));</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk11">SelectSocket</span><span class="mtk1">(</span><span class="mtk10">Func</span><span class="mtk1">&lt;</span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">KeyValuePair</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt;&gt;, </span><span class="mtk10">Socket</span><span class="mtk1">&gt; </span><span class="mtk12">selector</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk12">_lock</span><span class="mtk1">.</span><span class="mtk11">DoReadLock</span><span class="mtk1">(() =&gt; </span><span class="mtk11">selector</span><span class="mtk1">(</span><span class="mtk12">_sockets</span><span class="mtk1">.</span><span class="mtk11">ToList</span><span class="mtk1">()));</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>약간이나마 효율을 높이기 위해 <code>ReaderWriterLock</code>을 사용했다.
 재미있는 부분은 <code>SelectSocket</code>을 수행하는 부분인데, 이 과정에서는 모든 <code>Socket</code>과 그에 대한 <code>SocketInformation</code>을 순회하면서 적절한 <code>Socket</code>을 뽑아내야한다. 하지만 해당 자료구조를 순회하려면 자료구조가 Lock으로 보호된 상태이어야 하므로 Socket을 선택하는 selector를 delegator 형태로 받아서 <code>ReadLock</code> 구간 내에서 수행될 수 있도록 한다.</p>
 <p>그런데 작업을 분산시키기 위해 필요한 정보는 <code>Socket</code>, <code>SocketInformation</code> 뿐만 아니라 어떤 작업인지(<code>IWork</code>)의 정보도 필요하다. 때문에 <code>Master</code>에서는 이 정보까지 취합해서 적절한 <code>Slave</code>를 선택할 수 있도록 delegator를 제공한다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">sealed</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">DistributeContext</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">IList</span><span class="mtk1">&lt;</span><span class="mtk10">KeyValuePair</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt;&gt; </span><span class="mtk12">Sockets</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">IWork</span><span class="mtk1"> </span><span class="mtk12">Work</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">SocketContainer</span><span class="mtk1"> </span><span class="mtk12">_container</span><span class="mtk1">;</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">sealed</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">DistributeContext</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">IList</span><span class="mtk1">&lt;</span><span class="mtk10">KeyValuePair</span><span class="mtk1">&lt;</span><span class="mtk10">Socket</span><span class="mtk1">, </span><span class="mtk10">SocketInformation</span><span class="mtk1">&gt;&gt; </span><span class="mtk12">Sockets</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">IWork</span><span class="mtk1"> </span><span class="mtk12">Work</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">SocketContainer</span><span class="mtk1"> </span><span class="mtk12">_container</span><span class="mtk1">;</span></span></span></code></pre>
 <p>필요한 정보(<code>Socket</code>, <code>SocketInformation</code>, <code>IWork</code>)를 <code>DistributeContext</code>로 감싸서 <code>SelectSocketDecl</code>로 넘겨준다. 이 delegator는 <code>_container</code>의 <code>SelectSocket()</code> 내에서 수행되므로 <code>_container</code>의 ReadLock 내에서 수행된다. 이렇게 socket을 하나 선택하게 되면 해당 socket으로 work를 전달한다. 즉 해당 slave에게 work를 전달한다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3">// Master class</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">delegate</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk10">SelectSocketDecl</span><span class="mtk1">(</span><span class="mtk10">DistributeContext</span><span class="mtk1"> </span><span class="mtk12">context</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">SelectSocketDecl</span><span class="mtk1"> </span><span class="mtk12">_socketSelector</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">DistributeWork</span><span class="mtk1">(</span><span class="mtk10">IWork</span><span class="mtk1"> </span><span class="mtk12">work</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1"> = </span><span class="mtk12">_container</span><span class="mtk1">.</span><span class="mtk11">SelectSocket</span><span class="mtk1">(</span><span class="mtk12">sockets</span><span class="mtk1"> =&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk11">_socketSelector</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DistributeContext</span><span class="mtk1">(</span><span class="mtk12">_container</span><span class="mtk1">, </span><span class="mtk12">sockets</span><span class="mtk1">.</span><span class="mtk11">AsReadOnly</span><span class="mtk1">(), </span><span class="mtk12">work</span><span class="mtk1">)));</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">if</span><span class="mtk1"> (</span><span class="mtk12">socket</span><span class="mtk1"> == </span><span class="mtk4">null</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">throw</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">NullReferenceException</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">SendWork</span><span class="mtk1">(</span><span class="mtk12">work</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// Master class</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">delegate</span><span class="mtk1"> </span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk10">SelectSocketDecl</span><span class="mtk1">(</span><span class="mtk10">DistributeContext</span><span class="mtk1"> </span><span class="mtk12">context</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">SelectSocketDecl</span><span class="mtk1"> </span><span class="mtk12">_socketSelector</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">DistributeWork</span><span class="mtk1">(</span><span class="mtk10">IWork</span><span class="mtk1"> </span><span class="mtk12">work</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">socket</span><span class="mtk1"> = </span><span class="mtk12">_container</span><span class="mtk1">.</span><span class="mtk11">SelectSocket</span><span class="mtk1">(</span><span class="mtk12">sockets</span><span class="mtk1"> =&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk11">_socketSelector</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DistributeContext</span><span class="mtk1">(</span><span class="mtk12">_container</span><span class="mtk1">, </span><span class="mtk12">sockets</span><span class="mtk1">.</span><span class="mtk11">AsReadOnly</span><span class="mtk1">(), </span><span class="mtk12">work</span><span class="mtk1">)));</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">if</span><span class="mtk1"> (</span><span class="mtk12">socket</span><span class="mtk1"> == </span><span class="mtk4">null</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">throw</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">NullReferenceException</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">socket</span><span class="mtk1">.</span><span class="mtk11">SendWork</span><span class="mtk1">(</span><span class="mtk12">work</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>굉장히 간단한 구조로 분산 시스템을 만들어봤다.</p>
 <ul>
 <li>Master는 Slave의 연결을 기다리고, Slave가 연결되면 각 상태를 적절하게 고려해서 작업을 전달한다.</li>
@@ -150,71 +150,71 @@ Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대�
 </ul>
 <h2>예제</h2>
 <p>소스 코드에 첨부된 간단한 예제 코드를 직접 보면 다음과 같다.</p>
-<pre class="default-dark vscode-highlight" data-language="csharp"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">[</span><span class="mtk10">Serializable</span><span class="mtk1">]</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">SlaveWork</span><span class="mtk1"> : </span><span class="mtk10">IWork</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">endPoint</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">Console</span><span class="mtk1">.</span><span class="mtk11">WriteLine</span><span class="mtk1">(</span><span class="mtk8">&quot;Do my work: &quot;</span><span class="mtk1"> + </span><span class="mtk12">endPoint</span><span class="mtk1">.</span><span class="mtk12">RemoteEndPoint</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">endPoint</span><span class="mtk1">.</span><span class="mtk11">SendWork</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">MasterWork</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">SlaveResult</span><span class="mtk1">(</span><span class="mtk8">&quot;TEST MESSAGE&quot;</span><span class="mtk1">)));</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[</span><span class="mtk10">Serializable</span><span class="mtk1">]</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">SlaveResult</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk4">string</span><span class="mtk1"> </span><span class="mtk12">SlaveGeneratedMessage</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk11">SlaveResult</span><span class="mtk1">(</span><span class="mtk4">string</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">SlaveGeneratedMessage</span><span class="mtk1"> = </span><span class="mtk12">message</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[</span><span class="mtk10">Serializable</span><span class="mtk1">]</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">MasterWork</span><span class="mtk1"> : </span><span class="mtk10">IWork</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">SlaveResult</span><span class="mtk1"> </span><span class="mtk12">_result</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk11">MasterWork</span><span class="mtk1">(</span><span class="mtk10">SlaveResult</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">_result</span><span class="mtk1"> = </span><span class="mtk12">result</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">endPoint</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">Console</span><span class="mtk1">.</span><span class="mtk11">WriteLine</span><span class="mtk1">(</span><span class="mtk8">&quot;Do master work: &quot;</span><span class="mtk1"> + </span><span class="mtk12">endPoint</span><span class="mtk1">.</span><span class="mtk12">RemoteEndPoint</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">Console</span><span class="mtk1">.</span><span class="mtk11">WriteLine</span><span class="mtk1">(</span><span class="mtk8">&quot;Received from slave: &quot;</span><span class="mtk1"> + </span><span class="mtk12">_result</span><span class="mtk1">.</span><span class="mtk12">SlaveGeneratedMessage</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Program</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">static</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Main</span><span class="mtk1">(</span><span class="mtk4">string</span><span class="mtk1">[] </span><span class="mtk12">args</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">master</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Master</span><span class="mtk1">(</span><span class="mtk7">12345</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">Task</span><span class="mtk1">.</span><span class="mtk12">Factory</span><span class="mtk1">.</span><span class="mtk11">StartNew</span><span class="mtk1">(</span><span class="mtk12">master</span><span class="mtk1">.</span><span class="mtk12">Start</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">Thread</span><span class="mtk1">.</span><span class="mtk11">Sleep</span><span class="mtk1">(</span><span class="mtk7">1000</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk4">int</span><span class="mtk1"> </span><span class="mtk12">slaveCount</span><span class="mtk1"> = </span><span class="mtk7">10</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">foreach</span><span class="mtk1"> (</span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">index</span><span class="mtk1"> </span><span class="mtk15">in</span><span class="mtk1"> </span><span class="mtk12">Enumerable</span><span class="mtk1">.</span><span class="mtk11">Range</span><span class="mtk1">(</span><span class="mtk7">0</span><span class="mtk1">, </span><span class="mtk12">slaveCount</span><span class="mtk1">))</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">slave</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Slave</span><span class="mtk1">(</span><span class="mtk8">&quot;127.0.0.1&quot;</span><span class="mtk1">, </span><span class="mtk7">12345</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">Task</span><span class="mtk1">.</span><span class="mtk12">Factory</span><span class="mtk1">.</span><span class="mtk11">StartNew</span><span class="mtk1">(</span><span class="mtk12">slave</span><span class="mtk1">.</span><span class="mtk12">Start</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk12">master</span><span class="mtk1">.</span><span class="mtk12">ConnectedSlaveCount</span><span class="mtk1"> != </span><span class="mtk12">slaveCount</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">Thread</span><span class="mtk1">.</span><span class="mtk11">Sleep</span><span class="mtk1">(</span><span class="mtk7">0</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk8">&quot;Start!&quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">master</span><span class="mtk1">.</span><span class="mtk11">DistributeWork</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">SlaveWork</span><span class="mtk1">());</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">Thread</span><span class="mtk1">.</span><span class="mtk11">Sleep</span><span class="mtk1">(</span><span class="mtk7">1000</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="csharp" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[</span><span class="mtk10">Serializable</span><span class="mtk1">]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">SlaveWork</span><span class="mtk1"> : </span><span class="mtk10">IWork</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">endPoint</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">Console</span><span class="mtk1">.</span><span class="mtk11">WriteLine</span><span class="mtk1">(</span><span class="mtk8">&quot;Do my work: &quot;</span><span class="mtk1"> + </span><span class="mtk12">endPoint</span><span class="mtk1">.</span><span class="mtk12">RemoteEndPoint</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">endPoint</span><span class="mtk1">.</span><span class="mtk11">SendWork</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">MasterWork</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">SlaveResult</span><span class="mtk1">(</span><span class="mtk8">&quot;TEST MESSAGE&quot;</span><span class="mtk1">)));</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[</span><span class="mtk10">Serializable</span><span class="mtk1">]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">SlaveResult</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk4">string</span><span class="mtk1"> </span><span class="mtk12">SlaveGeneratedMessage</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk11">SlaveResult</span><span class="mtk1">(</span><span class="mtk4">string</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">SlaveGeneratedMessage</span><span class="mtk1"> = </span><span class="mtk12">message</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[</span><span class="mtk10">Serializable</span><span class="mtk1">]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">MasterWork</span><span class="mtk1"> : </span><span class="mtk10">IWork</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">SlaveResult</span><span class="mtk1"> </span><span class="mtk12">_result</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk11">MasterWork</span><span class="mtk1">(</span><span class="mtk10">SlaveResult</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">_result</span><span class="mtk1"> = </span><span class="mtk12">result</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Execute</span><span class="mtk1">(</span><span class="mtk10">Socket</span><span class="mtk1"> </span><span class="mtk12">endPoint</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">Console</span><span class="mtk1">.</span><span class="mtk11">WriteLine</span><span class="mtk1">(</span><span class="mtk8">&quot;Do master work: &quot;</span><span class="mtk1"> + </span><span class="mtk12">endPoint</span><span class="mtk1">.</span><span class="mtk12">RemoteEndPoint</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">Console</span><span class="mtk1">.</span><span class="mtk11">WriteLine</span><span class="mtk1">(</span><span class="mtk8">&quot;Received from slave: &quot;</span><span class="mtk1"> + </span><span class="mtk12">_result</span><span class="mtk1">.</span><span class="mtk12">SlaveGeneratedMessage</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">internal</span><span class="mtk1"> </span><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Program</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">static</span><span class="mtk1"> </span><span class="mtk4">void</span><span class="mtk1"> </span><span class="mtk11">Main</span><span class="mtk1">(</span><span class="mtk4">string</span><span class="mtk1">[] </span><span class="mtk12">args</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">master</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Master</span><span class="mtk1">(</span><span class="mtk7">12345</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">Task</span><span class="mtk1">.</span><span class="mtk12">Factory</span><span class="mtk1">.</span><span class="mtk11">StartNew</span><span class="mtk1">(</span><span class="mtk12">master</span><span class="mtk1">.</span><span class="mtk12">Start</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">Thread</span><span class="mtk1">.</span><span class="mtk11">Sleep</span><span class="mtk1">(</span><span class="mtk7">1000</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk4">int</span><span class="mtk1"> </span><span class="mtk12">slaveCount</span><span class="mtk1"> = </span><span class="mtk7">10</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">foreach</span><span class="mtk1"> (</span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">index</span><span class="mtk1"> </span><span class="mtk15">in</span><span class="mtk1"> </span><span class="mtk12">Enumerable</span><span class="mtk1">.</span><span class="mtk11">Range</span><span class="mtk1">(</span><span class="mtk7">0</span><span class="mtk1">, </span><span class="mtk12">slaveCount</span><span class="mtk1">))</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">var</span><span class="mtk1"> </span><span class="mtk12">slave</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Slave</span><span class="mtk1">(</span><span class="mtk8">&quot;127.0.0.1&quot;</span><span class="mtk1">, </span><span class="mtk7">12345</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">Task</span><span class="mtk1">.</span><span class="mtk12">Factory</span><span class="mtk1">.</span><span class="mtk11">StartNew</span><span class="mtk1">(</span><span class="mtk12">slave</span><span class="mtk1">.</span><span class="mtk12">Start</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk12">master</span><span class="mtk1">.</span><span class="mtk12">ConnectedSlaveCount</span><span class="mtk1"> != </span><span class="mtk12">slaveCount</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">Thread</span><span class="mtk1">.</span><span class="mtk11">Sleep</span><span class="mtk1">(</span><span class="mtk7">0</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">Logger</span><span class="mtk1">.</span><span class="mtk11">Write</span><span class="mtk1">(</span><span class="mtk8">&quot;Start!&quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk4">true</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">master</span><span class="mtk1">.</span><span class="mtk11">DistributeWork</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">SlaveWork</span><span class="mtk1">());</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">Thread</span><span class="mtk1">.</span><span class="mtk11">Sleep</span><span class="mtk1">(</span><span class="mtk7">1000</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <ol>
 <li><code>Master</code>를 시작하고, <code>Slave</code>를 10개 만들어서 <code>Master</code>에 연결한다.</li>
 <li><code>Master</code>는 <code>SlaveWork</code> 객체를 만들어서 적절히 <code>Slave</code>에게 넘겨준다. 기본 알고리즘은 RoundRobin이므로 첫 번째 <code>Slave</code>부터 차례대로 일을 받게 된다.</li>
@@ -232,76 +232,110 @@ Github: DistWork - simplest 지난 번 글에서는 분산 처리 환경에 대�
 <li>RpcWork와 WorkGroup 설계를 추가하여 보다 간편한 분산 작업을</li>
 </ul>
 <p>작성할 수 있도록 고민해보자.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2013/04/22/simple-distributed-system-implementation-1/">&lt; 분산 처리 환경 구현 1</a><a style="float:right" href="/2013/05/19/how-much-faster-is-cpp-than-c-sharp/">How much faster is C++ than C#? &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2013/05/07/simple-distributed-system-implementation-2/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2013/04/22/simple-distributed-system-implementation-1/">&lt; 분산 처리 환경 구현 1</a><a style="float:right" href="/2013/05/19/how-much-faster-is-cpp-than-c-sharp/">How much faster is C++ than C#? &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2013/05/07/simple-distributed-system-implementation-2/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

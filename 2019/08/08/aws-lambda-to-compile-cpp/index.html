@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2019/08/08/aws-lambda-to-compile-cpp/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS Lambda로 cpp 파일 컴파일</title><meta data-react-helmet="true" name="description" content="Lambda에서 cpp 파일을 컴파일해보자.
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2019/08/08/aws-lambda-to-compile-cpp/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS Lambda로 cpp 파일 컴파일</title><meta data-react-helmet="true" name="description" content="Lambda에서 cpp 파일을 컴파일해보자.
 …"/><meta data-react-helmet="true" name="keywords" content="aws, serverless, lambda"/><meta data-react-helmet="true" name="og:title" content="AWS Lambda로 cpp 파일 컴파일"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="Lambda에서 cpp 파일을 컴파일해보자.
-…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/08/aws-lambda-to-compile-cpp/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>AWS Lambda로 cpp 파일 컴파일</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">August 08, 2019</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/lambda/">lambda</a></div></div><div><p>프로그래밍 동아리에 있던 대학교 시절, 으레 남들 하는 것처럼 동아리 내 문제풀이 채점 서버를 만든다고 나섰던 적이 있다. 그 당시 내가 알고 있는 지식을 최대한 사용해서 만들었지만 잘못된 가정과 부족한 지식으로 인해 서버는 금새 응답 불가 상태가 되었고 덕분에 운영을 맡았던 친구들이 제출된 코드를 손으로 채점해서 결과를 알려주는 슬픈 일이 발생했었다. 잘못 가정한 것은, 어찌보면 너무나 당연한 잘못인데, “컴파일과 실행/채점이 충분히 빨리 끝난다” 는 것이었다. 당시 채점 서버를 하나만 두었기 때문에 이 가정을 조금이라도 어기는 좋지 않은 코드가 제출되면 다른 사람들의 제출조차 막혀버리는 문제가 발생했던 것이다.</p>
+…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/08/aws-lambda-to-compile-cpp/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>AWS Lambda로 cpp 파일 컴파일</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">August 08, 2019</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/lambda/">lambda</a></div></div><div><p>프로그래밍 동아리에 있던 대학교 시절, 으레 남들 하는 것처럼 동아리 내 문제풀이 채점 서버를 만든다고 나섰던 적이 있다. 그 당시 내가 알고 있는 지식을 최대한 사용해서 만들었지만 잘못된 가정과 부족한 지식으로 인해 서버는 금새 응답 불가 상태가 되었고 덕분에 운영을 맡았던 친구들이 제출된 코드를 손으로 채점해서 결과를 알려주는 슬픈 일이 발생했었다. 잘못 가정한 것은, 어찌보면 너무나 당연한 잘못인데, “컴파일과 실행/채점이 충분히 빨리 끝난다” 는 것이었다. 당시 채점 서버를 하나만 두었기 때문에 이 가정을 조금이라도 어기는 좋지 않은 코드가 제출되면 다른 사람들의 제출조차 막혀버리는 문제가 발생했던 것이다.</p>
 <p><a href="https://startlink.blog/category/%EC%8A%A4%ED%83%80%ED%8A%B8%EB%A7%81%ED%81%AC/baekjoon-online-judge/boj-10-years/">백준 온라인의 저지의 10년 개발 이야기</a> 글에 나와있는 구조처럼, 적어도 queue를 두어 시스템을 분리하고 throttling을 할 수 있어야 하고, 서버가 분산될 수 있으므로 적절한 storage를 두어 state를 공유할 수 있어야 하겠다. 어쨌든 이것저것 좀 많이 경험해본 지금이야 좀 더 나은 구조로 서비스를 구축할 수 있을 것 같은데 그럴 기회도 명분도 다시오지 않아 가끔 이 주제가 생각날 때마다 씁쓸함이 있다.</p>
 <p>하지만 최근 잉여하면서 남는게 시간이고, 절제된 요금의 서버리스 영업을 한창 하는 중이니, <code>queue + storage + worker-pool</code>의 정상적인 방법 말고, 서버리스로 이 구조를 설계해보고 그 중 핵심(?)에 속하는 컴파일 부분을 AWS Lambda를 통해 실행하는 방법을 정리해보도록 하겠다. 물론 서버리스는 AWS의 것을 쓸 것이다.</p>
 <h3>채점 시스템 구조</h3>
@@ -37,16 +37,16 @@
 <li>데이터 파일들도 상대 경로로 잘 찾아질 수 있도록 구성해야 한다: 만약 배포하려는 프로그램이 무조건 절대 경로를 사용한다면 문제가 크다. Lambda에서 writable한 storage는 오로지 <code>/tmp</code> 뿐이기 때문이다.</li>
 </ul>
 <p>이렇게 만들어진 외부 런타임 파일이 AWS Lambda 환경에서도 정상적으로 실행 가능한지 확인해보려면 <a href="https://hub.docker.com/_/amazonlinux">amazonlinux</a>을 사용하면 된다. 예를 들어 <a href="https://www.musl-libc.org"><code>musl-gcc</code></a>를 확인해보고 싶다면 미리 <a href="https://musl.cc"><code>x86_64-linux-musl-native.tgz</code></a>를 받아 압축을 풀고 다음과 같이 확인해 볼 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ docker run -it -v </span><span class="mtk12">$PWD</span><span class="mtk1">/x86_64-linux-musl-native:/opt amazonlinux:2 /bin/sh</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ cat &gt; hello.c &lt;&lt; EOF</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">#include &lt;stdio.h&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">int main(int argc, char **argv)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{ printf(</span><span class="mtk8">&quot;hello %d\n&quot;</span><span class="mtk1">, argc); }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">EOF</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ musl-gcc -static -Os hello.c</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ ./a.out</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">hello 1</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ docker run -it -v </span><span class="mtk12">$PWD</span><span class="mtk1">/x86_64-linux-musl-native:/opt amazonlinux:2 /bin/sh</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ cat &gt; hello.c &lt;&lt; EOF</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">#include &lt;stdio.h&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">int main(int argc, char **argv)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{ printf(</span><span class="mtk8">&quot;hello %d\n&quot;</span><span class="mtk1">, argc); }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">EOF</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ musl-gcc -static -Os hello.c</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ ./a.out</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">hello 1</span></span></span></code></pre>
 <p>만약 무언가 에러가 발생한다면</p>
 <ul>
 <li>경로가 잘못되었거나</li>
@@ -72,8 +72,8 @@
 <p>용량처럼 구체적인 제약은 문제가 발생할 때 눈치채기 쉬운 편이다. 정확히 명시되지 않은 제약 조건으로 인해 문제를 로컬의 <code>amazonlinux</code> 테스트는 문제 없었는데 <code>Lambda</code>에 올린 이후에 실행이 되지 않을 수 있다. <code>amazonlinux</code>는 docker image로 제공되는 것이므로 Lambda의 몇 가지 플랫폼 이슈를 사전에 확인할 수 없는 문제가 있는데 예를 들어 대표적으로 <a href="https://forums.aws.amazon.com/thread.jspa?threadID=219962"><code>/dev/shm</code>을 사용할 수 없는</a> 문제가 있다. 이 때문에 로컬 테스트를 하고 나서도 반드시 간단한 Lambda를 만들어 배포해서 실제 환경에서도 정상 동작하는지 확인해야 한다. 모든 시스템을 다 구성한 후에 외부 런타임이 제대로 실행될 수 없다는 것을 깨달으면 너무나도 슬프다.</p>
 <h3>musl-gcc</h3>
 <p>cpp 파일을 컴파일하기 위해 제일 먼저 생각해볼 수 있는 것은 <code>gcc</code>일 것이다. 하지만 이는 용량이 너무 크기 때문에 Lambda에 올리기는 어려워 보인다. 필요한 파일만 <code>inotifywait</code> 등으로 추려서 올리는 것도 방법이겠지만 다행히 그보다는 좀 더 쉬운 방법이 있다. golang에서 주로 사용한다고 알려진 <a href="https://www.musl-libc.org"><code>musl-gcc</code></a>를 이용하는 것이다. 게다가 이 툴은 <a href="https://musl.cc">커뮤니티에서</a> <a href="https://musl.cc/x86_64-linux-musl-native.tgz">package로 잘 구성된 170MB의 cc toolset</a>을 제공하므로 따로 static build를 만든다고 고생할 필요가 없다. 물론 그래도 잘 동작하는지 위에서 이야기한 것처럼 <code>amazonlinux</code> docker container를 하나 띄워서 사용해보면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ docker run -it -v </span><span class="mtk12">$PWD</span><span class="mtk1">/x86_64-linux-musl-native:/opt amazonlinux:2 /bin/sh</span></span>
-<span class="vscode-highlight-line"><span class="mtk3"># ... 동일한 내용 생략 ...</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ docker run -it -v </span><span class="mtk12">$PWD</span><span class="mtk1">/x86_64-linux-musl-native:/opt amazonlinux:2 /bin/sh</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># ... 동일한 내용 생략 ...</span></span></span></code></pre>
 <p>이 글을 쓰는 당시 <code>x86_64-linux-musl-native.tgz</code> 내의 <code>lib/libc.so</code>의 symlink가 잘못 만들어져 static build가 아닐 경우 <code>libc</code>를 찾지 못해서 실행이 안 되는 문제가 있었다. 이 위치를 제대로 수정해주면 굳이 static build를 수행하지 않아도 되겠지만 설명의 단계를 줄이기 위해서 이 글에서는 Lambda 내에서 빌드를 할 때에는 계속 static build를 가정하도록 하겠다.</p>
 <h3>초기 기동 시간 고찰</h3>
 <p>그럼 이 파일을 Lambda로 배포해서 사용하려면 어떻게 해야 할까?</p>
@@ -155,52 +155,52 @@ d. c)의 방법과 비슷하지만 <code>/var/task</code>에 풀린 <code>musl-g
 <p>각 실험에서 사용한 모든 코드를 예쁘게 정리해두지는 않았지만 <a href="https://github.com/lacti/serverless-single-cpp-compiler">이곳에서 전체 코드를 확인할 수 있다.</a> 나름 유의미했던 b), d) 두 개의 실험만 좀 자세히 보자.</p>
 <h4>압축 풀어 사용하는 방법 (b)</h4>
 <p>먼저 압축 파일을 Serverless framework의 deploy 과정에서 같이 포함할 수 있도록 설정해준다. Python이나 Webpack을 사용하지 않는 NodeJS의 경우 <code>serverless.yml</code>의 <code>package.include</code>를 사용하면 되겠지만 Webpack을 사용하는 경우 다음과 같이 <code>CopyWebpackPlugin</code>을 사용하도록 <code>webpack.config.js</code> 파일을 수정한다.</p>
-<pre class="default-dark vscode-highlight" data-language="javascript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">CopyWebpackPlugin</span><span class="mtk1"> = </span><span class="mtk11">require</span><span class="mtk1">(</span><span class="mtk8">&quot;copy-webpack-plugin&quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk10">module</span><span class="mtk1">.</span><span class="mtk10">exports</span><span class="mtk1"> = {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk3">// ...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">plugins:</span><span class="mtk1"> [</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">CopyWebpackPlugin</span><span class="mtk1">([</span><span class="mtk8">&quot;x86_64-linux-musl-native.tgz&quot;</span><span class="mtk1">])]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk3">// ...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="javascript" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">CopyWebpackPlugin</span><span class="mtk1"> = </span><span class="mtk11">require</span><span class="mtk1">(</span><span class="mtk8">&quot;copy-webpack-plugin&quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk10">module</span><span class="mtk1">.</span><span class="mtk10">exports</span><span class="mtk1"> = {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk3">// ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">plugins:</span><span class="mtk1"> [</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">CopyWebpackPlugin</span><span class="mtk1">([</span><span class="mtk8">&quot;x86_64-linux-musl-native.tgz&quot;</span><span class="mtk1">])]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk3">// ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p>그리고 handler가 시작될 때 다음과 같이 <code>/tmp</code> 밑에 적당한 디렉토리를 하나 만들고 압축을 풀어둔다. 만약 Lambda instance 재사용 등에 의해 이미 <code>/tmp</code> 내의 그 디렉토리가 존재한다면 굳이 다시 압축을 풀지는 않는다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">tmpDir</span><span class="mtk1"> = </span><span class="mtk12">os</span><span class="mtk1">.</span><span class="mtk11">tmpdir</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">ccVersion</span><span class="mtk1"> = </span><span class="mtk8">&quot;x86_64-linux-musl-native&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">ccPath</span><span class="mtk1"> = </span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">tmpDir</span><span class="mtk1">, </span><span class="mtk12">ccVersion</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">existsSync</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">)) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;((</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">reject</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">decompress</span><span class="mtk1">(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">src:</span><span class="mtk1"> </span><span class="mtk8">&#96;</span><span class="mtk4">${</span><span class="mtk12">ccVersion</span><span class="mtk4">}</span><span class="mtk8">.tgz&#96;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">dest:</span><span class="mtk1"> </span><span class="mtk12">tmpDir</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      },</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">error</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1"> ? </span><span class="mtk11">reject</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">) : </span><span class="mtk11">resolve</span><span class="mtk1">())</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    )</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  );</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">tmpDir</span><span class="mtk1"> = </span><span class="mtk12">os</span><span class="mtk1">.</span><span class="mtk11">tmpdir</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">ccVersion</span><span class="mtk1"> = </span><span class="mtk8">&quot;x86_64-linux-musl-native&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">ccPath</span><span class="mtk1"> = </span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">tmpDir</span><span class="mtk1">, </span><span class="mtk12">ccVersion</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">existsSync</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">)) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;((</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">reject</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">decompress</span><span class="mtk1">(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">src:</span><span class="mtk1"> </span><span class="mtk8">`</span><span class="mtk4">${</span><span class="mtk12">ccVersion</span><span class="mtk4">}</span><span class="mtk8">.tgz`</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">dest:</span><span class="mtk1"> </span><span class="mtk12">tmpDir</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">error</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1"> ? </span><span class="mtk11">reject</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">) : </span><span class="mtk11">resolve</span><span class="mtk1">())</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    )</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  );</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>그리고 <code>event.body</code>로부터 소스 코드를 받아서 이 <code>musl-gcc</code>로 빌드하도록 코드를 작성해준다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">extern</span><span class="mtk1"> = (</span><span class="mtk12">file</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">string</span><span class="mtk1">[]) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;{</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">stdout</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1"> | </span><span class="mtk10">Buffer</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">stderr</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1"> | </span><span class="mtk10">Buffer</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }&gt;((</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">reject</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">execFile</span><span class="mtk1">(</span><span class="mtk12">file</span><span class="mtk1">, </span><span class="mtk12">args</span><span class="mtk1">, { </span><span class="mtk12">encoding:</span><span class="mtk1"> </span><span class="mtk8">&quot;utf-8&quot;</span><span class="mtk1"> }, (</span><span class="mtk12">error</span><span class="mtk1">, </span><span class="mtk12">stdout</span><span class="mtk1">, </span><span class="mtk12">stderr</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">error</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        ? </span><span class="mtk11">reject</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        : </span><span class="mtk11">resolve</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">stdout</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk12">stderr</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    )</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  );</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">compile</span><span class="mtk1"> = (</span><span class="mtk12">sourceFile</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">executeFile</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">extern</span><span class="mtk1">(</span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">, </span><span class="mtk8">&#96;bin&#96;</span><span class="mtk1">, </span><span class="mtk8">&#96;g++&#96;</span><span class="mtk1">), [</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk8">&quot;-static&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk8">&quot;-O3&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">sourceFile</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk8">&quot;-o&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">executeFile</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  ]);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">extern</span><span class="mtk1"> = (</span><span class="mtk12">file</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk4">readonly</span><span class="mtk1"> </span><span class="mtk10">string</span><span class="mtk1">[]) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">stdout</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1"> | </span><span class="mtk10">Buffer</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">stderr</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1"> | </span><span class="mtk10">Buffer</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }&gt;((</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">reject</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">execFile</span><span class="mtk1">(</span><span class="mtk12">file</span><span class="mtk1">, </span><span class="mtk12">args</span><span class="mtk1">, { </span><span class="mtk12">encoding:</span><span class="mtk1"> </span><span class="mtk8">&quot;utf-8&quot;</span><span class="mtk1"> }, (</span><span class="mtk12">error</span><span class="mtk1">, </span><span class="mtk12">stdout</span><span class="mtk1">, </span><span class="mtk12">stderr</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">error</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        ? </span><span class="mtk11">reject</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        : </span><span class="mtk11">resolve</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">stdout</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk12">stderr</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    )</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  );</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">compile</span><span class="mtk1"> = (</span><span class="mtk12">sourceFile</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">executeFile</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">extern</span><span class="mtk1">(</span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">, </span><span class="mtk8">`bin`</span><span class="mtk1">, </span><span class="mtk8">`g++`</span><span class="mtk1">), [</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk8">&quot;-static&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk8">&quot;-O3&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">sourceFile</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk8">&quot;-o&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">executeFile</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  ]);</span></span></span></code></pre>
 <p>물론 <code>sourceFile</code>과 <code>executeFile</code>은 모두 writable storage인 <code>/tmp</code> 밑에서 생성될 것이다. 실행해서 결과를 가져오는 부분은 <code>extern</code> 함수를 <code>executeFile</code>에 대해 사용하면 될 것이다.</p>
 <p>어쨌든 조심해야 할 것은, 이렇게 임시로 만들어 놓은 파일들은 Lambda instance 재사용에 의해 다음 요청 때에도 여전히 남아있을 수 있고, 이로 인해 가용 용량이 점차 소진될 수 있으므로 반드시 이런 임시 파일은 꼭 깨끗하게 정리를 해주어야 한다는 것이다. 물론 Lambda instance가 timeout 등 uncaught error에 의해 중단될 수도 있으므로 이는 단순히 <code>try-finally</code>에 의해 지우는 것이 아니라 아예 위치를 지정해놓고 작업을 수행하기 전에도 쓰레기가 있는지 검사해서 치우고 진행할 수 있도록 해야 의도치 않은 문제 없이 시스템을 잘 사용할 수 있을 것이다.</p>
 <h4>Lambda와 같이 배포해서 복사 (d)</h4>
@@ -214,40 +214,40 @@ d. c)의 방법과 비슷하지만 <code>/var/task</code>에 풀린 <code>musl-g
 </ul>
 <p>이 과정은 <a href="https://github.com/lacti/serverless-single-cpp-compiler/blob/master/.postinstall.sh">.postinstall.sh</a> 에 자세히 나와있다. <code>include</code> 디렉토리를 저렇게 만드는 이유는 조금이라도 파일 수를 줄이기 위함인데 이는 잠시 후 다시 자세히 이야기하겠다.</p>
 <p>이제 준비된 <code>cc</code> 디렉토리를 배포에 포함할 수 있도록 <code>webpack.config.js</code> 파일을 수정한다.</p>
-<pre class="default-dark vscode-highlight" data-language="javascript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">CopyWebpackPlugin</span><span class="mtk1"> = </span><span class="mtk11">require</span><span class="mtk1">(</span><span class="mtk8">&quot;copy-webpack-plugin&quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk10">module</span><span class="mtk1">.</span><span class="mtk10">exports</span><span class="mtk1"> = {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk3">// ...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">plugins:</span><span class="mtk1"> [</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">CopyWebpackPlugin</span><span class="mtk1">([{ </span><span class="mtk12">from:</span><span class="mtk1"> </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1">, </span><span class="mtk12">to:</span><span class="mtk1"> </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1"> }])]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk3">// ...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="javascript" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">CopyWebpackPlugin</span><span class="mtk1"> = </span><span class="mtk11">require</span><span class="mtk1">(</span><span class="mtk8">&quot;copy-webpack-plugin&quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk10">module</span><span class="mtk1">.</span><span class="mtk10">exports</span><span class="mtk1"> = {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk3">// ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">plugins:</span><span class="mtk1"> [</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">CopyWebpackPlugin</span><span class="mtk1">([{ </span><span class="mtk12">from:</span><span class="mtk1"> </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1">, </span><span class="mtk12">to:</span><span class="mtk1"> </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1"> }])]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk3">// ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p>이제 handler가 시작될 때 이 파일을 <code>/tmp/cc</code>에 복사해주자. 그리고 필요한 파일들에게 실행 권한을 주어야 하는데 이 목록은 간단히 <code>cc</code> 디렉토리에서 <code>find . -type f -executable</code> 등으로 쉽게 가져올 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">ccPath</span><span class="mtk1"> = </span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">tmpDir</span><span class="mtk1">, </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">existsSync</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">)) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">copySync</span><span class="mtk1">(</span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1">, </span><span class="mtk12">ccPath</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">exe</span><span class="mtk1"> </span><span class="mtk4">of</span><span class="mtk1"> </span><span class="mtk12">exes</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">chmodSync</span><span class="mtk1">(</span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">, </span><span class="mtk12">exe</span><span class="mtk1">), </span><span class="mtk8">&quot;755&quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">&#96;Cannot give a permission&#96;</span><span class="mtk1">, </span><span class="mtk12">error</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">ccPath</span><span class="mtk1"> = </span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">tmpDir</span><span class="mtk1">, </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">existsSync</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">)) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">copySync</span><span class="mtk1">(</span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1">, </span><span class="mtk12">ccPath</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">exe</span><span class="mtk1"> </span><span class="mtk4">of</span><span class="mtk1"> </span><span class="mtk12">exes</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">fs</span><span class="mtk1">.</span><span class="mtk11">chmodSync</span><span class="mtk1">(</span><span class="mtk12">path</span><span class="mtk1">.</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk12">ccPath</span><span class="mtk1">, </span><span class="mtk12">exe</span><span class="mtk1">), </span><span class="mtk8">&quot;755&quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">`Cannot give a permission`</span><span class="mtk1">, </span><span class="mtk12">error</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>이제 <code>musl-gcc</code>가 준비되었으므로 아까 봤던 코드와 동일한 방법으로 <code>event.body</code>로 전달된 코드를 컴파일하고 실행해볼 수 있겠다.</p>
 <p>압축 해제에 비해 computing power를 사용할 일이 줄었기 때문에 생각보다 시작 시간이 꽤 단출되었다. 하지만 꽤 많은 수의 파일을 써야 한다는 점은 여전하기 때문에 만약 실행 시간을 더 줄이려면 정말 필요한 파일만 추려서 올리는 것이 더 좋다.</p>
 <p>하지만 <code>musl-gcc</code>의 파일 구조를 잘 모르기 때문에, 그리고 워낙 파일이 많기 때문에 이걸 한땀한땀 추리는 것은 꽤나 어려운, 혹은 불가능한 일일 것이다. 때문에 조금의 위험 부담을 감수하면서 좀 더 편리한 방법을 사용해보자.</p>
 <p>이 때 사용할 수 있는 것이 바로 <code>inotifywait</code> 툴이다. Ubuntu의 경우 <code>inotify-tools</code> package를 통해 설치할 수 있다. 이 툴은 파일 시스템의 이벤트를 감지하는 것으로 이걸 켜놓고 gcc를 수행하면 내게 필요한 파일만 딱 확인할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ inotifywait \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  -m </span><span class="mtk6">\ </span><span class="mtk1">                  </span><span class="mtk3"># Watch multiple events</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  -e access </span><span class="mtk6">\ </span><span class="mtk1">           </span><span class="mtk3"># Listen access event only</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  -o dependencies.log </span><span class="mtk6">\ </span><span class="mtk1"> </span><span class="mtk3"># Write this result to &quot;dependencies.log&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  --format </span><span class="mtk8">&quot;%w%f&quot;</span><span class="mtk1"> </span><span class="mtk6">\ </span><span class="mtk1">     </span><span class="mtk3"># Watch files only</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  -r </span><span class="mtk6">\ </span><span class="mtk1">                  </span><span class="mtk3"># Watch recursively</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1"> &amp;                 </span><span class="mtk3"># Watch &quot;cc&quot; directory</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ ./cc/bin/g++ hello.cpp -o hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ </span><span class="mtk11">kill</span><span class="mtk1"> %1</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ sort -u depenencies.log | less</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ inotifywait \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -m </span><span class="mtk6">\ </span><span class="mtk1">                  </span><span class="mtk3"># Watch multiple events</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -e access </span><span class="mtk6">\ </span><span class="mtk1">           </span><span class="mtk3"># Listen access event only</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -o dependencies.log </span><span class="mtk6">\ </span><span class="mtk1"> </span><span class="mtk3"># Write this result to &quot;dependencies.log&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  --format </span><span class="mtk8">&quot;%w%f&quot;</span><span class="mtk1"> </span><span class="mtk6">\ </span><span class="mtk1">     </span><span class="mtk3"># Watch files only</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -r </span><span class="mtk6">\ </span><span class="mtk1">                  </span><span class="mtk3"># Watch recursively</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk8">&quot;cc&quot;</span><span class="mtk1"> &amp;                 </span><span class="mtk3"># Watch &quot;cc&quot; directory</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ ./cc/bin/g++ hello.cpp -o hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ </span><span class="mtk11">kill</span><span class="mtk1"> %1</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sort -u depenencies.log | less</span></span></span></code></pre>
 <p>이렇게 딱 필요한 파일만 잘 추리면 원래 <code>musl-gcc</code> 파일들에 비해 반 이상 줄일 수 있으므로 초기 기동 시간을 확실히 줄일 수 있다. 물론 대부분의 파일들은 header고 그에 비해 executable은 많지 않기 때문에 약간의 관대함을 보여 executable은 모두 올리는 것도 방법이겠다. 물론 어떤 header가 언제 불릴지 모르는 점도 조금은 불안하지만, <em>대회 채점 서버를 만든다</em> 는 도메인으로 다시 돌아와본다면 사용할만한 header를 모두 포함하는 간단한 cpp 파일을 하나 작성해서 빌드하는 동안 얻어낸 결과만 추리는 것도 좋은 방법이라고 생각한다.</p>
 <p>물론 이렇게까지 구성한 후에도 혹시나 싶어 단순 파일 복사 밖에 없는 이 실험에서도 Lambda의 <code>memorySize</code>를 늘려봤다. <code>1G</code>에서 <code>2G</code>로 늘렸고, 두 경우 모두 <code>memoryConsumption</code>이 <code>200MB</code> 수준인데도 <code>2G</code>인 경우에 초기 기동 시간이 단축되는 것을 확인했다(…) Undocumented의 영역이지만 참으로 알 수 없는 내용이 많다.</p>
 <h3>정리</h3>
@@ -258,76 +258,110 @@ d. c)의 방법과 비슷하지만 <code>/var/task</code>에 풀린 <code>musl-g
 <li>그리고 초기 기동 시간이 너무 느려 곤란할 경우 필요한 파일만 잘 추려서 올릴 수 있도록 하고, 가급적이면 모든 것을 <code>/tmp</code>에 다 올려서 사용하는 것보다 <code>/var/task</code>도 적절히 사용해주는 것이 효율을 더 좋게 할 수 있겠다.</li>
 <li>마지막으로 이유는 모르겠지만 <code>memorySize</code>에 의해 초기 기동 시간이 달라지는 경우가 있으므로 이 값도 적절히 바꿔가며 실험해보자.</li>
 </ul>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2019/08/01/api-gateway-custom-authorizer/">&lt; API Gateway의 인증을 위한 Custom Authroizer 사용하기</a><a style="float:right" href="/2019/08/12/set-timeout-on-aws-lambda/">AWS Lambda에서의 setTimeout &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/08/aws-lambda-to-compile-cpp/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk6 { color: #D7BA7D; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2019/08/01/api-gateway-custom-authorizer/">&lt; API Gateway의 인증을 위한 Custom Authroizer 사용하기</a><a style="float:right" href="/2019/08/12/set-timeout-on-aws-lambda/">AWS Lambda에서의 setTimeout &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/08/aws-lambda-to-compile-cpp/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

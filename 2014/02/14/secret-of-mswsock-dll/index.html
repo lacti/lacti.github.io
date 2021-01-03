@@ -1,8 +1,8 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2014/02/14/secret-of-mswsock-dll/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">mswsock.dll의 비밀</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2014/02/14/secret-of-mswsock-dll/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">mswsock.dll의 비밀</title><meta data-react-helmet="true" name="description" content="
 최근 회사에서 c#으로 네트워크 프로그래밍을 하고 있다. 일은 아니고 그냥 개인의 취향
 나름 c#도 속도가 괜찮다는 것을 보여주려고 시작을 했는데, 진행하면서 점점 보이는 결과는 영 좋지 않다. 서버 과부하 테스트 프로그램을 c#으로 porting…"/><meta data-react-helmet="true" name="keywords" content="optimization, network, c#"/><meta data-react-helmet="true" name="og:title" content="mswsock.dll의 비밀"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
 최근 회사에서 c#으로 네트워크 프로그래밍을 하고 있다. 일은 아니고 그냥 개인의 취향
-나름 c#도 속도가 괜찮다는 것을 보여주려고 시작을 했는데, 진행하면서 점점 보이는 결과는 영 좋지 않다. 서버 과부하 테스트 프로그램을 c#으로 porting…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2014/02/14/secret-of-mswsock-dll/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>mswsock.dll의 비밀</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">February 14, 2014</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/optimization/">optimization</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/network/">network</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/csharp/">c#</a></div></div><div><p>최근 회사에서 c#으로 네트워크 프로그래밍을 하고 있다. 일은 아니고 그냥 개인의 취향
+나름 c#도 속도가 괜찮다는 것을 보여주려고 시작을 했는데, 진행하면서 점점 보이는 결과는 영 좋지 않다. 서버 과부하 테스트 프로그램을 c#으로 porting…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2014/02/14/secret-of-mswsock-dll/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>mswsock.dll의 비밀</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">February 14, 2014</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/optimization/">optimization</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/network/">network</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/csharp/">c#</a></div></div><div><p>최근 회사에서 c#으로 네트워크 프로그래밍을 하고 있다. 일은 아니고 그냥 개인의 취향
 나름 c#도 속도가 괜찮다는 것을 보여주려고 시작을 했는데, 진행하면서 점점 보이는 결과는 영 좋지 않다.</p>
 <p>서버 과부하 테스트 프로그램을 c#으로 porting했다. 정말 과부하 테스트를 하려면 c++로 작성해야 맞지만 테스트 로직까지 c++로 작성하면 골치가 아프니 core는 c++, logic은 c#으로 작성하는 방법을 고민하면서 porting을 하고 있다. 하지만 그 전에 귀찮으니 일단 network core도 c#으로 작성했고 이 때 c# async io와 async/await을 대충 섞어서 작성했다.</p>
 <p><strong>정말 대충 짰더니 정말 성능이 대충 나온다(…)</strong>
@@ -10,20 +10,20 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
 <p>.net <code>Socket</code>의 <code>BeginReceive</code>, <code>EndReceive</code> 함수를 사용하면 내부에서 pinvoke로 <code>WSARecv</code> 함수를 부르게 된다. <code>WSARecv</code> 함수는 <code>ws2_32.dll</code>에 정의된 함수로 얼핏보기에는 socket 확장 api가 담겨있는 <code>mswsock.dll</code>이 부를 필요가 없어 보인다. 이를 정확히 확인하기 위해 ms symbol server에서 clr 관련 symbol을 받고 다시 profiler를 돌려보았다.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 766px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 766px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 34.98694516971279%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAIAAACHqfpvAAAACXBIWXMAAA7EAAAOwwHaapjcAAABF0lEQVQY0zWQaXaEIBCEvf+1ZlEURYSRRZwAis6SyRlSavKHx+vur6u6MiEk74RS5vF8fT4/7/f3NKdpmq21MU4pLT5EO7jn8z3PSWvtQ0hp9T5obbPrNb/mxfl8aVgrb73SxvuYllUbw1qORXNaeqWsc8v6aHnXyRu6IU7oZpQ2VUVRVEpDn3MxuBHA4FwnZJxm8L3WKIIBAKfofvnAWJtVlJYVJWVFSFmQKs8LbSzm3DhC54Cx9w9mrZAbjFsO5ZqAKcjpBO+XgpRwfsCM8wM2OHq8g2GIR/YHjNUZrZuGcbS1NsBw9LjP/SunHQZ9P4JALKhgqZA3wDVCgNU9rO0dBgcYKyCDIfxRtMNmewtsvzmEWDP2CyN3ZOA3zWxeAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    style="padding-bottom: 35.08771929824561%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAIAAACHqfpvAAAACXBIWXMAAA7EAAAOwwHaapjcAAABC0lEQVQY00WQCY6EIBREuf+12g2xWwVkdRk3sG8xpUwyiZjK57+qUlJWtKQ0ywoh1bz8TDjrFuLl/CilOs54hmism5c1Xl+ltTb2DNd+nLgleVHheb3y96eVg1LaggYA+NN2G7ZCBGCdD9eXC9lzAUfMIQhjb8aarudaWyxxLoCBmKYZet0OaG1vGC4AHjigXdv1pGasZg2ljNK6oqwoK6UNvOd5wfX6RBv09iNgZCQYc2hykzWraI3mWZZDKAU4zMs/7Jz345SSOZf7AXhLtRt8LQprY4ANg8LeDf8lH6DBpmS0F3LABJ74QQQoPKz1aGudw9u5MSX3PU/J+ukdQhRCou1+hm3b2677BfScY3xMEsjnAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="functions"
         title="functions"
-        src="/static/87f8a5582a10c6a5a18de6e6215a7f60/8cc01/mswsock_secret_functions.png"
-        srcset="/static/87f8a5582a10c6a5a18de6e6215a7f60/72d8f/mswsock_secret_functions.png 285w,
-/static/87f8a5582a10c6a5a18de6e6215a7f60/02b5c/mswsock_secret_functions.png 570w,
-/static/87f8a5582a10c6a5a18de6e6215a7f60/8cc01/mswsock_secret_functions.png 766w"
+        src="/static/87f8a5582a10c6a5a18de6e6215a7f60/0af7c/mswsock_secret_functions.png"
+        srcset="/static/87f8a5582a10c6a5a18de6e6215a7f60/5459c/mswsock_secret_functions.png 285w,
+/static/87f8a5582a10c6a5a18de6e6215a7f60/2cee3/mswsock_secret_functions.png 570w,
+/static/87f8a5582a10c6a5a18de6e6215a7f60/0af7c/mswsock_secret_functions.png 766w"
         sizes="(max-width: 766px) 100vw, 766px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -33,21 +33,21 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
 <p>간단히 calling, called를 확인해보자.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 1140px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1140px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 26.141078838174277%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAIAAADKYVtkAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOElEQVQY0y2KTUvCcACH92GCDh0s00CTGVhqYtCpQ5foq0QXg2Zrts2X1F7FuohLbFGZ/ufarJxu7kXn9p9B36NBwXP48Tw/pMd/GcpkqsM/TB0qimWMrLFquXuiudiGarty4hrNtoz/p5sQ7FU5eFIwMMV5m+AhKTjCeJYF2nFLpQSYE51cz6kOvnndPmxKqRcV65gnwCS6VlaESLjcn6OlhbzkKcre0ih0rdXVn2RlGCoPohU1UdUTd8b+w7Qmz3xkx08BPwkCNIfm37dv+0i8ADz423KmvUJxAbq7URQZ2QnSYB5rLREd/xnnI7mtq4+6DCOFruvRPB8pCrGyuHs/QDZJdjHFBNPNEP4YJtgo9dwYWusZ1nvErKab4VMWxdmdUruhwNiFuHYuREq9+OVn8qa/Vxv9AiEsxYotefjKAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    style="padding-bottom: 26.31578947368421%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAIAAADKYVtkAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABPElEQVQY0wExAc7+AM/M09XS2dvZ4NvZ4NvZ4NvZ4NXV3tTU3NTU3NjY4NfY4NfY39fY4NTV3dbU29jX3tva4dva4dva4drZ4QBjr9FfrtJrttlvudtyut10vN6/2OOFvNVytdN8vtyAwN6Bwt+RyeLA1+Bmrctpr9BttNRvtdVyt9d8vdoAMZvNKpjNL5rOMpzPNp7RPKPUstTlTqfQN5zNQqPRRaXTRqbVWa7Ys9PhP5nCOpbBPJjCP5vEQ5zGVafNADCPuymMuy+PvTKSvjaUwDyYw7DQ3j2WwCGIuS2OvTGRvjGRv0WcxrLR30KdxzSWxDmZxj2cyUGfylWq0QBQmbpKl7lTnL1Wnb5an79cocG91d9ho8FLl7pVnL1Yn75Zn8BpqMW+1+JhrM5ZqM1dq85hrtFlr9J0uNdrSsRLn7rQVgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="ws2_32.dll"
         title="ws2_32.dll"
-        src="/static/274bc6a9a48586b9e4c6d84d1bc244dc/69203/mswsock_secret_ws2_32_dll.png"
-        srcset="/static/274bc6a9a48586b9e4c6d84d1bc244dc/72d8f/mswsock_secret_ws2_32_dll.png 285w,
-/static/274bc6a9a48586b9e4c6d84d1bc244dc/02b5c/mswsock_secret_ws2_32_dll.png 570w,
-/static/274bc6a9a48586b9e4c6d84d1bc244dc/69203/mswsock_secret_ws2_32_dll.png 1140w,
-/static/274bc6a9a48586b9e4c6d84d1bc244dc/9b45d/mswsock_secret_ws2_32_dll.png 1205w"
+        src="/static/274bc6a9a48586b9e4c6d84d1bc244dc/267c0/mswsock_secret_ws2_32_dll.png"
+        srcset="/static/274bc6a9a48586b9e4c6d84d1bc244dc/5459c/mswsock_secret_ws2_32_dll.png 285w,
+/static/274bc6a9a48586b9e4c6d84d1bc244dc/2cee3/mswsock_secret_ws2_32_dll.png 570w,
+/static/274bc6a9a48586b9e4c6d84d1bc244dc/267c0/mswsock_secret_ws2_32_dll.png 1140w,
+/static/274bc6a9a48586b9e4c6d84d1bc244dc/e217c/mswsock_secret_ws2_32_dll.png 1205w"
         sizes="(max-width: 1140px) 100vw, 1140px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -55,21 +55,21 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
     </span></p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 1140px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1140px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 26.061615320566194%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAIAAADKYVtkAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABMElEQVQY0yXK60rCYACA4d1MkIrkCWeYFEQYldAldDUairM055xmYpSgfxquCSWJrukc1k5+23Ru3yq6j1bB8+vlRQRuLs4kTV6udegydaiqa2NhuVYa/GMbwFZVawXWpmb/by63I/mBkhmAy4lVmtjlKSRmDr/8IFkNH2t1AdYEWBecjvTJGzD9pGSHepH7PXHeIXkLiV2/bRCij5S2GmroZpG403vg++Re3m3JyTY46mjHXeOsZ1Lql7f67iElf10ONJRwExy0AbJPjgPFUaQ8jhFcvDo5bAq04sQJdrMwDF2xaIWLVrjU7ZxSIIqPUJxF8ddtgkuQ09OWgMQx2pOmglk6kmdQrL9Xeu6J1s4F400/hHM0ij1GMSZVe6FE039O+TJUMEdH80ys0E9WBj/5M8MqzdDOAwAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    style="padding-bottom: 25.964912280701757%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAIAAADKYVtkAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABMklEQVQY0yXK206CYADAcR6mC50dPGOz7Kq5latH6G3U0nQVAZKHDmtueROIuuXKmYiCJYjygSJ81Oo9otp+V//9kTf+XRJkMJkvNegwNDidmvrs1wLAP5YOLCcu1KUBrP/N4XQk3Z4eP6sYb17yFjmEV6ItzD9KHCB6oCzCogjLI7s2+RzqMN1Wsh0N4y18YJGCXRRMxF0Yr5CSh5I3Soq/Movea3X1+6A6id3I8aq69wD2a/pR3aBnXx5q7KLktaLsLSuBa3W3qiIhrOs97wax1wjJRQt8vCKwir1V4Fz5jh/roUQ/TPQTdyNGgSjeRfEeinObZH+bGhzeishqinYnad8JG8w20Fxr5+KJkczYWdOdfAxkWDTXCOeaCeqFloz1NONJ0b4MGzptRPKtONH+AQN8ww9ZK9p8AAAAAElFTkSuQmCC'); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="mswsock.dll"
         title="mswsock.dll"
-        src="/static/8caaedce047ba57837f09a099ac8c1ea/69203/mswsock_secret_mswsock_dll.png"
-        srcset="/static/8caaedce047ba57837f09a099ac8c1ea/72d8f/mswsock_secret_mswsock_dll.png 285w,
-/static/8caaedce047ba57837f09a099ac8c1ea/02b5c/mswsock_secret_mswsock_dll.png 570w,
-/static/8caaedce047ba57837f09a099ac8c1ea/69203/mswsock_secret_mswsock_dll.png 1140w,
-/static/8caaedce047ba57837f09a099ac8c1ea/7c105/mswsock_secret_mswsock_dll.png 1201w"
+        src="/static/8caaedce047ba57837f09a099ac8c1ea/267c0/mswsock_secret_mswsock_dll.png"
+        srcset="/static/8caaedce047ba57837f09a099ac8c1ea/5459c/mswsock_secret_mswsock_dll.png 285w,
+/static/8caaedce047ba57837f09a099ac8c1ea/2cee3/mswsock_secret_mswsock_dll.png 570w,
+/static/8caaedce047ba57837f09a099ac8c1ea/267c0/mswsock_secret_mswsock_dll.png 1140w,
+/static/8caaedce047ba57837f09a099ac8c1ea/610eb/mswsock_secret_mswsock_dll.png 1201w"
         sizes="(max-width: 1140px) 100vw, 1140px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -79,4 +79,94 @@ vs analyze 기능을 통해 확인을 해보면 가장 오래 걸리는 부분�
 다량의 패킷 수신자가 <code>WSARecv</code>를 부르는 과정에서 <code>ws2_32.dll</code>의 함수가 호출된 것은 당연했다. 하지만 그 과정에서 알 수 없는 오류가 발생했고, 그 오류를 처리하기 위해 불린 <code>NtStatusToSocketError()</code> 함수가 <code>mswsock.dll</code>의 <code>NtDeviceIoControlFile()</code> 함수를 불렀던 것이다.</p>
 <p>그렇다면 <code>NtDeviceIoControlFile()</code> 함수는 대체 무엇일까, 그리고 왜 그렇게 느릴까?
 profiling한 결과를 보면 대부분의 exclusive sample의 address가 비슷한 지점을 가리키고 있는 것을 확인할 수 있다. 즉, 특정 지점에서 많이 멈춰있다는 이야기일 것인데, 이 때 cpu 사용량이 꽤 높다는 점을 미루어볼 때 뭔가 busy waiting을 하는 것이 아닐까 추측된다.</p>
-<p>이 부분은 symbol 만으로 확인하기는 어렵고, 직접 disassemble을 해서 확인을 하던가 해야하지만 별로 그러고 싶지는 않고(…) 일단 pinvoke로 직접 iocp를 호출하는 c# 코드를 작성하여 그 부분에서도 여전히 비슷한 문제가 발생하는지 확인을 해봐야겠다.</p></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2014/02/11/fast-message-serialization/">&lt; 빠른 메시지 만들기</a><a style="float:right" href="/2014/02/16/network-offload-error/">네트워크 offload 장애 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2014/02/14/secret-of-mswsock-dll/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+<p>이 부분은 symbol 만으로 확인하기는 어렵고, 직접 disassemble을 해서 확인을 하던가 해야하지만 별로 그러고 싶지는 않고(…) 일단 pinvoke로 직접 iocp를 호출하는 c# 코드를 작성하여 그 부분에서도 여전히 비슷한 문제가 발생하는지 확인을 해봐야겠다.</p>
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2014/02/11/fast-message-serialization/">&lt; 빠른 메시지 만들기</a><a style="float:right" href="/2014/02/16/network-offload-error/">네트워크 offload 장애 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2014/02/14/secret-of-mswsock-dll/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

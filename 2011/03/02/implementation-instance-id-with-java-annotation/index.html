@@ -1,126 +1,157 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2011/03/02/implementation-instance-id-with-java-annotation/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">java annotation을 사용한 InstanceId 구현</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2011/03/02/implementation-instance-id-with-java-annotation/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">java annotation을 사용한 InstanceId 구현</title><meta data-react-helmet="true" name="description" content="
 Java에서 생성하는 Object마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자. Index 발급 Group 관련해서 파일을 하나 작성하여 IndexGeneratingManager…"/><meta data-react-helmet="true" name="keywords" content="java"/><meta data-react-helmet="true" name="og:title" content="java annotation을 사용한 InstanceId 구현"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-Java에서 생성하는 Object마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자. Index 발급 Group 관련해서 파일을 하나 작성하여 IndexGeneratingManager…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2011/03/02/implementation-instance-id-with-java-annotation/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>java annotation을 사용한 InstanceId 구현</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">March 02, 2011</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/java/">java</a></div></div><div><p>Java에서 생성하는 <code>Object</code>마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자.</p>
+Java에서 생성하는 Object마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자. Index 발급 Group 관련해서 파일을 하나 작성하여 IndexGeneratingManager…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2011/03/02/implementation-instance-id-with-java-annotation/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>java annotation을 사용한 InstanceId 구현</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">March 02, 2011</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/java/">java</a></div></div><div><p>Java에서 생성하는 <code>Object</code>마다 InstanceId를 부여하는 방법에 대해 고민해보고 코드를 작성해보자.</p>
 <p>Index 발급 Group 관련해서 파일을 하나 작성하여 <code>IndexGeneratingManager</code>를 구성해서 발급해도 되고, 아니면 발급 받는 시점을 적절히 조절하거나 발급 함수의 인자로 Group할 Class 정보를 넣어줘도 되겠다.<br>
 하지만 본 글에서는 Java 1.5부터 추가된 <code>Annotation</code>을 사용하여 source code에 metadata를 추가하여 문제를 해결하는 방법을 써 보겠다.</p>
 <p>Java의 <code>Annotation</code>은 특정 지점(ElementType: Type, Method, Field, …)에 특정 시점(Retention: Source, Class, Runtime)까지 유지되는 metadata이다.<br>
 <code>@interface keyword</code>로 정의할 수 있고, 지정된 지점에 맞게 class, method, field, parameter 등에 선언될 수 있고, 이는 지정된 시점까지 유지된다.</p>
 <p>위 문제를 해결하기 위해 새로 작성하는 <code>IndexCategory</code>라는 annotation은 index를 발급할 <code>category</code> class를 지정한다.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.ElementType;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.Retention;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.RetentionPolicy;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.Target;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">@</span><span class="mtk10">Target</span><span class="mtk1">(</span><span class="mtk12">ElementType</span><span class="mtk1">.</span><span class="mtk12">TYPE</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">@</span><span class="mtk10">Retention</span><span class="mtk1">(</span><span class="mtk12">RetentionPolicy</span><span class="mtk1">.</span><span class="mtk12">RUNTIME</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> @</span><span class="mtk4">interface</span><span class="mtk1"> </span><span class="mtk10">IndexCategory</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">Class</span><span class="mtk1">&lt;</span><span class="mtk15">?</span><span class="mtk1">&gt; </span><span class="mtk11">category</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.ElementType;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.Retention;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.RetentionPolicy;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">import</span><span class="mtk1"> java.lang.annotation.Target;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">@</span><span class="mtk10">Target</span><span class="mtk1">(</span><span class="mtk12">ElementType</span><span class="mtk1">.</span><span class="mtk12">TYPE</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">@</span><span class="mtk10">Retention</span><span class="mtk1">(</span><span class="mtk12">RetentionPolicy</span><span class="mtk1">.</span><span class="mtk12">RUNTIME</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> @</span><span class="mtk4">interface</span><span class="mtk1"> </span><span class="mtk10">IndexCategory</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">Class</span><span class="mtk1">&lt;</span><span class="mtk15">?</span><span class="mtk1">&gt; </span><span class="mtk11">category</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>이 annotation은 <code>Type</code>에 선언될 수 있는데, 여기서 <code>Type</code>은 <code>class</code>를 뜻한다.<br>
 또한 Runtime까지 유지되는 정보인데, 그 이유는 객체가 “생성되는 시점”인 runtime에 해당 정보를 통해서 어떤 category의 class type으로 index를 발급받을지 얻어내야하기 때문이다.</p>
 <p>annotation은 속성<code>property</code>를 갖는데, <code>IndexCategory</code>는 <code>category()</code>라는 속성을 갖는다. 이는 <code>Class&#x3C;?></code>를 값으로 갖는 속성으로 그 이름은 category가 된다.</p>
 <p>위와 같은 <code>IndexCategory</code> annotation을 다음과 같이 사용하고자 할 class에 적용한다.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Skill</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">Thing</span><span class="mtk1"> {}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">@</span><span class="mtk10">IndexCategory</span><span class="mtk1">(category=</span><span class="mtk12">Skill</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Magic</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">Skill</span><span class="mtk1"> {}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">@</span><span class="mtk10">IndexCategory</span><span class="mtk1">(category=</span><span class="mtk12">Skill</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Mastery</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">Skill</span><span class="mtk1"> {}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Skill</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">Thing</span><span class="mtk1"> {}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">@</span><span class="mtk10">IndexCategory</span><span class="mtk1">(category=</span><span class="mtk12">Skill</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Magic</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">Skill</span><span class="mtk1"> {}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">@</span><span class="mtk10">IndexCategory</span><span class="mtk1">(category=</span><span class="mtk12">Skill</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Mastery</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">Skill</span><span class="mtk1"> {}</span></span></span></code></pre>
 <p><code>Magic</code> class와 <code>Mastery</code> class는 <code>IndexCategory</code>에 의해 어떤 category에 따라 index를 발급받을지 code 상에 명시한다.
 분명 이 annotation은 프로그램의 동작에 영향을 주지만, 어떠한 코드로써 그 정보를 제공한다기 보다는 metadata로 그 정보를 제공한다는 점에서 충분히 매력적이다. 어떠한 class의 특성을 명시하기 위해 method나 field, 상속 등의 무거운 방법을 사용하지 않고, 위처럼 <code>annotation</code>을 통해 충분히 정보를 제공할 수 있다.</p>
 <p>문법상 annotation을 사용할 때 앞에 @ 을 붙이고 annotation 이름을 쓴다. 그리고 () 안에 <em>속성=값</em>의 형태로 나열하면 되고, 배열의 경우 {}를 통해 묶어주면 된다.</p>
 <p>이러한 annotation을 가장 많이 접하는 경우가 <code>Override annotation</code>과 <code>Deprecated annotation</code>, 그리고 <code>SuppressWarnings annotation</code>이다.<br>
 간단히 <code>Override annotation</code>만 설명하자면 이는 method에 선언 가능하며 source 시간까지 유지되는 <code>annotation</code>이다. 즉 compiler가 확인하고 버리는 시점까지 유지되는 <code>annotation</code>으로 <code>override</code> 되지 않은 method가 이 <code>annotation</code>을 가지고 있을 경우 compile error를 띄워주는 역할을 하여 compile time에 잘못된 override를 사전에 보고하는 역할을 한다.</p>
 <p>위와 같이 <code>IndexCategory</code> annotation을 명시한 뒤, 객체를 생성하여 index를 발급하는 코드에서는 이를 반영하여 index를 해주면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">static</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">() {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">callerClassName</span><span class="mtk1"> = </span><span class="mtk11">findCallerClassName</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk10">Class</span><span class="mtk1">&lt;</span><span class="mtk4">?</span><span class="mtk1">&gt; </span><span class="mtk12">callerClass</span><span class="mtk1"> = </span><span class="mtk12">Class</span><span class="mtk1">.</span><span class="mtk11">forName</span><span class="mtk1">(callerClassName);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">if</span><span class="mtk1"> (</span><span class="mtk12">callerClass</span><span class="mtk1">.</span><span class="mtk11">isAnnotationPresent</span><span class="mtk1">(</span><span class="mtk12">IndexCategory</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">)) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk10">IndexCategory</span><span class="mtk1"> </span><span class="mtk12">category</span><span class="mtk1"> = </span><span class="mtk12">callerClass</span><span class="mtk1">.</span><span class="mtk11">getAnnotation</span><span class="mtk1">(</span><span class="mtk12">IndexCategory</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk10">Class</span><span class="mtk1">&lt;</span><span class="mtk4">?</span><span class="mtk1">&gt; </span><span class="mtk12">categoryClass</span><span class="mtk1"> = </span><span class="mtk12">category</span><span class="mtk1">.</span><span class="mtk11">category</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">(categoryClass);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">(callerClass);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">(callerClassName);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">static</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">() {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">callerClassName</span><span class="mtk1"> = </span><span class="mtk11">findCallerClassName</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk10">Class</span><span class="mtk1">&lt;</span><span class="mtk4">?</span><span class="mtk1">&gt; </span><span class="mtk12">callerClass</span><span class="mtk1"> = </span><span class="mtk12">Class</span><span class="mtk1">.</span><span class="mtk11">forName</span><span class="mtk1">(callerClassName);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">if</span><span class="mtk1"> (</span><span class="mtk12">callerClass</span><span class="mtk1">.</span><span class="mtk11">isAnnotationPresent</span><span class="mtk1">(</span><span class="mtk12">IndexCategory</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">)) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk10">IndexCategory</span><span class="mtk1"> </span><span class="mtk12">category</span><span class="mtk1"> = </span><span class="mtk12">callerClass</span><span class="mtk1">.</span><span class="mtk11">getAnnotation</span><span class="mtk1">(</span><span class="mtk12">IndexCategory</span><span class="mtk1">.</span><span class="mtk12">class</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk10">Class</span><span class="mtk1">&lt;</span><span class="mtk4">?</span><span class="mtk1">&gt; </span><span class="mtk12">categoryClass</span><span class="mtk1"> = </span><span class="mtk12">category</span><span class="mtk1">.</span><span class="mtk11">category</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">(categoryClass);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">(callerClass);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk10">Exception</span><span class="mtk1"> </span><span class="mtk12">e</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk11">generateNextIndex</span><span class="mtk1">(callerClassName);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p><code>callerClassName</code>을 가져와서 그로부터 Class 정보를 가져온 뒤, 그 Class가 <code>IndexCategory</code> annotation이 존재<code>present</code>할 경우 해당 annotation에 명시된 category로부터 category class 정보를 가져와서 그 class로 index를 발급하겠다는 코드이다.</p>
 <p>즉, 반드시 <code>IndexCategory</code>를 통해 index grouping을 수행하겠다는 것이 아니라 <code>IndexCategory</code> annotation이 present된 경우에만 해당 class로 index를 발급받는 것이므로, annotation이 선언되지 않은 경우까지 완벽히 처리하게 됩니다.</p>
 <p>물론 <code>callerClassName</code>에서 잘못된 class 이름을 얻을 경우에 대비해서 예외처리 코드를 추가했지만 이는 <code>Class#forName</code> 함수가 반드시 예외를 처리하게 하는(명시적 예외처리) 구조이므로 try-catch 문을 작성한 것이지 위 경우에서는 예외가 발생할 가능성이 없다.</p>
 <p>본 문서에서는 <a href="https://en.wikipedia.org/wiki/Annotation#Java_annotations">Java Annotation</a>의 문법에 대해 설명하는 것이 취지가 아니므로, 이 정도로 글을 마친다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2011/02/22/object-database-and-value-object/">&lt; Object Database와 Value Object</a><a style="float:right" href="/2011/03/20/classical-inheritance-in-javascript/">Classical Inheritance in JavaScript &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2011/03/02/implementation-instance-id-with-java-annotation/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2011/02/22/object-database-and-value-object/">&lt; Object Database와 Value Object</a><a style="float:right" href="/2011/03/20/classical-inheritance-in-javascript/">Classical Inheritance in JavaScript &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2011/03/02/implementation-instance-id-with-java-annotation/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2019/07/07/websocket-api/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS WebSocket API 써보기</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2019/07/07/websocket-api/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS WebSocket API 써보기</title><meta data-react-helmet="true" name="description" content="
 웹 채팅 서비스를 만들어본다고 생각해보자. 물론 저기에는 수많은 기능이 있겠지만 다 떼어내고 가장 기본적인 기능인, Web interface…"/><meta data-react-helmet="true" name="keywords" content="aws, server, serverless"/><meta data-react-helmet="true" name="og:title" content="AWS WebSocket API 써보기"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-웹 채팅 서비스를 만들어본다고 생각해보자. 물론 저기에는 수많은 기능이 있겠지만 다 떼어내고 가장 기본적인 기능인, Web interface…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2019/07/07/websocket-api/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>AWS WebSocket API 써보기</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">July 07, 2019</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/server/">server</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/serverless/">serverless</a></div></div><div><p>웹 채팅 서비스를 만들어본다고 생각해보자. 물론 저기에는 수많은 기능이 있겠지만 다 떼어내고 가장 기본적인 기능인, Web interface를 통해서 사용자와 운영자가 실시간으로 채팅을 할 수 있는 부분을 만든다고 생각을 해보자.</p>
+웹 채팅 서비스를 만들어본다고 생각해보자. 물론 저기에는 수많은 기능이 있겠지만 다 떼어내고 가장 기본적인 기능인, Web interface…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2019/07/07/websocket-api/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>AWS WebSocket API 써보기</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">July 07, 2019</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/server/">server</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div></div><div><p>웹 채팅 서비스를 만들어본다고 생각해보자. 물론 저기에는 수많은 기능이 있겠지만 다 떼어내고 가장 기본적인 기능인, Web interface를 통해서 사용자와 운영자가 실시간으로 채팅을 할 수 있는 부분을 만든다고 생각을 해보자.</p>
 <p>일단 클라이언트의 HTTP 요청에 대해 서버에서 응답하는 구조인 HTTP의 특성으로 인해 상호간의 실시간 채팅을 위해서는 단순히 클라이언트가 요청해서 그 답을 구해내는 구조는 다소 부족해보인다. 물론 주기적으로 계속 서버 측에서 할 말이 있는지 물어보는 polling 방법을 사용할 수도 있겠지만 이것은 할 말이 없을 때에도 계속 클라이언트의 요청을 받아야한다는 뜻이므로 꽤나 비효율적이 될 수 있다. 즉, 이는 ServerPush에 대한 고민을 좀 해야 한다는 뜻인데, WebRTC와 같이 다소 복잡한 방법을 사용하지 않아도 다행히 HTTP에서는 WebSocket protocol을 제공해주므로 이 연결을 통해 실시간으로 데이터를 주고 받는 문제는 쉽게 해결할 수 있다.</p>
 <h2>Dedicated Server</h2>
 <p>사실 이 문제는 NodeJS의 <a href="https://socket.io">socket.io</a> 등을 사용해서 서버를 만들면 클라이언트에서도 동일한 라이브러리를 사용해서 쉽게 채팅 서비스를 만들 수 있다. 다만 이 경우 이렇게 만든 서버를 서비하기 위해 적절한 서버 인스턴스를 구축 혹은 클라우드 서비스에서 할당하여 배포 파이프라인을 구축하고 요청량에 따라 적절히 확장될 수 있도록 모니터링 혹은 자동화를 하고 에러 등에 의한 자동/수동 복구를 통한 가용성 확보도 필수다. 즉, 서버를 직접 만드는 작업도 일이지만 그렇게 만들어진 서버를 서비스 운영을 위해 관리하는 작업 또한 꽤 크다는 뜻이다. 물론 요새는 docker로 containerization을 하고 docker-compose나 k8s로 관리하면 되는 세상이 되었으므로 다소 정답에 가까운 운영 정책을 사용할 수 있지만 본 글에서는 약간 초점을 바꿔서 AWS에서 밀고 있는 <strong>서버리스</strong> 를 기반으로 이런 서비스를 구축하는 방법에 대해서 알아보려고 한다.</p>
@@ -45,14 +45,14 @@
 <p><code>Selection Expression</code>에 대해서는 나중에 다시 설명하기로 하고, 일단은 <code>$default</code>가 클라이언트가 연결을 성공한 이후 보내는 모든 메시지에 대해 호출되는 Lambda handler의 <code>routeKey</code>라고 생각하면 편할 것 같다.</p>
 <h2>개발환경 준비</h2>
 <p>이제 실제 프로그래밍을 시작해보자. 설치된 <code>Serverless Framework</code>을 통해 다음과 같이 프로젝트를 시작할 수 있다. 물론 <code>Serverless Framework</code>이 설치되지 않았다면 <code>npm i -g serverless</code>로 설치를 해주면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ mkdir websocket-chat/ &amp;&amp; </span><span class="mtk11">cd</span><span class="mtk1"> websocket-chat/</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ sls create --template aws-nodejs-typescript --name websocket-chat</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Serverless: Generating boilerplate...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Serverless: Successfully generated boilerplate </span><span class="mtk15">for</span><span class="mtk1"> template: </span><span class="mtk8">&quot;aws-nodejs-typescript&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ ls</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">handler.ts  package.json  serverless.yml  tsconfig.json  webpack.config.js</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ mkdir websocket-chat/ &amp;&amp; </span><span class="mtk11">cd</span><span class="mtk1"> websocket-chat/</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sls create --template aws-nodejs-typescript --name websocket-chat</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Serverless: Generating boilerplate...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Serverless: Successfully generated boilerplate </span><span class="mtk15">for</span><span class="mtk1"> template: </span><span class="mtk8">&quot;aws-nodejs-typescript&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ ls</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">handler.ts  package.json  serverless.yml  tsconfig.json  webpack.config.js</span></span></span></code></pre>
 <p>이제</p>
 <ul>
 <li><code>serverless.yml</code> 파일에 배포에 관련된 권한, 자원 설정과 WebSocekt API의 event를 적절한 Lambda function의 entrypoint로 연결해주는 선언을 하고,</li>
@@ -68,225 +68,258 @@
 <p>그리고 AWS Lambda는 stateless한 computing resource로 persistence를 위한 저장소는 <strong>외부의 것</strong> 을 사용해야 한다. broadcasting을 위해 <code>connectionId</code>를 어딘가 보관했다가 읽어오는 작업을 진행해야 하는데 이를 위해 잘 알려진 MySQL이나 Redis, 혹은 DynamoDB 중 어느 것을 써도 문제 없다. 단, Lambda 내의 전역 공간에 in-memory로 저장하거나 혹은 Lambda 내에서 <code>fs</code>를 통해 파일로 쓰는 것은 아무 의미가 없는데 이는 매번 필요할 때마다 초기화되어 기동되는 Lambda의 특성으로 인해 그렇게 저장해놓은 데이터는 여러 Lambda instance가 동시에 기동되었을 때 동기화되지 못하거나 혹은 Lambda instance가 terminate되었을 때 모두 소실되기 때문이다. 여기서는 원본 글에서와 같이 <code>DynamoDB</code>를 사용하여 connectionId를 관리해보도록 하겠다.</p>
 <h2>$connect Handler</h2>
 <p><code>connectionId</code>는 <code>event.requestContext.connectionId</code>에 있으니 그걸 가져와서 DynamoDB에 넣어주면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">connect</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DynamoDB</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">putItem</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">TableName:</span><span class="mtk1"> </span><span class="mtk8">&#96;ConnectionIds&#96;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">Item:</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">connectionId:</span><span class="mtk1"> { </span><span class="mtk12">S:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">connectionId</span><span class="mtk1"> },</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      },</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">connect</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DynamoDB</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">putItem</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">TableName:</span><span class="mtk1"> </span><span class="mtk8">`ConnectionIds`</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">Item:</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">connectionId:</span><span class="mtk1"> { </span><span class="mtk12">S:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">connectionId</span><span class="mtk1"> },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>본 예제에서는 편의상 table 이름을 literal로 사용했지만 production에서 보다 나은 코드 관리를 하게 된다면 environment variable 등으로 빼는 것이 훨씬 낫다. 또한 DynamoDB에 <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html">WCU</a>을 초과했을 때 위 요청이 실패할 수도 있으므로 try-catch를 통해 적절한 에러 처리도 필요하다. <code>$connect</code> Lambda handler에서 200 응답을 보내지 않은 경우는 에러 상황으로 간주하여 WebSocket 연결이 제대로 수락되지 않는다. <em>추후 이를 이용하여 권한없이 요청하는 클라이언트의 연결을 거부할 수도 있다.</em></p>
 <h2>$disconnect Handler</h2>
 <p><code>ConnectionIds</code> table은 <code>connectionId</code>를 key로 사용하므로 이 값을 사용해 데이터를 제거하면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">disconnect</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DynamoDB</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">deleteItem</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">TableName:</span><span class="mtk1"> </span><span class="mtk8">&#96;ConnectionIds&#96;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">Key:</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">connectionId:</span><span class="mtk1"> { </span><span class="mtk12">S:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">connectionId</span><span class="mtk1"> },</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      },</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">disconnect</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DynamoDB</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">deleteItem</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">TableName:</span><span class="mtk1"> </span><span class="mtk8">`ConnectionIds`</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">Key:</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">connectionId:</span><span class="mtk1"> { </span><span class="mtk12">S:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">connectionId</span><span class="mtk1"> },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>이 때에는 에러를 반환해도 이미 클라이언트는 연결을 끊었으므로 그것을 알아챌 좋은 방법은 없다. 때문에 WCU 고갈 등에 의한 오류로 해당 connectionId가 제대로 삭제되지 않아 자원 누수가 발생할 수도 있는데 이를 적절히 defer해서 처리하거나 아니면 <code>$default</code> Lambda에서 <code>send</code>를 요청했을 때 실패하는 경우 지워주는 방법도 가능은 하다.</p>
 <h2>$default Handler</h2>
 <p><code>ConnectionIds</code> table에서 모든 <code>connectionId</code>를 <code>scan</code>해서 <a href="https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ApiGatewayManagementApi.html"><code>ApiGatewayManagementApi#postToConnection</code></a>을 사용하여 메시지를 전달한다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">broadcast</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">dbResult</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DynamoDB</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">scan</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">TableName:</span><span class="mtk1"> </span><span class="mtk8">&#96;ConnectionIds&#96;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">ProjectionExpression:</span><span class="mtk1"> </span><span class="mtk8">&quot;connectionId&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">api</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">ApiGatewayManagementApi</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">endpoint:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">domainName</span><span class="mtk1"> + </span><span class="mtk8">&quot;/&quot;</span><span class="mtk1"> + </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">stage</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">.</span><span class="mtk11">all</span><span class="mtk1">(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">dbResult</span><span class="mtk1">.</span><span class="mtk12">Items</span><span class="mtk1">.</span><span class="mtk11">map</span><span class="mtk1">(</span><span class="mtk4">async</span><span class="mtk1"> ({ </span><span class="mtk12">connectionId</span><span class="mtk1"> }) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">api</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        .</span><span class="mtk11">postToConnection</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk12">ConnectionId:</span><span class="mtk1"> </span><span class="mtk12">connectionId</span><span class="mtk1">.</span><span class="mtk12">S</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk12">Data:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">body</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    )</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  )</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">broadcast</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">dbResult</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">DynamoDB</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">scan</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">TableName:</span><span class="mtk1"> </span><span class="mtk8">`ConnectionIds`</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">ProjectionExpression:</span><span class="mtk1"> </span><span class="mtk8">&quot;connectionId&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">api</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">ApiGatewayManagementApi</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">endpoint:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">domainName</span><span class="mtk1"> + </span><span class="mtk8">&quot;/&quot;</span><span class="mtk1"> + </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">requestContext</span><span class="mtk1">.</span><span class="mtk12">stage</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">.</span><span class="mtk11">all</span><span class="mtk1">(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">dbResult</span><span class="mtk1">.</span><span class="mtk12">Items</span><span class="mtk1">.</span><span class="mtk11">map</span><span class="mtk1">(</span><span class="mtk4">async</span><span class="mtk1"> ({ </span><span class="mtk12">connectionId</span><span class="mtk1"> }) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">api</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        .</span><span class="mtk11">postToConnection</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk12">ConnectionId:</span><span class="mtk1"> </span><span class="mtk12">connectionId</span><span class="mtk1">.</span><span class="mtk12">S</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk12">Data:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">body</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        .</span><span class="mtk11">promise</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    )</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  )</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>역시 RCU 고갈로 인해 connectionIds를 조회하지 못해 broadcast가 실패할 수 있다. 때문에 connect/disconnect 혹은 message 전송의 빈도수가 높은 경우에는 DynamoDB 대신 아예 dedicated resource인 MySQL이나 Redis를 쓰는 편이 더 적합할 수도 있다. 혹은 DynamoDB의 RCU/WCU를 제한하지 않는 auto provisioning을 사용하는 것도 방법이다. <em>물론 이 경우 DDoS에 대한 대비를 제대로 하지 않으면 요금 폭탄이 발생할 수도 있는 점은 주의해야 한다.</em></p>
 <p><code>ApiGatewayManagementApi</code>는 <code>connectionId</code>를 사용하여 peer로 메시지 전송을 요청하기 위한 API로 <code>aws-sdk</code>에 포함되어 있는 WebSocket API client이다. 이 때 요청에 응답하기 위한 <code>manageConnection</code>은 각 <strong>WebSocket endpoint</strong> 에 따라 달라지게 되므로 이처럼 <code>endpoint</code>에 적절한 주소가 들어갈 수 있도록 해야 한다. 보통 이 주소는 코드보다는 설정을 통해 관리되므로 코드에서는 적절히 <code>event.requestContext</code> 객체를 활용하여 <code>event.requestContext.domainName + / + event.requestContext.stage</code>로 사용할 수 있다. 이는 보통 생성되는 <code>PROTOCOL://API-ID.execute-api.REGION.amazonaws.com/STAGE</code>를 뜻하게 된다. <strong>이 때문에 추후 API Gateway의 <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html"><code>Custom domain name</code></a>을 사용하게 될 경우 이 경로를 변경해주어야 하지만</strong> 이 글에서는 거기까지 다루지는 않는다.</p>
 <p>역시 중간중간 적절한 예외 처리를 하지 않았지만 예외의 간단함을 위해 넘어가자.</p>
 <p><a href="https://github.com/lacti/websocket-api-sample-chat/blob/master/handler.ts">전체 코드는 다음 위치에서 볼 수 있다.</a></p>
 <h2>serverless.yaml</h2>
 <p>먼저 작성한 함수들을 적절한 websocket의 route에 연결을 해주자.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">functions</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">connect</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.connect</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      - </span><span class="mtk4">websocket</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">route</span><span class="mtk1">: </span><span class="mtk8">$connect</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">disconnect</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.disconnect</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      - </span><span class="mtk4">websocket</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">route</span><span class="mtk1">: </span><span class="mtk8">$disconnect</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">broadcast</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.broadcast</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      - </span><span class="mtk4">websocket</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">route</span><span class="mtk1">: </span><span class="mtk8">$default</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">functions</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">connect</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.connect</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      - </span><span class="mtk4">websocket</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">route</span><span class="mtk1">: </span><span class="mtk8">$connect</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">disconnect</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.disconnect</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      - </span><span class="mtk4">websocket</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">route</span><span class="mtk1">: </span><span class="mtk8">$disconnect</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">broadcast</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.broadcast</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      - </span><span class="mtk4">websocket</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">route</span><span class="mtk1">: </span><span class="mtk8">$default</span></span></span></code></pre>
 <p>그리고 CloudFormation 식을 사용하여 이 서비스에서 사용할 DynamoDB 테이블을 선언해준다. 그럼 이제 이 서비스가 배포될 때 필요한 DynamoDB 테이블을 같이 생성해주고, 제거할 때 같이 제거해 줄 것이다. <del>좀 더 정확히 말하면, API Gateway와 Lambda, 그리고 logging을 위한 CloudWatch로 이루어진 CloudFormation stack에 DynamoDB table을 포함시켜 같이 관리될 수 있도록 해준다.</del></p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">resources</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">Resources</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">ConnectionTable</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">Type</span><span class="mtk1">: </span><span class="mtk8">AWS::DynamoDB::Table</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">Properties</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">TableName</span><span class="mtk1">: </span><span class="mtk8">ConnectionIds</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">AttributeDefinitions</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          - </span><span class="mtk4">AttributeName</span><span class="mtk1">: </span><span class="mtk8">connectionId</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk4">AttributeType</span><span class="mtk1">: </span><span class="mtk8">S</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">KeySchema</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          - </span><span class="mtk4">AttributeName</span><span class="mtk1">: </span><span class="mtk8">connectionId</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">            </span><span class="mtk4">KeyType</span><span class="mtk1">: </span><span class="mtk8">HASH</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">ProvisionedThroughput</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">ReadCapacityUnits</span><span class="mtk1">: </span><span class="mtk7">5</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">WriteCapacityUnits</span><span class="mtk1">: </span><span class="mtk7">5</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">resources</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">Resources</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">ConnectionTable</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Type</span><span class="mtk1">: </span><span class="mtk8">AWS::DynamoDB::Table</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Properties</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">TableName</span><span class="mtk1">: </span><span class="mtk8">ConnectionIds</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">AttributeDefinitions</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          - </span><span class="mtk4">AttributeName</span><span class="mtk1">: </span><span class="mtk8">connectionId</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">AttributeType</span><span class="mtk1">: </span><span class="mtk8">S</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">KeySchema</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          - </span><span class="mtk4">AttributeName</span><span class="mtk1">: </span><span class="mtk8">connectionId</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">KeyType</span><span class="mtk1">: </span><span class="mtk8">HASH</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">ProvisionedThroughput</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">ReadCapacityUnits</span><span class="mtk1">: </span><span class="mtk7">5</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">WriteCapacityUnits</span><span class="mtk1">: </span><span class="mtk7">5</span></span></span></code></pre>
 <p>마지막으로 각 Lambda에서 DynamoDB와 WebSocketAPI에 접근하기 위한 권한(IAM)을 주기 위해서 <code>provider</code> section에 다음과 같이 선언한다. 예제를 조금이라도 간결하게 유지하기 위해서 권한을 굉장히 큰 범위(<code>*</code>)로 주었다. 실제 서비스를 위한 상황에서는 절대하지 않는 편이 좋다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">provider</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">aws</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">runtime</span><span class="mtk1">: </span><span class="mtk8">nodejs10.x</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">iamRoleStatements</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    - </span><span class="mtk4">Effect</span><span class="mtk1">: </span><span class="mtk8">&quot;Allow&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">Action</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        - </span><span class="mtk8">&quot;execute-api:ManageConnections&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">Resource</span><span class="mtk1">: </span><span class="mtk8">&quot;*&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    - </span><span class="mtk4">Effect</span><span class="mtk1">: </span><span class="mtk8">&quot;Allow&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">Action</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        - </span><span class="mtk8">&quot;dynamodb:*&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">Resource</span><span class="mtk1">: </span><span class="mtk8">&quot;*&quot;</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">provider</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">aws</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">runtime</span><span class="mtk1">: </span><span class="mtk8">nodejs10.x</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">iamRoleStatements</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    - </span><span class="mtk4">Effect</span><span class="mtk1">: </span><span class="mtk8">&quot;Allow&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Action</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        - </span><span class="mtk8">&quot;execute-api:ManageConnections&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Resource</span><span class="mtk1">: </span><span class="mtk8">&quot;*&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    - </span><span class="mtk4">Effect</span><span class="mtk1">: </span><span class="mtk8">&quot;Allow&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Action</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        - </span><span class="mtk8">&quot;dynamodb:*&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Resource</span><span class="mtk1">: </span><span class="mtk8">&quot;*&quot;</span></span></span></code></pre>
 <p>serverless 표현식에 생소하다면 굉장히 당황스러울 수 있는데 그래도 개인적으로는 CloudFormation 선언문보다는 더 간단하다고 생각한다. <a href="https://github.com/lacti/websocket-api-sample-chat/blob/master/serverless.yml"><code>serverless.yaml</code> 파일의 전체는 다음 위치에서 확인해볼 수 있다.</a></p>
 <p>물론 위 선언에는 <code>region</code>이 없기 때문에 이대로 배포를 하면 기본 값인 <code>us-east-1</code>에 배포된다. 재미로 하는 것이기 때문에 가장 가격이 싼 <code>us-east-1</code>을 그대로 사용하는데, 만약 한국에 배포를 하고 싶다면 다음 구문을 <code>provider</code>에 추가해주면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">provider</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk7">...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">region</span><span class="mtk1">: </span><span class="mtk8">ap-northeast-2</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk7">...</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">provider</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk7">...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">region</span><span class="mtk1">: </span><span class="mtk8">ap-northeast-2</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk7">...</span></span></span></code></pre>
 <h2>배포 및 테스트</h2>
 <p>이제 모든 코드 작업이 완료되었으므로 배포해서 테스트만 하면 된다. <a href="https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html">먼저 AWS credential이 잘 설정되어 있어야 한다.</a> default profile로 설정이 되어있다면 고민할 필요가 없고 만약 multiple profile을 관리하고 있다면 <code>AWS_PROFILE</code> environment variable을 적절하게 사용해주거나 앞으로 <code>sls</code>를 사용할 때 <code>--aws-profile PROFILE-NAME</code>을 사용하면 된다. 단, 후자의 경우 한 번이라도 실수하면 좋지 못한 상황이 벌어지기 때문에 가급적이면 <code>AWS_PROFILE</code> 등의 environment variable을 설정해서 사용하는 것을 권장하고 이를 위해 <a href="https://github.com/direnv/direnv"><code>direnv</code></a> 등을 사용하면 더욱 좋다고 생각한다.</p>
 <p><code>sls deploy</code> 명령으로 다음과 같이 배포할 수 있다. 그럼 Webpack을 진행하여 code를 packing한 후 zip으로 만들어서 S3에 올려 Lambda에 연결한 후, API Gateway, Lambda, CloudWatch, DynamoDB 등의 자원을 관리하는 CloudFormation stack을 만들어 시스템 배포를 진행하게 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ sls deploy</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Service Information</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">service: websocket-chat</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">stage: dev</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">region: us-east-1</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">stack: websocket-chat-dev</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">resources: 24</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">api keys:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  None</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">endpoints:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  wss://API-ID.execute-api.us-east-1.amazonaws.com/dev</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">functions:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  connect: websocket-chat-dev-connect</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  disconnect: websocket-chat-dev-disconnect</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  broadcast: websocket-chat-dev-broadcast</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">layers:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  None</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="8"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sls deploy</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Service Information</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">service: websocket-chat</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">stage: dev</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">region: us-east-1</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">stack: websocket-chat-dev</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">resources: 24</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">api keys:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  None</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">endpoints:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  wss://API-ID.execute-api.us-east-1.amazonaws.com/dev</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">functions:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  connect: websocket-chat-dev-connect</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  disconnect: websocket-chat-dev-disconnect</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  broadcast: websocket-chat-dev-broadcast</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">layers:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  None</span></span></span></code></pre>
 <p>테스트를 할 때에는 <a href="https://github.com/websockets/wscat"><code>wscat</code></a>이 좋다. <code>npm i -g wscat</code>으로 설치하고, 터미널을 여러 개 띄워서 다음과 같이 테스트할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ wscat -c </span><span class="mtk8">&quot;wss://API-ID.execute-api.us-east-1.amazonaws.com/dev&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">connected (press CTRL+C to quit)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">&gt; hi there!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">&lt; hi there!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">disconnected (code: 1001)</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="9"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ wscat -c </span><span class="mtk8">&quot;wss://API-ID.execute-api.us-east-1.amazonaws.com/dev&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">connected (press CTRL+C to quit)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">&gt; hi there!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">&lt; hi there!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">disconnected (code: 1001)</span></span></span></code></pre>
 <p>이 시스템은 아직 제대로 된 모니터링이나 보안 대책을 가지고 있지 않기 때문에 주소를 public하게 노출했다가는 다른 사람들의 놀이터가 되기 쉬우므로 주의가 필요하다. 일단은 기본기를 연습한다는 느낌이면 좋을 것 같고, 이로써 AWS Serverless 기반의 WebSocket 서버 구축을 완료하였다.</p>
 <h2>한계 및 응용</h2>
 <p>WebSocket API가 dedicated 서버에 비해 비용이 아주 효율적이지는 않다. 왜냐하면 connect, disconnect, default 혹은 custom routeKey에 의해 수행되는 API call 비용과 그에 따른 Lambda 수행 비용, DynamoDB 요청 비용 등이 지속적으로 발생할 수 있고, 무엇보다도 이 WebSocket API는 connection 유지 비용이 있어 connection이 연결되어 있는 시간의 초 단위에 비례해서 매겨지는 요금이 있다. 그마저도 10분 동안 아무런 요청이 없으면 자동으로 연결을 닫고, 요청이 계속 있다고 해도 2시간이 넘어가면 연결이 끊어지게 된다. 뿐만 아니라 payload에도 제한이 있어 한 frame의 크기가 32KB가 넘어갈 수 없고 binary frame을 사용할 수도 없다. 마지막으로 이미 연결을 맺는 과정(<code>$connect</code>)에서는 클라이언트의 연결을 거부할 수 있지만 이미 맺어진 후에 클라이언트와의 연결을 강제로 종료하는 API가 존재하지 않는다.</p>
 <p>동시 연결 수 등의 다른 제한 요소들도 있으므로 만약 이를 production에서 사용하고자 한다면 <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html">Limitations</a>를 확인하는 것이 꼭 필요하다. 게다가 어떤 제한은 ticket을 통해 증가시킬 수도 있지만 그렇지 못한 값도 있으므로 반드시 먼저 확인을 해야 한다.</p>
 <p>그럼에도 불구하고 WebSocket API는 꽤나 Serverless라는 점에서, 즉 managed resource라는 점에서 매력적이다. dedicated resource처럼 할당한 시간 동안 돈을 내지 않아도 되므로 가끔 잠깐씩 요청이 많아질 수 있는 가벼운 서비스에서는 큰 기술없이 저렴한 비용으로 튼튼한 backend를 구축하기에 훌륭한 도구이다.</p>
 <p>예를 들어 잉여톤에서 게임 mock up을 위해 가끔은 이런 클라이언트 간의 broadcasting 서비스가 필요할 때가 있는데 그 때마다 서버를 새로 만들어 띄우는 것은 너무 번거롭고, 그렇다고 계속 띄워놓자니 비용이 아무래도 아깝다. 이러한 경우를 위해 만든 <a href="https://github.com/yingyeothon/message-broadcast"><code>message-broadcast</code></a> 서비스는 어느 정도 수준에서의 production 게임 내 채팅 서버로 써도 괜찮고, topic 별로 broadcasting이 가능한 <a href="https://github.com/yingyeothon/message-topic"><code>message-topic</code></a> 도 정리하고 있다. 이후 차츰 더 많은 부분을 Serverless 기반으로 재사용 가능하게 정리하여 저렴한 비용의 backend를 작성할 수 있도록 고민해볼 예정이다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2017/10/29/yingyeoton-4/">&lt; 잉여톤 4회 후기</a><a style="float:right" href="/2019/07/30/working-copy/">iPad의 Working Copy &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/07/07/websocket-api/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2017/10/29/yingyeoton-4/">&lt; 잉여톤 4회 후기</a><a style="float:right" href="/2019/07/30/working-copy/">iPad의 Working Copy &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/07/07/websocket-api/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

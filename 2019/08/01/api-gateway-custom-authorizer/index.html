@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2019/08/01/api-gateway-custom-authorizer/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">API Gateway의 인증을 위한 Custom Authroizer 사용하기</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2019/08/01/api-gateway-custom-authorizer/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">API Gateway의 인증을 위한 Custom Authroizer 사용하기</title><meta data-react-helmet="true" name="description" content="
 API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket API를 구축할 수 있다. AWS CloudFormation을 직접 사용하여 서비스를 구성할 수도 있고, 최근에 나온 aws-cdk…"/><meta data-react-helmet="true" name="keywords" content="aws, serverless, auth"/><meta data-react-helmet="true" name="og:title" content="API Gateway의 인증을 위한 Custom Authroizer 사용하기"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket API를 구축할 수 있다. AWS CloudFormation을 직접 사용하여 서비스를 구성할 수도 있고, 최근에 나온 aws-cdk…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/01/api-gateway-custom-authorizer/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>API Gateway의 인증을 위한 Custom Authroizer 사용하기</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">August 01, 2019</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/auth/">auth</a></div></div><div><p>API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket API를 구축할 수 있다. AWS CloudFormation을 직접 사용하여 서비스를 구성할 수도 있고, 최근에 나온 <a href="https://docs.aws.amazon.com/cdk/latest/guide/home.html">aws-cdk</a>을 사용하여 구성할 수도 있다. 물론 <a href="https://serverless.com">Serverless framework</a>과 같이 vendor 종속적이지 않은 framework을 사용할 수도 있다. 어느 쪽을 사용하든 <a href="https://github.com/lucpod/aws-lambda-workshop/tree/master/lessons/01-simple-hello-world-api">각각이</a> <a href="https://serverless.com/framework/docs/providers/aws/examples/hello-world/">제공하는</a> template을 이용하면 <em>Hello world</em> 를 출력하는 HTTP/s API를 만드는데에 많은 시간이 필요하지 않다. <del>물론 처음일 경우, AWS 가입과 <a href="https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html">credential</a> 등의 개발 환경의 설정에 많은 시간이 소요될 수 있다.</del></p>
+API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket API를 구축할 수 있다. AWS CloudFormation을 직접 사용하여 서비스를 구성할 수도 있고, 최근에 나온 aws-cdk…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/01/api-gateway-custom-authorizer/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>API Gateway의 인증을 위한 Custom Authroizer 사용하기</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">August 01, 2019</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/auth/">auth</a></div></div><div><p>API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket API를 구축할 수 있다. AWS CloudFormation을 직접 사용하여 서비스를 구성할 수도 있고, 최근에 나온 <a href="https://docs.aws.amazon.com/cdk/latest/guide/home.html">aws-cdk</a>을 사용하여 구성할 수도 있다. 물론 <a href="https://serverless.com">Serverless framework</a>과 같이 vendor 종속적이지 않은 framework을 사용할 수도 있다. 어느 쪽을 사용하든 <a href="https://github.com/lucpod/aws-lambda-workshop/tree/master/lessons/01-simple-hello-world-api">각각이</a> <a href="https://serverless.com/framework/docs/providers/aws/examples/hello-world/">제공하는</a> template을 이용하면 <em>Hello world</em> 를 출력하는 HTTP/s API를 만드는데에 많은 시간이 필요하지 않다. <del>물론 처음일 경우, AWS 가입과 <a href="https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html">credential</a> 등의 개발 환경의 설정에 많은 시간이 소요될 수 있다.</del></p>
 <p><em>Hello world</em> 를 출력하기 위한 구조, Lambda의 코드가 어디에 올라가서 어떻게 배치되고 API Gateway가 어떤 gateway를 구성하며 그 둘이 어떻게 proxy로 설정되어 HTTP event를 받아 처리할 수 있는지, <del>나중에 기회가 되면 정리해보겠지만</del> 이미 각 시스템마다 훌륭한 글이 많이 있다.</p>
 <ul>
 <li><a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-hello-world.html">AWS Serverless getting started</a></li>
@@ -57,126 +57,126 @@ API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket AP
 <p>만들어보도록 하겠다. <a href="https://github.com/lacti/serverless-custom-authorizer-example">전체 예제는 이 쪽에서 확인해볼 수 있다.</a></p>
 <h3>Login API</h3>
 <p><a href="https://tools.ietf.org/html/rfc7617">HTTP Basic authentication</a>을 사용한다고 하면 인증 요청은 다음과 같이 HTTP Header로 전달된다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">Authorization</span><span class="mtk1">: </span><span class="mtk8">Basic BASE64(&quot;id:password&quot;)</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">Authorization</span><span class="mtk1">: </span><span class="mtk8">Basic BASE64(&quot;id:password&quot;)</span></span></span></code></pre>
 <p>이를 위해 <code>delimiter</code>를 기준으로 앞뒤를 나누는 함수와 base64를 decode하는 함수를 먼저 만들어둔다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">splitByDelimiter</span><span class="mtk1"> = (</span><span class="mtk12">data</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">delim</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">pos</span><span class="mtk1"> = </span><span class="mtk12">data</span><span class="mtk1"> ? </span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">indexOf</span><span class="mtk1">(</span><span class="mtk12">delim</span><span class="mtk1">) : -</span><span class="mtk7">1</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk12">pos</span><span class="mtk1"> &gt; </span><span class="mtk7">0</span><span class="mtk1"> ? [</span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">substr</span><span class="mtk1">(</span><span class="mtk7">0</span><span class="mtk1">, </span><span class="mtk12">pos</span><span class="mtk1">), </span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">substr</span><span class="mtk1">(</span><span class="mtk12">pos</span><span class="mtk1"> + </span><span class="mtk7">1</span><span class="mtk1">)] : [</span><span class="mtk8">&quot;&quot;</span><span class="mtk1">, </span><span class="mtk8">&quot;&quot;</span><span class="mtk1">];</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">decodeBase64</span><span class="mtk1"> = (</span><span class="mtk12">input</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk10">Buffer</span><span class="mtk1">.</span><span class="mtk11">from</span><span class="mtk1">(</span><span class="mtk12">input</span><span class="mtk1">, </span><span class="mtk8">&quot;base64&quot;</span><span class="mtk1">).</span><span class="mtk11">toString</span><span class="mtk1">(</span><span class="mtk8">&quot;utf8&quot;</span><span class="mtk1">);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">splitByDelimiter</span><span class="mtk1"> = (</span><span class="mtk12">data</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">, </span><span class="mtk12">delim</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">pos</span><span class="mtk1"> = </span><span class="mtk12">data</span><span class="mtk1"> ? </span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">indexOf</span><span class="mtk1">(</span><span class="mtk12">delim</span><span class="mtk1">) : -</span><span class="mtk7">1</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk12">pos</span><span class="mtk1"> &gt; </span><span class="mtk7">0</span><span class="mtk1"> ? [</span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">substr</span><span class="mtk1">(</span><span class="mtk7">0</span><span class="mtk1">, </span><span class="mtk12">pos</span><span class="mtk1">), </span><span class="mtk12">data</span><span class="mtk1">.</span><span class="mtk11">substr</span><span class="mtk1">(</span><span class="mtk12">pos</span><span class="mtk1"> + </span><span class="mtk7">1</span><span class="mtk1">)] : [</span><span class="mtk8">&quot;&quot;</span><span class="mtk1">, </span><span class="mtk8">&quot;&quot;</span><span class="mtk1">];</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">decodeBase64</span><span class="mtk1"> = (</span><span class="mtk12">input</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">Buffer</span><span class="mtk1">.</span><span class="mtk11">from</span><span class="mtk1">(</span><span class="mtk12">input</span><span class="mtk1">, </span><span class="mtk8">&quot;base64&quot;</span><span class="mtk1">).</span><span class="mtk11">toString</span><span class="mtk1">(</span><span class="mtk8">&quot;utf8&quot;</span><span class="mtk1">);</span></span></span></code></pre>
 <p>이제 <code>login API</code>를 작성할 수 있다. 이 함수는 일반 HTTP/s API이므로 <code>APIGatewayProxyEvent</code>의 <code>headers</code>로부터 <code>Authorization</code> 값을 가져와서 id와 password 부분을 얻어낸 후 비교하고, 기대된 값이면 JWT를 발급하여 반환한다. JWT를 발급하는 것은 <a href="https://github.com/auth0/node-jsonwebtoken">라이브러리</a>를 사용해서 간단하게 수행할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">jwtSecret</span><span class="mtk1"> = </span><span class="mtk8">&quot;verySecret&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">admin</span><span class="mtk1"> = {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">id:</span><span class="mtk1"> </span><span class="mtk8">&quot;test&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">password:</span><span class="mtk1"> </span><span class="mtk8">&quot;1234&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">login</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> [</span><span class="mtk12">type</span><span class="mtk1">, </span><span class="mtk12">data</span><span class="mtk1">] = </span><span class="mtk11">splitByDelimiter</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">headers</span><span class="mtk1">[</span><span class="mtk8">&quot;Authorization&quot;</span><span class="mtk1">], </span><span class="mtk8">&quot; &quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> [</span><span class="mtk12">id</span><span class="mtk1">, </span><span class="mtk12">pw</span><span class="mtk1">] = </span><span class="mtk11">splitByDelimiter</span><span class="mtk1">(</span><span class="mtk11">decodeBase64</span><span class="mtk1">(</span><span class="mtk12">data</span><span class="mtk1">), </span><span class="mtk8">&quot;:&quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">accepted</span><span class="mtk1"> = </span><span class="mtk12">type</span><span class="mtk1"> === </span><span class="mtk8">&quot;Basic&quot;</span><span class="mtk1"> &amp;&amp; </span><span class="mtk12">id</span><span class="mtk1"> === </span><span class="mtk12">admin</span><span class="mtk1">.</span><span class="mtk12">id</span><span class="mtk1"> &amp;&amp; </span><span class="mtk12">pw</span><span class="mtk1"> === </span><span class="mtk12">admin</span><span class="mtk1">.</span><span class="mtk12">password</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk12">accepted</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">401</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;Unauthorized&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">token</span><span class="mtk1"> = </span><span class="mtk12">jwt</span><span class="mtk1">.</span><span class="mtk11">sign</span><span class="mtk1">({ </span><span class="mtk12">id</span><span class="mtk1"> }, </span><span class="mtk12">jwtSecret</span><span class="mtk1">, { </span><span class="mtk12">expiresIn:</span><span class="mtk1"> </span><span class="mtk8">&quot;30m&quot;</span><span class="mtk1"> });</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk10">JSON</span><span class="mtk1">.</span><span class="mtk11">stringify</span><span class="mtk1">({ </span><span class="mtk12">token</span><span class="mtk1"> })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">jwtSecret</span><span class="mtk1"> = </span><span class="mtk8">&quot;verySecret&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">admin</span><span class="mtk1"> = {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">id:</span><span class="mtk1"> </span><span class="mtk8">&quot;test&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">password:</span><span class="mtk1"> </span><span class="mtk8">&quot;1234&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">login</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> [</span><span class="mtk12">type</span><span class="mtk1">, </span><span class="mtk12">data</span><span class="mtk1">] = </span><span class="mtk11">splitByDelimiter</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">headers</span><span class="mtk1">[</span><span class="mtk8">&quot;Authorization&quot;</span><span class="mtk1">], </span><span class="mtk8">&quot; &quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> [</span><span class="mtk12">id</span><span class="mtk1">, </span><span class="mtk12">pw</span><span class="mtk1">] = </span><span class="mtk11">splitByDelimiter</span><span class="mtk1">(</span><span class="mtk11">decodeBase64</span><span class="mtk1">(</span><span class="mtk12">data</span><span class="mtk1">), </span><span class="mtk8">&quot;:&quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">accepted</span><span class="mtk1"> = </span><span class="mtk12">type</span><span class="mtk1"> === </span><span class="mtk8">&quot;Basic&quot;</span><span class="mtk1"> &amp;&amp; </span><span class="mtk12">id</span><span class="mtk1"> === </span><span class="mtk12">admin</span><span class="mtk1">.</span><span class="mtk12">id</span><span class="mtk1"> &amp;&amp; </span><span class="mtk12">pw</span><span class="mtk1"> === </span><span class="mtk12">admin</span><span class="mtk1">.</span><span class="mtk12">password</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk12">accepted</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">401</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;Unauthorized&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">token</span><span class="mtk1"> = </span><span class="mtk12">jwt</span><span class="mtk1">.</span><span class="mtk11">sign</span><span class="mtk1">({ </span><span class="mtk12">id</span><span class="mtk1"> }, </span><span class="mtk12">jwtSecret</span><span class="mtk1">, { </span><span class="mtk12">expiresIn:</span><span class="mtk1"> </span><span class="mtk8">&quot;30m&quot;</span><span class="mtk1"> });</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk10">JSON</span><span class="mtk1">.</span><span class="mtk11">stringify</span><span class="mtk1">({ </span><span class="mtk12">token</span><span class="mtk1"> })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p>정상적인 요청이라면 JWT가 반환되고 그렇지 않다면 401 응답이 반환될 것이다.</p>
 <h3>Auth function</h3>
 <p>이제 이후에는 생성된 JWT로만 요청을 하게 될 것이므로 이 토큰의 유효성을 검증하는 <code>auth function</code>은 간단하게 작성할 수 있다. 이 token은 <a href="https://tools.ietf.org/html/rfc6750">Bearer Authorization</a>으로 전달되므로 그 값을 받아 <a href="https://github.com/auth0/node-jsonwebtoken">라이브러리</a>로 유효성을 검사한다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">auth</span><span class="mtk1">: </span><span class="mtk10">CustomAuthorizerHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> [</span><span class="mtk12">type</span><span class="mtk1">, </span><span class="mtk12">token</span><span class="mtk1">] = </span><span class="mtk11">splitByDelimiter</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">authorizationToken</span><span class="mtk1">, </span><span class="mtk8">&quot; &quot;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">allow</span><span class="mtk1"> = </span><span class="mtk12">type</span><span class="mtk1"> === </span><span class="mtk8">&quot;Bearer&quot;</span><span class="mtk1"> &amp;&amp; !!</span><span class="mtk12">jwt</span><span class="mtk1">.</span><span class="mtk11">verify</span><span class="mtk1">(</span><span class="mtk12">token</span><span class="mtk1">, </span><span class="mtk12">jwtSecret</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">principalId:</span><span class="mtk1"> </span><span class="mtk8">&quot;user&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">policyDocument:</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">Version:</span><span class="mtk1"> </span><span class="mtk8">&quot;2012-10-17&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">Statement:</span><span class="mtk1"> [</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk12">Action:</span><span class="mtk1"> </span><span class="mtk8">&quot;execute-api:Invoke&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk12">Effect:</span><span class="mtk1"> </span><span class="mtk12">allow</span><span class="mtk1"> ? </span><span class="mtk8">&quot;Allow&quot;</span><span class="mtk1"> : </span><span class="mtk8">&quot;Deny&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk12">Resource:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">methodArn</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      ]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">auth</span><span class="mtk1">: </span><span class="mtk10">CustomAuthorizerHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> [</span><span class="mtk12">type</span><span class="mtk1">, </span><span class="mtk12">token</span><span class="mtk1">] = </span><span class="mtk11">splitByDelimiter</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">authorizationToken</span><span class="mtk1">, </span><span class="mtk8">&quot; &quot;</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">allow</span><span class="mtk1"> = </span><span class="mtk12">type</span><span class="mtk1"> === </span><span class="mtk8">&quot;Bearer&quot;</span><span class="mtk1"> &amp;&amp; !!</span><span class="mtk12">jwt</span><span class="mtk1">.</span><span class="mtk11">verify</span><span class="mtk1">(</span><span class="mtk12">token</span><span class="mtk1">, </span><span class="mtk12">jwtSecret</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">principalId:</span><span class="mtk1"> </span><span class="mtk8">&quot;user&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">policyDocument:</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">Version:</span><span class="mtk1"> </span><span class="mtk8">&quot;2012-10-17&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">Statement:</span><span class="mtk1"> [</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk12">Action:</span><span class="mtk1"> </span><span class="mtk8">&quot;execute-api:Invoke&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk12">Effect:</span><span class="mtk1"> </span><span class="mtk12">allow</span><span class="mtk1"> ? </span><span class="mtk8">&quot;Allow&quot;</span><span class="mtk1"> : </span><span class="mtk8">&quot;Deny&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk12">Resource:</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">methodArn</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      ]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p>token의 유효성 여부에 따라 허가 여부를 결정해서 Policy를 만들어주면 된다. 이 때 Resource에 범위를 적절히 설정해주어야 하는데, <strong>이 예제는 간단해서 요청한 <code>methodArn</code>을 그대로</strong> 전달한다. 물론 API가 여러 개일 경우 단일 Resource를 포함하는 allow policy가 여러 개 생성되거나 범위 Resource를 포함하는 allow policy가 생성되어야 한다. 그렇지 않으면 <strong>X API를 요청할 때 만들어져 cache된 policy로 Y API를 요청할 때에도 사용하게 되므로 <code>Resource</code>가 맞지 않아 제대로 허용되지 않을 수 있다.</strong></p>
 <p>이를 위해 간단히 policy의 cache를 끄는 방법도 있지만 이 경우 <code>auth</code> handler가 매번 실행되므로 비용이나 성능 최적화 측면에서 손해를 보게 된다. 때문에 <code>event.methodArn</code>을 적절히 사용하여 범위로 허용해 줄 수 있도록 사용해야 한다.</p>
 <h4>Allow many functions</h4>
 <p><code>methodArn</code>의 규격은 다음과 같으므로 <code>stage</code>와 <code>httpVerb</code>를 적당히 <code>*</code>로 정해주면 되겠다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk8">arn:aws:execute-api:{regionId}:{accountId}:{apiId}/{stage}/{httpVerb}/[{resource}/[{child-resources}]]</span></span></code></pre>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> [, , , </span><span class="mtk12">region</span><span class="mtk1">, </span><span class="mtk12">accountId</span><span class="mtk1">, </span><span class="mtk12">apiId</span><span class="mtk1">, </span><span class="mtk12">stage</span><span class="mtk1">] = </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">methodArn</span><span class="mtk1">.</span><span class="mtk11">split</span><span class="mtk1">(</span><span class="mtk5">/</span><span class="mtk8">[</span><span class="mtk5">:/</span><span class="mtk8">]</span><span class="mtk5">/</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">scopedMethodArn</span><span class="mtk1"> =</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  [</span><span class="mtk8">&quot;arn&quot;</span><span class="mtk1">, </span><span class="mtk8">&quot;aws&quot;</span><span class="mtk1">, </span><span class="mtk8">&quot;execute-api&quot;</span><span class="mtk1">, </span><span class="mtk12">region</span><span class="mtk1">, </span><span class="mtk12">accountId</span><span class="mtk1">, </span><span class="mtk12">apiId</span><span class="mtk1">].</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk8">&quot;:&quot;</span><span class="mtk1">) +</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk8">&quot;/&quot;</span><span class="mtk1"> +</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  [</span><span class="mtk12">stage</span><span class="mtk1">, </span><span class="mtk3">/* method= */</span><span class="mtk1"> </span><span class="mtk8">&quot;*&quot;</span><span class="mtk1">, </span><span class="mtk3">/* function= */</span><span class="mtk1"> </span><span class="mtk8">&quot;*&quot;</span><span class="mtk1">].</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk8">&quot;/&quot;</span><span class="mtk1">);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk8">arn:aws:execute-api:{regionId}:{accountId}:{apiId}/{stage}/{httpVerb}/[{resource}/[{child-resources}]]</span></span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> [, , , </span><span class="mtk12">region</span><span class="mtk1">, </span><span class="mtk12">accountId</span><span class="mtk1">, </span><span class="mtk12">apiId</span><span class="mtk1">, </span><span class="mtk12">stage</span><span class="mtk1">] = </span><span class="mtk12">event</span><span class="mtk1">.</span><span class="mtk12">methodArn</span><span class="mtk1">.</span><span class="mtk11">split</span><span class="mtk1">(</span><span class="mtk5">/</span><span class="mtk8">[</span><span class="mtk5">:/</span><span class="mtk8">]</span><span class="mtk5">/</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">scopedMethodArn</span><span class="mtk1"> =</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  [</span><span class="mtk8">&quot;arn&quot;</span><span class="mtk1">, </span><span class="mtk8">&quot;aws&quot;</span><span class="mtk1">, </span><span class="mtk8">&quot;execute-api&quot;</span><span class="mtk1">, </span><span class="mtk12">region</span><span class="mtk1">, </span><span class="mtk12">accountId</span><span class="mtk1">, </span><span class="mtk12">apiId</span><span class="mtk1">].</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk8">&quot;:&quot;</span><span class="mtk1">) +</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk8">&quot;/&quot;</span><span class="mtk1"> +</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  [</span><span class="mtk12">stage</span><span class="mtk1">, </span><span class="mtk3">/* method= */</span><span class="mtk1"> </span><span class="mtk8">&quot;*&quot;</span><span class="mtk1">, </span><span class="mtk3">/* function= */</span><span class="mtk1"> </span><span class="mtk8">&quot;*&quot;</span><span class="mtk1">].</span><span class="mtk11">join</span><span class="mtk1">(</span><span class="mtk8">&quot;/&quot;</span><span class="mtk1">);</span></span></span></code></pre>
 <p>새롭게 만들어진 <code>methodArn</code>은 이번 요청에 수행될 Lambda function 뿐만 아니라 다른 httpVerb의 resource도 실행 가능하도록 <code>*</code>으로 넓게 지정되었다. 이제 이 policy가 cache될 것이고 다른 httpEndpoint가 호출되어도 범위로 지정된 <code>methodArn</code>에 의해 Lambda 수행 허가가 문제 없이 이루어질 것이다.</p>
 <p>물론 이렇게 간단히 <code>*</code>로 지정하기 어렵고 매번 <code>auth function</code>이 판단을 해야 하는 경우도 있다. 이 경우는 오히려 policy cache를 사용하지 않도록 설정해야 하는데 <code>Serverless framework</code>에서는 <code>resultTtlInSeconds</code>를 <code>0</code>으로 지정하면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">authorizer</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">auth</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">resultTtlInSeconds</span><span class="mtk1">: </span><span class="mtk7">0</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">authorizer</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">auth</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">resultTtlInSeconds</span><span class="mtk1">: </span><span class="mtk7">0</span></span></span></code></pre>
 <h3>Hello API</h3>
 <p>이제 테스트를 위해 사용할 간단한 GET API를 만들어둔다. 이 함수는 <code>auth function</code>이 <code>allow policy</code>를 반환할 경우 불리게 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">hello</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk10">JSON</span><span class="mtk1">.</span><span class="mtk11">stringify</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">hello</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">event</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk10">JSON</span><span class="mtk1">.</span><span class="mtk11">stringify</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <h3>serverless.yml</h3>
 <p>이제 작성한 함수들을 배포될 수 있도록 <code>serverless.yml</code>에 등록한다. <code>login API</code>는 <code>auth</code> 없이 늘 하던대로 등록하면 되고, <code>auth function</code>로 Lambda로 배포될 수 있도록 <code>functions</code>에 추가해준 뒤, <code>hello API</code>의 <code>http.authorizer</code>에 <code>auth</code>를 연결해주면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">service</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">hello-custom-authorizer</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">plugins</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  - </span><span class="mtk8">serverless-webpack</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">provider</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">aws</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">runtime</span><span class="mtk1">: </span><span class="mtk8">nodejs10.x</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">region</span><span class="mtk1">: </span><span class="mtk8">ap-northeast-2</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">functions</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">login</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.login</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      - </span><span class="mtk4">http</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">method</span><span class="mtk1">: </span><span class="mtk8">post</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">path</span><span class="mtk1">: </span><span class="mtk8">login</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">auth</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.auth</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">hello</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      - </span><span class="mtk4">http</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">method</span><span class="mtk1">: </span><span class="mtk8">get</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">path</span><span class="mtk1">: </span><span class="mtk8">hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk4">authorizer</span><span class="mtk1">: </span><span class="mtk8">auth</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="8"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">service</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">hello-custom-authorizer</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">plugins</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  - </span><span class="mtk8">serverless-webpack</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">provider</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">name</span><span class="mtk1">: </span><span class="mtk8">aws</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">runtime</span><span class="mtk1">: </span><span class="mtk8">nodejs10.x</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">region</span><span class="mtk1">: </span><span class="mtk8">ap-northeast-2</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">functions</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">login</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.login</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      - </span><span class="mtk4">http</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">method</span><span class="mtk1">: </span><span class="mtk8">post</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">path</span><span class="mtk1">: </span><span class="mtk8">login</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">auth</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.auth</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">hello</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">handler</span><span class="mtk1">: </span><span class="mtk8">handler.hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">events</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      - </span><span class="mtk4">http</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">method</span><span class="mtk1">: </span><span class="mtk8">get</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">path</span><span class="mtk1">: </span><span class="mtk8">hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">authorizer</span><span class="mtk1">: </span><span class="mtk8">auth</span></span></span></code></pre>
 <h2>테스트</h2>
 <p>배포하면 <code>https://API-ID.execute-api.REGION.amazonaws.com/dev/</code> 하위에 <code>login</code>과 <code>hello</code> API를 얻을 수 있다. 이제 로그인을 수행하려면 다음과 같이 curl을 사용할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ curl -XPOST </span><span class="mtk8">&quot;https://test:1234@API-ID.execute-api.REGION.amazonaws.com/dev/login&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span><span class="mtk8">&quot;token&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;JWT&quot;</span><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="9"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ curl -XPOST </span><span class="mtk8">&quot;https://test:1234@API-ID.execute-api.REGION.amazonaws.com/dev/login&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span><span class="mtk8">&quot;token&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;JWT&quot;</span><span class="mtk1">}</span></span></span></code></pre>
 <p>이제 얻어낸 JWT 값을 사용하여 <code>hello API</code>를 요청할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ curl -XGET -H </span><span class="mtk8">&quot;Authorization: Bearer JWT-FROM-RESPONSE&quot;</span><span class="mtk1"> </span><span class="mtk8">&quot;https://API-ID.execute-id.REGION.amazonaws.com/dev/hello&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span><span class="mtk8">&quot;resource&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;/hello&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;path&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;/hello&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;httpMethod&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;GET&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;headers&quot;</span><span class="mtk1">:{</span><span class="mtk8">&quot;Accept&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;*/*&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;Authorization&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;Bearer TOKEN-FROM-RESPONSE&quot;</span><span class="mtk1">,...},...}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="10"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ curl -XGET -H </span><span class="mtk8">&quot;Authorization: Bearer JWT-FROM-RESPONSE&quot;</span><span class="mtk1"> </span><span class="mtk8">&quot;https://API-ID.execute-id.REGION.amazonaws.com/dev/hello&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span><span class="mtk8">&quot;resource&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;/hello&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;path&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;/hello&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;httpMethod&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;GET&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;headers&quot;</span><span class="mtk1">:{</span><span class="mtk8">&quot;Accept&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;*/*&quot;</span><span class="mtk1">,</span><span class="mtk8">&quot;Authorization&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;Bearer TOKEN-FROM-RESPONSE&quot;</span><span class="mtk1">,...},...}</span></span></span></code></pre>
 <p>만약 token 없이 요청한다면 <em>401 Unauthorized</em> 응답을 받게 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ curl -v -XGET </span><span class="mtk8">&quot;https://API-ID.execute-id.REGION.amazonaws.com/dev/hello&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">&lt; HTTP/2 401</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">&lt; content-type: application/json</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">&lt; content-length: 26</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">...</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">{</span><span class="mtk8">&quot;message&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;Unauthorized&quot;</span><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="11"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ curl -v -XGET </span><span class="mtk8">&quot;https://API-ID.execute-id.REGION.amazonaws.com/dev/hello&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">&lt; HTTP/2 401</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">&lt; content-type: application/json</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">&lt; content-length: 26</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span><span class="mtk8">&quot;message&quot;</span><span class="mtk1">:</span><span class="mtk8">&quot;Unauthorized&quot;</span><span class="mtk1">}</span></span></span></code></pre>
 <h2>정리</h2>
 <ul>
 <li>Basic authentication으로 요청된 id와 password로부터 JWT를 생성하는 <code>login API</code>와</li>
@@ -184,76 +184,111 @@ API Gateway와 Lambda Proxy를 사용하여 간단한 HTTP/s API나 WebSocket AP
 <li>인증이 필요한 API를 구성할 때 위 <code>auth function</code>을 <code>authorizer</code>로 연결해서 사용할 수 있게 된다.</li>
 </ul>
 <p>Serverless로 구성된 간단한 데이터베이스 등 개인 프로젝트를 진행할 때에도 API들을 인증으로 보호해야 하는 경우가 있는데 이제 위 방법을 사용해서 간단한 인증 체계를 구성할 수 있다. id나 password, 혹은 token을 환경 변수로 관리해서 특정 유저만 허용해도 좋고 필요하다면 S3에 인증 정보를 넣어두고 불러와서 사용해도 되겠다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2019/07/30/working-copy/">&lt; iPad의 Working Copy</a><a style="float:right" href="/2019/08/08/aws-lambda-to-compile-cpp/">AWS Lambda로 cpp 파일 컴파일 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/01/api-gateway-custom-authorizer/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk5 { color: #D16969; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2019/07/30/working-copy/">&lt; iPad의 Working Copy</a><a style="float:right" href="/2019/08/08/aws-lambda-to-compile-cpp/">AWS Lambda로 cpp 파일 컴파일 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/01/api-gateway-custom-authorizer/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

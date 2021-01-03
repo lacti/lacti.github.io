@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2019/08/12/set-timeout-on-aws-lambda/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS Lambda에서의 setTimeout</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2019/08/12/set-timeout-on-aws-lambda/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS Lambda에서의 setTimeout</title><meta data-react-helmet="true" name="description" content="
 AWS Lambda에서 실행하기 위한 분산 ActorSystem을 개발하고 있다. 처음에는 단순히 actor의 state를 Redis나 S3에 기록하고 Redis를 기반으로 작성된 Queue와 Lock…"/><meta data-react-helmet="true" name="keywords" content="aws, serverless, auth"/><meta data-react-helmet="true" name="og:title" content="AWS Lambda에서의 setTimeout"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-AWS Lambda에서 실행하기 위한 분산 ActorSystem을 개발하고 있다. 처음에는 단순히 actor의 state를 Redis나 S3에 기록하고 Redis를 기반으로 작성된 Queue와 Lock…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/12/set-timeout-on-aws-lambda/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>AWS Lambda에서의 setTimeout</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">August 12, 2019</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/auth/">auth</a></div></div><div><p><a href="https://www.npmjs.com/package/@yingyeothon/actor-system-aws-lambda-support">AWS Lambda에서 실행하기 위한</a> <a href="https://www.npmjs.com/package/@yingyeothon/actor-system">분산 ActorSystem</a>을 개발하고 있다. 처음에는 단순히 actor의 state를 <a href="https://www.npmjs.com/package/@yingyeothon/repository-redis">Redis</a>나 <a href="https://www.npmjs.com/package/@yingyeothon/repository-s3">S3</a>에 기록하고 <a href="https://www.npmjs.com/package/@yingyeothon/actor-system-redis-support">Redis를 기반으로 작성된 Queue와 Lock</a>으로 메시지를 교환하면 될 것이라고 생각하고 열심히 만들고 있었다. 하지만 이 모든 것은 actor간 <code>Delayed Message</code>를 교환해야 할 필요가 있는 시점에서 문제가 발생했다. <em>actor 시스템에 대한 이야기도 충분히 재미있지만 이는 추후에 다뤄보도록 하자.</em></p>
+AWS Lambda에서 실행하기 위한 분산 ActorSystem을 개발하고 있다. 처음에는 단순히 actor의 state를 Redis나 S3에 기록하고 Redis를 기반으로 작성된 Queue와 Lock…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/12/set-timeout-on-aws-lambda/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>AWS Lambda에서의 setTimeout</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">August 12, 2019</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/auth/">auth</a></div></div><div><p><a href="https://www.npmjs.com/package/@yingyeothon/actor-system-aws-lambda-support">AWS Lambda에서 실행하기 위한</a> <a href="https://www.npmjs.com/package/@yingyeothon/actor-system">분산 ActorSystem</a>을 개발하고 있다. 처음에는 단순히 actor의 state를 <a href="https://www.npmjs.com/package/@yingyeothon/repository-redis">Redis</a>나 <a href="https://www.npmjs.com/package/@yingyeothon/repository-s3">S3</a>에 기록하고 <a href="https://www.npmjs.com/package/@yingyeothon/actor-system-redis-support">Redis를 기반으로 작성된 Queue와 Lock</a>으로 메시지를 교환하면 될 것이라고 생각하고 열심히 만들고 있었다. 하지만 이 모든 것은 actor간 <code>Delayed Message</code>를 교환해야 할 필요가 있는 시점에서 문제가 발생했다. <em>actor 시스템에 대한 이야기도 충분히 재미있지만 이는 추후에 다뤄보도록 하자.</em></p>
 <p><a href="https://github.com/rabbitmq/rabbitmq-delayed-message-exchange"><code>Delayed Message</code></a>는 <code>visiblity</code>가 지정된 시간 뒤에 확보되는 message로 간단히 <code>setTimeout(() => post(message), millis)</code>와 같은 형태가 된다. 그렇다면 <code>setTimeout</code>을 <code>AWS Lambda</code>에서 사용해도 문제가 없을까? 이 문제를 확인하기 위해 AWS Lambda에 대한 기본 성질과 간단한 실험을 진행해보자.</p>
 <h2>Lambda는 언제 끝나나</h2>
 <p><a href="https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/">Understanding Container Reuse in AWS Lambda</a> 글에서 자세히 나와있는데 인용해보면 다음과 같다.</p>
@@ -16,50 +16,50 @@ AWS Lambda에서 실행하기 위한 분산 ActorSystem을 개발하고 있다. 
 <p>이를 테스트하기 위한 코드는 <a href="https://github.com/lacti/aws-lambda-set-timeout-tester">GitHub:lacti/aws-lambda-set-timeout-tester</a>에 올려두었다.</p>
 <h3>간단한 방법</h3>
 <p>handler 중간에 <code>setTimeout</code>이 있으면 어떻게 될까? 아예 한 술 더 써서 <code>Promise</code>로 감싸진 <code>setTimeout</code> 함수를 다음과 같이 <code>await</code>하지 않고 호출한다고 가정해보자. <a href="https://serverless.com">Serverless framework</a>을 사용해서 만든 <code>aws-nodejs-typescript</code>에 다음과 같이 간단한 <code>setTimeout</code> 구문을 추가해 보았다. 어떤 결과를 기대할 수 있을까?</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1"> = (</span><span class="mtk12">millis</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;(</span><span class="mtk12">resolve</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk11">setTimeout</span><span class="mtk1">(</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">millis</span><span class="mtk1">));</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">hello</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> () </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">&#96;Before setTimeout&#96;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">sleep</span><span class="mtk1">(</span><span class="mtk7">3000</span><span class="mtk1">).</span><span class="mtk11">then</span><span class="mtk1">(() </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">&#96;setTimeout is called!&#96;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  });</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">&#96;After timeout&#96;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&#96;Hi, there!&#96;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1"> = (</span><span class="mtk12">millis</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;(</span><span class="mtk12">resolve</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk11">setTimeout</span><span class="mtk1">(</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">millis</span><span class="mtk1">));</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">hello</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> () </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">`Before setTimeout`</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">sleep</span><span class="mtk1">(</span><span class="mtk7">3000</span><span class="mtk1">).</span><span class="mtk11">then</span><span class="mtk1">(() </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">`setTimeout is called!`</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  });</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk8">`After timeout`</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">`Hi, there!`</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p>배포한 후 API를 한 번 호출한 다음 로그를 확인해보자. 다음처럼 <em>setTimeout is called!</em> 는 로그에서 확인할 수가 없다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ sls deploy</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ curl https://API-DOMAIN/STAGE/hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Hi, there!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ sls logs -f hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID Version: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  Before setTimeout</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  After timeout</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sls deploy</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ curl https://API-DOMAIN/STAGE/hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Hi, there!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sls logs -f hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID Version: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  Before setTimeout</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  After timeout</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span></code></pre>
 <p>별다른 로그가 없으니 <code>setTimeout</code>의 요청을 하던 중 오류가 발생한 것 같지는 않고, <code>Duration</code> 시간을 보면 굉장히 작은 걸 보니 차라리 <code>setTimeout</code>의 callback이 불리기 전에 Lambda execution이 완료되었다고 가정을 하고 테스트를 좀 더 진행해보자.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  sleep 3; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Hi, there!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Hi, there!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ sls logs -f hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID Version: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  setTimeout is called!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  Before setTimeout</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  After timeout</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID Version: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  setTimeout is called!</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  Before setTimeout</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">TIMESTAMP  GUID  INFO  After timeout</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  sleep 3; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Hi, there!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Hi, there!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sls logs -f hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID Version: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  setTimeout is called!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  Before setTimeout</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  After timeout</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID Version: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  setTimeout is called!</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  Before setTimeout</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">TIMESTAMP  GUID  INFO  After timeout</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span></code></pre>
 <p>뭔가 느낌이 와서 3초를 간격으로 두 번의 API 요청을 해보았다. 이번에는 두 로그에서 모두 <code>setTimeout is called!</code>를 볼 수 있다. 재미있는건 둘 다 <code>Before setTimeout</code> 이전에 그 로그가 나왔다는 것이다. 뭔가 온 느낌과 이번 결과로 가설을 세워볼 수 있다.</p>
 <ul>
 <li><code>setTimeout</code>의 callback이 완전히 실행이 안 되는 것은 아니다.</li>
@@ -70,79 +70,79 @@ AWS Lambda에서 실행하기 위한 분산 ActorSystem을 개발하고 있다. 
 <p>예를 들면 <a href="https://github.com/lacti/aws-lambda-set-timeout-tester/blob/master/README.md">이 쪽에서의 실험처럼</a> 1초 간격으로 API를 4번 호출하면 마지막 로그에서만 첫 번째 execution에서 요청된 setTimeout의 callback이 수행된다는 것이다.</p>
 <h3>좀 더 깊은 방법</h3>
 <p>위 실험은 로그에 너무 정보가 많이 부족해서 결과를 제대로 확인하기가 어렵다. 때문에 다음과 같이 Lambda execution이 언제 실행되었고 setTimeout이 언제 요청되었으며 그것이 몇 번째 실행인지의 index를 로그에 추가해보도록 하자.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">staticIndex</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">now</span><span class="mtk1"> = () </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Date</span><span class="mtk1">().</span><span class="mtk11">toISOString</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">helloWithPromise</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> () </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">capturedIndex</span><span class="mtk1"> = ++</span><span class="mtk12">staticIndex</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">prefix</span><span class="mtk1"> = () </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk8">&#96;[</span><span class="mtk4">${</span><span class="mtk12">capturedIndex</span><span class="mtk4">}</span><span class="mtk8">][</span><span class="mtk4">${</span><span class="mtk11">now</span><span class="mtk1">()</span><span class="mtk4">}</span><span class="mtk8">]&#96;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">&#96;Before requesting a scheduled job.&#96;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">requested</span><span class="mtk1"> = </span><span class="mtk11">now</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">sleep</span><span class="mtk1">(</span><span class="mtk7">3000</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">then</span><span class="mtk1">(() </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">&#96;This is requested from [</span><span class="mtk4">${</span><span class="mtk12">requested</span><span class="mtk4">}</span><span class="mtk8">]&#96;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">catch</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">error</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">&#96;Error after 3 seconds&#96;</span><span class="mtk1">, </span><span class="mtk12">error</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    });</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">&#96;After requesting a scheduled job.&#96;</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&#96;</span><span class="mtk4">${</span><span class="mtk11">prefix</span><span class="mtk1">()</span><span class="mtk4">}</span><span class="mtk8"> requested at [</span><span class="mtk4">${</span><span class="mtk12">requested</span><span class="mtk4">}</span><span class="mtk8">]&#96;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">staticIndex</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">now</span><span class="mtk1"> = () </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Date</span><span class="mtk1">().</span><span class="mtk11">toISOString</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">helloWithPromise</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> () </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">capturedIndex</span><span class="mtk1"> = ++</span><span class="mtk12">staticIndex</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">prefix</span><span class="mtk1"> = () </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk8">`[</span><span class="mtk4">${</span><span class="mtk12">capturedIndex</span><span class="mtk4">}</span><span class="mtk8">][</span><span class="mtk4">${</span><span class="mtk11">now</span><span class="mtk1">()</span><span class="mtk4">}</span><span class="mtk8">]`</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">`Before requesting a scheduled job.`</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">requested</span><span class="mtk1"> = </span><span class="mtk11">now</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">sleep</span><span class="mtk1">(</span><span class="mtk7">3000</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">then</span><span class="mtk1">(() </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">`This is requested from [</span><span class="mtk4">${</span><span class="mtk12">requested</span><span class="mtk4">}</span><span class="mtk8">]`</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">catch</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">error</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">`Error after 3 seconds`</span><span class="mtk1">, </span><span class="mtk12">error</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    });</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk11">prefix</span><span class="mtk1">(), </span><span class="mtk8">`After requesting a scheduled job.`</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">`</span><span class="mtk4">${</span><span class="mtk11">prefix</span><span class="mtk1">()</span><span class="mtk4">}</span><span class="mtk8"> requested at [</span><span class="mtk4">${</span><span class="mtk12">requested</span><span class="mtk4">}</span><span class="mtk8">]`</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p><a href="https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/">Lambda container는 재사용될 수 있기 때문에</a> <code>staticIndex</code>와 같은 전역 변수도 Lambda execution 간에 공유될 수 있다. 이제 <code>setTimeout</code>이 몇 번째 Lambda execution에서 요청된 것인지 보다 명확하게 확인해볼 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">$ curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  sleep 1; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  sleep 1; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  sleep 1; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  sleep 3; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[1][2019-08-12T13:57:57.870Z] requested at [2019-08-12T13:57:57.869Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[2][2019-08-12T13:57:58.964Z] requested at [2019-08-12T13:57:58.964Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[3][2019-08-12T13:58:00.068Z] requested at [2019-08-12T13:58:00.068Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[4][2019-08-12T13:58:01.132Z] requested at [2019-08-12T13:58:01.132Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">[5][2019-08-12T13:58:04.216Z] requested at [2019-08-12T13:58:04.216Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">$ sls logs -f hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:57:57.869 (+09:00)  GUID  INFO  [1][2019-08-12T13:57:57.868Z] Before requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:57:57.870 (+09:00)  GUID  INFO  [1][2019-08-12T13:57:57.869Z] After requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:57:58.964 (+09:00)  GUID  INFO  [2][2019-08-12T13:57:58.964Z] Before requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:57:58.964 (+09:00)  GUID  INFO  [2][2019-08-12T13:57:58.964Z] After requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:00.068 (+09:00)  GUID  INFO  [3][2019-08-12T13:58:00.068Z] Before requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:00.068 (+09:00)  GUID  INFO  [3][2019-08-12T13:58:00.068Z] After requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:01.131 (+09:00)  GUID  INFO  [1][2019-08-12T13:58:01.131Z] This is requested from [2019-08-12T13:57:57.869Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:01.132 (+09:00)  GUID  INFO  [4][2019-08-12T13:58:01.132Z] Before requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:01.132 (+09:00)  GUID  INFO  [4][2019-08-12T13:58:01.132Z] After requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:04.215 (+09:00)  GUID  INFO  [2][2019-08-12T13:58:04.215Z] This is requested from [2019-08-12T13:57:58.964Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:04.215 (+09:00)  GUID  INFO  [3][2019-08-12T13:58:04.215Z] This is requested from [2019-08-12T13:58:00.068Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:04.215 (+09:00)  GUID  INFO  [4][2019-08-12T13:58:04.215Z] This is requested from [2019-08-12T13:58:01.132Z]</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:04.216 (+09:00)  GUID  INFO  [5][2019-08-12T13:58:04.216Z] Before requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">2019-08-12 22:58:04.216 (+09:00)  GUID  INFO  [5][2019-08-12T13:58:04.216Z] After requesting a scheduled job.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">END RequestId: GUID</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  sleep 1; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  sleep 1; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  sleep 1; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span><span class="mtk1">; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  sleep 3; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  curl https://API-DOMAIN/STAGE/hello; </span><span class="mtk11">echo</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[1][2019-08-12T13:57:57.870Z] requested at [2019-08-12T13:57:57.869Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[2][2019-08-12T13:57:58.964Z] requested at [2019-08-12T13:57:58.964Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[3][2019-08-12T13:58:00.068Z] requested at [2019-08-12T13:58:00.068Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[4][2019-08-12T13:58:01.132Z] requested at [2019-08-12T13:58:01.132Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">[5][2019-08-12T13:58:04.216Z] requested at [2019-08-12T13:58:04.216Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">$ sls logs -f hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:57:57.869 (+09:00)  GUID  INFO  [1][2019-08-12T13:57:57.868Z] Before requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:57:57.870 (+09:00)  GUID  INFO  [1][2019-08-12T13:57:57.869Z] After requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:57:58.964 (+09:00)  GUID  INFO  [2][2019-08-12T13:57:58.964Z] Before requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:57:58.964 (+09:00)  GUID  INFO  [2][2019-08-12T13:57:58.964Z] After requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:00.068 (+09:00)  GUID  INFO  [3][2019-08-12T13:58:00.068Z] Before requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:00.068 (+09:00)  GUID  INFO  [3][2019-08-12T13:58:00.068Z] After requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:01.131 (+09:00)  GUID  INFO  [1][2019-08-12T13:58:01.131Z] This is requested from [2019-08-12T13:57:57.869Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:01.132 (+09:00)  GUID  INFO  [4][2019-08-12T13:58:01.132Z] Before requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:01.132 (+09:00)  GUID  INFO  [4][2019-08-12T13:58:01.132Z] After requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">START RequestId: GUID: </span><span class="mtk12">$LATEST</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:04.215 (+09:00)  GUID  INFO  [2][2019-08-12T13:58:04.215Z] This is requested from [2019-08-12T13:57:58.964Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:04.215 (+09:00)  GUID  INFO  [3][2019-08-12T13:58:04.215Z] This is requested from [2019-08-12T13:58:00.068Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:04.215 (+09:00)  GUID  INFO  [4][2019-08-12T13:58:04.215Z] This is requested from [2019-08-12T13:58:01.132Z]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:04.216 (+09:00)  GUID  INFO  [5][2019-08-12T13:58:04.216Z] Before requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">2019-08-12 22:58:04.216 (+09:00)  GUID  INFO  [5][2019-08-12T13:58:04.216Z] After requesting a scheduled job.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">END RequestId: GUID</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">REPORT RequestId: GUID  Duration: X.XX ms   Billed Duration: X00 ms  Memory Size: 1024 MB  Max Memory Used: XX MB</span></span></span></code></pre>
 <p>네 번째 execution의 로그를 보면 <strong>[1][2019-08-12t13:58:01.131z] This is requested from [2019-08-12T13:57:57.869Z]</strong> 와 같은 로그를 볼 수 있다. 다른 행의 로그와는 다르게 이 로그는 <code>[1]</code>로 시작하는데 그 이유는 이 로그가 첫 번째 execution에서 요청되었기 때문이다. 즉, <code>capturedIndex</code>가 첫 번째 execution에서 capture되어 네 번째 execution까지 잘 유지되었다고 볼 수 있다. 아예 3초 더 쉰 뒤에 실행된 다섯 번째 로그는 네 번째 execution에서도 시간이 아직 되지 않아서 불리지 못한 2, 3, 4번째의 <code>setTimeout</code>의 callback이 모두 수행된 것을 볼 수 있다.</p>
 <h2>정리</h2>
 <p>Lambda container가 재사용될 수 있는 점을 이용하여 전역 변수나 <code>/tmp</code> 내의 파일들을 서로 다른 Lambda execution 간에 공유해서 사용하는 경우가 있다. 이 성질을 이용하면 <code>setTimeout</code> 등의 callback도 이번 Lambda execution이 아니라 다음 Lambda execution에서 실행될 수 있도록 할 수 있다. 하지만 대부분의 경우에서 이는 기대 상황이 아닐 것이고, 오히려 Lambda execution 내에 unresolved Promise나 setTimeout callback이 있어도 Lambda handler가 완료되면 그들은 호출되지 않기 때문에 이들이 모두 정상 동작하기를 바란다면 <strong>반드시 모든 Promise를 await한 후 handler를 반환하도록 코드를 관리해야 하겠다.</strong></p>
@@ -154,76 +154,109 @@ AWS Lambda에서 실행하기 위한 분산 ActorSystem을 개발하고 있다. 
 </ul>
 <h3>여담</h3>
 <p>위와 같은 행동을 보일 수 있는 이유는 NodeJS runtime의 suspend와 resume이 hypervisor에 의해 잘 수행되기 때문인데 어찌보면 당연한 이야기이지만 이렇게 모든 context가 칼같이 suspend되었다가 resume되고 이 모든 과정이 몇 ms 내에서 일어난다는 점은 신기할 정도이다. 이 쪽은 <a href="http://firecracker-microvm.io/">microvm</a>의 마법을 좀 더 공부하고 정리해볼 수 있도록 노력해야겠다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2019/08/08/aws-lambda-to-compile-cpp/">&lt; AWS Lambda로 cpp 파일 컴파일</a><a style="float:right" href="/2019/08/16/actor-model-on-aws-lambda/">AWS Lambda와 Actor model &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/12/set-timeout-on-aws-lambda/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2019/08/08/aws-lambda-to-compile-cpp/">&lt; AWS Lambda로 cpp 파일 컴파일</a><a style="float:right" href="/2019/08/16/actor-model-on-aws-lambda/">AWS Lambda와 Actor model &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/12/set-timeout-on-aws-lambda/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

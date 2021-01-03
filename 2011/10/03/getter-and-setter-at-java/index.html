@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2011/10/03/getter-and-setter-at-java/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">Java와 Getter/Setter</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2011/10/03/getter-and-setter-at-java/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">Java와 Getter/Setter</title><meta data-react-helmet="true" name="description" content="
 …"/><meta data-react-helmet="true" name="keywords" content="java"/><meta data-react-helmet="true" name="og:title" content="Java와 Getter/Setter"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2011/10/03/getter-and-setter-at-java/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>Java와 Getter/Setter</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">October 03, 2011</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/java/">java</a></div></div><div><p>객체지향 프로그래밍이라는 개념은 이름만으로는 상당히 추상적이라서 이해하기 영 좋지 않다. 약간 다르게 생각을 해보자. 객체지향이라는 개념이 왜 나왔는가를 통해서 대충 당시의 사람들이 무엇을 상상하고 만들었는지를 통해 이해해보는 것이다.</p>
+…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2011/10/03/getter-and-setter-at-java/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>Java와 Getter/Setter</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">October 03, 2011</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/java/">java</a></div></div><div><p>객체지향 프로그래밍이라는 개념은 이름만으로는 상당히 추상적이라서 이해하기 영 좋지 않다. 약간 다르게 생각을 해보자. 객체지향이라는 개념이 왜 나왔는가를 통해서 대충 당시의 사람들이 무엇을 상상하고 만들었는지를 통해 이해해보는 것이다.</p>
 <h2>옛날 이야기</h2>
 <p>예전에는 절차지향 프로그래밍이라는 방식이 있었다. 프로그램이란, 기계(전자회로)의 동작을 제어하는 것으로, 이렇게, 저렇게, 의 명령 집합으로 생각되던 시절이었다. 당시에는 데이터나 명령이나 크게 구분이 없었다. 그래서 프로그램은 어떤 순서로 어떤 동작을 수행할지에 대한 나열인 방식으로 작성되었다</p>
 <p>프로그램의 규모가 커지면서, 저러한 수행의 방식이 비슷한 곳이 많아졌다. 내가 짠 부분에서도, 남이 짠 부분에서도 최대 공약수를 구해야하는데, 매번 구하는 프로그램을 짜는 건 비효율적이다. 따라서 함수가 분리되고 라이브러리가 생겼다</p>
@@ -17,15 +17,15 @@
 <h2>객체냐 자료구조냐</h2>
 <p>은근슬쩍 넘어갔는데, 객체랑 자료구조랑은 좀 다르다. 관심있게 읽어준 사람은, 초반에는 분명 자료구조를 이야기하다가 어느순간 능구렁이 담 넘어가듯 객체 이야기로 넘어갔다는 것을 감지했을 것이다.</p>
 <p>자바 프로그래밍을 하면서 가장 많이 실수하는 것이 이 둘을 구분짓지 못하는 것인데 왜 그런지 보자. 객체지향을 자바라는 언어로 공부하면서 가장 많이 배우는 잘못된 것은 아래와 같은 코드이다.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Person</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk11">Person</span><span class="mtk1">() {}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk11">getAge</span><span class="mtk1">() { </span><span class="mtk15">return</span><span class="mtk1"> age; }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">void</span><span class="mtk1"> </span><span class="mtk11">setAge</span><span class="mtk1">(</span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">) { </span><span class="mtk4">this</span><span class="mtk1">.</span><span class="mtk12">age</span><span class="mtk1"> = age; }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk11">getName</span><span class="mtk1">() { </span><span class="mtk15">return</span><span class="mtk1"> name; }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">void</span><span class="mtk1"> </span><span class="mtk11">setName</span><span class="mtk1">(</span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">) { </span><span class="mtk4">this</span><span class="mtk1">.</span><span class="mtk12">name</span><span class="mtk1"> = name; }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Person</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk11">Person</span><span class="mtk1">() {}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk11">getAge</span><span class="mtk1">() { </span><span class="mtk15">return</span><span class="mtk1"> age; }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">void</span><span class="mtk1"> </span><span class="mtk11">setAge</span><span class="mtk1">(</span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">) { </span><span class="mtk4">this</span><span class="mtk1">.</span><span class="mtk12">age</span><span class="mtk1"> = age; }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk11">getName</span><span class="mtk1">() { </span><span class="mtk15">return</span><span class="mtk1"> name; }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">void</span><span class="mtk1"> </span><span class="mtk11">setName</span><span class="mtk1">(</span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">) { </span><span class="mtk4">this</span><span class="mtk1">.</span><span class="mtk12">name</span><span class="mtk1"> = name; }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>Person이라는 객체는 상태를 갖는다. 나이와 이름이라는 상태를 갖는데 이를 제어할 수 있도록 age와 name에 대한 <em>getter, setter를 만들어서 객체지향에 맞는 좋은 프로그래밍을 한 것일까?</em></p>
 <ul>
 <li>객체의 상태가 잘 은닉화 되었나? (어차피 public 으로 그냥 다 노출되었다.)</li>
@@ -36,27 +36,27 @@
 <p>뭐 get/set 좋다. 취향이니 존중해줄 수는 있지만 아무 생각없이 get/set 코드 찍어내면서 난 정말 멋진 객체지향 프로그래머야! 라고 생각하지는 않았으면 좋겠다.</p>
 <p>실제로, 위와 같은 class는 객체라기보다는 자료구조이다. 객체는 상태를 갖고 스스로 그걸 관리해주는, 즉 그걸 조작하는 함수를 갖는 것이다. 자료구조는? 자료를 담는 것이다.</p>
 <p>어차피 Person class를 사용해서 사람에 대한 정보를 처리하는 코드를 작성한다면, 그 코드가 Person가 아닌 Person 자료를 관리하는 곳에 들어가기 때문이다.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">PeopleManager</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">Person</span><span class="mtk1">&gt; </span><span class="mtk12">people</span><span class="mtk1"> = </span><span class="mtk15">new</span><span class="mtk1"> </span><span class="mtk10">ArrayList</span><span class="mtk1">&lt;</span><span class="mtk10">Person</span><span class="mtk1">&gt;();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk11">calcaulteAverageAge</span><span class="mtk1">() {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">averageAge</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk10">Person</span><span class="mtk1"> </span><span class="mtk12">p</span><span class="mtk15">:</span><span class="mtk1"> people) averageAge += </span><span class="mtk12">p</span><span class="mtk1">.</span><span class="mtk12">age</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> averageAge / </span><span class="mtk12">people</span><span class="mtk1">.</span><span class="mtk11">size</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Person</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">PeopleManager</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">Person</span><span class="mtk1">&gt; </span><span class="mtk12">people</span><span class="mtk1"> = </span><span class="mtk15">new</span><span class="mtk1"> </span><span class="mtk10">ArrayList</span><span class="mtk1">&lt;</span><span class="mtk10">Person</span><span class="mtk1">&gt;();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk11">calcaulteAverageAge</span><span class="mtk1">() {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">averageAge</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk10">Person</span><span class="mtk1"> </span><span class="mtk12">p</span><span class="mtk15">:</span><span class="mtk1"> people) averageAge += </span><span class="mtk12">p</span><span class="mtk1">.</span><span class="mtk12">age</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> averageAge / </span><span class="mtk12">people</span><span class="mtk1">.</span><span class="mtk11">size</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Person</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>Person 객체들은 List에 의해 관리되고 있고, 그걸 소유하는 PeopleManager에서 접근, 계산하고 있다.
 여기서 Person class가 age와 name에 대해 getter/setter 를 가질 필요는 전혀 없다. 오히려 있으면 더럽다. (안그래도 느린데, getter 접근하면 더 느려진다! 물론 javac가 최적화해줄 수 있지만 그걸 바라고 getter를 쓰는건 좀 이상하다.)</p>
 <p>단순히 사람에 대한 정보를 담는, 즉 자료구조라면 굳이 getter/setter를 두지 않고 public으로 멤버를 노출시키는게 더 올바른 설계라는 것이다.</p>
 <h2>왜 getter/setter를 붙이는 습관이 들었을까</h2>
 <p>Java가 가장 많이 사용되는 시장은 Web이다. J2EE가 크게 성공하면서 EJB가 대세! 인 세상이 있었다. EJB 는 Enterprise Java Bean의 약자인데, 여기서 Bean은 아래와 같은 코드를 말했다.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">PersonBean</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">PersonBean</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">int</span><span class="mtk1"> </span><span class="mtk12">age</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">String</span><span class="mtk1"> </span><span class="mtk12">name</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>즉, DB와 어떻게 보여줄 지 연산하는 부분과 웹 페이지 만드는 부분에서 데이터를 공유하기 위해 정보를 담는 자료구조인 것이다. 이런 값 객체(ValueObject: VO) 들이 많아지면서 코드 여기저기를 누비게 되었다.</p>
 <p>그런데 값이란게 로직과 떨어질 수가 없는 운명이다.</p>
 <p>예를 들면, 저 나이에서 만 나이를 구하는 경우를 생각해보자. age에서 1을 빼면 된다. 따라서 만 나이가 사용되는 경우에는 다 - 1 연산을 사용하였다. 사실 이건 중복되는 로직이니까 Person class에서 이걸 반환하는 함수를 하나 넣어주면 되는데, 안타깝게도 저 부분은 거의 auto generation 되는 코드이거나, convention으로 강력하게 박혀있기 때문에 함부로 수정하지를 않았다. 그래서 로직 코드가 중복되고, 코드의 품질이 저하되었다.</p>
@@ -74,86 +74,119 @@
 </ul>
 <p>아무튼 Getter, Setter을 은닉을 위해 쓰겠다는건 말도 안되는 이야기고, 진짜 쓰겠다면 Mutator와 Accessor의 개념으로 접근해서 설계를 하는 마음을 먹고 써야한다.</p>
 <p>물론 Java에서는 멤버의 Readonly를 위해 Getter만 존재하는 경우도 있다. 이 경우에는 final keyword를 사용해서 수정이 불가능하게 해줘도 되는데, 이게 객체 멤버를 반환할 경우에는 좀 애매해진다. final은 객체 멤버의 reference을 못 바꾸게 하는거지 반환된 객체를 수정하지 못하게하는건 아니니까.</p>
-<pre class="default-dark vscode-highlight" data-language="java"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Program</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">final</span><span class="mtk1"> </span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">Code</span><span class="mtk1">&gt; </span><span class="mtk12">codes</span><span class="mtk1"> = </span><span class="mtk15">new</span><span class="mtk1"> </span><span class="mtk10">ArrayList</span><span class="mtk1">&lt;</span><span class="mtk10">Code</span><span class="mtk1">&gt;();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">Code</span><span class="mtk1">&gt; </span><span class="mtk11">getCodes</span><span class="mtk1">() {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> codes;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk3">// 중략</span></span>
-<span class="vscode-highlight-line"><span class="mtk10">Program</span><span class="mtk1"> </span><span class="mtk12">program</span><span class="mtk1"> = </span><span class="mtk15">new</span><span class="mtk1"> </span><span class="mtk11">Program</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk12">program</span><span class="mtk1">.</span><span class="mtk11">getCodes</span><span class="mtk1">().</span><span class="mtk11">clear</span><span class="mtk1">(); </span><span class="mtk3">// 수정할 수 있다</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="java" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">Program</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">private</span><span class="mtk1"> </span><span class="mtk4">final</span><span class="mtk1"> </span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">Code</span><span class="mtk1">&gt; </span><span class="mtk12">codes</span><span class="mtk1"> = </span><span class="mtk15">new</span><span class="mtk1"> </span><span class="mtk10">ArrayList</span><span class="mtk1">&lt;</span><span class="mtk10">Code</span><span class="mtk1">&gt;();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk10">List</span><span class="mtk1">&lt;</span><span class="mtk10">Code</span><span class="mtk1">&gt; </span><span class="mtk11">getCodes</span><span class="mtk1">() {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> codes;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3">// 중략</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk10">Program</span><span class="mtk1"> </span><span class="mtk12">program</span><span class="mtk1"> = </span><span class="mtk15">new</span><span class="mtk1"> </span><span class="mtk11">Program</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk12">program</span><span class="mtk1">.</span><span class="mtk11">getCodes</span><span class="mtk1">().</span><span class="mtk11">clear</span><span class="mtk1">(); </span><span class="mtk3">// 수정할 수 있다</span></span></span></code></pre>
 <p>이 때문에 @Readonly annotation이 추가되려 하였으나 실패했다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2011/09/30/using-rtti-at-cpp/">&lt; c++ 에서 구조체 RTTI 정보 남기기</a><a style="float:right" href="/2011/10/08/design-database/">데이터베이스 설계 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2011/10/03/getter-and-setter-at-java/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2011/09/30/using-rtti-at-cpp/">&lt; c++ 에서 구조체 RTTI 정보 남기기</a><a style="float:right" href="/2011/10/08/design-database/">데이터베이스 설계 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2011/10/03/getter-and-setter-at-java/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

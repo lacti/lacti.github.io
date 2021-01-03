@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2019/10/01/hello-serverless-xray-typescript/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">Serverless + X-Ray + TypeScript</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2019/10/01/hello-serverless-xray-typescript/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">Serverless + X-Ray + TypeScript</title><meta data-react-helmet="true" name="description" content="
 AWS X-Ray는 AWS가 제공하는 tracing solution이다. AWS X-Ray는 개발자가 마이크로 서비스 아키텍처를 사용해 구축된 애플리케이션과 같은 프로덕션 분산 애플리케이션을 분석하고 디버그하는 데 도움이 됩니다. X-Ray…"/><meta data-react-helmet="true" name="keywords" content="aws, serverless, xray, typescript"/><meta data-react-helmet="true" name="og:title" content="Serverless + X-Ray + TypeScript"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-AWS X-Ray는 AWS가 제공하는 tracing solution이다. AWS X-Ray는 개발자가 마이크로 서비스 아키텍처를 사용해 구축된 애플리케이션과 같은 프로덕션 분산 애플리케이션을 분석하고 디버그하는 데 도움이 됩니다. X-Ray…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2019/10/01/hello-serverless-xray-typescript/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>Serverless + X-Ray + TypeScript</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">October 01, 2019</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/xray/">xray</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/typescript/">typescript</a></div></div><div><p><a href="https://aws.amazon.com/ko/xray/">AWS X-Ray</a>는 AWS가 제공하는 tracing solution이다.</p>
+AWS X-Ray는 AWS가 제공하는 tracing solution이다. AWS X-Ray는 개발자가 마이크로 서비스 아키텍처를 사용해 구축된 애플리케이션과 같은 프로덕션 분산 애플리케이션을 분석하고 디버그하는 데 도움이 됩니다. X-Ray…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2019/10/01/hello-serverless-xray-typescript/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>Serverless + X-Ray + TypeScript</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">October 01, 2019</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/xray/">xray</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/typescript/">typescript</a></div></div><div><p><a href="https://aws.amazon.com/ko/xray/">AWS X-Ray</a>는 AWS가 제공하는 tracing solution이다.</p>
 <blockquote>
 <p>AWS X-Ray는 개발자가 마이크로 서비스 아키텍처를 사용해 구축된 애플리케이션과 같은 프로덕션 분산 애플리케이션을 분석하고 디버그하는 데 도움이 됩니다. X-Ray를 사용해 자신이 개발한 애플리케이션과 기본 서비스가 성능 문제와 오류의 근본 원인 식별과 문제 해결을 올바로 수행하는지 파악할 수 있습니다. X-Ray는 요청이 애플리케이션을 통과함에 따라 요청에 대한 엔드 투 엔드 뷰를 제공하고 애플리케이션의 기본 구성 요소를 맵으로 보여줍니다. X-Ray를 사용하여 간단한 3-티어 애플리케이션에서부터 수천 개의 서비스로 구성된 복잡한 마이크로 서비스 애플리케이션에 이르기까지 개발 중인 애플리케이션과 프로덕션에 적용된 애플리케이션 모두 분석할 수 있습니다.</p>
 </blockquote>
@@ -23,81 +23,81 @@ AWS X-Ray는 AWS가 제공하는 tracing solution이다. AWS X-Ray는 개발자�
 <li><a href="https://aws.amazon.com/ko/xray/features/">https://aws.amazon.com/ko/xray/features/</a></li>
 </ul>
 <p><a href="https://serverless.com">Serverless framework</a>에서는 <a href="https://serverless.com/blog/framework-release-v141/">꽤 예전부터 Serverless stack에 X-Ray 연동을 지원하기 시작했다.</a> 이제 이와 같은 옵션을 <code>serverless.yml</code>에 추가하는 것만으로도 기본적인 API Gateway + Lambda의 Service map과 Traces를 확인할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">provider</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">tracing</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">apiGateway</span><span class="mtk1">: </span><span class="mtk4">true</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk4">lambda</span><span class="mtk1">: </span><span class="mtk4">true</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">provider</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">tracing</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">apiGateway</span><span class="mtk1">: </span><span class="mtk4">true</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">lambda</span><span class="mtk1">: </span><span class="mtk4">true</span></span></span></code></pre>
 <p>하지만 함수 단위로 직접 segment를 만들어서 모니터링을 하고 싶다거나, 연동되는 다른 AWS component간의 측정을 진행하려면 <a href="https://github.com/aws/aws-xray-sdk-node"><code>aws-xray-sdk</code></a>를 사용해야 한다. 이 package는 이미 개발된 <a href="https://www.npmjs.com/package/aws-xray-sdk-express"><code>express</code></a>, <a href="https://www.npmjs.com/package/aws-xray-sdk-restify"><code>restify</code></a>, <a href="https://www.npmjs.com/package/aws-xray-sdk-mysql"><code>mysql</code></a> 등에 대한 추적도 수행할 수 있는 라이브러리를 제공한다. 이에 대한 사용법은 <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs.html">공식 문서</a>에서 잘 찾아볼 수 있으므로 이 글에서는 보다 간단한 수준으로 <strong>Serverless framework에서 aws-xray-sdk-core를 TypeScript + Webpack</strong>으로 사용하는 방법에 대해 정리해보려고 한다.</p>
 <p>진행되는 내용에 대한 전체 코드와 간단한 설명은 <a href="https://github.com/lacti/hello-serverless-xray-typescript">GitHub: hello-serverless-xray-typescript</a>에서 확인이 가능하다.</p>
 <h3>프로젝트 시작</h3>
 <p>Serverless framework이 설치되어있다는 가정 하에, 다음과 같이 프로젝트를 시작할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3"># Install Serverless framework, first.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">npm i -g serverless</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk3"># Prepare a working directory.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">mkdir hello-serverless-xray-typescript &amp;&amp; \</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">cd</span><span class="mtk1"> hello-serverless-xray-typescript</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk3"># Create the scaffold using a create command of Serverless cli.</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">sls create --template aws-nodejs-typescript --name hello-serverless-xray-typescript</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># Install Serverless framework, first.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">npm i -g serverless</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># Prepare a working directory.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">mkdir hello-serverless-xray-typescript &amp;&amp; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">cd</span><span class="mtk1"> hello-serverless-xray-typescript</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># Create the scaffold using a create command of Serverless cli.</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">sls create --template aws-nodejs-typescript --name hello-serverless-xray-typescript</span></span></span></code></pre>
 <p>그럼 이제 template으로부터 여러 파일이 자동으로 생성된다. TypeScript와 Webpack 설정도 기본으로 들어있어서 아주 편하다. 하지만 예전에 만들어진 template이므로 참조 라이브러리들이 오래되었을 수 있으니 모두 최신으로 갱신해준다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">yarn add -D @types/aws-lambda @types/node@10 serverless-webpack ts-loader typescript webpack</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">yarn add -D @types/aws-lambda @types/node@10 serverless-webpack ts-loader typescript webpack</span></span></span></code></pre>
 <h3><code>aws-sdk</code> 추가</h3>
 <p><code>aws-xray-sdk</code>는 <code>aws-sdk</code>를 참조로 가진다. 하지만 <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html"><code>aws-sdk@2.488.0</code>는 AWS Lambda의 runtime에 이미 포함되어있으므로</a> 다음과 같이 <code>optionalDependencies</code>로 추가해주고 <code>webpack.config.js</code>에서는 <code>externals</code>에 넣어 bundle에 포함되지 않도록 해준다. <code>aws-sdk</code>는 너무 크기 때문에 bundle에 들어가면 용량이 급격히 증가하고, 이는 cold start 지연의 원인이 될 수 있다. <em>물론 사용하고자 하는 함수가 AWS Lambda에서 지원하는 <code>aws-sdk</code>보다 최신에만 있다면 어쩔 수 없이 <code>aws-sdk</code>를 포함해서 업로드해야 한다.</em></p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">yarn add -O aws-sdk@2.488.0</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">yarn add -O aws-sdk@2.488.0</span></span></span></code></pre>
 <p>📄 webpack.config.js</p>
-<pre class="default-dark vscode-highlight" data-language="diff"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">      filename: &quot;[name].js&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    },</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    target: &quot;node&quot;,</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+   externals: [/aws-sdk/],</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    module: {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      rules: [</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        // all files with a &#96;.ts&#96; or &#96;.tsx&#96; extension will be handled by &#96;ts-loader&#96;</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="diff" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      filename: &quot;[name].js&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    target: &quot;node&quot;,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+   externals: [/aws-sdk/],</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    module: {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      rules: [</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`</span></span></span></code></pre>
 <h3><code>aws-xray-sdk-core</code> 추가</h3>
 <p><code>aws-xray-sdk</code>는 <code>express</code>, <code>mysql</code> 등의 기반을 쉽게 추적할 수 있는 middleware를 모두 포함하고 있어 package 크기가 꽤 크다. 만약 추적할 대상이 AWS component나 직접 개발한 함수라면 <code>aws-xray-sdk-core</code>를 추가하는 것만으로도 충분하다. 다음과 같이 추가하자.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">yarn add aws-xray-sdk-core</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">yarn add aws-xray-sdk-core</span></span></span></code></pre>
 <p>하지만 슬프게도 이 official package는 type definition을 가지고 있지 않다. 더욱이 <a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped</a>에도 올라와있지 않다. 예전에 작성된 <a href="https://github.com/aws/aws-xray-sdk-node/pull/109">index.d.ts에 대한 PR</a>이 있지만 작업 중간에 중단되었는지 그 상태로 계속 멈춰있다. 일단 급한대로 이 파일을 가져다가 <a href="https://github.com/lacti/hello-serverless-xray-typescript/blob/master/typings/aws-xray-sdk-core/index.d.ts"><code>typings/aws-xray-sdk-core/index.d.ts</code></a>에 넣어주자.</p>
 <p>단, 이따 사용할 <code>captureFunc</code>, <code>captureAsyncFunc</code>의 경우 return type이 누락되어 있어 이것만 추가로 수정해주면 된다.</p>
 <p>📄 index.d.ts</p>
-<pre class="default-dark vscode-highlight" data-language="diff"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">   ): SegmentLike | undefined;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">   export function getNamespace(): Namespace;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk8">-  export function captureFunc(</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+  export function captureFunc&lt;R&gt;(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     name: string,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     fcn: (subsegment: Subsegment) =&gt; R,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     parent?: SegmentLike</span></span>
-<span class="vscode-highlight-line"><span class="mtk8">-  ): void;</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+  ): R;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk8">-  export function captureAsyncFunc(</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+  export function captureAsyncFunc&lt;R&gt;(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     name: string,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     fcn: (subsegment: Subsegment) =&gt; Promise&lt;R&gt;,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     parent?: SegmentLike</span></span>
-<span class="vscode-highlight-line"><span class="mtk8">-  ): void;</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+  ): Promise&lt;R&gt;;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">   export function captureCallbackFunc&lt;A extends any[]&gt;(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">     name: string,</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="diff" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">   ): SegmentLike | undefined;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">   export function getNamespace(): Namespace;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk8">-  export function captureFunc(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+  export function captureFunc&lt;R&gt;(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     name: string,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     fcn: (subsegment: Subsegment) =&gt; R,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     parent?: SegmentLike</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk8">-  ): void;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+  ): R;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk8">-  export function captureAsyncFunc(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+  export function captureAsyncFunc&lt;R&gt;(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     name: string,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     fcn: (subsegment: Subsegment) =&gt; Promise&lt;R&gt;,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     parent?: SegmentLike</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk8">-  ): void;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+  ): Promise&lt;R&gt;;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">   export function captureCallbackFunc&lt;A extends any[]&gt;(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">     name: string,</span></span></span></code></pre>
 <h3>Webpack 경고 해결</h3>
 <p><code>aws-xray-core-sdk</code>는 AWS Lambda의 Node.js runtime에 포함되어있지 않으므로 Webpack으로 함께 bundle을 만들어야 한다. 하지만 다음과 같은 경고가 나온다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">WARNING </span><span class="mtk15">in</span><span class="mtk1"> ./node_modules/aws-xray-sdk-core/lib/patchers/call_capturer.js 41:32-47</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Critical dependency: the request of a dependency is an expression</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/segments/attributes/aws.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/aws-xray.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/index.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./handler.ts</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">WARNING </span><span class="mtk15">in</span><span class="mtk1"> ./node_modules/colors/lib/colors.js 127:29-43</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">Critical dependency: the request of a dependency is an expression</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/colors/safe.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/winston/lib/winston/config.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/winston/lib/winston.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/logger.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/aws-xray.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/index.js</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"> @ ./handler.ts</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">WARNING </span><span class="mtk15">in</span><span class="mtk1"> ./node_modules/aws-xray-sdk-core/lib/patchers/call_capturer.js 41:32-47</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Critical dependency: the request of a dependency is an expression</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/segments/attributes/aws.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/aws-xray.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/index.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./handler.ts</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">WARNING </span><span class="mtk15">in</span><span class="mtk1"> ./node_modules/colors/lib/colors.js 127:29-43</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">Critical dependency: the request of a dependency is an expression</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/colors/safe.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/winston/lib/winston/config.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/winston/lib/winston.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/logger.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/aws-xray.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./node_modules/aws-xray-sdk-core/lib/index.js</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1"> @ ./handler.ts</span></span></span></code></pre>
 <p>그 이유는,</p>
 <ul>
 <li><code>aws-xray-core-sdk</code>가 사용하는 <code>winston</code>에서 <code>colors</code> 라이브러리를 사용하는데 이 때 <code>color-theme</code>를 동적으로 바꾸는 함수가 있어 runtime <code>require</code>를 하기 때문에 경고가 발생하고</li>
@@ -106,67 +106,67 @@ AWS X-Ray는 AWS가 제공하는 tracing solution이다. AWS X-Ray는 개발자�
 <p>때문에 전자의 경우는 쓸 일이 없으니 무시하면 되고, 후자의 경우는 만약 쓰게 된다면 굳이 <code>string</code> type을 넘겨 runtime <code>require</code>를 수행하도록 json을 넘기는 쪽으로 사용하면 문제가 없다. 다만 이 <code>call_capture</code>가 기본적으로 capture하는 attribute의 whitelist가 <a href="https://github.com/aws/aws-xray-sdk-node/blob/master/packages/core/lib/resources/aws_whitelist.json"><code>aws-xray-sdk-core/lib/resources/aws_whitelist.json</code></a>에 있기 때문에 이를 Webpack이 제대로 bundle에 넣어주어야 AWSClient로 통신하는 요청에 대해서도 좀 제대로 capture가 될 수 있다.</p>
 <p>다행히 Webpack은 2버전부터 <code>require</code>하는 JSON 파일을 bundle에 알아서 잘 포함시켜준다. 때문에 별다른 신경을 쓸 필요가 없고, 안심하고 경고를 무시해도 되겠다. 하지만 빌드할 때마다 경고가 계속 나오는 것은 아주 거슬리므로 다음과 같이 정규식을 써서 해당 경고가 더 이상 출력되지 않도록 <code>webpack.config.js</code>를 고치도록 하자.</p>
 <p>📄 webpack.config.js</p>
-<pre class="default-dark vscode-highlight" data-language="diff"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">  const path = require(&quot;path&quot;);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  const slsw = require(&quot;serverless-webpack&quot;);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+ const ignoreWarnings = [</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+   [/call_capturer.js/, /the request of a dependency is an expression/],</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+   [/colors.js/, /the request of a dependency is an expression/]</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+ ];</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  module.exports = {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    mode: slsw.lib.webpack.isLocal ? &quot;development&quot; : &quot;production&quot;,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    entry: slsw.lib.entries,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    externals: [/aws-sdk/],</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    module: {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      rules: [{ test: /\.tsx?$/, loader: &quot;ts-loader&quot; }]</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+   },</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+   stats: {</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+     warningsFilter: warning =&gt; {</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+       return ignoreWarnings.some(regexs =&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+         regexs.every(regex =&gt; regex.test(warning))</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+       );</span></span>
-<span class="vscode-highlight-line"><span class="mtk7">+     }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="diff" data-index="8"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  const path = require(&quot;path&quot;);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  const slsw = require(&quot;serverless-webpack&quot;);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+ const ignoreWarnings = [</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+   [/call_capturer.js/, /the request of a dependency is an expression/],</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+   [/colors.js/, /the request of a dependency is an expression/]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+ ];</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  module.exports = {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    mode: slsw.lib.webpack.isLocal ? &quot;development&quot; : &quot;production&quot;,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    entry: slsw.lib.entries,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    externals: [/aws-sdk/],</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    module: {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      rules: [{ test: /\.tsx?$/, loader: &quot;ts-loader&quot; }]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+   },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+   stats: {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+     warningsFilter: warning =&gt; {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+       return ignoreWarnings.some(regexs =&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+         regexs.every(regex =&gt; regex.test(warning))</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+       );</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk7">+     }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span></code></pre>
 <h3>Sleep 함수 측정</h3>
 <p>준비가 끝났으니 간단하게 Sleep 함수를 만들어서 잘 측정되는지 확인해보도록 하자. <code>handler.ts</code>를 다음과 같이 수정한다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">APIGatewayProxyHandler</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-lambda&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk8">&quot;source-map-support/register&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">captureAsyncFunc</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-xray-sdk-core&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1"> = (</span><span class="mtk12">millis</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">captureAsyncFunc</span><span class="mtk1">(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk8">&quot;sleep&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">seg</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;(</span><span class="mtk12">resolve</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk11">setTimeout</span><span class="mtk1">(() </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk11">resolve</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">          </span><span class="mtk12">seg</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        }, </span><span class="mtk12">millis</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      )</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  );</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">hello</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> () </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">i</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">; </span><span class="mtk12">i</span><span class="mtk1"> &lt; </span><span class="mtk7">10</span><span class="mtk1">; ++</span><span class="mtk12">i</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1">(</span><span class="mtk7">100</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  };</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">};</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="9"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">APIGatewayProxyHandler</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-lambda&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk8">&quot;source-map-support/register&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">captureAsyncFunc</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-xray-sdk-core&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1"> = (</span><span class="mtk12">millis</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">captureAsyncFunc</span><span class="mtk1">(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk8">&quot;sleep&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">seg</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;(</span><span class="mtk12">resolve</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk11">setTimeout</span><span class="mtk1">(() </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk11">resolve</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk12">seg</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        }, </span><span class="mtk12">millis</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      )</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  );</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">export</span><span class="mtk1"> </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">hello</span><span class="mtk1">: </span><span class="mtk10">APIGatewayProxyHandler</span><span class="mtk1"> = </span><span class="mtk4">async</span><span class="mtk1"> () </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">for</span><span class="mtk1"> (</span><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">i</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">; </span><span class="mtk12">i</span><span class="mtk1"> &lt; </span><span class="mtk7">10</span><span class="mtk1">; ++</span><span class="mtk12">i</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1">(</span><span class="mtk7">100</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">statusCode:</span><span class="mtk1"> </span><span class="mtk7">200</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">body:</span><span class="mtk1"> </span><span class="mtk8">&quot;OK&quot;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  };</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">};</span></span></span></code></pre>
 <p><code>sleep</code> 함수는 지정된 <code>millis</code>를 쉬는데 이 때 <code>aws-xray-core-sdk</code>의 <code>captureAsyncFunc</code> 함수를 사용해서 <code>segment</code>를 기록한다. 100ms씩 10번 쉬도록 작성하고 다음과 같이 Serverless stack을 배포한다. 물론 AWS credentials이 개발 환경에 설정되어있어야 한다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">yarn deploy</span></span></code></pre>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">api keys:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  None</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">endpoints:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  GET - https://0000000000.execute-api.xx-xxxxxx-x.amazonaws.com/dev/hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">functions:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  hello: hello-serverless-xray-typescript-dev-hello</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">layers:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  None</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="10"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">yarn deploy</span></span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="11"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">api keys:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  None</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">endpoints:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  GET - https://0000000000.execute-api.xx-xxxxxx-x.amazonaws.com/dev/hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">functions:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  hello: hello-serverless-xray-typescript-dev-hello</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">layers:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  None</span></span></span></code></pre>
 <p>배포가 끝나면 다음과 같이 보고서가 출력된다. 여기에 나온 Endpoint를 curl 등으로 호출한 뒤 AWS Management console의 X-Ray에 들어가보면 다음과 같은 Service map과 Traces를 볼 수 있다.</p>
 <table>
 <thead>
@@ -185,129 +185,163 @@ AWS X-Ray는 AWS가 제공하는 tracing solution이다. AWS X-Ray는 개발자�
 <h3>Capture Function</h3>
 <p>기본으로 제공되는 <code>captureFunc</code>와 <code>captureAsyncFunc</code>를 사용하면 이처럼 segment를 만들어서 X-Ray에서 확인할 수 있다. Promise를 포함하는 복잡한 함수의 수행 시간을 확인하거나 오류를 추적할 때 꽤나 도움을 받을 수 있을 것 같다.</p>
 <p>하지만 <code>segment</code>를 매번 close해주어야 하는 것은 매우 번거로운 일이므로 다음과 같은 간단한 helper를 만들어서 사용할 수도 있겠다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">captureSync</span><span class="mtk1"> = &lt;</span><span class="mtk10">Args</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">any</span><span class="mtk1">[], </span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">name</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">target</span><span class="mtk1">: (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk10">ReturnType</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">captureFunc</span><span class="mtk1">(</span><span class="mtk12">name</span><span class="mtk1">, </span><span class="mtk12">segment</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1"> = </span><span class="mtk11">target</span><span class="mtk1">(...</span><span class="mtk12">args</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk15">throw</span><span class="mtk1"> </span><span class="mtk12">error</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  });</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">captureAsync</span><span class="mtk1"> = &lt;</span><span class="mtk10">Args</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">any</span><span class="mtk1">[], </span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;(</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk12">name</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">target</span><span class="mtk1">: (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;((</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">reject</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk11">captureAsyncFunc</span><span class="mtk1">(</span><span class="mtk12">name</span><span class="mtk1">, </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">segment</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk15">try</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">target</span><span class="mtk1">(...</span><span class="mtk12">args</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk11">resolve</span><span class="mtk1">(</span><span class="mtk12">result</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">        </span><span class="mtk11">reject</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  );</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="12"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">captureSync</span><span class="mtk1"> = &lt;</span><span class="mtk10">Args</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">any</span><span class="mtk1">[], </span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">name</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">target</span><span class="mtk1">: (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk10">ReturnType</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">captureFunc</span><span class="mtk1">(</span><span class="mtk12">name</span><span class="mtk1">, </span><span class="mtk12">segment</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1"> = </span><span class="mtk11">target</span><span class="mtk1">(...</span><span class="mtk12">args</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk15">throw</span><span class="mtk1"> </span><span class="mtk12">error</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  });</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">captureAsync</span><span class="mtk1"> = &lt;</span><span class="mtk10">Args</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> </span><span class="mtk10">any</span><span class="mtk1">[], </span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;(</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk12">name</span><span class="mtk1">: </span><span class="mtk10">string</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">target</span><span class="mtk1">: (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> (...</span><span class="mtk12">args</span><span class="mtk1">: </span><span class="mtk10">Args</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">ReturnType</span><span class="mtk1">&gt;((</span><span class="mtk12">resolve</span><span class="mtk1">, </span><span class="mtk12">reject</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">captureAsyncFunc</span><span class="mtk1">(</span><span class="mtk12">name</span><span class="mtk1">, </span><span class="mtk4">async</span><span class="mtk1"> </span><span class="mtk12">segment</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk15">try</span><span class="mtk1"> {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">result</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">target</span><span class="mtk1">(...</span><span class="mtk12">args</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk11">resolve</span><span class="mtk1">(</span><span class="mtk12">result</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      } </span><span class="mtk15">catch</span><span class="mtk1"> (</span><span class="mtk12">error</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk12">segment</span><span class="mtk1">.</span><span class="mtk11">close</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk11">reject</span><span class="mtk1">(</span><span class="mtk12">error</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  );</span></span></span></code></pre>
 <p>이제 다음과 같이 사용할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">adder</span><span class="mtk1"> = (</span><span class="mtk12">a</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">, </span><span class="mtk12">b</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk12">a</span><span class="mtk1"> + </span><span class="mtk12">b</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk11">captureSync</span><span class="mtk1">(</span><span class="mtk12">adder</span><span class="mtk1">)(</span><span class="mtk7">10</span><span class="mtk1">, </span><span class="mtk7">20</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1"> = (</span><span class="mtk12">millis</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;(</span><span class="mtk12">resolve</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk11">setTimeout</span><span class="mtk1">(</span><span class="mtk12">resolve</span><span class="mtk1">), </span><span class="mtk12">millis</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">captureAsync</span><span class="mtk1">(</span><span class="mtk12">sleep</span><span class="mtk1">)(</span><span class="mtk7">1000</span><span class="mtk1">);</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="13"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">adder</span><span class="mtk1"> = (</span><span class="mtk12">a</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">, </span><span class="mtk12">b</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk12">a</span><span class="mtk1"> + </span><span class="mtk12">b</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk11">captureSync</span><span class="mtk1">(</span><span class="mtk12">adder</span><span class="mtk1">)(</span><span class="mtk7">10</span><span class="mtk1">, </span><span class="mtk7">20</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">sleep</span><span class="mtk1"> = (</span><span class="mtk12">millis</span><span class="mtk1">: </span><span class="mtk10">number</span><span class="mtk1">) </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">Promise</span><span class="mtk1">&lt;</span><span class="mtk10">void</span><span class="mtk1">&gt;(</span><span class="mtk12">resolve</span><span class="mtk1"> </span><span class="mtk4">=&gt;</span><span class="mtk1"> </span><span class="mtk11">setTimeout</span><span class="mtk1">(</span><span class="mtk12">resolve</span><span class="mtk1">), </span><span class="mtk12">millis</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">captureAsync</span><span class="mtk1">(</span><span class="mtk12">sleep</span><span class="mtk1">)(</span><span class="mtk7">1000</span><span class="mtk1">);</span></span></span></code></pre>
 <h3>Capture AWSClient</h3>
 <p><code>S3</code>나 <code>DynamoDB</code> 등의 AWS component와의 통신을 capture하려면 처음 client 객체를 만들 때 한 번 <code>captureAWSClient</code>로 감싸주면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">S3</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-sdk&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">captureAWSClient</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-xray-sdk-core&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">s3</span><span class="mtk1"> = </span><span class="mtk11">captureAWSClient</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">S3</span><span class="mtk1">());</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="14"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">S3</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-sdk&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">captureAWSClient</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-xray-sdk-core&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">s3</span><span class="mtk1"> = </span><span class="mtk11">captureAWSClient</span><span class="mtk1">(</span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">S3</span><span class="mtk1">());</span></span></span></code></pre>
 <p>만약 AWS namespace 하위의 모든 client를 다 capture하려면 <code>captureAWS</code>를 사용하면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk1"> </span><span class="mtk15">as</span><span class="mtk1"> </span><span class="mtk12">rawAWS</span><span class="mtk1"> </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-sdk&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">captureAWS</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-xray-sdk-core&quot;</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">AWS</span><span class="mtk1"> = </span><span class="mtk11">captureAWS</span><span class="mtk1">(</span><span class="mtk12">rawAWS</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">s3</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">AWS</span><span class="mtk1">.</span><span class="mtk10">S3</span><span class="mtk1">();</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="15"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk1"> </span><span class="mtk15">as</span><span class="mtk1"> </span><span class="mtk12">rawAWS</span><span class="mtk1"> </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-sdk&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> { </span><span class="mtk12">captureAWS</span><span class="mtk1"> } </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">&quot;aws-xray-sdk-core&quot;</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">AWS</span><span class="mtk1"> = </span><span class="mtk11">captureAWS</span><span class="mtk1">(</span><span class="mtk12">rawAWS</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">s3</span><span class="mtk1"> = </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">AWS</span><span class="mtk1">.</span><span class="mtk10">S3</span><span class="mtk1">();</span></span></span></code></pre>
 <h3>마무리</h3>
 <p>AWS Serverless 개발을 하면서 복잡한 Lambda를 만드는 일이 별로 없었기 때문에 사실 이 Traces를 봐도 크게 쓸 일이 없었다. 다만 Lambda의 cold start나 최근에 만든 actor model의 성능 테스트를 하면서 이에 대한 metric을 좀 기록할 수 있는 요소가 필요했는데, 마침 X-Ray가 그 역할을 잘 해주어 많은 도움이 되었다. <del>게다가 100K개가 매달 Free-tier에 속하므로 가난뱅이 서버 모델을 만들기에 딱 좋다.</del></p>
 <p>다만 주로 Serverless framework + TypeScript + Webpack 기반을 사용했기 때문에 type definition도 없고 Webpack 경고도 발생하니 최근까지 잘 안 써봤다. 그러다가 우연히 좋은 기회(?)를 얻어 그 추진력으로 내부도 좀 보고 정리도 할 수 있었다. 이전까지는 우선순위가 낮은 선택 요소였는데 앞으로는 필수 기본 요소로 X-Ray를 사용해서 좀 더 측정/추적 가능한 Serverless Stack을 쌓아봐야겠다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2019/08/16/actor-model-on-aws-lambda/">&lt; AWS Lambda와 Actor model</a><a style="float:right" href="/2019/10/05/serverless-html-bundle/">Serverless로 React 서비스하기 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/10/01/hello-serverless-xray-typescript/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2019/08/16/actor-model-on-aws-lambda/">&lt; AWS Lambda와 Actor model</a><a style="float:right" href="/2019/10/05/serverless-html-bundle/">Serverless로 React 서비스하기 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/10/01/hello-serverless-xray-typescript/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

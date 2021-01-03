@@ -1,48 +1,48 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2008/04/01/gdb-simple-help/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">gdb 간단 사용법 정리</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2008/04/01/gdb-simple-help/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">gdb 간단 사용법 정리</title><meta data-react-helmet="true" name="description" content="
 GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이므로 gdb는 gdb shell을 제공하고, 사용자는 그 shell…"/><meta data-react-helmet="true" name="keywords" content="tool"/><meta data-react-helmet="true" name="og:title" content="gdb 간단 사용법 정리"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이므로 gdb는 gdb shell을 제공하고, 사용자는 그 shell…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2008/04/01/gdb-simple-help/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>gdb 간단 사용법 정리</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">April 01, 2008</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/tool/">tool</a></div></div><div><p>GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이므로 gdb는 gdb shell을 제공하고, 사용자는 그 shell에 명령을 입력함으로써 디버깅을 수행할 수 있다.</p>
+GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이므로 gdb는 gdb shell을 제공하고, 사용자는 그 shell…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2008/04/01/gdb-simple-help/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>gdb 간단 사용법 정리</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">April 01, 2008</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/tool/">tool</a></div></div><div><p>GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이므로 gdb는 gdb shell을 제공하고, 사용자는 그 shell에 명령을 입력함으로써 디버깅을 수행할 수 있다.</p>
 <p>먼저 디버깅을 수행하기 위해서는 소스 코드를 컴파일할 때 디버깅 정보를 포함하도록 해야한다. gcc에서 이에 해당하는 옵션은 -g이다. 예를 들어 test.c라는 파일이 있다면 다음과 같이 수행하면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">gcc -g test.c</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">gcc -g test.c</span></span></span></code></pre>
 <p>gdb에서 디버깅을 시작하는 방법은 두 가지가 있다. gdb 실행 시 디버깅할 파일을 입력하는 방법과 gdb 내에 들어가서 <code>file</code> 명령을 이용해 파일을 입력하는 방식이다.</p>
 <p><code>$ gdb a.out</code> 혹은, <code>(gdb) file a.out</code></p>
 <p><code>file</code> 명령은 symbol table를 불러와서 디버깅 준비를 하는 명령이다. 이와 헷갈릴 수 있는 명령으로는 <code>exec</code>가 있는데 이는 단순히 지정된 파일을 실행만 할 뿐 디버깅을 하지는 못한다.</p>
 <p>gdb를 시작할 때 디버깅할 파일 이름을 입력하는게 편해보이지만 gdb 내부에서 <code>file</code> 명령을 이용하여 디버깅할 파일명을 입력할 때는 gdb의 shell에 의해 파일명을 자동 완성 해주기 때문에 더 편하다.</p>
 <p>gdb shell이라는 것은 gdb를 실행하였을 때 (gdb)라는 prompt를 띄우며 사용자의 입력을 기다리고 있는 것을 지칭한다. 이 shell은 bash와 마찬가지로 tab키를 통한 자동 완성을 지원해주기 때문에 좀 더 편하게 디버깅을 수행할 수 있다. 게다가 뒤에서 언급할 이야기이지만 명령어의 축약형, ↑키를 통한 shell 명령 history-back 기능과 그리고 아무것도 입력하지 않고 return 키를 쳤을 때 방금 전에 수행한 명령을 다시 수행해주는 기능을 제공해 주기 때문에 좀 더 적은 타이핑typing으로 디버깅을 수행할 수 있도록 해준다.</p>
 <p>symbol table을 읽어왔으니 프로그램의 수행을 시작해야 한다. 수행을 시작하는 명령어는 <code>run</code>이다. gdb는 명령어의 축약형이 존재하기 때문에 단순히 <code>r</code>로 실행할 수 있다. 만약 실행 인자를 주어야하는 경우에는 <code>r</code> 뒤에 작성하면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) r arg0 arg1 arg2</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) r arg0 arg1 arg2</span></span></span></code></pre>
 <p>아직 <code>breakpoints</code>를 설정하지 않았기 때문에 프로그램을 수행하면 그대로 수행을 마치고 종료해버린다. 따라서 <code>breakpoints</code>를 걸어주어야 하는데, 이 때 사용하는 명령어는 break이다. <code>b</code>로 축약하여 사용할 수 있다. <code>b</code> 뒤에는 여러 symbol이 올 수 있는데 기본적으로 줄 번호나 함수 이름을 사용할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) b 37</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) b main</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) b 37</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) b main</span></span></span></code></pre>
 <p>gdb에서는 <code>list</code> 명령을 이용하여 소스를 볼 수 있다. 물론 <code>gcc -g</code> 옵션으로 컴파일을 수행한 c/c++ source 파일이 그 이름 그대로 그 위치에 존재하고 있어야 한다. 그렇지 않으면 source 파일을 찾을 수 없기 때문에 list를 보여줄 수 없다는 에러 메시지가 출력된다. 이 명령은 <code>l</code> 이라는 축약 명령을 갖는다. <code>l</code> 뒤에는 보고자하는 줄 번호가 올 수 있다. 줄 번호를 입력하지 않으면 소스를 처음 줄부터 10줄을 화면에 출력하고, 줄 번호를 입력할 경우에 그 줄 번호를 기준으로 위로 5줄, 지정한 줄, 아래로 4줄 해서 총 10줄을 보여준다.
 그리고 <code>l</code>을 지속적으로 명령할 경우 현재까지 출력된 소스 코드 이후의 소스를 이어서 10줄씩 더 볼 수 있다. 이는 위에서 언급한 대로 <code>l</code>을 치지 않고 그냥 return 키를 쳐도 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) l</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) l 15</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) l</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) l 15</span></span></span></code></pre>
 <p>breakpoint를 걸고 디버깅을 수행하면 해당 지점에서 break되고 gdb는 사용자의 명령을 기다리게 된다. 이 때 한 줄씩 진행하는 명령과 다시 동작을 재개하는 명령이 있다. 다시 동작을 재개하는 명령은 <code>continue</code>이다. 축약으로 <code>c</code>로 사용할 수 있는데 별다른 사항은 없고, 언급했듯이 단순히 break된 프로그램의 진행을 다시 수행하도록 한다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) c</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) c</span></span></span></code></pre>
 <p>한 줄씩 진행하는 명령은 두 가지 동작으로 나뉜다. 그것은 현재 수행할 명령 행의 특성에 따라 나뉘는데, 예를 들어 현재 수행할 명령이 함수 호출 명령일 때 해당 함수에 대한 symbol table이 있어서 jumping이 가능하면 그 내부의 진행 상황까지 디버깅할 수 있다. 이 경우 그 함수 내부로 진입(<em>step into</em>)하여 디버깅을 진행할 것인지, 아니면 그냥 지나쳐(<em>step over</em>) 갈 것인지 선택할 수 있다. 전자의 진입(step into)의 명령은 <code>step</code>이고, 축약은 <code>s</code>이다. 후자의 진행(step over)의 명령은 <code>next</code>이고 축약은 <code>n</code>이다. 두 명령 모두 뒤에 숫자를 입력하여 몇 개의 명령이나 진행할 것인지 지정할 수 있다.
 이 명령 또한 <code>l</code>과 마찬가지로 처음에 한 번만 입력하고 그 다음부터는 그냥 return키만 입력하여 사용하는 경우가 많다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) s</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) n 10</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) s</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) n 10</span></span></span></code></pre>
 <p>디버깅을 진행하다보면 내부에 존재하는 어떤 값을 출력해보고 싶을 때가 있다. 이 때 사용하는 명령은 <code>print</code>이다. 축약은 <code>p</code>이다. 이 때 <code>p</code> 뒤에는 출력하고자 하는 대상이 오면 된다. 함수를 입력하면 함수가 존재하는 메모리 주소가 나오고 symbol table에 함수가 있는 경우에는 함수의 인자가 추가로 더 나온다. 변수명을 입력하면 변수의 내용이 나온다. 만약 변수가 배열, 구조체나 객체인 경우에는 그 내부에 존재하는 원소나 멤버를 출력해준다.</p>
 <p>또한 메모리 주소를 출력하기 위해 <code>&#x26; 연산자</code>를 사용할 수 있고, 반대로 메모리 주소에 있는 내용을 출력하기 위해 <code>* 연산자</code>를 사용할 수 있다. 따라서 특정 변수의 메모리 주소를 보거나 메모리 주소 내에 존재하는 내용을 출력할 수 있다. 실제로 디버깅을 하다가 객체의 내용을 보고 싶을 때, class 내부에서 간단히 <code>print (*this)</code>를 사용하면 된다.</p>
 <p>그리고 일반 수식도 지원하기 때문에 변수에 어떤 값을 연산한 결과 등도 출력이 가능하다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) p main</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) p i</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) p &amp;i</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) p *</span><span class="mtk8">((char</span><span class="mtk1">*</span><span class="mtk8">)</span><span class="mtk7">0x804834A</span><span class="mtk8">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) p i * 21 - 2</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) p main</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) p i</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) p &amp;i</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) p *</span><span class="mtk8">((char</span><span class="mtk1">*</span><span class="mtk8">)</span><span class="mtk7">0x804834A</span><span class="mtk8">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) p i * 21 - 2</span></span></span></code></pre>
 <p>다음으로 디버깅 도중에 존재하는 변수의 값을 변경하거나 디버깅에 사용되는 변수를 정의하는 <code>set</code> 명령이 있다. <code>s</code>는 <code>step</code> 명령의 축약이므로 <code>set</code> 명령은 축약이 존재하지 않는다. <code>set</code> 뒤에는 변수를 정의하기 위한 expression이 들어간다. 예를 들어 i 변수의 값을 11로 변경하고 싶으면 <code>set i = 11</code>을 수행하면 된다.</p>
 <p>이를 응용하여 특정 메모리의 값도 변경할 수 있다. 이는 set 명령이 print 명령과 마찬가지로 <code>&#x26;</code>와 <code>*</code>을 지원해주기 때문인데, <code>* 연산자</code>를 통해서 특정 위치의 메모리의 값을 변경할 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) </span><span class="mtk11">set</span><span class="mtk1"> i = 11</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) </span><span class="mtk11">set</span><span class="mtk1"> *</span><span class="mtk8">((int</span><span class="mtk1">*</span><span class="mtk8">)</span><span class="mtk7">0xBFD8EB9B</span><span class="mtk8">) </span><span class="mtk1">=</span><span class="mtk8"> </span><span class="mtk7">23</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) </span><span class="mtk11">set</span><span class="mtk1"> i = 11</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) </span><span class="mtk11">set</span><span class="mtk1"> *</span><span class="mtk8">((int</span><span class="mtk1">*</span><span class="mtk8">)</span><span class="mtk7">0xBFD8EB9B</span><span class="mtk8">) </span><span class="mtk1">=</span><span class="mtk8"> </span><span class="mtk7">23</span></span></span></code></pre>
 <p>그리고 디버깅에 사용되는 변수를 정의할 수도 있다. 프로그램 내에 존재하는 일반 변수와 구별하기 위해서 변수 이름 앞에 반드시 <code>$</code>를 붙여야 한다. 이러한 변수는 예를 들면 이중 포인터로 구성된 배열의 내용을 볼 때 사용할 수 있다. 다음과 같이 <code>$i</code>를 정의한 뒤 <code>print</code> 명령으로 배열의 첫번째 원소를 출력하게 하고, return 키를 계속 입력함으로써 이중 포인터로 구성된 배열의 내용을 살펴볼 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) </span><span class="mtk11">set</span><span class="mtk1"> </span><span class="mtk12">$i</span><span class="mtk1"> = 0</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) p env[</span><span class="mtk12">$i</span><span class="mtk1">++]</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="8"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) </span><span class="mtk11">set</span><span class="mtk1"> </span><span class="mtk12">$i</span><span class="mtk1"> = 0</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) p env[</span><span class="mtk12">$i</span><span class="mtk1">++]</span></span></span></code></pre>
 <p>그리고 지금까지 설정한 변수를 보려면 <code>show convience</code>를 수행하면 된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) show convience</span></span>
-<span class="vscode-highlight-line"><span class="mtk12">$i</span><span class="mtk1"> = 3</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="9"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) show convience</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk12">$i</span><span class="mtk1"> = 3</span></span></span></code></pre>
 <p>break를 특정 소스의 지점에 거는 것이 아니라 변수 자체에 걸 수도 있다. 해당 변수를 watchpoints로 걸어두면 된다. 명령은 <code>watch</code>이며 뒤에는 expression이 들어간다. <code>watch</code>를 통해 watchpoints를 걸어두면 해당 변수의 값이 변할 때 break된다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) watch i</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="10"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) watch i</span></span></span></code></pre>
 <p><code>b</code>나 <code>watch</code>를 통해 breakpoints와 watchpoints를 보려면 <code>info</code>란 명령을 사용하면 된다. <code>info</code> 명령은 현재 디버깅에 대한 여러 정보를 보여주는 명령으로 그 축약은 <code>i</code>이다. <code>i</code>로 볼 수 있는 정보는 매우 많은데, 그 정보들의 목록을 보려면 그냥 <code>i</code>만 입력하고 return 키를 누르면 된다.</p>
 <ul>
 <li>대표적으로 많이 사용되는 <code>i</code> 명령은 위에서 언급한 breakpoints를 보는 <code>i breakpoints</code> 명령인데, 줄여서 <code>i b</code>로 가능하다.</li>
@@ -85,9 +85,9 @@ GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이�
 </table>
 <p>정의한 breakpoints와 watchpoints를 제거하려면 <code>clear</code> 명령과 <code>delete</code> 명령을 사용해야한다. <code>clear</code> 명령은 특정 symbol에 걸려있는 breakpoints나 watchpoints를 제거하는 것으로 뒤에 변수명이나 함수명이 올 수 있다. 반면에 <code>delete</code>는 제거하고자 하는 breakpoint number를 입력해서 제거할 수 있다.</p>
 <p>breakpoint number는 gdb 구동시 0부터 시작하여 breakpoints나 watchpoints를 설정할 때 자동으로 1씩 증가하는 값이다. 이 번호는 breakpoints를 설정할 때 볼 수 있고, 또 <code>i b</code>명령을 통해서도 볼 수 있다. <code>delete</code>의 축약 명령은 <code>d</code>로, <code>d</code> 뒤에 number를 입력함으로써 해당 번호의 breakpoints를 제거할 수도 있고, 그냥 <code>d</code>만을 명령함으로써 현재 설정된 모든 breakpoints를 제거할 수도 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="bash"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk1">(gdb) clear main</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) d 1</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">(gdb) d</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="11"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) clear main</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) d 1</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">(gdb) d</span></span></span></code></pre>
 <p>지금까지 GDB의 기초 사용법에 대해 정리하였다. 지금까지 언급한 명령을 표로 정리하면 다음과 같다.</p>
 <table>
 <thead>
@@ -165,76 +165,106 @@ GDB는 GNU Debugger의 약자로 console 디버거이다. console 디버거이�
 </tr>
 </tbody>
 </table>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2008/04/01/make-pintos-environment/">&lt; pintos 환경 구축</a><a style="float:right" href="/2008/07/28/ConsoleHandler-System-in-out-error-closing/">ConsoleHandler와 System.in/out/error의 closing &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2008/04/01/gdb-simple-help/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2008/04/01/pintos-internal-structure/">&lt; pintos 기본 구조와 동작 원리</a><a style="float:right" href="/2008/07/28/ConsoleHandler-System-in-out-error-closing/">ConsoleHandler와 System.in/out/error의 closing &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2008/04/01/gdb-simple-help/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

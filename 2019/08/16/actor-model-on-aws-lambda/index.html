@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2019/08/16/actor-model-on-aws-lambda/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS Lambda와 Actor model</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2019/08/16/actor-model-on-aws-lambda/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">AWS Lambda와 Actor model</title><meta data-react-helmet="true" name="description" content="
 천성이 백엔드 개발자라서 그런지 개인적으로 토이 프로젝트를 해도 꼭 서버가 들어가는 경우가 더 많다. 이런 시스템들을 단순히 코드 형태로 GitHub…"/><meta data-react-helmet="true" name="keywords" content="aws, serverless, lambda, actor"/><meta data-react-helmet="true" name="og:title" content="AWS Lambda와 Actor model"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
-천성이 백엔드 개발자라서 그런지 개인적으로 토이 프로젝트를 해도 꼭 서버가 들어가는 경우가 더 많다. 이런 시스템들을 단순히 코드 형태로 GitHub…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/16/actor-model-on-aws-lambda/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>AWS Lambda와 Actor model</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">August 16, 2019</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/lambda/">lambda</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/actor/">actor</a></div></div><div><p>천성이 백엔드 개발자라서 그런지 개인적으로 토이 프로젝트를 해도 꼭 서버가 들어가는 경우가 더 많다. 이런 시스템들을 단순히 코드 형태로 GitHub에만 보관하는 것은 아무래도 좀 아쉬워서 혹시 생각날 때 바로 접속해볼 수 있게 늘 띄워놓고 싶은데 아무래도 비용이 만만치 않다. Docker로 구워두고 필요할 때마다 <code>compose up</code>해서 사용할 수도 있겠지만 역시 이를 위한 환경이 필요하다는 점에서 아쉽다.</p>
+천성이 백엔드 개발자라서 그런지 개인적으로 토이 프로젝트를 해도 꼭 서버가 들어가는 경우가 더 많다. 이런 시스템들을 단순히 코드 형태로 GitHub…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2019/08/16/actor-model-on-aws-lambda/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>AWS Lambda와 Actor model</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">August 16, 2019</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/aws/">aws</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/lambda/">lambda</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/actor/">actor</a></div></div><div><p>천성이 백엔드 개발자라서 그런지 개인적으로 토이 프로젝트를 해도 꼭 서버가 들어가는 경우가 더 많다. 이런 시스템들을 단순히 코드 형태로 GitHub에만 보관하는 것은 아무래도 좀 아쉬워서 혹시 생각날 때 바로 접속해볼 수 있게 늘 띄워놓고 싶은데 아무래도 비용이 만만치 않다. Docker로 구워두고 필요할 때마다 <code>compose up</code>해서 사용할 수도 있겠지만 역시 이를 위한 환경이 필요하다는 점에서 아쉽다.</p>
 <p>이런 이유로 서버리스에 빠지게 되었고, 이제는 거의 대부분의 프로젝트를 서버리스로 진행하고 있다. 대부분의 경우에는 한 달에 한 번이나 요청이 있을까 말까 하기 때문에 서버리스로 배포된 프로젝트는 요금 최적화 측면에서 굉장히 흡족하다. 사실상 요금이 없기 때문이다.</p>
 <p>하지만 이러한 서비스들에서 만약 state를 관리해야 할 일이 생긴다면 좀 곤란해진다. 왜냐하면 DynamoDB는 RCU/WCU를 관리해야 하는데 예측하기 어렵거나 비용이 생각보다 너무 나오고, MySQL이나 Redis는 dedicated instance를 띄워놓아야 하기 때문에 비용이 너무 많이 나오기 때문이다. 이에 비해 S3는 꽤 괜찮은 선택지처럼 보인다. Lambda에서 S3로부터 파일을 읽어서 적당히 수정해서 다시 S3에 쓰는 것이다. 어차피 요청이 거의 없을 것이기 때문에 S3 request 수도 별로 없을 것이므로 요금도 사실상 거의 안 나올 것이다.</p>
 <p>하지만 가장 큰 문제는 concurrent update다. 예를 들어 게임 내에서 유저의 상태를 변경하는 API가 거의 동시에 요청되어 그걸 처리하기 위한 Lambda instance가 동시에 실행되었다면, 그 둘 모두 S3에서 파일을 가져와서 수정하고 업데이트하는 작업을 <em>동시에</em> 수행하게 될 것이다. 즉, 운이 나쁘면, 한 Lambda instance에서 작업한 내용은 다른 Lambda instance의 덮어쓰기에 의해 완전히 소실될 것이다.</p>
@@ -46,14 +46,14 @@
 <li><code>dump</code> 가능한 <code>concurrent</code> 자료구조를 통해 처리된 <code>messageCount</code>를 한 번에 <code>CAS</code>해보는</li>
 </ul>
 <p>방법을 사용했다. 하지만 <code>Redis</code>에서는 <code>dump</code> 가능한 <code>concurrent</code> 자료구조도 딱히 없고, <code>CAS</code>는 더더욱 없기 때문에, 조금은 더 비효율적이지만 <code>lock</code>을 사용하는 간단한 방법으로 문제를 다시 풀어보자. 다음과 같이 정리해볼 수 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">enqueue</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">while</span><span class="mtk1"> (!(</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">isEmpty</span><span class="mtk1">()) &amp;&amp; (</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">tryAcquire</span><span class="mtk1">())) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk4">null</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">while</span><span class="mtk1"> ((</span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">dequeue</span><span class="mtk1">()) != </span><span class="mtk4">null</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">dispatch</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">release</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">enqueue</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">while</span><span class="mtk1"> (!(</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">isEmpty</span><span class="mtk1">()) &amp;&amp; (</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">tryAcquire</span><span class="mtk1">())) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk4">null</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">while</span><span class="mtk1"> ((</span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">dequeue</span><span class="mtk1">()) != </span><span class="mtk4">null</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">dispatch</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">release</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p><del>await이 풍년이다.</del></p>
 <ol>
 <li>queue에 message를 넣었는데.</li>
@@ -68,11 +68,11 @@
 <li>concurrency가 정말 낮아서 다른 thread가 처리할 가능성이 굉장히 낮은 경우에는 방금 message를 넣었는데 queue가 empty일리가 없다. 때문에 바로 lock 걸로 <em>dequeue</em> 해서 처리하고 unlock한 뒤 queue empty를 검사하는 것이 조금이라도 비용을 더 아낄 수 있다.</li>
 </ol>
 <p>위 코드에서는 별 고민없이 바로 <code>dequeue</code>를 해서 처리를 시도했는데 사실 처리 도중 프로세스 강제 종료와 같은 불의의 사고를 당하면 그 메시지는 소실되어 버린다. 이를 안전하게 보호해주려면 다음과 같이 <code>peek-dequeue</code> 구조를 만들어주는게 차라리 더 낫다. 물론 이 때문에 network latency를 한 번 더 감수해야 함은 어쩔 수가 없다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk4">null</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">while</span><span class="mtk1"> ((</span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">peek</span><span class="mtk1">()) != </span><span class="mtk4">null</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">dispatch</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">dequeue</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk4">null</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">while</span><span class="mtk1"> ((</span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">peek</span><span class="mtk1">()) != </span><span class="mtk4">null</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">dispatch</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">dequeue</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <h4><a href="https://github.com/yingyeothon/nodejs-toolkit/blob/master/packages/actor-system-redis-support/src/queue.ts"><code>Redis</code>로 만드는 <code>queue</code></a></h4>
 <p><code>Redis</code>는 <code>RPUSH</code>와 <code>LPOP</code> 명령을 지원한다. 이는 value type이 collection인 경우 right-push로 새 element를 추가하다가 left-pop으로 첫 번째 element를 가져오는 명령이다.</p>
 <p>물론 <code>LPUSH</code>와 <code>RPOP</code>으로도 구성할 수 있지만 peek을 위해 <code>LINDEX</code>를 쓰려고 <code>RPUSH</code>, <code>LPOP</code>을 사용하였다. <code>LLEN</code>을 써서 queue의 길이를 잴 수 있고, 이것으로 queue empty 여부를 확인할 수 있다.</p>
@@ -86,36 +86,36 @@
 <p>물론 분산 Lock이므로 누가 Lock을 걸었는지 등을 기록해서 추적이 편하게 만들어주는 것도 중요하고, 혹시 lock은 했는데 unlock은 못 한 상태로 thread가 죽은 경우를 대비하기 위해 lock에 TTL을 도입하는 방법도 고민해볼 수 있겠지만 여기서는 간단하게 구현했다.</p>
 <h3><a href="https://github.com/yingyeothon/nodejs-toolkit/tree/master/packages/actor-system-aws-lambda-support">AWS Lambda에서의 Actor model</a></h3>
 <p>AWS Lambda는 최대 수행 시간이 API Gateway에 연동된 경우 30초, 기타 다른 비동기 이벤트에 의해 기동될 경우 최대 900초이다. 이 제약으로 인해 위 actor model을 그대로 쓸 수가 없고 timeout으로 instance가 끝나기 전에 점유한 actor를 놓아주고 나올 필요가 있다.</p>
-<pre class="default-dark vscode-highlight" data-language="typescript"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">isAlive</span><span class="mtk1"> = () </span><span class="mtk4">=&gt;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk10">Date</span><span class="mtk1">.</span><span class="mtk11">now</span><span class="mtk1">() - </span><span class="mtk12">lambdaEpoch</span><span class="mtk1"> &lt; (</span><span class="mtk12">fromAPI</span><span class="mtk1"> ? </span><span class="mtk7">5</span><span class="mtk1"> * </span><span class="mtk7">1000</span><span class="mtk1"> : </span><span class="mtk7">899</span><span class="mtk1"> * </span><span class="mtk7">100</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">enqueue</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">while</span><span class="mtk1"> (</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk11">isAlive</span><span class="mtk1">() &amp;&amp;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  !(</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">isEmpty</span><span class="mtk1">()) &amp;&amp;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  (</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">tryAcquire</span><span class="mtk1">())</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk4">null</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk11">isAlive</span><span class="mtk1">() &amp;&amp; (</span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">peek</span><span class="mtk1">()) != </span><span class="mtk4">null</span><span class="mtk1">) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">dispatch</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">dequeue</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  }</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">release</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk11">isAlive</span><span class="mtk1">()) {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">AWS</span><span class="mtk1">.</span><span class="mtk10">Lambda</span><span class="mtk1">()</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">invoke</span><span class="mtk1">({</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">FunctionName:</span><span class="mtk1"> </span><span class="mtk12">process</span><span class="mtk1">.</span><span class="mtk12">env</span><span class="mtk1">.</span><span class="mtk12">BOTTOM_HALF_LAMBDA_NAME</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">InvocationType:</span><span class="mtk1"> </span><span class="mtk8">&quot;Event&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">Qualifier:</span><span class="mtk1"> </span><span class="mtk12">functionVersion</span><span class="mtk1"> || </span><span class="mtk8">&quot;$LATEST&quot;</span><span class="mtk1">,</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">      </span><span class="mtk12">Payload:</span><span class="mtk1"> </span><span class="mtk10">JSON</span><span class="mtk1">.</span><span class="mtk11">stringify</span><span class="mtk1">(</span><span class="mtk3">/* something for next generation */</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    })</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">();</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="typescript" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk11">isAlive</span><span class="mtk1"> = () </span><span class="mtk4">=&gt;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">Date</span><span class="mtk1">.</span><span class="mtk11">now</span><span class="mtk1">() - </span><span class="mtk12">lambdaEpoch</span><span class="mtk1"> &lt; (</span><span class="mtk12">fromAPI</span><span class="mtk1"> ? </span><span class="mtk7">5</span><span class="mtk1"> * </span><span class="mtk7">1000</span><span class="mtk1"> : </span><span class="mtk7">899</span><span class="mtk1"> * </span><span class="mtk7">100</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">enqueue</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">while</span><span class="mtk1"> (</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk11">isAlive</span><span class="mtk1">() &amp;&amp;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  !(</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">isEmpty</span><span class="mtk1">()) &amp;&amp;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  (</span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">tryAcquire</span><span class="mtk1">())</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">let</span><span class="mtk1"> </span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk4">null</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">while</span><span class="mtk1"> (</span><span class="mtk11">isAlive</span><span class="mtk1">() &amp;&amp; (</span><span class="mtk12">message</span><span class="mtk1"> = </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">peek</span><span class="mtk1">()) != </span><span class="mtk4">null</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk11">dispatch</span><span class="mtk1">(</span><span class="mtk12">message</span><span class="mtk1">);</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">queue</span><span class="mtk1">.</span><span class="mtk11">dequeue</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  }</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">await</span><span class="mtk1"> </span><span class="mtk12">actor</span><span class="mtk1">.</span><span class="mtk12">lock</span><span class="mtk1">.</span><span class="mtk11">release</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">if</span><span class="mtk1"> (!</span><span class="mtk11">isAlive</span><span class="mtk1">()) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">new</span><span class="mtk1"> </span><span class="mtk10">AWS</span><span class="mtk1">.</span><span class="mtk10">Lambda</span><span class="mtk1">()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">invoke</span><span class="mtk1">({</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">FunctionName:</span><span class="mtk1"> </span><span class="mtk12">process</span><span class="mtk1">.</span><span class="mtk12">env</span><span class="mtk1">.</span><span class="mtk12">BOTTOM_HALF_LAMBDA_NAME</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">InvocationType:</span><span class="mtk1"> </span><span class="mtk8">&quot;Event&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">Qualifier:</span><span class="mtk1"> </span><span class="mtk12">functionVersion</span><span class="mtk1"> || </span><span class="mtk8">&quot;$LATEST&quot;</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk12">Payload:</span><span class="mtk1"> </span><span class="mtk10">JSON</span><span class="mtk1">.</span><span class="mtk11">stringify</span><span class="mtk1">(</span><span class="mtk3">/* something for next generation */</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    })</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    .</span><span class="mtk11">promise</span><span class="mtk1">();</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <p>Lambda가 시작될 때의 <code>Date.now()</code> 값을 어딘가 기록해두고, <code>isAlive</code> 함수에서 기대 생존 시간과 비교해서 아직 처리를 더 할 수 있는지 확인한다. 그리고 더 처리할게 남았는데 <code>isAlive</code>하지 않아서 종료된 경우 다음 Lambda를 실행해서 작업을 이어서 처리할 수 있게 해준다. 예를 들어 <code>actorName</code> 같은 것을 넘기면 작업을 이어서 처리할 수 있을 것이다. 이 구조가 커널의 interrupt 처리와 비슷하기 때문에 이름을 <code>BOTTOM_HALF_LAMBDA</code>라고 붙여주었다. 물론 <code>isAlive</code> 실패에 의해 loop가 종료된 것인지는 좀 더 조건을 구분해야 하지만 이 글에서는 그 부분을 심각하게 여기지 않고 대충 넘어갔다.</p>
 <p><code>BOTTOM_HALF_LAMBDA_NAME</code>은 <code>process.env</code>를 통해 전달되는 값인데 <code>serverless.yml</code>을 통해 다음과 같이 정해줄 수 있다. 물론 <code>serverless.yaml</code>에 <code>bottomHalf</code>라고 Lambda 함수를 등록해두었을 경우를 가정한 것이다.</p>
-<pre class="default-dark vscode-highlight" data-language="yaml"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">environment</span><span class="mtk1">:</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk4">BOTTOM_HALF_LAMBDA</span><span class="mtk1">: </span><span class="mtk8">${self:service.name}-${self:provider.stage}-bottomHalf</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">environment</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">BOTTOM_HALF_LAMBDA</span><span class="mtk1">: </span><span class="mtk8">${self:service.name}-${self:provider.stage}-bottomHalf</span></span></span></code></pre>
 <p>당연한 이야기지만 API Gateway에 연결될 Lambda와 bottomHalf로 기동될 Lambda는 timeout이 다르므로 같은 Lambda를 사용할 수 없다. 때문에 조금은 귀찮지만 Lambda를 따로 등록해서 사용해야 한다.</p>
 <h3>한계</h3>
 <p>처음에 <code>Redis</code>가 dedicated라서 안 쓴다더니 lock과 queue 관리를 위해서 써버렸다. 사실 비용이 조금 더 나오긴 하지만 queue는 SQS로 대체할 수 있고, lock은 현재 딱히 좋은 비용 최적화의 대체제가 없다.</p>
@@ -135,76 +135,110 @@
 <li>확률적으로, APIGateway LambdaProxy에서 다른 요청들을 계속 처리해서, 그 API 요청을 기다리는 사용자는 남의 요청을 처리해주는 것을 계속 기다리게 될 수 있다. 남의 것을 얼마나 처리할 것인지 시간을 잘 조정해야 한다.</li>
 </ul>
 <p>즉 API Latency를 고민해서 적절한 time limit을 지정해야겠다. 이에 대한 자세한 내용은 추후 <strong>Leaderboard 만들기</strong> 에서 알아보고, WebSocket을 사용한 callback에 대해서는 <strong>여름 새벽 앱 개발기</strong> 에서 알아보기로 하겠다.</p>
-<style class="vscode-highlight-styles">
-  :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
-</style></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2019/08/12/set-timeout-on-aws-lambda/">&lt; AWS Lambda에서의 setTimeout</a><a style="float:right" href="/2019/10/01/hello-serverless-xray-typescript/">Serverless + X-Ray + TypeScript &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/16/actor-model-on-aws-lambda/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2019/08/12/set-timeout-on-aws-lambda/">&lt; AWS Lambda에서의 setTimeout</a><a style="float:right" href="/2019/10/01/hello-serverless-xray-typescript/">Serverless + X-Ray + TypeScript &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2019/08/16/actor-model-on-aws-lambda/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

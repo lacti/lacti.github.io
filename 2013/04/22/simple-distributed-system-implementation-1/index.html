@@ -1,8 +1,8 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.2072d913c063a542f3b5.css">/*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}hr{height:0}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{padding:0}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.18.17"/><link rel="canonical" href="https://lacti.github.io/2013/04/22/simple-distributed-system-implementation-1/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">분산 처리 환경 구현 1</title><meta data-react-helmet="true" name="description" content="
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2013/04/22/simple-distributed-system-implementation-1/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">분산 처리 환경 구현 1</title><meta data-react-helmet="true" name="description" content="
 잉여 컴퓨팅 자원을 십분 활용하여 처리량을 늘리기 위한 분산 처리 환경을 구축해보자.
 (hadoop, incredibuild…"/><meta data-react-helmet="true" name="keywords" content="distributed, c#"/><meta data-react-helmet="true" name="og:title" content="분산 처리 환경 구현 1"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="
 잉여 컴퓨팅 자원을 십분 활용하여 처리량을 늘리기 위한 분산 처리 환경을 구축해보자.
-(hadoop, incredibuild…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-1211b620997782271ba5.js"/><link as="script" rel="preload" href="/app-185d957ea9988b49a616.js"/><link as="script" rel="preload" href="/styles-0d354045707154beb68d.js"/><link as="script" rel="preload" href="/commons-3fce3172fd8a85fc49f9.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-ce2107299e04cbdad379.js"/><link as="fetch" rel="preload" href="/page-data/2013/04/22/simple-distributed-system-implementation-1/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group" id="gatsby-focus-wrapper"><style data-emotion-css="kpmdxy">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px !important;line-height:1.65 !important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0,0,0,0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width:48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion-css="waqu46">.css-waqu46{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-waqu46 exus2xv0"><style data-emotion-css="uflovx">.css-uflovx{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-uflovx e1tqqkg0"><style data-emotion-css="voneje">.css-voneje{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion-css="8gr2bf">.css-8gr2bf{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-8gr2bf ei8rjbq0"><style data-emotion-css="bc9u65">.css-bc9u65{color:#fff;font-size:1.8rem;font-weight:600;}.css-bc9u65:hover,.css-bc9u65:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-bc9u65 e1tqqkg2" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion-css="b95f0i">.css-b95f0i{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-b95f0i e5vn29h0"><style data-emotion-css="isoq4t">.css-isoq4t{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-isoq4t e1eg7n7x0"><style data-emotion-css="fkj7ih">.css-fkj7ih{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-fkj7ih ei8rjbq0"><h1>분산 처리 환경 구현 1</h1><style data-emotion-css="acwcvw">.css-acwcvw{margin-bottom:1rem;}</style><div class="css-acwcvw e2e8kon0"><style data-emotion-css="lbx3g2">.css-lbx3g2{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-lbx3g2 etnz4u60">April 22, 2013</span><style data-emotion-css="3y0053">.css-3y0053{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-3y0053 e15u2a1u0"><a href="/tag/distributed/">distributed</a></div><div class="css-3y0053 e15u2a1u0"><a href="/tag/csharp/">c#</a></div></div><div><p>잉여 컴퓨팅 자원을 십분 활용하여 처리량을 늘리기 위한 분산 처리 환경을 구축해보자.
+(hadoop, incredibuild…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2013/04/22/simple-distributed-system-implementation-1/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>분산 처리 환경 구현 1</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">April 22, 2013</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/distributed/">distributed</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/csharp/">c#</a></div></div><div><p>잉여 컴퓨팅 자원을 십분 활용하여 처리량을 늘리기 위한 분산 처리 환경을 구축해보자.
 (hadoop, incredibuild 같은 프로그램을 만드려면 어떤 고민이 필요한지 생각해볼 수 있겠다.)</p>
 <p>자세하게 파고들면 밑도 끝도 없을테니 간단하게 살펴보자.</p>
 <p>분산 처리 환경을 구축할 때 적어도 다음의 항목에 대한 고민이 필요하다.</p>
@@ -22,19 +22,19 @@
 <p>가장 간단한 master-slave 구조를 보면 다음과 같다.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 370px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 370px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 41.891891891891895%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAA7DAAAOwwHHb6hkAAABgUlEQVQY042Q7S9CcRTH71/nYRpesLEZxoxmtBaN8lBiXpgZ95LbaunBim5XXZWe7kVxfyJPjYo8bSwN7yJN98ZvbOadPjv7bmc7353zPcjnfxSLPNTHlxQRGnWCCceuysGqbKGhwws3kv/gsm/vr7n8T2Vz+QLHQ8cvHM9B89XD/gxVtgpEZERq3+ub85R7o7OIwXtWJXc1TATqVT6otSOuaDINp3m++Hfzw1NyOdhPhEftYQW5M2YOiiPna4iaitUoaSEGulAgREG1IujdjZM2i37JYDQaTSaTTqdds1PX90caT6uZ6TXRPWZGhHuatk8NCEqeVA4HujHQibJClK0Y8lNbp0a9Vq1exHFco9Fg8xhJOBO37Oy6wLojJoGMBANzboEviiErTKJx3NcxzbRN0e3Tm82TvpPLDLyzAKN/w3EF2KafU9ag3MrILfSghZYt+6UH8XWkxG/fpI8WNupsQEIAKQEkuL+OPsZLNd9lYlpvq52VOfaUVESp87fAzF/E1negZY9nFgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    style="padding-bottom: 41.75438596491228%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAA7DAAAOwwHHb6hkAAABiklEQVQY02P4Twj8+/cXSD59fXPZvqK1R2tWH65ac7hq6b7841dWMTx4/v7O03dA8v7z90Dy7pN3X7//AulB1Xzv2dkJW7xWnyjacKp6w6nKKTu8t5/uZwhu2GZdsN6rert75VbP6m0OReuPXnoEVP3j56/fYPDr18+/f/4/e3172Z6KlftrgGjVgbolu0tOXF3HENd1IKL9YMmcM8VzTpfOOR3atn/r4SsL5s6aOGnylClTpk6d2t/ft3DBktuPzkzfGrn0QC4QLTuYP31b2J6zMxkCG3a6VO5I6jsS33Mosfewa+X2LYeubN20buXKVavBYPmK5bt37b/18NTkzUHLDxWtOVK15mjFlC2BO09PYWhedLxw2qHquccr5hyrmnu8ZMahq/dfAZ399+8/ZD8/f3N35V6Qm5fvrVixr2rZnvJT1zYy4AhhBPgD9PH///efnZu0xXvV8YK1J8rWnCieusNnx5mJDH/+/kND//5hiaonr64v2JO17ljdhuPNm060LNybcfjSEgCqynSSjsk3bwAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="master-slave 구조"
         title="master-slave 구조"
-        src="/static/74c6e12b4b6d90729666b8f301414885/9727d/mdf_basic.png"
-        srcset="/static/74c6e12b4b6d90729666b8f301414885/72d8f/mdf_basic.png 285w,
-/static/74c6e12b4b6d90729666b8f301414885/9727d/mdf_basic.png 370w"
+        src="/static/74c6e12b4b6d90729666b8f301414885/c9d3d/mdf_basic.png"
+        srcset="/static/74c6e12b4b6d90729666b8f301414885/5459c/mdf_basic.png 285w,
+/static/74c6e12b4b6d90729666b8f301414885/c9d3d/mdf_basic.png 370w"
         sizes="(max-width: 370px) 100vw, 370px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -53,19 +53,19 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 <p>이 때 slave의 상태를 master에게 보고하기 위해 connection을 유지하거나 다시 connection을 맺는 것은 귀찮은 일이므로 다음과 같은 구조를 생각해볼 수 있다.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 376px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 376px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 82.97872340425533%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACl0lEQVQ4y41T/U8ScRi//6rl1ttqNrd+MCtnFmP+0pqbhYhb0aKyF39w5dyaOBG0Dg5KTQwFQo6XAxTE0Z1AaG9gaLqZHCjHHXAvfYEyZZl99uyz5+65z3Of5/sCCXvB84DoTGbjfWjV60li7u/+ufS3FeEAQPu0LAuY0KjtLWJvh8QjlWBtrZhMSpFkuTN/uBjv6313+pS76ZK7scFxrs4las6mtv5XTPT1+sSi8ONHhOLOQlurp0WcTaUOEVdqS/FE4GmPueaIo64WxMzJY66rzaFAgCkUDpy5okwmk4jBQG9ufp6Y+KBRR4cGY1qYjEYwDNNqtSzL8mVUizmOA4wgSCKRqHJYyYPBoFqtYhga5CxX5Hj2l7iixHHcaDSWauAPYHjwkuP4clQ+WI59ejGsY5j8bkeoyIK6kC8UVKohkkz/dT9Ztvh1DV9Px1yBicCiJb4RSqyHOY6FeL7UNRom/LPeXRdVnjM7PwatoufT9a/nbmqx6/2WhkGLmKK3IeUkrrFEVFPES1us34gHomt7Z64kOxSpd0oRTDI1/wSEwdOOOGU5JgvVtJtq5bYzt61n5daj0mnlJCEIRYrK0X/AbGdJ0+wzg0OuR+UIeguwydfL5HPQ5W6nAsbvwaHuV2FRjwdYcMxYh4dHdDod2B7AIF/6GIHd14bQK8Z5+bi/c8QpUttaSraPy0z1XfbzXfYLD9ETneaBt0Rp8v22qVxm1HUXcXS88T4AoXfKRt0KOk9B9oW4M7SChhKAZ4LxL6tbv29XWSyUsmwuPYYpYPQGkGlRCWxvG8Pu0wwFCf/E7moPmBsHbBfH5zpHZztU9kaluYnKbUMsOCx7gqs+/aVHsDb+6Bi2CPsiel8E8SzC/uh4ocj8BHEVYDKhtOwdAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    style="padding-bottom: 82.80701754385966%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACl0lEQVQ4y4WT7VMSURTG9/9qrEynxkymKYvJT00z+qGRaibClyQdp6xppvKNPlSDoSyLmbBAqLAsiGvKAkKGCYgvrLqYmEAiZLG7dGGTRJ3xzJn74T73d89zz5kLZQ8Gx4FlL5lcJx1hzLwyOkJZsI0v3syf39njAipiGQasy5jZdEM4ebeeuFNP1N/Gb92M+v05lWVPhldGjKbyUqJGOCGstl8R4ILKzW9zJ8MsX9mgH79ePffk8dc2qVciHr92NZqHefV4mM1fHAyHXTA8evoUVnYWLy81lZZYBZWETrcViwGVKeaLKv9MJORyeTqZ/O50hrSa4KA6hKJxv39pcVEmk0U3Nws1imB+C0VRj8dz6ASXH0EkQvf29lCr4Vx9NsNywAIHFWSKohAE4UnQuf/JsvxdyZ2Uog+m1yMFBGJYLsPkNEW/MkytFoRDsUTP+NdsDp/O4lDOr9p8y9b0rx2IP7oRoXHMfMgw7zrnM8Oq7eKuTxUIIVJ/Fr3Darr0VfTWAvRqaKZz2Nv50dOr8z1Xu7UTC0dh8A4j+UJpExnIpwbymXZK2m8RReMUdE5ivNCCnX9ovthiLhGPNryd3kvvxuOJQsRisVQqZfXIYYsEsTar8AbE2vTB1radoCFhB9703ts64O0Y9NV1TbUNuB1TkwqFAjRPpVKp1QgY3uysDyVbZGMC1NmsdTbCRG2PURABtssk+gqp6ZLUVNVqPvPAKHkzCWzu/5F962zW5HwN4/eHJ9qHifYh+yNQ/0diHZoJREC680nO06G17aOtZhluxPGyD6tFxsWw7d4ALurH8m/OnhAcD4Nuy8Yua6YbNNONSntdtwHYDkEMwx7MI6P6983nwwQZ0LiDeldA5wrqXAH9bjr+F3KnXskt/ILaAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="sync-db 구조"
         title="sync-db 구조"
-        src="/static/529023efb9db78e37e23618e15bed346/bb9e4/mdf_sync_db.png"
-        srcset="/static/529023efb9db78e37e23618e15bed346/72d8f/mdf_sync_db.png 285w,
-/static/529023efb9db78e37e23618e15bed346/bb9e4/mdf_sync_db.png 376w"
+        src="/static/529023efb9db78e37e23618e15bed346/63ff8/mdf_sync_db.png"
+        srcset="/static/529023efb9db78e37e23618e15bed346/5459c/mdf_sync_db.png 285w,
+/static/529023efb9db78e37e23618e15bed346/63ff8/mdf_sync_db.png 376w"
         sizes="(max-width: 376px) 100vw, 376px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -76,19 +76,19 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 <p>약간 다른 관점이지만 다음과 같은 모델도 생각해볼 수 있다.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 429px;"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 429px; "
     >
       <span
     class="gatsby-resp-image-background-image"
-    style="padding-bottom: 46.853146853146846%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAIAAAC9o5sfAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABt0lEQVQoz22R20sCQRTG9x8Leo8eiiDQLIhINIiuoBUhJmWRuRVphV2ki90xcjGpbaUt0mLVtbIeAjUr03LX1F3ztjZKWVQ/DsOcM+c7w3wD5Tgum/sOkOZLFPcplr2e17mnJlywymsxF8rZLJcDjRyU/0P2i0wmA9Tx8MsJT0AIxXZ+vUMmLw0FQP5gFCV8uDtwTAaOHP67QKR4ypXWRDy6OS9cnebpJ6sw0xjz8hr1e2mfl6UoSG/xlHWaquRo9QBa3o2MbzvDT/dX157bIh7PzUPQZ7jo3HRKDa52Iz5wJmqzNQtxHp8cVQHxTY0C61l0SBYc/JFjeMu5vb4Cj09oNBqtVqtWq8EE8grBT/Wn9mWSQA6koiOZeL+DZ5tSQhvYbUUvIhhG65RoZb951uRm4/Tj49MzIBgMhcN0KOSS9Lm6pGRrNwGrlqxtekvjjKnWbB+Dku/pyBtDxdhCvDFMMv3D7OKbI5HDlgasoxFrEVgHJcaLoV27fA3vwkjdP27nvgCGgzSWoJbN4iWkSWestZzBqXQqwVAJhk6lk/+If90cZ+gdW/8eodg577VezhXq+c+v+gD+lLeGPOkSSgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    style="padding-bottom: 47.01754385964912%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAIAAAC9o5sfAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABoklEQVQoz4WQ60vCYBTG939F/0M3iC4gZoF0ISnBLkRkK6OLReWgJsyUokRqpeumbuoWabOps7JMi6g0irIFqaCbrcQ+VNCP98N7nvc95zk8gCAIvFD4PmJZKFG8p1OpY3A4AKrpvp7LdYuo8Pm8wPPiK1D4Rb5ELpcTS+4+4ZY0+hQdlEwSnNF+DuX54k/g+Dypx8Ime8S4H9FjJ0w0+Tn7y7Po/Mo9mtakxpVG2FjpJGafguG7A/KW8qSur4C5jVBZN1YFEjUjrnLltg4NnrEMTrhIEYp0EZ74TcQc6EVZteW034ZrqHqZr6mZrKgOTUwC0CZbqXYq9XQXTNeABIQGttbNi7AeQRCDAYFh+CoeO/FavXtLtHP51LuLjcp3JuQbA7VHqzoAJaPNU7gCohQQ2aLFtw5i4tbv6XQ2m81kMjme5xJJf1NruEPJStsPx4YM3k6TR77grNsP6f4I7Efa3OMDppLsDMq2VQ2uRdDBwg5m3ubTMFErIPzX/MIlEbxl2d0G2+vtQehLL6X9r/Pb+zN2NL7HTNtojf8C/dZFPgCKoLf1Zfp0BAAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
   ></span>
   <img
         class="gatsby-resp-image-image"
         alt="stated 구조"
         title="stated 구조"
-        src="/static/5002851f49c174c0b5c6142b7a99f3f5/d6846/mdf_stated.png"
-        srcset="/static/5002851f49c174c0b5c6142b7a99f3f5/72d8f/mdf_stated.png 285w,
-/static/5002851f49c174c0b5c6142b7a99f3f5/d6846/mdf_stated.png 429w"
+        src="/static/5002851f49c174c0b5c6142b7a99f3f5/7cfe8/mdf_stated.png"
+        srcset="/static/5002851f49c174c0b5c6142b7a99f3f5/5459c/mdf_stated.png 285w,
+/static/5002851f49c174c0b5c6142b7a99f3f5/7cfe8/mdf_stated.png 429w"
         sizes="(max-width: 429px) 100vw, 429px"
         style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
         loading="lazy"
@@ -103,4 +103,94 @@ master는 작업 요청을 받아서, <strong>적절히 쪼개서</strong>, <str
 <p>그리고 만에 하나 slave 프로그램이 오동작하여 사망할 경우 state가 이를 감지하여 master에게 보고할 수 있다. 그 후 상태에 따라 slave 프로그램을 다시 시작해줄 수 있다.
 이러한 구조는 보다 견고한 분산 처리 환경을 구축하는데 도움이 될 것이다.</p>
 <h2>정리</h2>
-<p>훨씬 더 다양한 방법이 있을테지만 생각나는 구조를 간략히 살펴봤고, 다음 글에서는 C#을 사용하여 간단한 분산 처리 환경을 구축하는 방법을 소개할 예정이다. 중요한 것은, <strong>어떻게 job을 쪼개고, 분산시키고, 취합할 것인가</strong> 이다.</p></div></div><div class="css-fkj7ih ei8rjbq0"><a style="float:left" href="/2012/11/30/ctags-cscope-with-vim/">&lt; ctags, cscope 설정 등 vim을 잘 써보자</a><a style="float:right" href="/2013/05/07/simple-distributed-system-implementation-2/">분산 처리 환경 구현 2 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2013/04/22/simple-distributed-system-implementation-1/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-185d957ea9988b49a616.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-ce2107299e04cbdad379.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-a7272ddf1dd94b27f286.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-f7ab2a3895e3a2f4ac2f.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-957726612e840ced3d62.js"]};/*]]>*/</script><script src="/component---src-templates-page-tsx-ce2107299e04cbdad379.js" async=""></script><script src="/commons-3fce3172fd8a85fc49f9.js" async=""></script><script src="/styles-0d354045707154beb68d.js" async=""></script><script src="/app-185d957ea9988b49a616.js" async=""></script><script src="/webpack-runtime-1211b620997782271ba5.js" async=""></script></body></html>
+<p>훨씬 더 다양한 방법이 있을테지만 생각나는 구조를 간략히 살펴봤고, 다음 글에서는 C#을 사용하여 간단한 분산 처리 환경을 구축하는 방법을 소개할 예정이다. 중요한 것은, <strong>어떻게 job을 쪼개고, 분산시키고, 취합할 것인가</strong> 이다.</p>
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2012/11/30/ctags-cscope-with-vim/">&lt; ctags, cscope 설정 등 vim을 잘 써보자</a><a style="float:right" href="/2013/05/07/simple-distributed-system-implementation-2/">분산 처리 환경 구현 2 &gt;</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2013/04/22/simple-distributed-system-implementation-1/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

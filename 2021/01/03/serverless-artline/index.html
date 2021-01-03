@@ -1,0 +1,417 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.3deb5e37fbd9f45aa579.css" id="gatsby-global-css">/*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */*,:after,:before{box-sizing:border-box}:root{-moz-tab-size:4;-o-tab-size:4;tab-size:4}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji}hr{height:0;color:inherit}abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}</style><meta name="generator" content="Gatsby 2.29.3"/><link rel="canonical" href="https://lacti.github.io/2021/01/03/serverless-artline/" data-baseprotocol="https:" data-basehost="lacti.github.io"/><title data-react-helmet="true">서버리스 머신러닝 모델 돌리기</title><meta data-react-helmet="true" name="description" content="AWS Lambda에 Container image를 올려보자.
+GitHub Python trending을 보다보면 재미있는게 참 많이 올라온다. Python이어서 더욱이 다른 언어보다 Machine Learning 관련된 것들이 많이 올라오는데, 관련 지식도, GPU…"/><meta data-react-helmet="true" name="keywords" content="serverless, docker"/><meta data-react-helmet="true" name="og:title" content="서버리스 머신러닝 모델 돌리기"/><meta data-react-helmet="true" name="og:type" content="article"/><meta data-react-helmet="true" name="og:description" content="AWS Lambda에 Container image를 올려보자.
+GitHub Python trending을 보다보면 재미있는게 참 많이 올라온다. Python이어서 더욱이 다른 언어보다 Machine Learning 관련된 것들이 많이 올라오는데, 관련 지식도, GPU…"/><meta data-react-helmet="true" name="og:image" content="https://lacti.github.io/background.jpg"/><link as="script" rel="preload" href="/webpack-runtime-32cc2442479283d7f58b.js"/><link as="script" rel="preload" href="/framework-8aba4025690a031b46dc.js"/><link as="script" rel="preload" href="/app-d7b4850bdfd8424882d8.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-d34ca9a5140f4edbf26e.js"/><link as="script" rel="preload" href="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"/><link as="fetch" rel="preload" href="/page-data/2021/01/03/serverless-artline/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/848695393.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css-global 77a6j3">@import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css");html{box-sizing:border-box;}*,*::before,*::after{box-sizing:inherit;}html{font-size:16px!important;line-height:1.65!important;}body{width:100%;overflow-x:hidden;overflow-y:scroll;font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;color:#000;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a{color:#742dd2;-webkit-text-decoration:none;text-decoration:none;font-weight:500;}a:hover,a:focus{-webkit-text-decoration:underline;text-decoration:underline;}img{max-width:100%;object-fit:contain;position:relative;}figure{margin:2rem 0;}figcaption{font-size:80%;}table{width:100%;margin-bottom:1rem;border:1px solid #f5f3f7;font-size:85%;border-collapse:collapse;}td,th{padding:.25rem .5rem;border:1px solid #f5f3f7;}th{text-align:left;}tbody tr:nth-of-type(odd) td{background-color:#fbfafc;}tbody tr:nth-of-type(odd) tr{background-color:#fbfafc;}h1,h2,h3,h4,h5,h6{margin-top:1.414rem;margin-bottom:.5rem;color:#000;font-weight:600;line-height:1.2;text-rendering:optimizeLegibility;}h1{margin-top:0;font-size:1.8rem;}h2{font-size:1.5rem;}h3{font-size:1.35rem;}h4,h5,h6{font-size:1.2rem;}p{margin-top:0;margin-bottom:1rem;}strong{color:#000;}ul,ol,dl{margin-top:0;margin-bottom:1rem;}dt{font-weight:bold;}dd{margin-bottom:.5rem;}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #f5f3f7;}blockquote{margin:.8rem 0;padding:.5rem 1rem;border-left:.25rem solid #f5f3f7;color:rgba(0, 0, 0, 0.54);}blockquote p:last-child{margin-bottom:0;}@media (min-width: 48em){blockquote{padding-right:5rem;padding-left:1.25rem;}}code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace,monospace;}code:not(.vscode-highlight-code){background-color:rgba(27,31,35,.05);border-radius:3px;font-size:95%;margin:0;padding:.2em .4em;}code.vscode-highlight-code{white-space:pre;word-break:normal;font-size:90%;}</style><style data-emotion="css jm9hhf-StyledLayoutRoot">.css-jm9hhf-StyledLayoutRoot{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;min-height:100vh;margin-bottom:1rem;}</style><div class="css-jm9hhf-StyledLayoutRoot exus2xv0"><style data-emotion="css 11rnafn-StyledHeader">.css-11rnafn-StyledHeader{height:72px;padding:0 1.5rem;background-color:#481380;color:rgba(255,255,255,0.5);}</style><header class="css-11rnafn-StyledHeader e1tqqkg2"><style data-emotion="css 6f6ha2-HeaderInner">.css-6f6ha2-HeaderInner{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><style data-emotion="css fv6npe-StyledContainer-HeaderInner">.css-fv6npe-StyledContainer-HeaderInner{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100%;}</style><div class="e1tqqkg1 css-fv6npe-StyledContainer-HeaderInner ei8rjbq0"><style data-emotion="css yh8u1r-HomepageLink">.css-yh8u1r-HomepageLink{color:#fff;font-size:1.8rem;font-weight:600;}.css-yh8u1r-HomepageLink:hover,.css-yh8u1r-HomepageLink:focus{-webkit-text-decoration:none;text-decoration:none;}</style><a class="css-yh8u1r-HomepageLink e1tqqkg0" href="/">Lacti&#x27;s Archive</a></div></header><style data-emotion="css k6v09u-StyledLayoutMain">.css-k6v09u-StyledLayoutMain{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1;-ms-flex:1;flex:1;}</style><main class="css-k6v09u-StyledLayoutMain e5vn29h0"><style data-emotion="css xoz08r-StyledPage">.css-xoz08r-StyledPage{display:block;-webkit-flex:1;-ms-flex:1;flex:1;position:relative;padding:1.5rem;}</style><div class="css-xoz08r-StyledPage e1eg7n7x0"><style data-emotion="css 72fhg1-StyledContainer">.css-72fhg1-StyledContainer{position:relative;margin-left:auto;margin-right:auto;width:auto;max-width:60em;}</style><div class="css-72fhg1-StyledContainer ei8rjbq0"><h1>서버리스 머신러닝 모델 돌리기</h1><style data-emotion="css 18r7yue-StyledTagsContainer">.css-18r7yue-StyledTagsContainer{margin-bottom:1rem;}</style><div class="css-18r7yue-StyledTagsContainer e2e8kon0"><style data-emotion="css 5h5jqp-StyledDate">.css-5h5jqp-StyledDate{display:inline-block;font-size:1rem;font-weight:500;display:inline-block;margin:4px;}</style><span class="css-5h5jqp-StyledDate etnz4u60">January 03, 2021</span><style data-emotion="css 1wp22e3-StyledContainer">.css-1wp22e3-StyledContainer{display:inline-block;padding:4px 8px;margin:4px 4px 4px 4px;border-radius:8px;background-color:#f1f1f1;}</style><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/serverless/">serverless</a></div><div class="css-1wp22e3-StyledContainer e15u2a1u0"><a href="/tag/docker/">docker</a></div></div><div><p><a href="https://github.com/trending/python?since=daily">GitHub Python trending</a>을 보다보면 재미있는게 참 많이 올라온다. Python이어서 더욱이 다른 언어보다 Machine Learning 관련된 것들이 많이 올라오는데, 관련 지식도, GPU도 없는 나로써는 대부분 그림의 떡에 불과하다.</p>
+<p>그러다가 가끔 <a href="https://github.com/vijishmadhavan/ArtLine">ArtLine</a>처럼 친절한 예제와 바로 실행해볼 수 있는 <a href="https://colab.research.google.com/github/vijishmadhavan/Light-Up/blob/master/ArtLine(Try_it_on_Colab).ipynb">CoLab</a>까지 제공해주는 것들이 올라오는데, 결과물도 썩 괜찮고 CPU로도 속도가 어느 정도 나오는 모델을 발견하게 되면 간단히 서버리스로 올려두고 싶은 마음이 생긴다(?)</p>
+<p>이번 글에서는 다음 과정에 대해서 간략히 정리한다.</p>
+<ol>
+<li>이런 Python 모델을 AWS Lambda + API Gateway에 올려서 서비스해보자.</li>
+<li>이 때 AWS Lambda가 Container image를 지원하니 이를 써보자.</li>
+<li>간단한 Flutter app을 만들어서 사진을 찍고, 그 결과를 1)의 API로 변환하여 노출해보자.</li>
+</ol>
+<p>결과물은 <a href="https://github.com/lacti/artline">github.com/lacti/artline</a>에 올려두었다. 물론 정리가 좀 많이 필요한 상태이다.</p>
+<h3>Lambda Container image</h3>
+<p>AWS Lambda의 가장 큰 문제로 부족한 코드 공간을 꼽을 수 있는데, 기존 환경에서는 <code>/var/task</code> 에서 사용할 수 있는 <strong>250MB</strong> 와 <code>/tmp</code> 에 사용할 수 있는 <strong>512MB</strong> 내에서 어떻게든 코드를 잘 배치하여 사용했어야만 했다.</p>
+<p>하지만 <a href="https://aws.amazon.com/ko/about-aws/whats-new/2020/12/aws-lambda-now-supports-container-images-as-a-packaging-format/">지난 12월 1일부터 Container image를 지원</a>하기 시작하면서 <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-create.html">이제 ECR에 Docker image를 올리고 Lambda에서 그를 사용</a>할 수 있게 되었다. <code>pytouch</code> 나 <code>tensorflow</code> 의 경우 모두 pip으로 설치되는 <code>.so</code> 파일들의 용량이 굉장히 크기 때문에 기존 <code>/var/task</code> + <code>/tmp</code> 의 조합으로도 도저히 용량 문제를 해결하기 힘든 경우가 종종 있었는데, 이제 최대 10GB 크기의 Docker image를 사용할 수 있기 때문에 별 고민 없이 쉽게 배포할 수 있다.</p>
+<p>물론 다음과 같은 제약이 있다.</p>
+<ul>
+<li>아직 한국 region을 지원하지 않는다.</li>
+<li>Image 용량이 클수록 cold start 시간이 길어진다. 단, layer별로 이미 pull된 부분에 대해서는 다음 cold start 시에도 어느 정도 재사용되는 듯한 느낌이 있어, Docker image layer를 잘 만들면 재배포 이후에도 cold start를 크게 걱정하지 않아도 될 수 있다.</li>
+<li>본 글에서 대충 만들게 될 약 4GB 수준의 Image는 API Gateway의 max timeout인 30초 내에서는 절대 기동될 수 없다. Image pull 받다가 timeout이 발생한다.</li>
+</ul>
+<p>하지만 ML 모델을 Lambda에 배포하는 것부터가 적어도 병렬성을 위했으면 위했지 단건 처리의 속도를 위한 것은 전혀 아니므로 어느 정도 Cold start는 감수해야 한다. <em>개별 건의 처리 속도가 중요하다면 당연히 dedicate GPU 머신을 사용해야 한다.</em></p>
+<h3>Backend 만들기</h3>
+<p>원래 잘 사용하는 <a href="https://www.serverless.com/">Serverless.js</a>에서는 왠지 Python 지원도 깔끔하지 않고 Docker에 대해서도 잘 지원할 것 같지 않아 <a href="https://github.com/aws/aws-sam-cli">sam-cli</a>를 써보기로 했다. 이 방법에 대해서는 <a href="https://aws.amazon.com/ko/blogs/compute/using-container-image-support-for-aws-lambda-with-aws-sam/">Using container image support for AWS Lambda with AWS SAM</a>에서 자세히 나와있기 때문에 필요한 부분만 간단하게 짚고 넘어갈 예정이다.</p>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">pip install -u aws-sam-cli</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">sam init</span></span></span></code></pre>
+<p>기본으로 만들어지는 <code>hello_world</code> 함수를 적당히 <code>transform</code> 으로 변경하고 그에 맞게 <code>template.yaml</code> 도 수정해준다. 메모리가 얼마나 필요할지는 모르겠지만 일단 <strong>2GB</strong> 정도 주고, API Gateway에서 어떻게든 실행하겠다는 의지를 갖고 timeout은 <strong>30</strong>을 준다. <em>앞에서 간단히 이야기했지만, Docker image가 상당히 커지기 때문에 첫 번째 요청은 거의 무조건(?) timeout이 발생한다. 이 문제를 간단히 해결하려면 적당히 <a href="https://www.serverless.com/plugins/serverless-plugin-warmup">warmup</a> 해두거나 혹은 <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html">reserved concurrency</a>를 하면 된다.</em></p>
+<pre class="grvsc-container default-dark" data-language="yaml" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">Resources</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk4">TransformFunction</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">Type</span><span class="mtk1">: </span><span class="mtk8">AWS::Serverless::Function</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">Properties</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">PackageType</span><span class="mtk1">: </span><span class="mtk8">Image</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">MemorySize</span><span class="mtk1">: </span><span class="mtk7">2048</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Timeout</span><span class="mtk1">: </span><span class="mtk7">30</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Events</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk4">HttpPost</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">Type</span><span class="mtk1">: </span><span class="mtk8">Api</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">          </span><span class="mtk4">Properties</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">Path</span><span class="mtk1">: </span><span class="mtk8">/transform</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk4">Method</span><span class="mtk1">: </span><span class="mtk8">post</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk4">Metadata</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">Dockerfile</span><span class="mtk1">: </span><span class="mtk8">Dockerfile</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">DockerContext</span><span class="mtk1">: </span><span class="mtk8">./transform</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">      </span><span class="mtk4">DockerTag</span><span class="mtk1">: </span><span class="mtk8">python3.8-v1</span></span></span></code></pre>
+<p>이제 <a href="https://github.com/lacti/artline/blob/master/be/transform/app.py"><code>transform/app.py</code></a> 를 작성해보자. 이미 <a href="https://github.com/vijishmadhavan/ArtLine">ArtLine</a>에서 코드가 다 정리되어 있으므로 이를 가져와서 다음과 같이 살짝만 정리해준다.</p>
+<pre class="grvsc-container default-dark" data-language="python" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk15">from</span><span class="mtk1"> art_line </span><span class="mtk15">import</span><span class="mtk1"> FeatureLoss  </span><span class="mtk3"># For pickle</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># Copy from https://github.com/vijishmadhavan/ArtLine</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">learn = load_learner(Path(os.path.dirname(</span><span class="mtk12">__file__</span><span class="mtk1">)), </span><span class="mtk8">&#39;ArtLine_500.pkl&#39;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">def</span><span class="mtk1"> </span><span class="mtk11">_artline_apply</span><span class="mtk1">(</span><span class="mtk12">input_path</span><span class="mtk1">: </span><span class="mtk10">str</span><span class="mtk1">, </span><span class="mtk12">output_path</span><span class="mtk1">: </span><span class="mtk10">str</span><span class="mtk1">):</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    img = PIL.Image.open(input_path).convert(</span><span class="mtk8">&quot;RGB&quot;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    img_t = T.ToTensor()(img)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    img_fast = Image(img_t)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    p, img_hr, b = learn.predict(img_fast)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk3"># Thanks for https://github.com/vijishmadhavan/ArtLine/issues/10</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    output = img_hr.cpu().data[</span><span class="mtk7">0</span><span class="mtk1">]</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    o = output.numpy()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    o[np.where(o &lt; </span><span class="mtk7">0</span><span class="mtk1">)] = </span><span class="mtk7">0.0</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    o[np.where(o &gt; </span><span class="mtk7">1</span><span class="mtk1">)] = </span><span class="mtk7">1.0</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    output = torch.from_numpy(o)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    output = T.ToPILImage()(output)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    output.save(output_path)</span></span></span></code></pre>
+<ul>
+<li>모델을 매번 로드하지 않도록 global scope에 선언했다. 이제 첫 요청만 느리다.</li>
+<li>Lambda handler와 <code>_artline_apply</code> 함수가 좀 더 효율적으로 데이터를 교환할 수 있지만 PoC이므로 간단하게 파일을 사용하여 결과를 공유하도록 한다.</li>
+<li>
+<p><code>ArtLine_500.pkl</code> 파일은 <code>__main__.FeatureLoss</code> class를 찾도록 되어있고 이게 없으면 모델을 가져오지 못한다. 때문에 해당 파일 내의 classpath를 적당히 <code>art_line.FeatureLoss</code> 로 수정해주고 이 파일을 import하여 <code>app.py</code> 가 <code>__main__</code> 이 되지 않더라도 모델을 정상적으로 불러올 수 있도록 처리해준다.</p>
+<ul>
+<li>실제 <a href="https://github.com/lacti/artline/blob/master/be/transform/art_line.py"><code>art_line.py</code></a> 내 <code>FeatureLoss</code> 는 존재만 하면 되므로 별도의 코드를 가질 필요가 없다.</li>
+</ul>
+</li>
+</ul>
+<p>이제 다음과 같은 Lambda handler를 작성하여 image를 변환해보도록 한다.</p>
+<pre class="grvsc-container default-dark" data-language="python" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">def</span><span class="mtk1"> </span><span class="mtk11">lambda_handler</span><span class="mtk1">(</span><span class="mtk12">event</span><span class="mtk1">, </span><span class="mtk12">context</span><span class="mtk1">):</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">if</span><span class="mtk1"> </span><span class="mtk4">not</span><span class="mtk1"> </span><span class="mtk8">&quot;body&quot;</span><span class="mtk1"> </span><span class="mtk4">in</span><span class="mtk1"> event </span><span class="mtk4">or</span><span class="mtk1"> </span><span class="mtk11">len</span><span class="mtk1">(event[</span><span class="mtk8">&quot;body&quot;</span><span class="mtk1">]) == </span><span class="mtk7">0</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> _response(</span><span class="mtk7">400</span><span class="mtk1">, </span><span class="mtk8">&quot;&quot;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    temp_root = tempfile.mkdtemp()</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">try</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        input_path = os.path.join(temp_root, </span><span class="mtk8">&quot;input.jpg&quot;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        output_path = os.path.join(temp_root, </span><span class="mtk8">&quot;output.jpg&quot;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">with</span><span class="mtk1"> </span><span class="mtk11">open</span><span class="mtk1">(input_path, </span><span class="mtk8">&quot;wb&quot;</span><span class="mtk1">) </span><span class="mtk15">as</span><span class="mtk1"> f:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            body_bytes = event[</span><span class="mtk8">&quot;body&quot;</span><span class="mtk1">].encode(</span><span class="mtk8">&#39;utf8&#39;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            f.write(base64.decodebytes(body_bytes))</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        _artline_apply(input_path, output_path)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">with</span><span class="mtk1"> </span><span class="mtk11">open</span><span class="mtk1">(output_path, </span><span class="mtk8">&quot;rb&quot;</span><span class="mtk1">) </span><span class="mtk15">as</span><span class="mtk1"> f:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">            </span><span class="mtk15">return</span><span class="mtk1"> _response(</span><span class="mtk7">200</span><span class="mtk1">, base64.encodebytes(f.read()))</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">except</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">import</span><span class="mtk1"> sys</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">import</span><span class="mtk1"> traceback</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk11">print</span><span class="mtk1">(</span><span class="mtk8">&quot;Exception in user code:&quot;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk11">print</span><span class="mtk1">(</span><span class="mtk8">&quot;-&quot;</span><span class="mtk1">*</span><span class="mtk7">60</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        traceback.print_exc(</span><span class="mtk12">file</span><span class="mtk1">=sys.stdout)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk11">print</span><span class="mtk1">(</span><span class="mtk8">&quot;-&quot;</span><span class="mtk1">*</span><span class="mtk7">60</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        </span><span class="mtk15">return</span><span class="mtk1"> _response(</span><span class="mtk7">500</span><span class="mtk1">, </span><span class="mtk8">&quot;Internal Server Error&quot;</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk15">finally</span><span class="mtk1">:</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        shutil.rmtree(temp_root)</span></span></span></code></pre>
+<p>편의상 API Gateway payload로 변환할 이미지에 대한 base64를 직접 받는다. 당연히 제대로 만드려면 다음과 같이 해야 한다.</p>
+<ol>
+<li>S3 signed url을 내려주고</li>
+<li>app에서 그 주소에 사진을 upload한 후</li>
+<li>Python Lambda에서 그 S3 key를 가지고 image를 변환하여 S3에 저장해두고</li>
+<li>그 결과를 app에서 가져가서 화면에 표시해야 한다.</li>
+</ol>
+<p>최대한 간단하게 만드는 것을 목표로 했으므로, payload로 받은 base64를 image로 변환하여 변환 함수 <code>_artline_apply</code> 를 수행하고, 그 결과를 바로 API Gateway의 response payload로 반환한다. <em>[API Gateway의 max payload는 10MB이므로](<a href="https://docs.aws.amazon.com/en">https://docs.aws.amazon.com/en</a></em>us/apigateway/latest/developerguide/limits.html) 사전에 app에서 이미지를 올릴 때 적당한 크기로 줄여서 올리도록 처리했다._</p>
+<p>이제 <code>requirements.txt</code> 를 정리해보자.</p>
+<pre class="grvsc-container default-dark" data-language="text" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source">fastai==1.0.61</span></span>
+<span class="grvsc-line"><span class="grvsc-source">numpy==1.17.2</span></span>
+<span class="grvsc-line"><span class="grvsc-source">pandas==1.1.2</span></span>
+<span class="grvsc-line"><span class="grvsc-source">torch==1.6.0</span></span>
+<span class="grvsc-line"><span class="grvsc-source">torchvision===0.7.0</span></span>
+<span class="grvsc-line"><span class="grvsc-source">Pillow==8.0.1</span></span></code></pre>
+<p>예전 방식이었다면 조금이라도 용량을 아끼기 위해 io watch를 걸고 프로그램을 실행하여 필요한 파일만 최소한으로 담고 그것도 <code>/var/task</code> 와 <code>/tmp</code> 에 나눠 담은 뒤 압축 풀고 <code>sys.path</code> 에 연결해주는 작업을 했겠지만, 이제는 <code>Dockerfile</code> 로 간편하게 처리하면 된다.</p>
+<pre class="grvsc-container default-dark" data-language="dockerfile" data-index="5"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">FROM</span><span class="mtk1"> public.ecr.aws/lambda/python:3.8</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">RUN</span><span class="mtk1"> yum update -y &amp;&amp; yum install -y gcc &amp;&amp; \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  pip install -U pip setuptools wheel</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">COPY</span><span class="mtk1"> requirements.txt ./</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">RUN</span><span class="mtk1"> python3.8 -m pip install -r requirements.txt -t .</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">COPY</span><span class="mtk1"> ArtLine_500.pkl ./</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">COPY</span><span class="mtk1"> app.py art_line.py ./</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">CMD</span><span class="mtk1"> [</span><span class="mtk8">&quot;app.lambda_handler&quot;</span><span class="mtk1">]</span></span></span></code></pre>
+<ul>
+<li><code>wheel</code> 과 <code>gcc</code> 가 설치되어야 <code>numpy</code> 가 제대로 설치될 수 있었다.</li>
+<li>좀 더 세심하게 Docker image 용량을 줄인다면 Cold start를 조금이라도 더 줄일 수 있다.</li>
+</ul>
+<h3>Backend 테스트 및 배포하기</h3>
+<p><code>sam build</code> 로 위 내용에 대한 Docker image를 만들고, 이렇게 만든 image를 <code>sam local invoke</code> 나 <code>sam local start-api</code> 로 테스트 할 수 있다. <strong>하지만 현재 <code>sam</code>의 버그인지 개발 환경 설정의 문제인지 Docker image가 갱신되어도 <code>local invoke/start-api</code> 가 새로 만들어진 image를 실행하지 못한다.</strong></p>
+<p>작성한 <code>app.py</code> 파일 자체는 <code>__name__ == '__main__'</code> 검사해서 실행해보면 정상 동작하는지 알 수야 있지만 이게 Lambda에 올라가서 잘 동작한다는 보장을 하기는 어려우니 가급적이면 Docker로 정상 동작 여부를 검증해보고 싶다. 그런데 위 명령어가 잘 동작하지 않으니 다음과 같이 직접 하나씩 풀어서 실행해야 한다.</p>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="6"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># Docker container 기동</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">docker run -p 9000:8080 transformfunction:python3.8-v1 app.lambda_handler</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># 입력 만들기</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk11">echo</span><span class="mtk1"> </span><span class="mtk8">&quot;{</span><span class="mtk6">\&quot;</span><span class="mtk8">body</span><span class="mtk6">\&quot;</span><span class="mtk8">:</span><span class="mtk6">\&quot;</span><span class="mtk8">$(cat input.jpg </span><span class="mtk1">|</span><span class="mtk8"> base64 </span><span class="mtk1">|</span><span class="mtk8"> tr -d $&#39;</span><span class="mtk6">\n</span><span class="mtk8">&#39;)</span><span class="mtk6">\&quot;</span><span class="mtk8">}&quot;</span><span class="mtk1"> &gt; with-image.json</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk3"># 변환 수행 후 결과 출력</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">curl -XPOST \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk8">&quot;http://localhost:9000/2015-03-31/functions/function/invocations&quot;</span><span class="mtk1"> \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -d @with-image.json | jq -r .body | base64 -d &gt; output.jpg</span></span></span></code></pre>
+<p>이제 <code>sam deploy --guided</code> 로 배포를 진행하면 된다. 단, 아직 <code>ap-northeast-2</code> 에서는 AWS Lambda가 Container image를 지원하지 않기 때문에 현재 지원 중인 지역으로 바꿔서 배포를 해야 한다. 만약 그렇지 않다면 <code>Function</code> 을 만드는 과정에서 배포가 실패하는데, 에러 메시지가 뜬금없이 <em>Unable to determine service/operation name to be authorized</em> 같은 형태로 나오기 때문에 괜히 시간만 버리게 된다.</p>
+<p>정상적으로 배포되었다면 변환을 위한 POST API가 하나 생성되었을 것이다. 이제 다음과 같이 사용해볼 수 있다. 물론 첫 번째 요청은 높은 확률로 timeout이 발생할 것이고, 어느 정도 warmup된 상태라면 이미지에 따라 6~9초 정도 시간이 소요될 것이다.</p>
+<pre class="grvsc-container default-dark" data-language="bash" data-index="7"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk4">time</span><span class="mtk1"> curl -s -XPOST \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk8">&quot;https://API-URL/Prod/transform/&quot;</span><span class="mtk1"> \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -d </span><span class="mtk8">&quot;$(convert input.jpg -resize 1024x1024 - </span><span class="mtk1">|</span><span class="mtk8"> base64 </span><span class="mtk1">|</span><span class="mtk8"> tr -d $&#39;</span><span class="mtk6">\n</span><span class="mtk8">&#39;)&quot;</span><span class="mtk1"> \</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  -o - | base64 -d &gt; output.jpg</span></span></span></code></pre>
+<h3>app 만들기</h3>
+<p>API를 만들었으니 이를 사용하는 app을 간단히 만들어보자.</p>
+<ol>
+<li><code>Flutter</code> 를 사용할 것이고,</li>
+<li>사진을 찍은 후</li>
+<li>바로 서버에 요청하여 변환된 이미지를 얻고</li>
+<li>화면에 결과를 노출할 것이다.</li>
+</ol>
+<p>Flutter도 생태가 잘 갖춰져 있기 때문에 저정도의 작업은 <a href="https://github.com/lacti/artline/blob/master/app/pubspec.yaml">이미 구현된 라이브러리를 사용</a>하는 것으로 충분히 쉽게 구현할 수 있다.</p>
+<p>Flutter의 구조에 대해 자세히 설명하지 않을 것이므로 간단히 사용한 라이브러리와 필수 함수의 내용에 대해서만 정리할 것이다. 전체 코드는 <a href="https://github.com/lacti/artline/blob/master/app/lib/main.dart">main.dart</a>에서 확인할 수 있다.</p>
+<ul>
+<li><code>image_picker</code> 사진을 찍거나 갤러리에서 사진을 선택하여</li>
+<li><code>flutter_image_compress</code> 그 이미지를 <em>1024x1024</em> 크기로 줄여서</li>
+<li><code>http</code> 서버 API로 요청하여 그 결과를 받아</li>
+<li><code>path_provider</code> App directory 내의</li>
+<li><code>intl</code> 날짜 <code>yyyyMMddHHmmss</code> 이름의 파일로 결과를 저장할 것이다.</li>
+<li>그리고 <code>loader_overlay</code> 그 동안 Loading indicator를 띄울 것이다.</li>
+</ul>
+<p><code>ImageSource</code>에 따라 사진을 찍거나 갤러리에서 사진을 가져온다. 그리고 그 이미지로 <code>transform</code> 함수를 수행한다.</p>
+<pre class="grvsc-container default-dark" data-language="dart" data-index="8"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source">Future getImage(ImageSource source) async {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final pickedFile = await picker.getImage(source: source);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  setState(() {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    if (pickedFile != null) {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">      _sourceImage = File(pickedFile.path);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">      transform();</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    }</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  });</span></span>
+<span class="grvsc-line"><span class="grvsc-source">}</span></span></code></pre>
+<p>Loading indicator를 띄우고, 입력받은 이미지의 크기를 줄이고 서버에 업로드하여 그 결과를 받는다.</p>
+<pre class="grvsc-container default-dark" data-language="dart" data-index="9"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source">Future transform() async {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  try {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    context.showLoaderOverlay();</span></span>
+<span class="grvsc-line"><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-source">    final outputFile = await compressAndUploadImage(_sourceImage);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    setState(() {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">      _transformedImage = outputFile;</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    });</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  } finally {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    context.hideLoaderOverlay();</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  }</span></span>
+<span class="grvsc-line"><span class="grvsc-source">}</span></span></code></pre>
+<p><code>flutter_image_compress</code> 라이브러리를 사용하여 입력받은 이미지를 <em>1024x1024</em> 크기로 줄이고 그 내용을 base64로 만들어서 서버에 요청한다. 그리고 서버의 응답을 다시 base64로 해석해서 결과 파일에 담고 그 파일을 반환한다.</p>
+<pre class="grvsc-container default-dark" data-language="dart" data-index="10"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source">Future&lt;File&gt; compressAndUploadImage(File sourceImage) async {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final compressed = await FlutterImageCompress.compressWithFile(</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    sourceImage.path,</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    minWidth: 1024,</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    minHeight: 1024,</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  );</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final payload = base64.encode(compressed);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final response = await http.post(transformApiUrl,</span></span>
+<span class="grvsc-line"><span class="grvsc-source">      headers: {}, body: payload, encoding: Encoding.getByName(&#39;utf-8&#39;));</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  if (response.statusCode != 200) {</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    throw new Exception(&#39;Server error ${response.statusCode}&#39;);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  }</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final appDir = await getApplicationDocumentsDirectory();</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final serial = DateFormat(&#39;yyyyMMddHHmmss&#39;).format(DateTime.now());</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final outputFile = File(&#39;${appDir.path}/$serial.jpg&#39;);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  final decoded =</span></span>
+<span class="grvsc-line"><span class="grvsc-source">      base64.decode(base64.normalize(response.body.replaceAll(&#39;\n&#39;, &#39;&#39;)));</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  await outputFile.writeAsBytes(decoded);</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  return outputFile;</span></span>
+<span class="grvsc-line"><span class="grvsc-source">}</span></span></code></pre>
+<p>이제 화면에서 상황에따라 변환된 이미지 <code>_transformedImage</code> 혹은 원본 이미지 <code>_sourceImage</code> 를 보여주면 된다. 글의 길이 상 <code>_stage</code> 를 관리하는 부분은 생략했다.</p>
+<pre class="grvsc-container default-dark" data-language="dart" data-index="11"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source">Center(</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  child: Column(</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    mainAxisAlignment: MainAxisAlignment.center,</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    children: &lt;Widget&gt;[</span></span>
+<span class="grvsc-line"><span class="grvsc-source">      _stage == Stage.Transformed</span></span>
+<span class="grvsc-line"><span class="grvsc-source">          ? Image.file(_transformedImage)</span></span>
+<span class="grvsc-line"><span class="grvsc-source">          : _sourceImage != null</span></span>
+<span class="grvsc-line"><span class="grvsc-source">              ? Image.file(_sourceImage)</span></span>
+<span class="grvsc-line"><span class="grvsc-source">              : Text(&quot;Please pick an image :)&quot;)</span></span>
+<span class="grvsc-line"><span class="grvsc-source">    ],</span></span>
+<span class="grvsc-line"><span class="grvsc-source">  ),</span></span>
+<span class="grvsc-line"><span class="grvsc-source">)</span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>앱 시작 화면</th>
+<th>사진 선택</th>
+<th>사진 변환 후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 277px; "
+    >
+      <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 216.60649819494586%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAArCAIAAAD3xz8iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABqElEQVRIx+2WS0sCYRiF37mogxdQEH9LLdpGtGlV0J9pGbTqTxgFtSkoVMTUmnGKyoUGoiQGbiqsbBqbi/p1nIloYWS5bJ7F4Z3znfMqDB8MpdPpXC5XKBRkWc5ms6lUKj0O+G6sWCzm83loJpOh59/QdXAHKPWngMwpIGsKvLJX9sqTlXFR/17WNK3X6xmGoev62xd+Ltu23Ww2q9VqvV6v1WqtVqvRaFQqlXa7PdEvDxzw510FtoP3nr3yvyub5i86n+FRGfPQuf+TbHDDbpLs0R22bjrmm2n17R+aSKJ20zGgCBMbWpvnvZmktnaif64cCxpsYG2o+uyWtl7SWR9l21jYeVraN+aST91X3R6FxvBhGsbibnf1yJzf7nS1V2KMqbcvK3t3B9ePmAdD9h3u0WlLX969P6w+MDYkpVS6UOWyfFw+w5eYrCgwPsAM5+vjqSxfnSll5fhSha+SKIp+SSJeJOJisVgwGCQiQRCg4XA4Go1yHMfzPDQQCMTjcUH0IczxAkzy+/2hUMg9RhkzBmyERiIRODjCLqgkSYlEwufzISo4vAOikTfSQnTsdAAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="App start"
+        title="App start"
+        src="/static/27c9e2db40372a732c60cde30ac38a21/b8799/2021-01-03-22-51-11.png"
+        srcset="/static/27c9e2db40372a732c60cde30ac38a21/b8799/2021-01-03-22-51-11.png 277w"
+        sizes="(max-width: 277px) 100vw, 277px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+      />
+    </span></td>
+<td><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 277px; "
+    >
+      <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 216.60649819494586%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,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'); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="Before"
+        title="Before"
+        src="/static/85b5c6ca94516b72ef572a249bfa61d0/b8799/2021-01-03-22-51-32.png"
+        srcset="/static/85b5c6ca94516b72ef572a249bfa61d0/b8799/2021-01-03-22-51-32.png 277w"
+        sizes="(max-width: 277px) 100vw, 277px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+      />
+    </span></td>
+<td><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 277px; "
+    >
+      <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 216.60649819494586%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAArCAIAAAD3xz8iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFA0lEQVRIx9WVW0iUaRjHX8fR8ECe09UyNTtJRQTiKuyFIru00tqFKSJYEXRRULBpQYY3xSKJXqgXSnlAXXbzlCRqaiqmjmOpXaRkh73IQjxbOqPTjDr7m+9dv9zWJaK92efi9fX9nv9z+D+HES0tLe3t7V1dXT09PQ8ePLh//37LZsJ7Z2fnw4cPuxTh0traKt59ibxXRF44xcpXiPjwFSLMXyH/bzDZy4vJZPqnEo/Ly8vq+REMzKII1PO/1WpVv0lK0V5dXbWuy9ramurMVueJiYnp6enZ2dnJycnr168/f/4cbZRmZmbevHnz6tWrmzdvlpeX19TUZGdn046Yw4qtzm/fvuVWX19PD3K5d++e9A9YPcfHx8+cOePm5rZjx47MzMwXL14sLS3xLrDNn+rq6vz8fGlvbm7ukzg5p6amIiMjt23bduLEibt3746NjYEXL1++JDw+37hxo6KiggtNCzFYkWAMST9lZWXu7u67du26evUqORKOQI+c+abT6fLy8mBio1sVzzkyMuLp6RkTEzM8PGw0GhcWFgSver2eqLg0NDQ0NzeXlJTATXd3twyYDGGrsLCwqalp37594eHhzCZTRYFs4FOnTl27dg2SIbOxsbGoqCgtLQ0rMvKBgYErV65UVlYy0r6+vv7+/keOHBkaGrIRdvv2bW9vb5JJTk4uKCgAk5WVlZOTQ5DYlp5BFhcXHz16dOvWrRC+d+9eYrSB79y5s3//fldX1/T0dOxBNfxRdgomw8YE6XGhSKhB+OHDhyXHtlKFhYV5eXmlpKRUVVVJeiRMFRkCLYBnIodwYrSV6vjx487OzgcOHEhNTS0tLVVVqYKskGxmLiw5+oScAwICfHx8amtrBRiMRUdHX758+ezZs2pXYGJ+fp4oiFCCSRs3gEk7ODgYIkRGRoafn9/p06fJOTExUe1KHBoMBpIHTFWxEhcXR9jfKELyubm54tatW9g7d+4cdTp27BitImN+9uzZ4OAgJ12ACaKgPQMDA2W1AAMRly5dCg0N/VmRiIiIqKgo9CRtOCcESQFdcPDgwe3btwPGMzmTqYiNjd29ezftTutAm5OTU0JCwuLiogxeNibdcvLkSXqTbMkRz0FBQXAuwhTBJ//v3LnTVxF+EKRbBM7Pnz9PajikyDgn+JCQEGIU+KRaSUlJYPiABqzU1dWpNXv69Cnc0gg49FMEsOwzAZkdHR0XL16kQ3GO7T179vT398toOUdHR2nmQ4cO8Y5pHFDnv8KGHkrCPNAAeLC3t8eQioT2trY2dtOFCxfi4+PhCR8eHh5ERwhCLkTGmDXEVLCP2BIg5UrkZO7hjwklQOaBjJhN1LgIdUtuHP2Ne1easG4mH/e2cV0+Wd3S9JIixr/Lf/OL8QUYVVnJmblfMcvL55GKstQUFrPZYjH/MWta/mBesXwGiSYwlDlRFtY1c+5j47eVC5ndBtXkpgLCumrO0hsjf138pc9gXQFsWf7h9/mf6o3fVc6/NxgtNqVNxLT+q/dj1bvkRtP3v80uLBqUvf16IalmsmFkTpkk67/JqvKp57UxsXqqcXgaXaHT9Q3oe5/oOoce9SIsg7514c7Lxn97enufPNLZlPt7+/R64ejo6OziIjRaYaehdV1cXOzs7LRaLSdtzDBpNBoanpOpZPK0Do7CXqux1/IotmzZQpejyme2/ydgXlQwe4JhcHBw4JO9In8CKyN4t313bMIAAAAASUVORK5CYII='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="After"
+        title="After"
+        src="/static/e513c7c054ab6f3f5f960340547d5e90/b8799/2021-01-03-22-51-40.png"
+        srcset="/static/e513c7c054ab6f3f5f960340547d5e90/b8799/2021-01-03-22-51-40.png 277w"
+        sizes="(max-width: 277px) 100vw, 277px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+      />
+    </span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="https://unsplash.com/photos/xmdrV9B_M5g">Photo by Kalen Kemp</a></li>
+</ul>
+<h3>정리</h3>
+<p>한땀한땀 dependency를 주워가며 어떻게든 <em>250+512</em> 안에 넣어 기어코 실행해내는 부분이 과거 AWS Lambda의 재미였다면, 이제는 고민없이 Docker로 쉽고 빠르게 배포할 수 있는 부분이 재미가 된 것 같다. 물론 Docker image의 용량이 Cold start latency에 지대한 영향을 끼치고, 이 때문에 처음 두 번의 요청이 각각 1) Docker image pull 받다가, 그리고 2) ML 모델 읽어오다가 발생하는 웃지 못할 상황도 있지만 가볍게 PoC를 해보거나 취미 프로젝트를 진행하는 수준으로는 손색이 없을 것 같다.</p>
+<p>당연한 이야기이지만 <em>250+512</em> 내에서 모든걸 최대한 세심하게 해결할 때보다 Docker image를 잘 구울 자신이 없다면 Cold start에서는 한 수 접고 들어가야 한다. 그럼에도 불구하고 배포 등의 이점이 너무 크기 때문에 왠만한 상황에서는 이 방법이 더 낫지 않을까 싶은데 이 경우 적어도 다음을 조심하면서 작업을 하면 좋지 않을까 생각한다.</p>
+<ul>
+<li>Docker image 크기를 최대한 줄여서 Cold start를 조금이라도 줄여보자.</li>
+<li>Local에서 Lambda 기반으로 테스트할 때와 API Gateway 기반으로 테스트할 때 Payload의 형태가 달라지므로 Local 테스트에 익숙해져보자. Local에서 잘 돌아간다면, 어지간해서 배포 후에도 잘 돌아간다는 뜻이므로 한결 개발이 예측 가능해질 수 있다.</li>
+<li>Cold start를 warmup이나 reserved concurrency로 해결해볼 수도 있겠지만 적당히 필요할 때 background에서 Lambda actor를 하나 띄워두고, S3를 매개로 파일을 교환하며 SQS나 Redis Q로 처리/완료를 교환하는 쪽으로 설계하는게 좀 더 시스템이 안정적이다.</li>
+</ul>
+<p>취미로 하다보니 다소 엉성했지만 아무튼 AWS Lambda에 간단한 ML 모델을 올려서 이를 활용하는 app까지 개발해보았다. 이렇게 하나 template을 만들어두면 추후 또 괜찮은 ML 모델 올려서 장난 치는 것을 금방해 볼 수 있으니 앞으로 기대가 크다.</p>
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-source:empty::after {
+    content: ' ';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.2));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.2));
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  
+  .default-dark {
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk6 { color: #D7BA7D; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
+</style></div></div><div class="css-72fhg1-StyledContainer ei8rjbq0"><a style="float:left" href="/2019/12/31/in-the-end-of-year/">&lt; 2019년 정리</a></div></div><div class="react-utterences"><div>Loading script...</div></div></main></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/2021/01/03/serverless-artline/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-78cdc6a84a6e659c51c0.js"],"app":["/app-d7b4850bdfd8424882d8.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-081498ca127c47a0bde3.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-02a49c8d2d196c0f41ba.js"],"component---src-templates-page-tsx":["/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js"],"component---src-templates-tag-tsx":["/component---src-templates-tag-tsx-f8c1536df6b1e52beb83.js"]};/*]]>*/</script><script src="/polyfill-78cdc6a84a6e659c51c0.js" nomodule=""></script><script src="/component---src-templates-page-tsx-15aaa9b96ddf69f84bb3.js" async=""></script><script src="/commons-d34ca9a5140f4edbf26e.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-d7b4850bdfd8424882d8.js" async=""></script><script src="/framework-8aba4025690a031b46dc.js" async=""></script><script src="/webpack-runtime-32cc2442479283d7f58b.js" async=""></script></body></html>

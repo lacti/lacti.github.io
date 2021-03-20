@@ -32,8 +32,8 @@
 <url> <loc>https://lacti.github.io/2014/05/28/ndc14-build-private-cloud/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/05/28/ndc14-cloud-fail-over-process/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/05/28/ndc14-design-generic-game-server/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://lacti.github.io/2014/05/28/ndc14-distributed-mmorpg-server-without-spof/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/05/28/ndc14-experience-of-using-redis/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://lacti.github.io/2014/05/28/ndc14-distributed-mmorpg-server-without-spof/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/05/28/ndc14-rx-server-application/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/05/27/ndc14-python-mobile-server/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/05/27/ndc14-wcf-mobile-server/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -41,11 +41,11 @@
 <url> <loc>https://lacti.github.io/2014/02/14/secret-of-mswsock-dll/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2014/02/11/fast-message-serialization/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/12/22/server-programming/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://lacti.github.io/2013/11/19/asynchronous-programming-pattern-2/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/11/19/message-dispatch-code-generation-by-enum-value/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://lacti.github.io/2013/11/19/asynchronous-programming-pattern-2/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/11/16/cpp-message-dispatcher/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://lacti.github.io/2013/11/10/function-adapter/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/11/10/template-programming-and-type-erasure/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://lacti.github.io/2013/11/10/function-adapter/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/11/04/generic-programming-with-template/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/10/09/asynchronous-programming-pattern-1/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2013/09/08/zhconverter-simplified-traditional/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -152,8 +152,8 @@
 <url> <loc>https://lacti.github.io/2008/07/28/ConsoleHandler-System-in-out-error-closing/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2008/04/01/gdb-simple-help/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2008/04/01/make-pintos-environment/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://lacti.github.io/2008/04/01/pintos-boot/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/2008/04/01/pintos-internal-structure/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://lacti.github.io/2008/04/01/pintos-boot/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/tag/serverless/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/tag/docker/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://lacti.github.io/tag/diary/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
